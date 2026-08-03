@@ -40,7 +40,7 @@ const GROUPS = [
       {
         title: "Video Production",
         copy: "Brand films, founder stories, product explainers and high-volume performance creative — directed, shot and edited in-house.",
-        deliverables: ["Brand film", "Ad creative library", "Case study films", "Motion系统"],
+        deliverables: ["Brand film", "Ad creative library", "Case study films", "Motion system"],
       },
       {
         title: "Photography",
