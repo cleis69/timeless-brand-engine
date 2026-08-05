@@ -1,111 +1,112 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 
+const URL = "https://timeless-brand-engine.lovable.app";
+
 export const Route = createFileRoute("/services")({
+  component: Services,
   head: () => ({
     meta: [
-      { title: "Services — Branding, AI Automation & Paid Growth | Ultra Vision" },
+      { title: "Services — Branding, Web, IA & Acquisition | ULTRA VISION" },
       {
         name: "description",
         content:
-          "Branding, custom websites, AI automation, paid media, content, film, CRM and lead generation — delivered by one senior team.",
+          "Branding, sites et applications, agents IA et automatisation, Meta / Google / TikTok Ads, production photo et vidéo. Les cinq pôles d'ULTRA VISION.",
       },
-      { property: "og:title", content: "Services | Ultra Vision" },
+      { property: "og:title", content: "Services — ULTRA VISION" },
       {
         property: "og:description",
         content:
-          "Ten disciplines, one accountable team: brand, web, AI, paid media, content and revenue operations.",
+          "Cinq pôles d'expertise : branding, web & applications, IA & automatisation, acquisition, création de contenu.",
       },
+      { property: "og:url", content: `${URL}/services` },
+      { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: `${URL}/services` }],
   }),
-  component: Services,
 });
 
-const GROUPS = [
+const POLES = [
   {
-    label: "Brand",
+    n: "01",
+    title: "Branding",
+    intro:
+      "Un territoire de marque qui justifie vos prix et rend vos concurrents interchangeables.",
     items: [
-      {
-        title: "Branding & Identity",
-        copy: "Positioning, naming, verbal identity, visual systems, guidelines and rollout. The work that lets you raise prices without losing deals.",
-        deliverables: ["Positioning strategy", "Identity system", "Brand book", "Launch assets"],
-      },
-      {
-        title: "Content Creation",
-        copy: "A monthly editorial engine: thought leadership, social, newsletters and sales collateral written with a real point of view.",
-        deliverables: ["Content strategy", "Editorial calendar", "Social systems", "Sales decks"],
-      },
-      {
-        title: "Video Production",
-        copy: "Brand films, founder stories, product explainers and high-volume performance creative — directed, shot and edited in-house.",
-        deliverables: ["Brand film", "Ad creative library", "Case study films", "Motion system"],
-      },
-      {
-        title: "Photography",
-        copy: "Campaign, product, portrait and environmental photography that gives your brand a library it can live on for years.",
-        deliverables: ["Art direction", "Production", "Retouching", "Asset library"],
-      },
+      "Plateforme de marque et positionnement",
+      "Identité visuelle et logotype",
+      "Charte graphique complète",
+      "Naming et messages clés",
+      "Déclinaisons print et digitales",
     ],
   },
   {
-    label: "Build",
+    n: "02",
+    title: "Web & Applications",
+    intro: "Des produits digitaux rapides, sobres et conçus autour d'un seul objectif : convertir.",
     items: [
-      {
-        title: "Custom Websites",
-        copy: "Editorial, fast, conversion-engineered websites. Designed pixel by pixel, built by senior engineers, measured against pipeline.",
-        deliverables: ["UX architecture", "Design system", "Development", "SEO foundation"],
-      },
-      {
-        title: "Custom Web Applications",
-        copy: "Client portals, dashboards, quoting tools and internal platforms built to production standards with real security.",
-        deliverables: ["Product discovery", "Architecture", "Build & QA", "Ongoing support"],
-      },
-      {
-        title: "AI Automation",
-        copy: "Agents that qualify inbound, summarise calls, draft proposals and keep your CRM honest — quietly removing hours every week.",
-        deliverables: ["Workflow audit", "Agent design", "Integrations", "Team enablement"],
-      },
+      "Sites vitrines et corporate",
+      "Applications web sur mesure",
+      "Landing pages de campagne",
+      "Design system et composants",
+      "Performance et accessibilité",
     ],
   },
   {
-    label: "Grow",
+    n: "03",
+    title: "IA & Automatisation",
+    intro: "Vos tâches répétitives disparaissent, votre équipe se concentre sur la vente.",
     items: [
-      {
-        title: "Meta, Google & TikTok Ads",
-        copy: "Full-funnel paid media: creative volume, clean measurement, offer testing and weekly optimisation against cost per qualified call.",
-        deliverables: ["Account architecture", "Creative sprints", "Tracking setup", "Weekly reporting"],
-      },
-      {
-        title: "Lead Generation",
-        copy: "Outbound sequences, inbound capture and referral loops designed to fill a calendar with the right conversations.",
-        deliverables: ["ICP definition", "Offer design", "Sequences", "Booking systems"],
-      },
-      {
-        title: "CRM Implementation",
-        copy: "Pipelines, lead scoring, automations and dashboards so revenue becomes a process instead of a personality.",
-        deliverables: ["CRM setup", "Data migration", "Automation", "Sales training"],
-      },
+      "Agents IA de qualification",
+      "Automatisation des workflows",
+      "Mise en place et migration CRM",
+      "Scoring et relances automatiques",
+      "Reporting consolidé",
+    ],
+  },
+  {
+    n: "04",
+    title: "Acquisition",
+    intro: "Un pilotage au rendez-vous qualifié, avec une lecture claire du coût réel.",
+    items: [
+      "Meta Ads",
+      "Google Ads",
+      "TikTok Ads",
+      "Lead generation B2B et B2C",
+      "Tracking, CRO et tableaux de bord",
+    ],
+  },
+  {
+    n: "05",
+    title: "Création de contenu",
+    intro: "Des visuels qui soutiennent le prix que vous demandez.",
+    items: [
+      "Direction artistique",
+      "Production photo",
+      "Production vidéo",
+      "Motion design",
+      "Contenus sociaux récurrents",
     ],
   },
 ];
 
-const ENGAGEMENTS = [
+const TIERS = [
   {
-    title: "Sprint",
-    price: "from €25,000",
-    copy: "A single, sharply scoped outcome — a repositioning, a website, an automation layer.",
+    name: "Sprint",
+    price: "à partir de 20 000 €",
+    text: "Identité ou site premium livré en 6 à 8 semaines, périmètre fermé.",
   },
   {
-    title: "Programme",
-    price: "€80,000 – €250,000",
-    copy: "Brand, build and acquisition delivered together across six to twelve months.",
+    name: "Programme",
+    price: "à partir de 8 000 € / mois",
+    text: "Marque, production de contenu et acquisition pilotées sur 6 à 12 mois.",
   },
   {
-    title: "Partner",
-    price: "monthly retainer",
-    copy: "Your senior growth team on standing call: media, content, product and iteration.",
+    name: "Partenariat",
+    price: "sur mesure",
+    text: "Équipe dédiée intégrée à votre direction, engagement sur les indicateurs.",
   },
 ];
 
@@ -114,50 +115,56 @@ function Services() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Everything your growth depends on, under one roof."
-        intro="Most companies buy marketing in fragments — an agency here, a freelancer there, a developer somewhere else. We assemble the whole system and stay accountable for the number at the end of it."
+        title="Cinq pôles qui couvrent l'intégralité de votre chaîne de croissance."
+        intro="De la plateforme de marque au coût par rendez-vous, tout est construit par la même équipe. Vous gardez un interlocuteur unique et une seule feuille de route."
       />
 
-      {GROUPS.map((group) => (
-        <section key={group.label} className="rule">
-          <div className="shell py-20 lg:py-28">
-            <Reveal>
-              <p className="eyebrow">{group.label}</p>
-            </Reveal>
-            <div className="mt-12 space-y-px bg-hairline">
-              {group.items.map((item, i) => (
-                <Reveal key={item.title} delay={i * 60}>
-                  <article className="grid gap-8 bg-background py-10 md:grid-cols-[1fr_1.4fr_1fr] lg:gap-12">
-                    <h2 className="display text-3xl lg:text-4xl">{item.title}</h2>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{item.copy}</p>
-                    <ul className="space-y-2 text-xs tracking-[0.12em] uppercase text-muted-foreground">
-                      {item.deliverables.map((d) => (
-                        <li key={d}>{d}</li>
-                      ))}
-                    </ul>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
+      <section className="rule bg-background">
+        <div className="shell py-20 lg:py-28">
+          <div className="grid gap-6 lg:grid-cols-2">
+            {POLES.map((p, i) => (
+              <Reveal key={p.title} delay={i * 60}>
+                <article className="surface-card h-full p-8 lg:p-10">
+                  <span className="text-xs tracking-[0.2em] text-accent">{p.n}</span>
+                  <h2 className="display mt-6 text-3xl sm:text-4xl">{p.title}</h2>
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+                    {p.intro}
+                  </p>
+                  <ul className="mt-8 space-y-3 text-sm">
+                    {p.items.map((it) => (
+                      <li key={it} className="flex gap-3 border-t border-hairline pt-3">
+                        <span className="text-accent">—</span>
+                        <span className="text-muted-foreground">{it}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </Reveal>
+            ))}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
-      <section className="rule bg-secondary">
+      <section className="rule bg-surface">
         <div className="shell py-24 lg:py-32">
           <Reveal>
-            <p className="eyebrow">Engagements</p>
-            <h2 className="display mt-6 max-w-2xl text-5xl lg:text-6xl">
-              Three ways to work together.
+            <p className="eyebrow">Modalités</p>
+            <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl">
+              Trois formats d&apos;engagement, un seul niveau d&apos;exigence.
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-px bg-hairline lg:grid-cols-3">
-            {ENGAGEMENTS.map((e, i) => (
-              <Reveal key={e.title} delay={i * 70}>
-                <div className="h-full bg-secondary p-8 lg:p-10">
-                  <h3 className="display text-4xl">{e.title}</h3>
-                  <p className="mt-3 text-sm font-medium">{e.price}</p>
-                  <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{e.copy}</p>
+          <div className="mt-16 grid gap-6 lg:grid-cols-3">
+            {TIERS.map((t, i) => (
+              <Reveal key={t.name} delay={i * 80}>
+                <div className="surface-card flex h-full flex-col justify-between p-8">
+                  <div>
+                    <h3 className="display text-2xl">{t.name}</h3>
+                    <p className="mt-2 text-sm text-accent-hover">{t.price}</p>
+                    <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{t.text}</p>
+                  </div>
+                  <Link to="/contact" className="link-underline mt-10 text-sm">
+                    Demander un devis
+                  </Link>
                 </div>
               </Reveal>
             ))}
