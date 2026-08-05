@@ -79,22 +79,45 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "author", content: "Ultra Vision" },
+      { name: "author", content: "ULTRA VISION" },
+      { name: "theme-color", content: "#090909" },
+      { property: "og:site_name", content: "ULTRA VISION" },
+      { property: "og:locale", content: "fr_FR" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://api.fontshare.com" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap",
+        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@400,500,600,700&display=swap",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap",
       },
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "ULTRA VISION",
+          alternateName: "Ultra Vision — Creative Growth Agency",
+          url: "https://timeless-brand-engine.lovable.app",
+          email: "studio@ultravision.fr",
+          telephone: "+33600000000",
+          sameAs: [],
+        }),
+      },
     ],
   }),
 
