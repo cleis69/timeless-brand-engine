@@ -3,34 +3,37 @@ import { Reveal } from "./Reveal";
 
 export function FinalCTA() {
   return (
-    <section className="rule bg-primary text-primary-foreground">
-      <div className="shell py-28 lg:py-40">
+    <section className="rule relative overflow-hidden bg-surface">
+      <div
+        className="glow-blue -bottom-32 right-1/4 h-[24rem] w-[24rem] opacity-50"
+        aria-hidden
+      />
+      <div className="shell relative py-28 lg:py-40">
         <Reveal>
-          <p className="eyebrow text-primary-foreground/60">Start here</p>
-          <h2 className="display mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-8xl">
-            Let&apos;s decide if we&apos;re the right studio for your next chapter.
+          <p className="eyebrow">Prochaine étape</p>
+          <h2 className="display mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
+            Parlons de votre croissance sur les douze prochains mois.
           </h2>
-          <p className="mt-8 max-w-xl text-base leading-relaxed text-primary-foreground/70">
-            A 30-minute discovery call. No decks, no pressure. You leave with a clear read on your
-            positioning, your funnel and the fastest path to growth — whether you work with us or
-            not.
+          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground">
+            30 minutes, sans engagement. Vous repartez avec une lecture claire de votre
+            positionnement, de votre tunnel d&apos;acquisition et des leviers prioritaires.
           </p>
           <div className="mt-12 flex flex-wrap items-center gap-4">
             <Link
               to="/contact"
-              className="inline-flex h-12 items-center rounded-full bg-primary-foreground px-7 text-xs font-semibold tracking-[0.16em] uppercase text-primary transition-opacity duration-300 hover:opacity-80"
+              className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
             >
-              Book a discovery call
+              Réserver un appel stratégique
             </Link>
             <a
               href="https://wa.me/33600000000"
-              className="inline-flex h-12 items-center rounded-full border border-primary-foreground/30 px-7 text-xs font-semibold tracking-[0.16em] uppercase transition-colors duration-300 hover:border-primary-foreground"
+              className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
             >
               WhatsApp
             </a>
             <a
               href="tel:+33600000000"
-              className="inline-flex h-12 items-center px-2 text-xs font-semibold tracking-[0.16em] uppercase text-primary-foreground/70 transition-colors hover:text-primary-foreground"
+              className="inline-flex h-12 items-center px-2 text-xs font-medium tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
             >
               +33 6 00 00 00 00
             </a>
