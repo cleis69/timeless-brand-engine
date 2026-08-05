@@ -1,416 +1,529 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
+import { Counter } from "@/components/Counter";
 import { FinalCTA } from "@/components/FinalCTA";
+import { Logo } from "@/components/Logo";
 import { useState } from "react";
 
+const URL = "https://timeless-brand-engine.lovable.app";
+
 export const Route = createFileRoute("/")({
+  component: Home,
   head: () => ({
     meta: [
-      { title: "Ultra Vision — Brand, AI & Growth Studio for Ambitious Companies" },
+      { title: "ULTRA VISION — Agence créative, IA & acquisition" },
       {
         name: "description",
         content:
-          "Ultra Vision builds brands, websites, AI automation and acquisition systems for medium and large businesses. Book a discovery call.",
+          "Agence créative premium : branding, sites web et applications, intelligence artificielle, automatisation et acquisition payante pour entreprises ambitieuses.",
       },
-      { property: "og:title", content: "Ultra Vision — Brand, AI & Growth Studio" },
+      { property: "og:title", content: "ULTRA VISION — Agence créative, IA & acquisition" },
       {
         property: "og:description",
         content:
-          "Branding, custom websites, AI automation and paid acquisition, engineered as one growth system.",
+          "Branding, développement web, IA et acquisition. Nous construisons des marques et des systèmes de croissance mesurables.",
+      },
+      { property: "og:url", content: `${URL}/` },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: `${URL}/` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "ULTRA VISION",
+          description:
+            "Agence créative spécialisée en branding, développement web, intelligence artificielle, automatisation et acquisition de leads.",
+          url: URL,
+          telephone: "+33600000000",
+          email: "studio@ultravision.fr",
+          areaServed: "FR",
+          address: { "@type": "PostalAddress", addressLocality: "Paris", addressCountry: "FR" },
+        }),
       },
     ],
   }),
-  component: Home,
 });
 
 const CLIENTS = [
-  "NORDHAUS",
-  "MERIDIAN",
-  "ATELIER 9",
-  "VOLTA GROUP",
-  "SAISON",
-  "HELIOS CAPITAL",
-  "KOENIG",
-  "LUMA MEDICAL",
+  "Nordhaus",
+  "Meridian",
+  "Atelier Vaste",
+  "Solene",
+  "Kairos Capital",
+  "Maison Ferrand",
+  "Volta",
+  "Orsay Group",
 ];
 
-const SERVICES = [
+const POLES = [
   {
     n: "01",
-    title: "Branding & Identity",
-    copy: "Positioning, naming, visual systems and brand governance that make premium pricing feel obvious.",
+    title: "Branding",
+    lines: ["Identité visuelle", "Positionnement", "Charte graphique"],
+    text: "Une marque lisible en trois secondes, cohérente sur chaque point de contact.",
   },
   {
     n: "02",
-    title: "Custom Websites",
-    copy: "Bespoke, fast, editorial websites engineered for conversion — never a template, never a compromise.",
+    title: "Web & Applications",
+    lines: ["Sites web", "Applications", "Landing pages"],
+    text: "Des interfaces rapides, sobres et pensées pour la conversion.",
   },
   {
     n: "03",
-    title: "AI Automation",
-    copy: "Agents and workflows that qualify leads, draft proposals and remove hours of manual work every week.",
+    title: "IA & Automatisation",
+    lines: ["Agents IA", "Automatisation", "CRM"],
+    text: "Vos processus commerciaux exécutés sans friction, 24 h sur 24.",
   },
   {
     n: "04",
-    title: "Meta, Google & TikTok Ads",
-    copy: "Full-funnel paid media built on creative volume, clean tracking and ruthless attention to CAC.",
+    title: "Acquisition",
+    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
+    text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
   },
   {
     n: "05",
-    title: "Content Creation",
-    copy: "Editorial and social content produced at pace, on brand, and built around a distinct point of view.",
-  },
-  {
-    n: "06",
-    title: "Video Production",
-    copy: "Brand films, product stories and performance creative shot with cinema discipline.",
-  },
-  {
-    n: "07",
-    title: "Photography",
-    copy: "Campaign, product and portrait photography that gives your brand a library it can live on for years.",
-  },
-  {
-    n: "08",
-    title: "Lead Generation",
-    copy: "Outbound, inbound and referral engines that fill a calendar with qualified conversations.",
-  },
-  {
-    n: "09",
-    title: "CRM Implementation",
-    copy: "Pipelines, scoring, sequences and reporting so no opportunity dies in an inbox.",
-  },
-  {
-    n: "10",
-    title: "Web Applications",
-    copy: "Portals, dashboards and internal tools built to production standards by senior engineers.",
+    title: "Création de contenu",
+    lines: ["Photo", "Vidéo", "Motion design"],
+    text: "Des assets de niveau maison de luxe, produits en interne.",
   },
 ];
 
 const PROJECTS = [
   {
     client: "Nordhaus",
-    sector: "Industrial Manufacturing",
-    title: "A 68-year-old manufacturer, repositioned for enterprise buyers",
-    metric: "+214% qualified pipeline",
-    year: "2026",
+    sector: "Immobilier premium",
+    result: "+214 % de pipeline qualifié",
+    scope: "Branding · Site · CRM",
   },
   {
     client: "Meridian",
-    sector: "Private Wealth",
-    title: "A wealth practice that finally looks like the money it manages",
-    metric: "€41M AUM sourced online",
-    year: "2025",
+    sector: "SaaS B2B",
+    result: "Coût par démo divisé par 2,8",
+    scope: "Acquisition · Landing pages",
   },
   {
-    client: "Luma Medical",
-    sector: "Health Technology",
-    title: "From twelve disconnected tools to one AI-driven revenue system",
-    metric: "−63% cost per booked call",
-    year: "2025",
+    client: "Atelier Vaste",
+    sector: "Architecture",
+    result: "11 projets signés en 6 mois",
+    scope: "Identité · Photo · Vidéo",
+  },
+  {
+    client: "Kairos Capital",
+    sector: "Finance",
+    result: "38 % de temps commercial libéré",
+    scope: "Agents IA · Automatisation",
   },
 ];
 
-const PROCESS = [
+const METHOD = [
   {
     n: "01",
-    title: "Diagnose",
-    copy: "Two weeks inside your numbers, your sales calls and your market. We find the constraint before we touch the design.",
+    title: "Diagnostic",
+    text: "Audit de la marque, du tunnel et des données. Nous identifions le point de friction qui coûte le plus cher.",
   },
   {
     n: "02",
-    title: "Define",
-    copy: "Positioning, offer architecture and the narrative that makes your category choose you by default.",
+    title: "Stratégie",
+    text: "Positionnement, message, offre et plan d'acquisition. Un document de référence, pas une présentation.",
   },
   {
     n: "03",
     title: "Design & Build",
-    copy: "Identity, website, content and automation built in parallel by one senior team — no handoffs, no agencies in the middle.",
+    text: "Identité, site, applications et contenus produits par des seniors, en cycles courts et validés.",
   },
   {
     n: "04",
-    title: "Deploy & Compound",
-    copy: "Paid media, CRM and AI workflows go live, then we iterate weekly against pipeline — not vanity metrics.",
+    title: "Croissance",
+    text: "Campagnes, automatisations et itérations mensuelles pilotées par la donnée commerciale.",
   },
 ];
 
-const STATS = [
-  { value: "€180M+", label: "Revenue influenced for clients" },
-  { value: "94%", label: "Client retention beyond year one" },
-  { value: "12", label: "Senior specialists, zero juniors" },
-  { value: "31", label: "Countries we've shipped work in" },
+const WHY = [
+  {
+    title: "Uniquement des seniors",
+    text: "Aucun stagiaire sur votre projet. Les personnes qui vendent sont celles qui exécutent.",
+  },
+  {
+    title: "Design et acquisition réunis",
+    text: "La marque et la performance sont construites ensemble, jamais dans deux silos.",
+  },
+  {
+    title: "Engagement sur les indicateurs",
+    text: "Nous nous engageons sur des rendez-vous qualifiés, pas sur des impressions.",
+  },
+  {
+    title: "Cadence tenue",
+    text: "Livraisons hebdomadaires, un interlocuteur unique, des délais annoncés et respectés.",
+  },
+];
+
+const STATS: { value: number; suffix: string; label: string; decimals?: number }[] = [
+  { value: 214, suffix: " %", label: "Croissance moyenne du pipeline" },
+  { value: 47, suffix: "", label: "Marques accompagnées" },
+  { value: 12, suffix: " M€", label: "Chiffre d'affaires généré" },
+  { value: 4.9, suffix: "/5", label: "Satisfaction client", decimals: 1 },
 ];
 
 const TESTIMONIALS = [
   {
     quote:
-      "They rebuilt how we sell, not just how we look. Six months later our average contract value is up 40% and we stopped competing on price.",
-    name: "Élise Marchand",
-    role: "CEO, Nordhaus Group",
+      "En six mois, notre marque est passée d'anonyme à référence sur notre marché. Les rendez-vous entrants ont changé de nature.",
+    name: "Claire Aubert",
+    role: "Directrice générale, Nordhaus",
   },
   {
     quote:
-      "The most senior team we've worked with in fifteen years. Everything they promised landed, on the week they said it would.",
-    name: "David Rennick",
-    role: "Managing Partner, Meridian",
+      "L'équipe comprend le business avant de parler design. Le coût d'acquisition a été divisé par près de trois.",
+    name: "Marc Delvaux",
+    role: "CMO, Meridian",
   },
   {
     quote:
-      "Their AI workflows quietly replaced two full-time roles of admin. The website is the best asset our company owns.",
+      "Les automatisations mises en place nous ont rendu deux jours par semaine. Investissement rentabilisé en un trimestre.",
     name: "Sofia Bennani",
-    role: "COO, Luma Medical",
+    role: "Associée, Kairos Capital",
   },
 ];
 
-const FAQS = [
+const FAQ = [
   {
-    q: "Who do you work with?",
-    a: "Established companies — typically €5M to €500M in revenue — with a real product, a sales team, and the ambition to lead their category rather than follow it.",
+    q: "Quel est le budget d'un accompagnement ?",
+    a: "Un projet de marque et de site démarre autour de 20 000 €. Les accompagnements complets, incluant acquisition, contenus et automatisation, se situent généralement entre 40 000 € et 100 000 € par an.",
   },
   {
-    q: "What does an engagement cost?",
-    a: "Focused projects start at €25,000. Full brand-and-growth programmes typically run €80,000 to €250,000 across six to twelve months. We scope after the discovery call, never before.",
+    q: "Quels sont les délais ?",
+    a: "Une identité et un site premium se livrent en 6 à 10 semaines. Les premières campagnes d'acquisition sont en ligne sous 3 semaines.",
   },
   {
-    q: "How fast do you move?",
-    a: "A repositioning and website programme ships in eight to twelve weeks. Paid media and AI automation often go live inside the first thirty days.",
+    q: "Travaillez-vous avec des PME ?",
+    a: "Oui, dès lors qu'il existe une ambition de croissance claire et une capacité à absorber les demandes générées.",
   },
   {
-    q: "Do you replace our internal team?",
-    a: "No. We give your team a system they can run, and we stay on retainer where senior firepower keeps compounding the result.",
+    q: "Comment mesurez-vous les résultats ?",
+    a: "Un tableau de bord unique relie dépense média, leads, rendez-vous et chiffre d'affaires signé. Revue mensuelle avec la direction.",
   },
   {
-    q: "What happens on the discovery call?",
-    a: "Thirty minutes. We review your positioning, funnel and constraints, then tell you honestly whether we're the right studio — and what we'd do first if we were.",
+    q: "Intervenez-vous hors de France ?",
+    a: "Nous accompagnons des clients à Paris, Dubaï, Genève et Casablanca, en français et en anglais.",
   },
 ];
 
 function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="shell relative pt-44 pb-24 lg:pt-56 lg:pb-32">
-        <div className="reveal">
-          <p className="eyebrow">Brand · AI · Acquisition</p>
-          <h1 className="display mt-10 max-w-[16ch] text-[clamp(3rem,10vw,9.5rem)]">
-            Growth, designed with <span className="italic">intent</span>.
-          </h1>
-          <div className="rule mt-16 grid gap-10 pt-10 md:grid-cols-[1.1fr_1fr]">
-            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Ultra Vision is a growth studio for medium and large businesses. We build the brand,
-              the website, the content and the AI-driven acquisition system — as one machine, owned
-              by one senior team.
-            </p>
-            <div className="flex flex-wrap items-start gap-4 md:justify-end">
-              <Link
-                to="/contact"
-                className="inline-flex h-12 items-center rounded-full bg-primary px-7 text-xs font-semibold tracking-[0.16em] uppercase text-primary-foreground transition-opacity duration-300 hover:opacity-80"
-              >
-                Book a discovery call
-              </Link>
-              <Link
-                to="/case-studies"
-                className="inline-flex h-12 items-center rounded-full border border-border px-7 text-xs font-semibold tracking-[0.16em] uppercase transition-colors duration-300 hover:border-foreground"
-              >
-                See the work
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trusted by */}
-      <section className="rule overflow-hidden py-10">
-        <div className="shell">
-          <p className="eyebrow">Trusted by teams at</p>
-        </div>
-        <div className="mt-8 flex w-max marquee">
-          {[0, 1].map((dup) => (
-            <div key={dup} className="flex shrink-0 items-center gap-16 pr-16">
-              {CLIENTS.map((c) => (
-                <span
-                  key={`${dup}-${c}`}
-                  className="text-sm font-semibold tracking-[0.28em] whitespace-nowrap text-muted-foreground"
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Services */}
-      <section className="rule">
-        <div className="shell py-24 lg:py-32">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <p className="eyebrow">Capabilities</p>
-                <h2 className="display mt-6 max-w-2xl text-5xl lg:text-7xl">
-                  Ten disciplines. One accountable team.
-                </h2>
-              </div>
-              <Link to="/services" className="link-underline text-sm font-medium">
-                All services
-              </Link>
-            </div>
-          </Reveal>
-
-          <div className="mt-16 grid gap-px bg-hairline sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map((s, i) => (
-              <Reveal key={s.n} delay={(i % 3) * 60}>
-                <article className="group h-full bg-background p-8 transition-colors duration-500 hover:bg-secondary lg:p-10">
-                  <span className="text-xs tracking-[0.2em] text-muted-foreground">{s.n}</span>
-                  <h3 className="display mt-8 text-3xl">{s.title}</h3>
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.copy}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured projects */}
-      <section className="rule">
-        <div className="shell py-24 lg:py-32">
-          <Reveal>
-            <p className="eyebrow">Selected work</p>
-            <h2 className="display mt-6 max-w-2xl text-5xl lg:text-7xl">
-              Work that moves a P&amp;L.
-            </h2>
-          </Reveal>
-
-          <div className="mt-16">
-            {PROJECTS.map((p, i) => (
-              <Reveal key={p.client} delay={i * 70}>
-                <Link
-                  to="/case-studies"
-                  className="group rule grid items-center gap-6 py-10 md:grid-cols-[1fr_2fr_auto]"
-                >
-                  <div>
-                    <p className="text-sm font-semibold tracking-[0.2em] uppercase">{p.client}</p>
-                    <p className="mt-2 text-xs text-muted-foreground">{p.sector}</p>
-                  </div>
-                  <h3 className="display text-3xl transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-                    {p.title}
-                  </h3>
-                  <div className="text-right">
-                    <p className="text-sm font-medium">{p.metric}</p>
-                    <p className="mt-2 text-xs text-muted-foreground">{p.year}</p>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section className="rule bg-secondary">
-        <div className="shell py-24 lg:py-32">
-          <Reveal>
-            <p className="eyebrow">Method</p>
-            <h2 className="display mt-6 max-w-2xl text-5xl lg:text-7xl">
-              A process built to remove doubt.
-            </h2>
-          </Reveal>
-          <div className="mt-16 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-            {PROCESS.map((s, i) => (
-              <Reveal key={s.n} delay={i * 80}>
-                <div className="rule pt-6">
-                  <span className="text-xs tracking-[0.2em] text-muted-foreground">{s.n}</span>
-                  <h3 className="display mt-6 text-3xl">{s.title}</h3>
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.copy}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics */}
-      <section className="rule">
-        <div className="shell py-24 lg:py-28">
-          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            {STATS.map((s, i) => (
-              <Reveal key={s.label} delay={i * 70}>
-                <p className="display text-6xl lg:text-7xl">{s.value}</p>
-                <p className="mt-4 max-w-[22ch] text-sm text-muted-foreground">{s.label}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="rule">
-        <div className="shell py-24 lg:py-32">
-          <Reveal>
-            <p className="eyebrow">In their words</p>
-          </Reveal>
-          <div className="mt-14 grid gap-px bg-hairline lg:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <Reveal key={t.name} delay={i * 80}>
-                <figure className="flex h-full flex-col justify-between bg-background p-8 lg:p-10">
-                  <blockquote className="display text-2xl leading-snug lg:text-3xl">
-                    “{t.quote}”
-                  </blockquote>
-                  <figcaption className="mt-10 text-sm">
-                    <span className="font-medium">{t.name}</span>
-                    <span className="block text-muted-foreground">{t.role}</span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="rule">
-        <div className="shell grid gap-14 py-24 lg:grid-cols-[1fr_1.6fr] lg:py-32">
-          <Reveal>
-            <p className="eyebrow">Questions</p>
-            <h2 className="display mt-6 text-5xl lg:text-6xl">Before you reach out.</h2>
-          </Reveal>
-          <div>
-            {FAQS.map((f, i) => (
-              <Reveal key={f.q} delay={i * 50}>
-                <FaqItem q={f.q} a={f.a} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      <Hero />
+      <Clients />
+      <Projects />
+      <Poles />
+      <Method />
+      <Why />
+      <Stats />
+      <Testimonials />
+      <Faq />
       <FinalCTA />
     </>
   );
 }
 
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
+function Hero() {
   return (
-    <div className="rule">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-6 py-7 text-left"
-      >
-        <span className="text-lg font-medium lg:text-xl">{q}</span>
-        <span
-          className={`text-xl leading-none transition-transform duration-500 ${open ? "rotate-45" : ""}`}
-        >
-          +
-        </span>
-      </button>
+    <section className="relative overflow-hidden">
       <div
-        className={`grid transition-[grid-template-rows] duration-500 ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-      >
-        <div className="overflow-hidden">
-          <p className="max-w-2xl pb-7 text-sm leading-relaxed text-muted-foreground">{a}</p>
+        className="glow-blue top-10 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 opacity-70"
+        aria-hidden
+      />
+      <div className="shell relative pt-36 pb-24 lg:pt-48 lg:pb-32">
+        <Reveal>
+          <div className="flex justify-center lg:justify-start">
+            <Logo className="h-14 sm:h-16 lg:h-20" />
+          </div>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <div className="mt-12 inline-flex items-center gap-3 rounded-full border border-hairline bg-surface px-4 py-2 text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Agence créative • IA • Acquisition
+          </div>
+        </Reveal>
+
+        <Reveal delay={160}>
+          <h1 className="display mt-10 max-w-6xl text-[2.6rem] sm:text-6xl lg:text-[5.2rem]">
+            Nous concevons des marques et des systèmes de croissance qui font la différence.
+          </h1>
+        </Reveal>
+
+        <Reveal delay={240}>
+          <p className="mt-10 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            ULTRA VISION accompagne les entreprises qui souhaitent accélérer leur croissance grâce
+            au branding, au développement web, à l&apos;intelligence artificielle et à des
+            stratégies d&apos;acquisition performantes.
+          </p>
+        </Reveal>
+
+        <Reveal delay={320}>
+          <div className="mt-12 flex flex-wrap items-center gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
+            >
+              Réserver un appel stratégique
+            </Link>
+            <Link
+              to="/realisations"
+              className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+            >
+              Découvrir nos réalisations
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Clients() {
+  return (
+    <section className="rule overflow-hidden bg-background py-10">
+      <div className="shell">
+        <p className="eyebrow">Entreprises accompagnées</p>
+      </div>
+      <div className="mt-8 flex overflow-hidden">
+        <div className="marquee flex shrink-0 items-center gap-16 pr-16">
+          {[...CLIENTS, ...CLIENTS].map((c, i) => (
+            <span
+              key={`${c}-${i}`}
+              className="display shrink-0 text-2xl text-muted-foreground sm:text-3xl"
+            >
+              {c}
+            </span>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
+  );
+}
+
+function Projects() {
+  return (
+    <section className="rule bg-background">
+      <div className="shell py-24 lg:py-32">
+        <Reveal>
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+            <div className="min-w-0">
+              <p className="eyebrow">Réalisations</p>
+              <h2 className="display mt-6 max-w-2xl text-4xl sm:text-5xl lg:text-6xl">
+                Des projets pensés pour être rentables, pas seulement remarqués.
+              </h2>
+            </div>
+            <Link to="/realisations" className="link-underline text-sm text-muted-foreground">
+              Voir tout
+            </Link>
+          </div>
+        </Reveal>
+
+        <div className="mt-16 border-t border-hairline">
+          {PROJECTS.map((p, i) => (
+            <Reveal key={p.client} delay={i * 60}>
+              <Link
+                to="/realisations"
+                className="group grid gap-3 border-b border-hairline py-8 transition-colors duration-500 hover:bg-surface md:grid-cols-[1.1fr_1fr_1fr_auto] md:items-center md:gap-8 md:px-4"
+              >
+                <span className="display text-2xl sm:text-3xl">{p.client}</span>
+                <span className="text-sm text-muted-foreground">{p.sector}</span>
+                <span className="text-sm text-muted-foreground">{p.scope}</span>
+                <span className="text-sm font-medium text-accent-hover">{p.result}</span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Poles() {
+  return (
+    <section className="rule bg-surface">
+      <div className="shell py-24 lg:py-32">
+        <Reveal>
+          <p className="eyebrow">Nos expertises</p>
+          <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl lg:text-6xl">
+            Cinq pôles, une seule équipe, une chaîne de valeur complète.
+          </h2>
+        </Reveal>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {POLES.map((p, i) => (
+            <Reveal key={p.title} delay={i * 70}>
+              <article className="surface-card h-full p-8">
+                <span className="text-xs tracking-[0.2em] text-accent">{p.n}</span>
+                <h3 className="display mt-6 text-2xl">{p.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
+                <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
+                  {p.lines.map((l) => (
+                    <li key={l} className="flex items-center gap-3">
+                      <span className="h-px w-4 bg-hairline" />
+                      {l}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </Reveal>
+          ))}
+          <Reveal delay={350}>
+            <Link
+              to="/services"
+              className="surface-card flex h-full flex-col justify-between p-8 hover:text-accent-hover"
+            >
+              <span className="eyebrow">Détail complet</span>
+              <span className="display mt-10 text-2xl">Voir tous les services →</span>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Method() {
+  return (
+    <section className="rule bg-background">
+      <div className="shell py-24 lg:py-32">
+        <Reveal>
+          <p className="eyebrow">Notre méthode</p>
+          <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl lg:text-6xl">
+            Quatre étapes, aucune zone grise.
+          </h2>
+        </Reveal>
+        <div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+          {METHOD.map((s, i) => (
+            <Reveal key={s.n} delay={i * 80}>
+              <div className="border-t border-hairline pt-6">
+                <span className="text-xs tracking-[0.2em] text-accent">{s.n}</span>
+                <h3 className="display mt-5 text-2xl">{s.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Why() {
+  return (
+    <section className="rule bg-surface">
+      <div className="shell grid gap-16 py-24 lg:grid-cols-[1fr_1.2fr] lg:py-32">
+        <Reveal>
+          <div>
+            <p className="eyebrow">Pourquoi ULTRA VISION</p>
+            <h2 className="display mt-6 text-4xl sm:text-5xl">
+              Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="grid gap-8 sm:grid-cols-2">
+          {WHY.map((w, i) => (
+            <Reveal key={w.title} delay={i * 70}>
+              <div className="border-t border-hairline pt-6">
+                <h3 className="text-base font-medium">{w.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Stats() {
+  return (
+    <section className="rule bg-background">
+      <div className="shell py-24 lg:py-28">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          {STATS.map((s, i) => (
+            <Reveal key={s.label} delay={i * 70}>
+              <div>
+                <p className="display text-5xl lg:text-6xl">
+                  <Counter to={s.value} suffix={s.suffix} decimals={s.decimals ?? 0} />
+                </p>
+                <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section className="rule bg-surface">
+      <div className="shell py-24 lg:py-32">
+        <Reveal>
+          <p className="eyebrow">Témoignages</p>
+        </Reveal>
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {TESTIMONIALS.map((t, i) => (
+            <Reveal key={t.name} delay={i * 80}>
+              <figure className="surface-card flex h-full flex-col justify-between p-8">
+                <blockquote className="display text-xl leading-snug sm:text-2xl">
+                  « {t.quote} »
+                </blockquote>
+                <figcaption className="mt-10 text-sm">
+                  <span className="block font-medium">{t.name}</span>
+                  <span className="block text-muted-foreground">{t.role}</span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Faq() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <section className="rule bg-background">
+      <div className="shell grid gap-14 py-24 lg:grid-cols-[1fr_1.4fr] lg:py-32">
+        <Reveal>
+          <div>
+            <p className="eyebrow">FAQ</p>
+            <h2 className="display mt-6 text-4xl sm:text-5xl">Questions fréquentes</h2>
+          </div>
+        </Reveal>
+        <div className="border-t border-hairline">
+          {FAQ.map((f, i) => (
+            <div key={f.q} className="border-b border-hairline">
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                aria-expanded={open === i}
+                className="flex w-full items-center justify-between gap-6 py-6 text-left"
+              >
+                <span className="text-base font-medium sm:text-lg">{f.q}</span>
+                <span
+                  className={`shrink-0 text-muted-foreground transition-transform duration-500 ${open === i ? "rotate-45" : ""}`}
+                >
+                  +
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-[max-height,opacity] duration-500 ${open === i ? "max-h-60 opacity-100" : "max-h-0 opacity-0"}`}
+              >
+                <p className="pb-6 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
