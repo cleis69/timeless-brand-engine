@@ -160,7 +160,7 @@ const WHY = [
   },
 ];
 
-const STATS = [
+const STATS: { value: number; suffix: string; label: string; decimals?: number }[] = [
   { value: 214, suffix: " %", label: "Croissance moyenne du pipeline" },
   { value: 47, suffix: "", label: "Marques accompagnées" },
   { value: 12, suffix: " M€", label: "Chiffre d'affaires généré" },
