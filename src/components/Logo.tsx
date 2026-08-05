@@ -5,7 +5,7 @@ export function Logo({ className = "h-8" }: { className?: string }) {
     <img
       src={logo.url}
       alt="ULTRA VISION — agence créative growth"
-      className={`${className} w-auto object-contain`}
+      className={`${className} w-auto object-contain mix-blend-screen`}
       loading="eager"
       decoding="async"
     />
