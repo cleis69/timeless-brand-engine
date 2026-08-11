@@ -47,16 +47,7 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const CLIENTS = [
-  "Nordhaus",
-  "Meridian",
-  "Atelier Vaste",
-  "Solene",
-  "Kairos Capital",
-  "Maison Ferrand",
-  "Volta",
-  "Orsay Group",
-];
+const CLIENTS = ["Africa Beauty", "Scultbody", "Ehab"];
 
 const POLES = [
   {
