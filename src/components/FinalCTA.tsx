@@ -26,8 +26,27 @@ import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } fro
 
 export function FinalCTA() {
   return (
-    <section className="rule relative overflow-hidden bg-surface">
-      <div className="glow-blue -bottom-32 right-1/4 h-[24rem] w-[24rem] opacity-50" aria-hidden />
+    /*
+      Le troisieme temps de respiration de la page.
+
+      Hero noir, videos noires, cassure claire, puis retour au noir pour
+      les expertises et la methode. Si le CTA final restait noir lui
+      aussi, la page se terminerait exactement comme elle a commence, et
+      rien ne signalerait au visiteur qu'il est arrive au moment de
+      decider.
+
+      Un bleu profond monte du bas. Ce n'est pas un aplat bleu — le
+      brief est clair, le bleu reste un accent — mais une lueur qui
+      teinte le noir. Assez pour que la section se detache, pas assez
+      pour crier.
+    */
+    <section
+      className="rule relative overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(125% 130% at 50% 135%, #1D4ED8 0%, #101c3d 42%, #0a0d18 68%, #090909 100%)",
+      }}
+    >
       <div className="shell relative py-28 lg:py-40">
         <Reveal>
           <p className="eyebrow">Prochaine étape</p>

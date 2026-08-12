@@ -76,11 +76,22 @@ function StatCell({
         transition: `opacity .8s ${EASE} ${delay}ms, transform .8s ${EASE} ${delay}ms`,
       }}
     >
+      {/*
+        Deux tailles, et c'est volontaire.
+
+        Une vraie valeur est courte — « +42% », « 3.2M » — donc elle
+        supporte une typographie tres grande, qui est tout l'effet
+        recherche. Un marqueur comme « STAT_01 » fait sept caracteres :
+        a la meme taille il deborde de sa colonne et chevauche ses
+        voisins. Le marqueur s'affiche donc en petit, en grise, le temps
+        que tu renseignes le vrai chiffre.
+      */}
       <span
         className={[
           "display tabular-nums leading-[0.9] tracking-[-0.03em]",
-          "text-[clamp(2.75rem,7vw,4.5rem)]",
-          pending ? "text-[#3a3a3a]" : "text-foreground",
+          pending
+            ? "text-[clamp(1.05rem,1.8vw,1.35rem)] text-[#3a3a3a]"
+            : "text-[clamp(2.75rem,7vw,4.5rem)] text-foreground",
         ].join(" ")}
       >
         {pending ? stat.value : <CountUp value={stat.value} play={isVisible} delay={delay} />}

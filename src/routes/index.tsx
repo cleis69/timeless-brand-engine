@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Reveal } from "@/components/Reveal";
+import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
-import { Logo } from "@/components/Logo";
+import { Conviction } from "@/components/Conviction";
+import { IrisBackdrop } from "@/components/IrisBackdrop";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
+import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { useState } from "react";
 
 /**
@@ -202,6 +204,8 @@ function Home() {
       <Hero />
       {/* La preuve visuelle arrive des le premier scroll. */}
       <VideoShowcase />
+      {/* La seule rupture claire de la page. Elle casse le tunnel noir. */}
+      <Conviction />
       <Clients />
       <Poles />
       <Method />
@@ -214,55 +218,83 @@ function Home() {
   );
 }
 
+/**
+ * Le hero.
+ *
+ * CE QUI A CHANGE
+ *
+ * Le logo a disparu d'ici. Il est deja dans la navigation, trois cents
+ * pixels plus haut. L'afficher deux fois ne renforcait pas la marque,
+ * ca signalait juste que la page n'avait rien d'autre a montrer.
+ *
+ * A sa place, l'iris de la marque en tres grand, coupe par le bord
+ * droit, en rotation lente. Le titre redevient le sujet.
+ *
+ * La ligne de villes en bas ancre l'agence dans le reel. C'est un
+ * detail, mais c'est ce genre de detail qui separe un site d'agence
+ * d'un gabarit.
+ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div
-        className="glow-blue top-10 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 opacity-70"
-        aria-hidden
-      />
-      <div className="shell relative pt-36 pb-24 lg:pt-48 lg:pb-32">
+    <section className="relative flex min-h-[92svh] items-center overflow-hidden">
+      <IrisBackdrop />
+
+      <div className="shell relative w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
         <Reveal>
-          <div className="flex justify-center lg:justify-start">
-            <Logo className="h-14 sm:h-16 lg:h-20" />
-          </div>
-        </Reveal>
-
-        <Reveal delay={80}>
-          <div className="mt-12 inline-flex items-center gap-3 rounded-full border border-hairline bg-surface px-4 py-2 text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            Agence créative • IA • Acquisition
-          </div>
-        </Reveal>
-
-        <Reveal delay={160}>
-          <h1 className="display mt-10 max-w-6xl text-[2.6rem] sm:text-6xl lg:text-[5.2rem]">
-            Nous concevons des marques et des systèmes de croissance qui font la différence.
-          </h1>
-        </Reveal>
-
-        <Reveal delay={240}>
-          <p className="mt-10 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            ULTRA VISION accompagne les entreprises qui souhaitent accélérer leur croissance grâce
-            au branding, au développement web, à l&apos;intelligence artificielle et à des
-            stratégies d&apos;acquisition performantes.
+          <p className="text-[0.7rem] font-medium tracking-[0.22em] uppercase text-accent">
+            Creative growth agency
           </p>
         </Reveal>
 
-        <Reveal delay={320}>
-          <div className="mt-12 flex flex-wrap items-center gap-4">
+        <h1 className="display mt-9 max-w-5xl text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-6xl lg:text-[5rem]">
+          <MaskReveal delay={80}>Nous concevons des marques</MaskReveal>
+          <MaskReveal delay={170}>
+            <span>et des </span>
+            <span className="text-[#5c5c5a]">systèmes de croissance</span>
+          </MaskReveal>
+          <MaskReveal delay={260}>qui font la différence.</MaskReveal>
+        </h1>
+
+        <Reveal delay={380}>
+          <p className="mt-10 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Branding, technologie, intelligence artificielle et acquisition, réunis dans une seule
+            équipe.
+          </p>
+        </Reveal>
+
+        <Reveal delay={460}>
+          <div className="mt-11 flex flex-wrap items-center gap-4">
             <Link
               to="/contact"
               className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
             >
-              Réserver un appel stratégique
+              Prendre rendez-vous
             </Link>
-            <Link
-              to="/realisations"
-              className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-            >
-              Découvrir nos réalisations
-            </Link>
+            {hasWhatsapp ? (
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+              >
+                Parler sur WhatsApp
+              </a>
+            ) : (
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+              >
+                Nous écrire
+              </a>
+            )}
+          </div>
+        </Reveal>
+
+        <Reveal delay={560}>
+          <div className="mt-20 flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#5c5c5a]">
+            {CONTACT.locations.split("—").map((v) => (
+              <span key={v.trim()}>{v.trim()}</span>
+            ))}
           </div>
         </Reveal>
       </div>
