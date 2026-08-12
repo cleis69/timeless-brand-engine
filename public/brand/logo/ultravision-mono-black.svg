@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1160 460" width="1160" height="460" role="img" aria-label="ULTRA VISION — Creative Growth Agency">
+  <title>ULTRA VISION — logo monochrome noir</title>
+  <defs>
+    <path id="uvA" d="M-2.9 -82 C-2.1 -110 -1.05 -160 -0.8 -237.2 A0.8 0.8 0 0 1 0.8 -237.2 C1.05 -160 2.1 -110 2.9 -82 Z"/>
+    <path id="uvB" d="M-2.9 -82 C-2.1 -108 -1.05 -155 -0.8 -229.2 A0.8 0.8 0 0 1 0.8 -229.2 C1.05 -155 2.1 -108 2.9 -82 Z"/>
+    <path id="uvC" d="M-2.9 -82 C-2.1 -109 -1.05 -158 -0.8 -235.2 A0.8 0.8 0 0 1 0.8 -235.2 C1.05 -158 2.1 -109 2.9 -82 Z"/>
+  </defs>
+  <g fill="#090909">
+    <g transform="translate(30 30) scale(0.78125)">
+      <g transform="translate(256 256)">
+        <use xlink:href="#uvA" transform="rotate(0)"/>
+        <use xlink:href="#uvB" transform="rotate(10)"/>
+        <use xlink:href="#uvC" transform="rotate(20)"/>
+        <use xlink:href="#uvA" transform="rotate(30)"/>
+        <use xlink:href="#uvB" transform="rotate(40)"/>
+        <use xlink:href="#uvC" transform="rotate(50)"/>
+        <use xlink:href="#uvA" transform="rotate(60)"/>
+        <use xlink:href="#uvB" transform="rotate(70)"/>
+        <use xlink:href="#uvC" transform="rotate(80)"/>
+        <use xlink:href="#uvA" transform="rotate(90)"/>
+        <use xlink:href="#uvB" transform="rotate(100)"/>
+        <use xlink:href="#uvC" transform="rotate(110)"/>
+        <use xlink:href="#uvA" transform="rotate(120)"/>
+        <use xlink:href="#uvB" transform="rotate(130)"/>
+        <use xlink:href="#uvC" transform="rotate(140)"/>
+        <use xlink:href="#uvA" transform="rotate(150)"/>
+        <use xlink:href="#uvB" transform="rotate(160)"/>
+        <use xlink:href="#uvC" transform="rotate(170)"/>
+        <use xlink:href="#uvA" transform="rotate(180)"/>
+        <use xlink:href="#uvB" transform="rotate(190)"/>
+        <use xlink:href="#uvC" transform="rotate(200)"/>
+        <use xlink:href="#uvA" transform="rotate(210)"/>
+        <use xlink:href="#uvB" transform="rotate(220)"/>
+        <use xlink:href="#uvC" transform="rotate(230)"/>
+        <use xlink:href="#uvA" transform="rotate(240)"/>
+        <use xlink:href="#uvB" transform="rotate(250)"/>
+        <use xlink:href="#uvC" transform="rotate(260)"/>
+        <use xlink:href="#uvA" transform="rotate(270)"/>
+        <use xlink:href="#uvB" transform="rotate(280)"/>
+        <use xlink:href="#uvC" transform="rotate(290)"/>
+        <use xlink:href="#uvA" transform="rotate(300)"/>
+        <use xlink:href="#uvB" transform="rotate(310)"/>
+        <use xlink:href="#uvC" transform="rotate(320)"/>
+        <use xlink:href="#uvA" transform="rotate(330)"/>
+        <use xlink:href="#uvB" transform="rotate(340)"/>
+        <use xlink:href="#uvC" transform="rotate(350)"/>
+      </g>
+    </g>
+    <g font-family="Space Grotesk, Poppins, Helvetica Neue, Arial, sans-serif">
+      <text x="510" y="214" font-size="136" font-weight="700" textLength="630" lengthAdjust="spacing">ULTRA</text>
+      <text x="510" y="333" font-size="136" font-weight="700" textLength="630" lengthAdjust="spacing">VISION</text>
+    </g>
+    <text x="512" y="386" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="500" opacity="0.6" textLength="626" lengthAdjust="spacing">CREATIVE GROWTH AGENCY</text>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="ULTRA VISION">
+  <title>ULTRA VISION — favicon (18 pointes)</title>
+  <defs>
+    <linearGradient id="uvGrad" gradientUnits="userSpaceOnUse" x1="80" y1="80" x2="432" y2="432">
+      <stop offset="0" stop-color="#60A5FA"/>
+      <stop offset="0.5" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <path id="uvF" d="M-6.5 -96 C-4.8 -122 -2.4 -172 -1.8 -238.2 A1.8 1.8 0 0 1 1.8 -238.2 C2.4 -172 4.8 -122 6.5 -96 Z"/>
+    <clipPath id="uvIrisF" clipPathUnits="userSpaceOnUse">
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(0)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(20)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(40)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(60)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(80)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(100)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(120)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(140)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(160)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(180)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(200)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(220)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(240)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(260)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(280)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(300)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(320)"/>
+      <use xlink:href="#uvF" transform="translate(256 256) rotate(340)"/>
+    </clipPath>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" rx="112" fill="#090909"/>
+  <rect x="0" y="0" width="512" height="512" fill="url(#uvGrad)" clip-path="url(#uvIrisF)"/>
+</svg>

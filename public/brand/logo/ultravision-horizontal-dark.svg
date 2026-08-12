@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1160 460" width="1160" height="460" role="img" aria-label="ULTRA VISION — Creative Growth Agency">
+  <title>ULTRA VISION — logo horizontal (fond sombre)</title>
+  <defs>
+    <linearGradient id="uvGrad" gradientUnits="userSpaceOnUse" x1="80" y1="80" x2="432" y2="432">
+      <stop offset="0" stop-color="#60A5FA"/>
+      <stop offset="0.5" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <path id="uvA" d="M-2.9 -82 C-2.1 -110 -1.05 -160 -0.8 -237.2 A0.8 0.8 0 0 1 0.8 -237.2 C1.05 -160 2.1 -110 2.9 -82 Z"/>
+    <path id="uvB" d="M-2.9 -82 C-2.1 -108 -1.05 -155 -0.8 -229.2 A0.8 0.8 0 0 1 0.8 -229.2 C1.05 -155 2.1 -108 2.9 -82 Z"/>
+    <path id="uvC" d="M-2.9 -82 C-2.1 -109 -1.05 -158 -0.8 -235.2 A0.8 0.8 0 0 1 0.8 -235.2 C1.05 -158 2.1 -109 2.9 -82 Z"/>
+    <clipPath id="uvIris" clipPathUnits="userSpaceOnUse">
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(0)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(10)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(20)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(30)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(40)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(50)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(60)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(70)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(80)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(90)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(100)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(110)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(120)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(130)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(140)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(150)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(160)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(170)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(180)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(190)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(200)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(210)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(220)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(230)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(240)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(250)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(260)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(270)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(280)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(290)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(300)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(310)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(320)"/>
+      <use xlink:href="#uvA" transform="translate(256 256) rotate(330)"/>
+      <use xlink:href="#uvB" transform="translate(256 256) rotate(340)"/>
+      <use xlink:href="#uvC" transform="translate(256 256) rotate(350)"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(30 30) scale(0.78125)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#uvGrad)" clip-path="url(#uvIris)"/>
+  </g>
+  <g font-family="Space Grotesk, Poppins, Helvetica Neue, Arial, sans-serif" fill="#F5F5F3">
+    <text x="510" y="214" font-size="136" font-weight="700" textLength="630" lengthAdjust="spacing">ULTRA</text>
+    <text x="510" y="333" font-size="136" font-weight="700" textLength="630" lengthAdjust="spacing">VISION</text>
+  </g>
+  <text x="512" y="386" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="500" fill="#8A8A8A" textLength="626" lengthAdjust="spacing">CREATIVE GROWTH AGENCY</text>
+</svg>

@@ -1,9 +1,44 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
-import { Counter } from "@/components/Counter";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Logo } from "@/components/Logo";
+import { VideoShowcase } from "@/components/work/VideoShowcase";
 import { useState } from "react";
+
+/**
+ * ULTRA VISION — page d'accueil.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/routes/index.tsx
+ * ============================================================
+ *
+ * CE QUI CHANGE PAR RAPPORT A LA VERSION PRECEDENTE
+ *
+ * 1. La section <VideoShowcase /> est ajoutee juste apres le Hero,
+ *    avant le bandeau de logos clients. Le visiteur voit une vraie
+ *    realisation des le premier scroll.
+ *
+ * 2. La section <Projects /> a ete supprimee. C'etait une liste de
+ *    texte citant Nordhaus, Meridian, Atelier Vaste et Kairos
+ *    Capital, qui n'existent pas, avec des resultats chiffres tout
+ *    aussi imaginaires. VideoShowcase la remplace avec de vrais
+ *    projets.
+ *
+ * 3. Les statistiques sont passees en marqueurs STAT_01 a STAT_04.
+ *    Les chiffres precedents (+214 %, 47 marques, 12 M€, 4,9/5)
+ *    etaient inventes. Remplace-les par tes vrais chiffres quand tu
+ *    les auras, et le compteur anime se remettra en route.
+ *
+ * 4. La section <Testimonials /> est desactivee. Les trois
+ *    temoignages signes Claire Aubert, Marc Delvaux et Sofia
+ *    Bennani etaient fictifs. Publier de faux temoignages clients
+ *    est une pratique commerciale trompeuse. Le code est conserve
+ *    plus bas : il suffira de le reactiver avec de vrais retours.
+ *
+ * 5. L'adresse e-mail des donnees structurees passe de
+ *    studio@ultravision.fr (inventee) a contact@ultravisionagency.com.
+ *    Le telephone +33600000000 a ete retire plutot qu'invente.
+ */
 
 const URL = "https://timeless-brand-engine.lovable.app";
 
@@ -37,8 +72,7 @@ export const Route = createFileRoute("/")({
           description:
             "Agence créative spécialisée en branding, développement web, intelligence artificielle, automatisation et acquisition de leads.",
           url: URL,
-          telephone: "+33600000000",
-          email: "studio@ultravision.fr",
+          email: "contact@ultravisionagency.com",
           areaServed: "FR",
           address: { "@type": "PostalAddress", addressLocality: "Paris", addressCountry: "FR" },
         }),
@@ -79,33 +113,6 @@ const POLES = [
     title: "Création de contenu",
     lines: ["Photo", "Vidéo", "Motion design"],
     text: "Des assets de niveau maison de luxe, produits en interne.",
-  },
-];
-
-const PROJECTS = [
-  {
-    client: "Nordhaus",
-    sector: "Immobilier premium",
-    result: "+214 % de pipeline qualifié",
-    scope: "Branding · Site · CRM",
-  },
-  {
-    client: "Meridian",
-    sector: "SaaS B2B",
-    result: "Coût par démo divisé par 2,8",
-    scope: "Acquisition · Landing pages",
-  },
-  {
-    client: "Atelier Vaste",
-    sector: "Architecture",
-    result: "11 projets signés en 6 mois",
-    scope: "Identité · Photo · Vidéo",
-  },
-  {
-    client: "Kairos Capital",
-    sector: "Finance",
-    result: "38 % de temps commercial libéré",
-    scope: "Agents IA · Automatisation",
   },
 ];
 
@@ -151,32 +158,19 @@ const WHY = [
   },
 ];
 
-const STATS: { value: number; suffix: string; label: string; decimals?: number }[] = [
-  { value: 214, suffix: " %", label: "Croissance moyenne du pipeline" },
-  { value: 47, suffix: "", label: "Marques accompagnées" },
-  { value: 12, suffix: " M€", label: "Chiffre d'affaires généré" },
-  { value: 4.9, suffix: "/5", label: "Satisfaction client", decimals: 1 },
-];
-
-const TESTIMONIALS = [
-  {
-    quote:
-      "En six mois, notre marque est passée d'anonyme à référence sur notre marché. Les rendez-vous entrants ont changé de nature.",
-    name: "Claire Aubert",
-    role: "Directrice générale, Nordhaus",
-  },
-  {
-    quote:
-      "L'équipe comprend le business avant de parler design. Le coût d'acquisition a été divisé par près de trois.",
-    name: "Marc Delvaux",
-    role: "CMO, Meridian",
-  },
-  {
-    quote:
-      "Les automatisations mises en place nous ont rendu deux jours par semaine. Investissement rentabilisé en un trimestre.",
-    name: "Sofia Bennani",
-    role: "Associée, Kairos Capital",
-  },
+/**
+ * Statistiques.
+ *
+ * Remplace 'STAT_01' par ta vraie valeur, par exemple '+214 %'.
+ * Tant qu'une valeur commence par STAT_, elle s'affiche en grise
+ * avec la mention « à compléter ». Impossible de publier un faux
+ * chiffre par accident.
+ */
+const STATS: { value: string; label: string }[] = [
+  { value: "STAT_01", label: "Croissance moyenne du pipeline" },
+  { value: "STAT_02", label: "Marques accompagnées" },
+  { value: "STAT_03", label: "Chiffre d'affaires généré" },
+  { value: "STAT_04", label: "Satisfaction client" },
 ];
 
 const FAQ = [
@@ -206,13 +200,14 @@ function Home() {
   return (
     <>
       <Hero />
+      {/* La preuve visuelle arrive des le premier scroll. */}
+      <VideoShowcase />
       <Clients />
-      <Projects />
       <Poles />
       <Method />
       <Why />
       <Stats />
-      <Testimonials />
+      {/* <Testimonials /> — réactiver avec de vrais témoignages clients. */}
       <Faq />
       <FinalCTA />
     </>
@@ -283,51 +278,13 @@ function Clients() {
       </div>
       <div className="mt-8 flex overflow-hidden">
         <div className="marquee flex shrink-0 items-center gap-16 pr-16">
-          {[...CLIENTS, ...CLIENTS].map((c, i) => (
+          {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
             <span
               key={`${c}-${i}`}
               className="display shrink-0 text-2xl text-muted-foreground sm:text-3xl"
             >
               {c}
             </span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Projects() {
-  return (
-    <section className="rule bg-background">
-      <div className="shell py-24 lg:py-32">
-        <Reveal>
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-            <div className="min-w-0">
-              <p className="eyebrow">Réalisations</p>
-              <h2 className="display mt-6 max-w-2xl text-4xl sm:text-5xl lg:text-6xl">
-                Des projets pensés pour être rentables, pas seulement remarqués.
-              </h2>
-            </div>
-            <Link to="/realisations" className="link-underline text-sm text-muted-foreground">
-              Voir tout
-            </Link>
-          </div>
-        </Reveal>
-
-        <div className="mt-16 border-t border-hairline">
-          {PROJECTS.map((p, i) => (
-            <Reveal key={p.client} delay={i * 60}>
-              <Link
-                to="/realisations"
-                className="group grid gap-3 border-b border-hairline py-8 transition-colors duration-500 hover:bg-surface md:grid-cols-[1.1fr_1fr_1fr_auto] md:items-center md:gap-8 md:px-4"
-              >
-                <span className="display text-2xl sm:text-3xl">{p.client}</span>
-                <span className="text-sm text-muted-foreground">{p.sector}</span>
-                <span className="text-sm text-muted-foreground">{p.scope}</span>
-                <span className="text-sm font-medium text-accent-hover">{p.result}</span>
-              </Link>
-            </Reveal>
           ))}
         </div>
       </div>
@@ -437,43 +394,26 @@ function Stats() {
     <section className="rule bg-background">
       <div className="shell py-24 lg:py-28">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 70}>
-              <div>
-                <p className="display text-5xl lg:text-6xl">
-                  <Counter to={s.value} suffix={s.suffix} decimals={s.decimals ?? 0} />
-                </p>
-                <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Testimonials() {
-  return (
-    <section className="rule bg-surface">
-      <div className="shell py-24 lg:py-32">
-        <Reveal>
-          <p className="eyebrow">Témoignages</p>
-        </Reveal>
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 80}>
-              <figure className="surface-card flex h-full flex-col justify-between p-8">
-                <blockquote className="display text-xl leading-snug sm:text-2xl">
-                  « {t.quote} »
-                </blockquote>
-                <figcaption className="mt-10 text-sm">
-                  <span className="block font-medium">{t.name}</span>
-                  <span className="block text-muted-foreground">{t.role}</span>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
+          {STATS.map((s, i) => {
+            const pending = s.value.startsWith("STAT_");
+            return (
+              <Reveal key={s.label} delay={i * 70}>
+                <div>
+                  <p
+                    className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
+                  >
+                    {s.value}
+                  </p>
+                  <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
+                  {pending && (
+                    <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
+                      à compléter
+                    </p>
+                  )}
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="ULTRA VISION">
+  <title>ULTRA VISION — icône 24 pointes (32–48 px)</title>
+  <defs>
+    <linearGradient id="uvGrad" gradientUnits="userSpaceOnUse" x1="80" y1="80" x2="432" y2="432">
+      <stop offset="0" stop-color="#60A5FA"/>
+      <stop offset="0.5" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <path id="uvN" d="M-4.2 -88 C-3.1 -116 -1.6 -166 -1.2 -236.8 A1.2 1.2 0 0 1 1.2 -236.8 C1.6 -166 3.1 -116 4.2 -88 Z"/>
+    <clipPath id="uvIrisN" clipPathUnits="userSpaceOnUse">
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(0)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(15)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(30)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(45)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(60)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(75)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(90)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(105)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(120)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(135)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(150)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(165)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(180)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(195)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(210)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(225)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(240)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(255)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(270)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(285)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(300)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(315)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(330)"/>
+      <use xlink:href="#uvN" transform="translate(256 256) rotate(345)"/>
+    </clipPath>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" fill="url(#uvGrad)" clip-path="url(#uvIrisN)"/>
+</svg>
