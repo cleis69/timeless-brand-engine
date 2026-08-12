@@ -1,13 +1,33 @@
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
+import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
+
+/**
+ * ULTRA VISION — bloc de conversion final.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/components/FinalCTA.tsx
+ * ============================================================
+ *
+ * CE QUI CHANGE
+ *
+ * Les liens WhatsApp et telephone pointaient vers +33 6 00 00 00 00,
+ * un numero inexistant. Un visiteur qui cliquait tombait dans le
+ * vide, et tu ne pouvais pas le savoir.
+ *
+ * Desormais les coordonnees viennent de src/config/contact.ts, et
+ * les boutons ne s'affichent que si un vrai numero y est renseigne.
+ * Tant que le champ est vide, le bouton disparait proprement.
+ *
+ * L'adresse e-mail remplace le bouton WhatsApp tant que celui-ci
+ * n'est pas configure : le visiteur garde toujours un second moyen
+ * de contact a cote du bouton principal.
+ */
 
 export function FinalCTA() {
   return (
     <section className="rule relative overflow-hidden bg-surface">
-      <div
-        className="glow-blue -bottom-32 right-1/4 h-[24rem] w-[24rem] opacity-50"
-        aria-hidden
-      />
+      <div className="glow-blue -bottom-32 right-1/4 h-[24rem] w-[24rem] opacity-50" aria-hidden />
       <div className="shell relative py-28 lg:py-40">
         <Reveal>
           <p className="eyebrow">Prochaine étape</p>
@@ -18,6 +38,7 @@ export function FinalCTA() {
             30 minutes, sans engagement. Vous repartez avec une lecture claire de votre
             positionnement, de votre tunnel d&apos;acquisition et des leviers prioritaires.
           </p>
+
           <div className="mt-12 flex flex-wrap items-center gap-4">
             <Link
               to="/contact"
@@ -25,18 +46,33 @@ export function FinalCTA() {
             >
               Réserver un appel stratégique
             </Link>
-            <a
-              href="https://wa.me/33600000000"
-              className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-            >
-              WhatsApp
-            </a>
-            <a
-              href="tel:+33600000000"
-              className="inline-flex h-12 items-center px-2 text-xs font-medium tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
-            >
-              +33 6 00 00 00 00
-            </a>
+
+            {hasWhatsapp ? (
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+              >
+                WhatsApp
+              </a>
+            ) : (
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+              >
+                Nous écrire
+              </a>
+            )}
+
+            {hasPhone && (
+              <a
+                href={telUrl}
+                className="inline-flex h-12 items-center px-2 text-xs font-medium tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {phoneDisplay()}
+              </a>
+            )}
           </div>
         </Reveal>
       </div>

@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { isPlaceholder, type Stat } from './work.data'
-import { useReveal, usePrefersReducedMotion } from '@/hooks/useReveal'
-import { EASE, DURATION } from '@/lib/motion'
+import { useEffect, useRef, useState } from "react";
+import { isPlaceholder, type Stat } from "./work.data";
+import { useReveal, usePrefersReducedMotion } from "@/hooks/useReveal";
 
 /**
  * ULTRA VISION — bande statistique sous une video.
@@ -10,45 +8,52 @@ import { EASE, DURATION } from '@/lib/motion'
  *   +42%              3.2M              +87%
  *   VISIBILITE        VUES              ENGAGEMENT
  *
- * Chiffres tres grands, libelles petits et discrets. Le contraste entre les
- * deux fait tout l'effet.
+ * Chiffres tres grands, libelles petits et discrets. Le contraste
+ * entre les deux fait tout l'effet.
+ *
+ * AUCUNE LIBRAIRIE D'ANIMATION. Uniquement des transitions CSS et un
+ * compteur en requestAnimationFrame. Le projet n'embarque pas
+ * framer-motion, et il n'y a aucune raison de l'ajouter pour trois
+ * fondus : ce serait 40 ko de plus pour un resultat identique.
  *
  * DEUX GARDE-FOUS
  *
- * 1. Tant qu'une valeur est un marqueur (STAT_01), elle s'affiche en grise
- *    avec la mention « a completer ». Impossible de publier un faux chiffre
- *    sans le voir.
+ * 1. Tant qu'une valeur est un marqueur (STAT_01), elle s'affiche en
+ *    grise avec la mention « a completer ». Impossible de publier un
+ *    faux chiffre sans le voir.
  *
  * 2. Le compteur anime ne se declenche que sur les vraies valeurs
  *    numeriques, et jamais si l'utilisateur a demande a reduire les
  *    animations.
  */
 
-type Props = {
-  stats: [Stat, Stat, Stat]
-  /** Retard apres l'apparition de la video, en secondes. */
-  delay?: number
-  className?: string
-}
+const EASE = "cubic-bezier(.16,1,.3,1)";
 
-export function WorkStats({ stats, delay = 0.24, className = '' }: Props) {
-  const { ref, isVisible } = useReveal<HTMLDivElement>({ amount: 0.3 })
+type Props = {
+  stats: [Stat, Stat, Stat];
+  /** Retard apres l'apparition de la video, en millisecondes. */
+  delay?: number;
+  className?: string;
+};
+
+export function WorkStats({ stats, delay = 240, className = "" }: Props) {
+  const { ref, isVisible } = useReveal<HTMLDivElement>({ amount: 0.25 });
 
   return (
     <div
       ref={ref}
-      className={`grid grid-cols-1 gap-y-10 border-t border-[#262626] pt-10 sm:grid-cols-3 sm:gap-x-8 ${className}`}
+      className={`grid grid-cols-1 gap-y-10 border-t border-hairline pt-10 sm:grid-cols-3 sm:gap-x-8 ${className}`}
     >
       {stats.map((stat, i) => (
         <StatCell
           key={stat.label + i}
           stat={stat}
           isVisible={isVisible}
-          delay={delay + i * 0.06}
+          delay={delay + i * 60}
         />
       ))}
     </div>
-  )
+  );
 }
 
 function StatCell({
@@ -56,57 +61,55 @@ function StatCell({
   isVisible,
   delay,
 }: {
-  stat: Stat
-  isVisible: boolean
-  delay: number
+  stat: Stat;
+  isVisible: boolean;
+  delay: number;
 }) {
-  const pending = isPlaceholder(stat.value)
+  const pending = isPlaceholder(stat.value);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-      transition={{ duration: DURATION.slow, ease: EASE.out, delay }}
+    <div
       className="flex flex-col"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(18px)",
+        transition: `opacity .8s ${EASE} ${delay}ms, transform .8s ${EASE} ${delay}ms`,
+      }}
     >
       <span
         className={[
-          'font-display tabular-nums leading-[0.9] tracking-[-0.03em]',
-          'text-[clamp(2.75rem,7vw,4.5rem)]',
-          pending ? 'text-[#3a3a3a]' : 'text-[#F5F5F3]',
-        ].join(' ')}
+          "display tabular-nums leading-[0.9] tracking-[-0.03em]",
+          "text-[clamp(2.75rem,7vw,4.5rem)]",
+          pending ? "text-[#3a3a3a]" : "text-foreground",
+        ].join(" ")}
       >
-        {pending ? (
-          stat.value
-        ) : (
-          <CountUp value={stat.value} play={isVisible} delay={delay} />
-        )}
+        {pending ? stat.value : <CountUp value={stat.value} play={isVisible} delay={delay} />}
       </span>
 
-      <span className="mt-3 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8A8A8A]">
+      <span className="mt-3 text-[0.7rem] font-medium tracking-[0.16em] uppercase text-muted-foreground">
         {stat.label}
       </span>
 
       {pending && (
-        <span className="mt-2 text-[10px] uppercase tracking-[0.12em] text-[#5a5a5a]">
-          a completer
+        <span className="mt-2 text-[0.62rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
+          à compléter
         </span>
       )}
-    </motion.div>
-  )
+    </div>
+  );
 }
 
 /**
  * Compteur anime.
  *
- * Il decoupe la valeur en trois : ce qui precede le nombre (« + »), le nombre
- * lui-meme, et ce qui suit (« % », « M », « M€ »). Seul le nombre est anime,
- * les symboles restent en place. Sans cela, « +42% » deviendrait « 0% » puis
- * « +42% » d'un coup, ce qui est laid.
+ * Il decoupe la valeur en trois : ce qui precede le nombre (« + »), le
+ * nombre lui-meme, et ce qui suit (« % », « M », « M€ »). Seul le
+ * nombre est anime, les symboles restent en place. Sans cela, « +42% »
+ * deviendrait « 0% » puis « +42% » d'un coup, ce qui est laid.
  *
- * La courbe d'acceleration est une sortie cubique : le compteur demarre vite
- * puis ralentit en approchant de la valeur finale. Un compteur lineaire fait
- * mecanique.
+ * La courbe d'acceleration est une sortie cubique : le compteur demarre
+ * vite puis ralentit en approchant de la valeur finale. Un compteur
+ * lineaire fait mecanique.
  */
 function CountUp({
   value,
@@ -114,61 +117,59 @@ function CountUp({
   delay = 0,
   duration = 1400,
 }: {
-  value: string
-  play: boolean
-  delay?: number
-  duration?: number
+  value: string;
+  play: boolean;
+  delay?: number;
+  duration?: number;
 }) {
-  const reduced = usePrefersReducedMotion()
-  const match = value.match(/^([^\d-]*)(-?[\d\s.,]+)(.*)$/)
+  const reduced = usePrefersReducedMotion();
+  const match = value.match(/^([^\d-]*)(-?[\d\s.,]+)(.*)$/);
 
-  const [display, setDisplay] = useState<string | null>(null)
-  const frame = useRef<number>()
+  const [display, setDisplay] = useState<string | null>(null);
+  const frame = useRef<number | undefined>(undefined);
 
-  const prefix = match?.[1] ?? ''
-  const rawNumber = match?.[2] ?? ''
-  const suffix = match?.[3] ?? ''
+  const prefix = match?.[1] ?? "";
+  const rawNumber = match?.[2] ?? "";
+  const suffix = match?.[3] ?? "";
 
-  const target = parseFloat(rawNumber.replace(/\s/g, '').replace(',', '.'))
-  const decimals = (rawNumber.split(/[.,]/)[1] ?? '').trim().length
+  const target = parseFloat(rawNumber.replace(/\s/g, "").replace(",", "."));
+  const decimals = (rawNumber.split(/[.,]/)[1] ?? "").trim().length;
 
   useEffect(() => {
-    if (!play || reduced || !match || Number.isNaN(target)) return
+    if (!play || reduced || !match || Number.isNaN(target)) return;
 
-    let start: number | null = null
-    const startDelay = delay * 1000
+    let start: number | null = null;
 
     const step = (now: number) => {
-      if (start === null) start = now
-      const elapsed = now - start - startDelay
+      if (start === null) start = now;
+      const elapsed = now - start - delay;
 
       if (elapsed < 0) {
-        frame.current = requestAnimationFrame(step)
-        return
+        frame.current = requestAnimationFrame(step);
+        return;
       }
 
-      const t = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - t, 3)
-      const current = target * eased
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const current = target * eased;
 
       setDisplay(
         decimals > 0
-          ? current.toFixed(decimals).replace('.', ',')
-          : Math.round(current).toLocaleString('fr-FR'),
-      )
+          ? current.toFixed(decimals).replace(".", ",")
+          : Math.round(current).toLocaleString("fr-FR"),
+      );
 
-      if (t < 1) frame.current = requestAnimationFrame(step)
-    }
+      if (t < 1) frame.current = requestAnimationFrame(step);
+    };
 
-    frame.current = requestAnimationFrame(step)
+    frame.current = requestAnimationFrame(step);
     return () => {
-      if (frame.current) cancelAnimationFrame(frame.current)
-    }
-  }, [play, reduced, match, target, decimals, duration, delay])
+      if (frame.current) cancelAnimationFrame(frame.current);
+    };
+  }, [play, reduced, match, target, decimals, duration, delay]);
 
-  // Valeur non numerique, animation desactivee, ou avant le depart : valeur brute.
   if (!match || Number.isNaN(target) || reduced || display === null) {
-    return <>{value}</>
+    return <>{value}</>;
   }
 
   return (
@@ -177,5 +178,5 @@ function CountUp({
       {display}
       {suffix}
     </>
-  )
+  );
 }
