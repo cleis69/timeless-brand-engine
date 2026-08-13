@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { WorkItem } from "./work.data";
+import { statsOf, type WorkItem } from "./work.data";
 import { VideoPlayer } from "./VideoPlayer";
 import { WorkStats } from "./WorkStats";
 import { MaskReveal, Reveal } from "@/components/Reveal";
@@ -160,22 +160,71 @@ export function VideoReveal({ item, index, total }: Props) {
     </div>
   );
 
+  /*
+    LA PROFONDEUR
+
+    Trois couches empilees, et c'est ce qui separe une image collee sur
+    une page d'un objet pose dans un espace :
+
+      1. Une plaque bleue inclinee de quelques degres, en arriere-plan.
+         Elle depasse d'un cote, comme une feuille glissee sous une
+         autre. C'est ce decalage qui cree la sensation d'epaisseur.
+      2. Une lueur diffuse derriere la video, qui la decolle du fond.
+      3. Une ombre portee profonde sous la carte elle-meme.
+
+    L'inclinaison alterne d'une realisation a l'autre, en miroir de la
+    mise en page. Sans cette alternance, les plaques pencheraient toutes
+    du meme cote et l'oeil y verrait un defaut plutot qu'une intention.
+  */
+  const tilt = flipped ? 6 : -6;
+
   const video = (
     <div
-      ref={revealRef}
-      className="relative overflow-hidden will-change-transform"
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "scale(1)" : `scale(${enterScale})`,
-        borderRadius: isVisible ? 20 : 32,
-        transition: `opacity ${enterDuration}ms ${EASE_EXPO}, transform ${enterDuration}ms ${EASE_EXPO}, border-radius ${enterDuration}ms ${EASE_EXPO}`,
-        // Garde-fou : une video verticale ne depasse jamais 82 % de la
-        // hauteur d'ecran et reste centree dans sa colonne.
-        ...(isPortrait ? { maxHeight: "82vh", maxWidth: 480, marginInline: "auto" } : {}),
-      }}
+      className="relative"
+      style={isPortrait ? { maxWidth: 480, marginInline: "auto" } : undefined}
     >
-      <div ref={parallaxRef} className="will-change-transform">
-        <VideoPlayer item={item} radius={20} withSound={index === 1} />
+      {/* Couche 1 — la plaque inclinee */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-4 top-6 bottom-6 rounded-[26px]"
+        style={{
+          background: "linear-gradient(135deg, #1D4ED8, #3B82F6)",
+          opacity: isVisible ? 0.3 : 0,
+          transform: `rotate(${isVisible ? tilt : 0}deg)`,
+          transition: `opacity ${enterDuration}ms ${EASE_EXPO} 120ms, transform ${enterDuration}ms ${EASE_EXPO} 120ms`,
+        }}
+      />
+
+      {/* Couche 2 — la lueur */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-10 -z-10 rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(59,130,246,0.20) 0%, transparent 68%)",
+          opacity: isVisible ? 1 : 0,
+          transition: `opacity ${enterDuration}ms ease-out 200ms`,
+          filter: "blur(28px)",
+        }}
+      />
+
+      {/* Couche 3 — la carte */}
+      <div
+        ref={revealRef}
+        className="relative overflow-hidden will-change-transform"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? "scale(1)" : `scale(${enterScale})`,
+          borderRadius: isVisible ? 20 : 32,
+          boxShadow: "0 34px 80px rgba(0,0,0,0.72)",
+          transition: `opacity ${enterDuration}ms ${EASE_EXPO}, transform ${enterDuration}ms ${EASE_EXPO}, border-radius ${enterDuration}ms ${EASE_EXPO}`,
+          // Garde-fou : une video verticale ne depasse jamais 82 % de la
+          // hauteur d'ecran.
+          ...(isPortrait ? { maxHeight: "82vh" } : {}),
+        }}
+      >
+        <div ref={parallaxRef} className="will-change-transform">
+          <VideoPlayer item={item} radius={20} withSound={index === 1} />
+        </div>
       </div>
     </div>
   );
@@ -204,7 +253,7 @@ export function VideoReveal({ item, index, total }: Props) {
             ].join(" ")}
           >
             {meta}
-            <WorkStats stats={item.stats} delay={240} className="mt-12" />
+            <WorkStats stats={statsOf(item)} delay={240} className="mt-12" />
           </div>
         </div>
 
@@ -223,7 +272,7 @@ export function VideoReveal({ item, index, total }: Props) {
     <section aria-labelledby={`work-${item.slug}-title`} className="relative">
       <div className="mb-8 sm:mb-10">{meta}</div>
       {video}
-      <WorkStats stats={item.stats} delay={240} className="mt-12 sm:mt-16" />
+      <WorkStats stats={statsOf(item)} delay={240} className="mt-12 sm:mt-16" />
 
       {index < total && (
         <div className="mt-20 h-px w-full bg-hairline sm:mt-28" aria-hidden="true" />

@@ -40,6 +40,30 @@
  * Aucun risque de publier un faux chiffre par accident.
  */
 
+/* ==========================================================================
+ *  ⚠️  MODE DEMONSTRATION  ⚠️
+ *
+ *  Quand DEMO_STATS vaut true, le site affiche les chiffres de la cle
+ *  `demoStats` de chaque realisation. CES CHIFFRES SONT INVENTES. Ils
+ *  servent uniquement a juger le rendu visuel avant d'avoir les vrais.
+ *
+ *  ------------------------------------------------------------------
+ *  A FAIRE AVANT DE PUBLIER LE SITE :  passer cette valeur a false.
+ *  ------------------------------------------------------------------
+ *
+ *  Pourquoi c'est serieux : afficher un resultat chiffre invente sur un
+ *  site qui vend une prestation est une allegation commerciale
+ *  trompeuse. Et le jour ou un prospect demande a voir le chiffre, on
+ *  perd l'affaire — pas faute de resultat, mais faute de pouvoir le
+ *  prouver.
+ *
+ *  Les vrais chiffres existent deja : Meta Business Manager et TikTok
+ *  Ads conservent l'historique de chaque campagne. Impressions, vues,
+ *  taux de clic, cout par resultat. Il suffit de les recopier dans la
+ *  cle `stats` de chaque realisation, puis de basculer ce drapeau.
+ * ========================================================================== */
+export const DEMO_STATS = true
+
 export type Stat = {
   /** '+42%', '3.2M', ou 'STAT_01' tant que le chiffre reel manque. */
   value: string
@@ -74,9 +98,14 @@ export type WorkItem = {
    *   '16/9' et '21/9' -> pleine largeur, texte au-dessus
    */
   aspect: '16/9' | '9/16' | '1/1' | '4/5' | '21/9'
-  /** Exactement trois statistiques. */
+  /** Les vrais chiffres. Marqueurs STAT_ tant qu'ils ne sont pas connus. */
   stats: [Stat, Stat, Stat]
+  /** Chiffres inventes, affiches uniquement quand DEMO_STATS vaut true. */
+  demoStats: [Stat, Stat, Stat]
 }
+
+/** Renvoie les chiffres a afficher selon le mode en cours. */
+export const statsOf = (item: WorkItem) => (DEMO_STATS ? item.demoStats : item.stats)
 
 /** Vrai si la valeur est encore un marqueur et non un chiffre reel. */
 export const isPlaceholder = (value: string) => value.startsWith('STAT_')
@@ -100,6 +129,11 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: 'STAT_02', label: 'TAUX DE CLIC' },
       { value: 'STAT_03', label: 'CONVERSIONS' },
     ],
+    demoStats: [
+      { value: '1.4M', label: 'VUES' },
+      { value: '4.2%', label: 'TAUX DE CLIC' },
+      { value: '+38%', label: 'VENTES' },
+    ],
   },
   {
     slug: 'scultbody',
@@ -118,6 +152,11 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: 'STAT_01', label: 'COUT PAR LEAD' },
       { value: 'STAT_02', label: 'VUES' },
       { value: 'STAT_03', label: 'CONVERSIONS' },
+    ],
+    demoStats: [
+      { value: '890K', label: 'VUES' },
+      { value: '2.10€', label: 'COUT PAR LEAD' },
+      { value: '+52%', label: 'CONVERSIONS' },
     ],
   },
   {
@@ -138,6 +177,11 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: 'STAT_02', label: 'RETENTION' },
       { value: 'STAT_03', label: 'ENGAGEMENT' },
     ],
+    demoStats: [
+      { value: '620K', label: 'VUES' },
+      { value: '68%', label: 'RETENTION' },
+      { value: '+41%', label: 'ENGAGEMENT' },
+    ],
   },
   {
     slug: 'ehab-localisation',
@@ -156,6 +200,11 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: 'STAT_01', label: 'MARCHES' },
       { value: 'STAT_02', label: 'VUES' },
       { value: 'STAT_03', label: 'DELAI' },
+    ],
+    demoStats: [
+      { value: '3', label: 'MARCHES' },
+      { value: '410K', label: 'VUES' },
+      { value: '12 j', label: 'DELAI' },
     ],
   },
 ]

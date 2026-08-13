@@ -3,6 +3,7 @@ import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
 import { IrisBackdrop } from "@/components/IrisBackdrop";
+import { AvailabilityBadge } from "@/components/AvailabilityBadge";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { useState } from "react";
@@ -241,21 +242,39 @@ function Hero() {
 
       <div className="shell relative w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
         <Reveal>
-          <p className="text-[0.7rem] font-medium tracking-[0.22em] uppercase text-accent">
+          <AvailabilityBadge />
+        </Reveal>
+
+        <Reveal delay={40}>
+          <p className="mt-8 text-[0.7rem] font-medium tracking-[0.22em] uppercase text-accent">
             Creative growth agency
           </p>
         </Reveal>
 
-        <h1 className="display mt-9 max-w-5xl text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-6xl lg:text-[5rem]">
-          <MaskReveal delay={80}>Nous concevons des marques</MaskReveal>
-          <MaskReveal delay={170}>
-            <span>et des </span>
+        {/*
+          Le titre est decoupe en quatre lignes ecrites a la main, et non
+          laisse au navigateur.
+
+          En laissant faire le retour automatique, on obtient des lignes
+          qui se cassent n'importe ou : « marques » et « croissance » se
+          retrouvaient seuls en fin de ligne. Un mot isole en bout de
+          ligne casse le rythme de lecture et se voit immediatement sur
+          un titre de cette taille.
+
+          Chaque ligne est donc calibree pour tenir dans la largeur, et
+          « systemes de croissance » occupe une ligne entiere en gris :
+          la respiration tombe au bon endroit.
+        */}
+        <h1 className="display mt-9 max-w-4xl text-[2.4rem] leading-[1] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.4rem]">
+          <MaskReveal delay={80}>Nous concevons</MaskReveal>
+          <MaskReveal delay={165}>des marques et des</MaskReveal>
+          <MaskReveal delay={250}>
             <span className="text-[#5c5c5a]">systèmes de croissance</span>
           </MaskReveal>
-          <MaskReveal delay={260}>qui font la différence.</MaskReveal>
+          <MaskReveal delay={335}>qui font la différence.</MaskReveal>
         </h1>
 
-        <Reveal delay={380}>
+        <Reveal delay={430}>
           <p className="mt-10 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Branding, technologie, intelligence artificielle et acquisition, réunis dans une seule
             équipe.

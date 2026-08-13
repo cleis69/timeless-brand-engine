@@ -1,6 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { isPlaceholder, type Stat } from "./work.data";
+import { DEMO_STATS, isPlaceholder, type Stat } from "./work.data";
 import { useReveal, usePrefersReducedMotion } from "@/hooks/useReveal";
+
+/*
+  Avertissement en console tant que le mode demonstration est actif.
+  Il ne se voit pas sur le site, mais il rappelle a chaque ouverture des
+  outils de developpement que les chiffres affiches sont inventes.
+*/
+if (typeof window !== "undefined" && DEMO_STATS) {
+  console.warn(
+    "%c[ULTRA VISION] Chiffres de DEMONSTRATION affiches. " +
+      "Passer DEMO_STATS a false dans src/components/work/work.data.ts avant de publier.",
+    "color:#3B82F6;font-weight:600",
+  );
+}
 
 /**
  * ULTRA VISION — bande statistique sous une video.
