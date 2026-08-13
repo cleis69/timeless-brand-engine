@@ -1,4 +1,5 @@
 import { MaskReveal, Reveal } from "./Reveal";
+import { Seam, Texture } from "./Texture";
 
 /**
  * ULTRA VISION — la cassure claire.
@@ -37,11 +38,23 @@ const PILIERS = [
 
 export function Conviction() {
   return (
-    <section
-      aria-labelledby="conviction-title"
-      className="relative bg-[#F5F5F3] text-[#090909]"
-    >
-      <div className="shell py-28 sm:py-36 lg:py-44">
+    <>
+      {/* Jointure haute : le noir se dissout dans le clair sur 120 px
+          au lieu de s'arreter net. C'est ce qui supprime l'effet de bloc. */}
+      <Seam from="#070708" to="#F5F5F3" height={120} />
+
+      <section
+        aria-labelledby="conviction-title"
+        className="relative text-[#090909]"
+        style={{
+          // Le clair non plus n'est pas un aplat : il se creuse legerement
+          // vers le bas pour amorcer le retour au sombre.
+          background: "linear-gradient(to bottom, #F5F5F3 0%, #EFEFEC 62%, #E7E7E3 100%)",
+        }}
+      >
+        <Texture tone="light" size={76} opacity={0.05} from="18% 8%" />
+
+        <div className="shell relative py-24 sm:py-28 lg:py-32">
         <Reveal>
           <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-[#6B6B6B]">
             Notre conviction
@@ -57,7 +70,15 @@ export function Conviction() {
           <MaskReveal delay={240}>à ce qu&apos;elle déclenche.</MaskReveal>
         </h2>
 
-        <div className="mt-16 grid gap-10 border-t border-[#DCDCD8] pt-12 sm:mt-20 sm:grid-cols-2 sm:gap-16">
+        {/*
+          Trois colonnes au lieu de deux.
+
+          Avec deux blocs de texte, le tiers droit de la section restait
+          vide et la page paraissait inachevee. La troisieme colonne porte
+          le chiffre qui resume l'agence : elle remplit l'espace et ajoute
+          un argument au lieu d'un remplissage.
+        */}
+        <div className="mt-14 grid gap-10 border-t border-[#D6D6D2] pt-12 sm:mt-16 sm:gap-12 lg:grid-cols-3 lg:gap-14">
           {PILIERS.map((p, i) => (
             <Reveal key={p.title} delay={320 + i * 90}>
               <h3 className="text-base font-medium">{p.title}</h3>
@@ -66,8 +87,29 @@ export function Conviction() {
               </p>
             </Reveal>
           ))}
+
+          <Reveal delay={500}>
+            <div className="flex h-full flex-col justify-between rounded-2xl bg-[#090909] p-7 text-[#F5F5F3]">
+              <p className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-[#8A8A8A]">
+                Une seule équipe
+              </p>
+              <div className="mt-8">
+                <span className="display block text-[3.2rem] leading-none tracking-[-0.04em]">
+                  10
+                </span>
+                <span className="mt-2 block text-[0.8rem] leading-relaxed text-[#A8A8A6]">
+                  métiers réunis, du branding à l&apos;acquisition, sans jamais passer
+                  par un prestataire externe.
+                </span>
+              </div>
+            </div>
+          </Reveal>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* Jointure basse : retour au sombre, sans coupure. */}
+      <Seam from="#E7E7E3" to="#090909" height={120} />
+    </>
   );
 }

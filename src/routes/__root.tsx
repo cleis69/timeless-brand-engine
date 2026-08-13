@@ -13,22 +13,50 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { PageTransition } from "../components/PageTransition";
+import { CONTACT } from "../config/contact";
+
+/**
+ * ULTRA VISION — racine de l'application.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/routes/__root.tsx
+ * ============================================================
+ *
+ * TROIS CHANGEMENTS, RIEN D'AUTRE
+ *
+ * 1. <PageTransition /> est monte au-dessus de tout. Le voile de
+ *    navigation doit vivre a la racine : place dans une page, il
+ *    disparaitrait au moment meme ou cette page se demonte.
+ *
+ * 2. Le favicon pointe vers /favicon.svg. Un SVG reste net sur les
+ *    ecrans a haute densite, la ou le PNG de 32 px bavait. Le PNG est
+ *    conserve en second pour les navigateurs anciens.
+ *
+ * 3. Les donnees structurees affichaient studio@ultravision.fr et
+ *    +33600000000, deux coordonnees inventees. Elles viennent
+ *    maintenant du fichier de configuration. Google lit ces donnees et
+ *    peut les afficher dans ses resultats : une adresse fausse a cet
+ *    endroit se propage.
+ *
+ * Le reste du fichier est inchange.
+ */
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          Cette page n'existe pas ou a été déplacée.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors hover:bg-accent-hover"
           >
-            Go home
+            Retour à l'accueil
           </Link>
         </div>
       </div>
@@ -47,10 +75,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          Cette page n'a pas pu se charger
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Un incident est survenu de notre côté. Réessayez ou revenez à l'accueil.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -58,15 +86,15 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors hover:bg-accent-hover"
           >
-            Try again
+            Réessayer
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center rounded-full border border-hairline px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-foreground transition-colors hover:border-accent"
           >
-            Go home
+            Accueil
           </a>
         </div>
       </div>
@@ -102,6 +130,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
     scripts: [
@@ -113,8 +142,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "ULTRA VISION",
           alternateName: "Ultra Vision — Creative Growth Agency",
           url: "https://timeless-brand-engine.lovable.app",
-          email: "studio@ultravision.fr",
-          telephone: "+33600000000",
+          email: CONTACT.email,
+          ...(CONTACT.phone ? { telephone: CONTACT.phone } : {}),
           sameAs: [],
         }),
       },
@@ -146,6 +175,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PageTransition />
       <SiteHeader />
       <main>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

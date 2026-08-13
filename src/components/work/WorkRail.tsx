@@ -73,6 +73,68 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
     return () => io.disconnect();
   }, [isMobile, items.length]);
 
+  /*
+    PARALLAXE VERTICALE — la mecanique B, greffee sur le rail.
+
+    Chaque colonne derive verticalement a sa propre vitesse pendant le
+    scroll : deux montent, deux descendent. Les quatre videos restent
+    cote a cote, mais elles cessent de se comporter comme un bloc rigide.
+
+    Trois regles que je m'impose ici :
+
+    - Amplitude faible, 26 px au maximum. Au-dela, les cartes se
+      desalignent visiblement et l'on croit a un defaut de mise en page
+      plutot qu'a une intention.
+    - Vitesses alternees et irregulieres (0.5 / -0.85 / 0.95 / -0.6). Des
+      valeurs symetriques produiraient un balancement mecanique.
+    - Rien sur mobile. Le rail y defile horizontalement au doigt : une
+      derive verticale en plus donnerait un mouvement illisible, et
+      chaque image supplementaire coute cher sur un telephone.
+
+    Une seule boucle d'animation pour les quatre cartes, synchronisee sur
+    le rafraichissement de l'ecran, qui n'ecrit que dans `transform`.
+  */
+  const SPEEDS = [0.5, -0.85, 0.95, -0.6];
+
+  useEffect(() => {
+    if (isMobile) {
+      cardRefs.current.forEach((el) => el && (el.style.transform = ""));
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const rail = railRef.current;
+    if (!rail) return;
+
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const r = rail.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 quand le rail entre par le bas, 1 quand il sort par le haut.
+      const p = Math.min(Math.max((vh - r.top) / (vh + r.height), 0), 1) - 0.5;
+
+      cardRefs.current.forEach((el, i) => {
+        if (!el) return;
+        el.style.transform = `translate3d(0, ${(p * (SPEEDS[i % SPEEDS.length] ?? 0) * 52).toFixed(2)}px, 0)`;
+      });
+    };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isMobile, items.length]);
+
   const current = items[active] ?? items[0];
 
   return (
@@ -83,7 +145,9 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
         className={[
           "uv-rail flex gap-3 sm:gap-4",
           "snap-x snap-mandatory overflow-x-auto pb-4",
-          "lg:snap-none lg:overflow-visible lg:pb-0",
+          // La marge verticale laisse la place a la derive des colonnes :
+          // sans elle, les cartes qui descendent seraient coupees.
+          "lg:snap-none lg:overflow-visible lg:py-8 lg:pb-8",
         ].join(" ")}
         style={{
           opacity: isVisible ? 1 : 0,
@@ -119,7 +183,11 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
                 borderRadius: 18,
                 flexGrow: isMobile ? 0 : isActive ? 2.8 : 0.7,
                 flexBasis: isMobile ? "auto" : 0,
-                transition: `flex-grow 620ms ${EASE}`,
+                // `transform` est pilote image par image par la parallaxe :
+                // il ne doit surtout pas etre en transition, sinon les deux
+                // se combattent et le mouvement devient pateux.
+                transition: `flex-grow 620ms ${EASE}, box-shadow 620ms ${EASE}`,
+                willChange: "transform",
                 boxShadow: isActive
                   ? "0 30px 70px rgba(0,0,0,.7), 0 0 0 1px rgba(59,130,246,.28)"
                   : "0 18px 44px rgba(0,0,0,.55), 0 0 0 1px #262626",
@@ -174,6 +242,22 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
                 >
                   {item.description}
                 </p>
+
+                {/*
+                  Le chiffre principal reste visible sur CHAQUE carte, meme
+                  comprimee. C'etait le defaut du rail : en ne montrant les
+                  resultats que pour la carte active, les trois autres
+                  redevenaient de simples images. Un chiffre par carte, et
+                  les quatre racontent quelque chose en permanence.
+                */}
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="display text-[1.05rem] leading-none tracking-[-0.02em] text-foreground">
+                    {statsOf(item)[0].value}
+                  </span>
+                  <span className="text-[0.58rem] tracking-[0.14em] uppercase text-[#8A8A8A]">
+                    {statsOf(item)[0].label}
+                  </span>
+                </div>
               </div>
             </article>
           );

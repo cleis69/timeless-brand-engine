@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { FEATURED_WORK, type WorkItem } from './work.data'
 import { WorkRail } from './WorkRail'
 import { MaskReveal, Reveal } from '@/components/Reveal'
+import { Texture } from '@/components/Texture'
 
 /**
  * ULTRA VISION — section « Selected Work ».
@@ -42,10 +43,18 @@ export function VideoShowcase({
   return (
     <section
       aria-labelledby="selected-work-title"
-      className={`relative overflow-hidden bg-[#090909] py-28 sm:py-36 lg:py-44 ${className}`}
+      className={`relative overflow-hidden py-24 sm:py-28 lg:py-32 ${className}`}
+      style={{
+        // Jamais un aplat. Le fond glisse de #0b0b0b a #070707 : l'ecart
+        // est presque imperceptible, mais il suffit pour que l'oeil cesse
+        // de lire un trou et se mette a lire une profondeur.
+        background: 'linear-gradient(to bottom, #0b0b0c 0%, #090909 42%, #070708 100%)',
+      }}
     >
-      {/* Halo bleu tres discret, ancre en haut a droite. Le bleu reste un
-          accent : jamais un fond. */}
+      {/* Grille technique : elle donne une echelle a l'espace vide. */}
+      <Texture tone="dark" size={80} opacity={0.05} from="70% 12%" />
+
+      {/* Halo bleu tres discret. Le bleu reste un accent : jamais un fond. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 right-[-10%] h-[560px] w-[560px] rounded-full opacity-[0.16] blur-[130px]"
@@ -54,7 +63,7 @@ export function VideoShowcase({
 
       <div className="relative mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16">
         {/* ---------- En-tete de section ---------- */}
-        <header className="mb-20 sm:mb-28">
+        <header className="mb-14 sm:mb-16">
           <Reveal>
             <div className="flex items-center gap-3">
               <span
