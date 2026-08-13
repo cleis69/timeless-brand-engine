@@ -1,144 +1,223 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
+import { EASE_PAGE, PAGE } from "@/config/motion";
 
 /**
- * ULTRA VISION — transition entre les pages : l'obturateur.
+ * ULTRA VISION — changement de page : la profondeur.
  *
- * LE PRINCIPE
+ * ============================================================
+ *  CE FICHIER REMPLACE src/components/PageTransition.tsx
  *
- * A chaque changement de page, l'iris de la marque grandit depuis le
- * point exact ou le visiteur vient de cliquer, jusqu'a recouvrir
- * l'ecran. Un eclat bleu marque le declenchement. Puis l'iris se
- * retracte et devoile la nouvelle page.
+ *  ATTENTION : l'usage change. Le composant ENVELOPPE desormais
+ *  le contenu au lieu d'etre pose a cote.
  *
- * POURQUOI DEPUIS LE POINT CLIQUE, ET NON DEPUIS LE CENTRE
+ *    Avant :  <PageTransition />
+ *             <main><Outlet /></main>
  *
- * Le lien que le visiteur vient de toucher devient l'origine du
- * mouvement. Son regard est deja a cet endroit : il n'a rien a
- * rattraper. Une transition partant du centre de l'ecran oblige l'oeil
- * a se deplacer deux fois, une pour la fermeture, une pour la nouvelle
- * page.
+ *    Maintenant :
+ *             <main><PageTransition><Outlet /></PageTransition></main>
  *
- * POURQUOI L'IRIS ET NON UN VOILE
+ *  Le fichier src/routes/__root.tsx fourni avec celui-ci fait
+ *  deja ce changement. Les deux vont ensemble.
+ * ============================================================
  *
- * Le symbole de la marque s'appelle un iris. Un iris, ca se ferme.
- * L'analogie n'est pas decorative, elle est exacte — et pour une agence
- * qui produit de la video, l'obturateur d'objectif est le geste metier
- * par excellence. C'est aussi la seule transition qu'un concurrent ne
- * peut pas copier sans copier le logo.
+ * CE QUI REMPLACE QUOI
  *
- * L'ECLAT
+ * L'obturateur a iris durait 1 560 ms et posait une forme opaque
+ * par-dessus la page. Deux problemes.
  *
- * Volontairement discret : 35 % d'opacite, 120 ms. Un flash marque le
- * declenchement, mais repete a chaque navigation il devient vite
- * agressif. Assez pour qu'on l'entende, pas assez pour qu'on le
- * subisse.
+ * Le premier est la duree. Sur un site ou l'on visite quatre ou cinq
+ * pages, une seconde et demie a chaque clic finit par se sentir. Une
+ * transition ne doit jamais devenir un peage.
  *
- * TROIS PRECAUTIONS
+ * Le second est plus profond. Poser une forme par-dessus la page, c'est
+ * masquer le changement au lieu de le raconter. Le visiteur ne voit pas
+ * une page succeder a une autre : il voit un rideau, puis une page.
  *
- * - Rien au premier chargement. Une page d'accueil qui demarre par un
- *   rideau noir se fait fermer.
- * - `pointer-events: none` en permanence : jamais d'interception de clic.
- * - Neutralise si l'utilisateur a demande moins d'animations. Un
- *   mouvement plein ecran est exactement ce qui declenche les genes
+ * LE PRINCIPE RETENU
+ *
+ * Rien n'est pose par-dessus. C'est le contenu lui-meme qui bouge.
+ *
+ *   La page qu'on quitte RECULE — elle rapetisse, se floute, s'efface.
+ *   La page qui arrive AVANCE — elle entre legerement trop grande,
+ *   nette, et se pose a sa taille exacte.
+ *
+ * Les deux mouvements ne sont pas symetriques, et c'est volontaire :
+ * un objet qui s'eloigne et un objet qui approche ne parcourent pas le
+ * meme chemin. C'est cette dissymetrie qui fait lire l'ecran comme un
+ * espace a plusieurs plans plutot que comme une surface plate.
+ *
+ * DEUX TEMPS TRES INEGAUX
+ *
+ *   sortie 200 ms — on quitte vite. Personne ne regarde ce qu'il quitte.
+ *   entree 440 ms — on arrive lentement. C'est la que tout se joue.
+ *
+ * Accorder autant de temps aux deux serait accorder autant
+ * d'importance a la page abandonnee qu'a celle qu'on decouvre.
+ *
+ * POURQUOI LE FLOU EST INDISPENSABLE
+ *
+ * Une mise a l'echelle seule se lit comme un zoom, c'est-a-dire comme
+ * un changement de taille. Ajouter le flou fait basculer la lecture :
+ * ce n'est plus la taille qui change, c'est la distance. C'est
+ * exactement le comportement d'un objectif, et le cerveau le decode
+ * sans qu'on ait rien a lui expliquer.
+ *
+ * COMMENT LA SORTIE EST DECLENCHEE
+ *
+ * Difficulte reelle : quand le routeur signale que l'adresse a change,
+ * l'ancienne page est deja demontee. Il est trop tard pour l'animer.
+ *
+ * On ecoute donc le clic sur les liens internes, en phase de capture,
+ * c'est-a-dire avant que le routeur ne reagisse. Le recul commence a
+ * l'instant du clic ; la navigation suit. L'animation est ainsi calee
+ * sur le geste du visiteur, pas sur la mecanique du routeur.
+ *
+ * QUATRE PRECAUTIONS
+ *
+ * - Filet de securite : si aucune navigation ne suit le clic — lien
+ *   annule, ancre sur la meme page, erreur — le contenu revient a la
+ *   normale au bout de 700 ms. Une page ne reste jamais effacee.
+ * - Les liens externes, les nouvelles fenetres et les clics avec Cmd,
+ *   Ctrl ou Maj sont ignores : ils n'entrainent aucun changement de page.
+ * - Rien au premier chargement.
+ * - Entierement neutralise si le visiteur a demande moins d'animations.
+ *   Un mouvement plein ecran est exactement ce qui declenche les genes
  *   vestibulaires.
  */
 
-const DURATION = 1560;
-
-export function PageTransition() {
+export function PageTransition({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const [phase, setPhase] = useState<"idle" | "close" | "open">("idle");
-  const [origin, setOrigin] = useState({ x: 50, y: 50 });
+  const ref = useRef<HTMLDivElement>(null);
   const first = useRef(true);
-  const point = useRef({ x: 0.5, y: 0.5 });
+  const safety = useRef(0);
 
-  /* On memorise en continu la derniere position cliquee. Au moment ou
-     la route change, on sait d'ou faire partir l'obturateur. */
+  /* Remet le contenu dans son etat normal. */
+  const clear = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transition = "";
+    el.style.transform = "";
+    el.style.opacity = "";
+    el.style.filter = "";
+    el.style.willChange = "";
+  };
+
+  /* --- La sortie : declenchee au clic, avant le routeur --------------- */
   useEffect(() => {
-    const onDown = (e: PointerEvent) => {
-      point.current = {
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onClick = (e: MouseEvent) => {
+      // Un clic modifie ouvre ailleurs : la page courante ne bouge pas.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+      const target = e.target as HTMLElement | null;
+      const link = target?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!link) return;
+      if (link.target && link.target !== "_self") return;
+
+      const href = link.getAttribute("href");
+      // Interne uniquement : commence par une seule barre oblique.
+      if (!href || !href.startsWith("/") || href.startsWith("//")) return;
+      // Deja sur cette page : il n'y aura pas de navigation a accompagner.
+      if (href.split("#")[0] === window.location.pathname) return;
+
+      const el = ref.current;
+      if (!el) return;
+
+      el.style.willChange = "transform, opacity, filter";
+      el.style.transition = [
+        `transform ${PAGE.out}ms ${EASE_PAGE}`,
+        `opacity ${PAGE.out}ms ease-out`,
+        `filter ${PAGE.out}ms ease-out`,
+      ].join(", ");
+      el.style.transform = "scale(.965)";
+      el.style.opacity = "0";
+      el.style.filter = "blur(6px)";
+
+      // Filet : si la navigation n'a pas lieu, on remet tout en place.
+      window.clearTimeout(safety.current);
+      safety.current = window.setTimeout(clear, PAGE.out + 500);
     };
-    window.addEventListener("pointerdown", onDown, { passive: true });
-    return () => window.removeEventListener("pointerdown", onDown);
+
+    // Capture : on passe avant le gestionnaire du routeur.
+    window.addEventListener("click", onClick, { capture: true });
+    return () => {
+      window.removeEventListener("click", onClick, { capture: true });
+      window.clearTimeout(safety.current);
+    };
   }, []);
 
+  /* --- L'entree : declenchee par le changement d'adresse -------------- */
   useEffect(() => {
     if (first.current) {
       first.current = false;
       return;
     }
 
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      clear();
       return;
     }
 
-    setOrigin({ x: point.current.x * 100, y: point.current.y * 100 });
-    setPhase("close");
+    window.clearTimeout(safety.current);
 
-    const toOpen = window.setTimeout(() => setPhase("open"), DURATION * 0.46);
-    const toIdle = window.setTimeout(() => setPhase("idle"), DURATION);
+    // Etat de depart : legerement trop grande, floue, transparente.
+    el.style.transition = "none";
+    el.style.transform = "scale(1.035)";
+    el.style.opacity = "0";
+    el.style.filter = "blur(8px)";
+    el.style.willChange = "transform, opacity, filter";
+
+    /*
+      Deux images d'attente avant de lancer le mouvement.
+
+      Une seule ne suffit pas : le navigateur peut regrouper le
+      changement d'etat et le lancement de la transition dans le meme
+      calcul, et la transition ne part alors jamais. La page apparaitrait
+      d'un coup, sans animation. C'est le piege classique.
+    */
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        el.style.transition = [
+          `transform ${PAGE.in}ms ${EASE_PAGE}`,
+          // L'opacite et la nettete arrivent en avance sur l'echelle :
+          // le texte doit etre lisible pendant que la page finit de se
+          // poser, pas seulement une fois qu'elle est posee.
+          `opacity ${Math.round(PAGE.in * 0.7)}ms ease-out`,
+          `filter ${Math.round(PAGE.in * 0.65)}ms ease-out`,
+        ].join(", ");
+        el.style.transform = "scale(1)";
+        el.style.opacity = "1";
+        el.style.filter = "blur(0px)";
+      });
+    });
+
+    const done = window.setTimeout(clear, PAGE.in + 60);
 
     return () => {
-      window.clearTimeout(toOpen);
-      window.clearTimeout(toIdle);
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+      window.clearTimeout(done);
     };
   }, [pathname]);
 
-  if (phase === "idle") return null;
+  /*
+    `transform-origin` au centre haut plutot qu'au centre.
 
-  const closed = phase === "close";
-
-  /* Le facteur d'echelle doit couvrir l'ecran depuis n'importe quel
-     point. Le pire cas est un clic dans un angle : la diagonale
-     complete. On prend large plutot que de calculer au plus juste. */
-  const cover = 62;
-
+    Une page fait plusieurs milliers de pixels de haut. Une mise a
+    l'echelle depuis son centre geometrique deplace le haut de la page
+    de plusieurs dizaines de pixels — et le haut est precisement ce que
+    le visiteur regarde en arrivant. Ancree en haut, la page grandit
+    vers le bas et le titre reste ou l'oeil l'attend.
+  */
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[100]">
-      {/* L'eclat de declenchement */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(circle at ${origin.x}% ${origin.y}%, #60A5FA 0%, #3B82F6 26%, transparent 62%)`,
-          opacity: closed ? 0.35 : 0,
-          transition: closed ? "opacity 120ms ease-out 560ms" : "opacity 340ms ease-out",
-        }}
-      />
-
-      {/* La pupille : c'est elle qui masque reellement la page */}
-      <div
-        className="absolute h-4 w-4 rounded-full will-change-transform"
-        style={{
-          left: `${origin.x}%`,
-          top: `${origin.y}%`,
-          backgroundColor: "#090909",
-          transform: `translate(-50%, -50%) scale(${closed ? cover * 1.9 : 0})`,
-          transition: `transform ${DURATION * 0.46}ms cubic-bezier(.76,0,.24,1)`,
-        }}
-      />
-
-      {/* L'iris, par-dessus : il donne le geste et la couleur */}
-      <img
-        src="/brand/icon/ultravision-icon-blue.svg"
-        alt=""
-        width={120}
-        height={120}
-        className="absolute w-[120px] will-change-transform"
-        style={{
-          left: `${origin.x}%`,
-          top: `${origin.y}%`,
-          transform: `translate(-50%, -50%) scale(${closed ? 5.4 : 0.2}) rotate(${closed ? 150 : 285}deg)`,
-          opacity: closed ? 0.9 : 0,
-          transition: `transform ${DURATION * 0.46}ms cubic-bezier(.76,0,.24,1), opacity ${closed ? 260 : 400}ms ease-out ${closed ? 0 : 240}ms`,
-        }}
-      />
+    <div ref={ref} style={{ transformOrigin: "50% 0%" }}>
+      {children}
     </div>
   );
 }

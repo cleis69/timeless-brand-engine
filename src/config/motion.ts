@@ -46,6 +46,16 @@ export const EASE_ENTER = "cubic-bezier(.16,1,.3,1)";
  */
 export const EASE_RESPOND = "cubic-bezier(.22,1,.36,1)";
 
+/**
+ * Courbe des changements de page.
+ *
+ * C'est celle qu'Apple emploie sur ses pages produit. Elle demarre
+ * immediatement — aucune hesitation au depart — et arrive tres amortie,
+ * sans jamais depasser sa cible. Pas de rebond : un rebond sur une page
+ * entiere donne l'impression que le contenu n'est pas fixe.
+ */
+export const EASE_PAGE = "cubic-bezier(.32,.72,0,1)";
+
 /* ==========================================================================
  *  LES DUREES, EN MILLISECONDES
  * ========================================================================== */
@@ -81,6 +91,31 @@ export const MOTION = {
 
   /** Ouverture d'une reponse de FAQ. */
   faq: 400,
+} as const;
+
+/* ==========================================================================
+ *  LE CHANGEMENT DE PAGE
+ * ========================================================================== */
+
+/**
+ * L'obturateur a iris precedent durait 1 560 ms. Au-dela de 600 ms
+ * environ, le cerveau cesse de percevoir un enchainement et commence a
+ * percevoir une attente. Sur un site ou l'on visite quatre ou cinq
+ * pages, cette attente se paie a chaque clic.
+ *
+ * 640 ms au total ici, en deux temps inegaux :
+ *
+ *   sortie 200 ms — on quitte vite, personne ne regarde ce qu'on quitte
+ *   entree 440 ms — on arrive lentement, c'est la que se joue l'effet
+ *
+ * Cette asymetrie est le point important. Une transition symetrique
+ * accorde autant d'importance a la page qu'on abandonne qu'a celle
+ * qu'on decouvre : c'est exactement l'inverse de ce que veut le
+ * visiteur.
+ */
+export const PAGE = {
+  out: 200,
+  in: 440,
 } as const;
 
 /* ==========================================================================

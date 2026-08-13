@@ -25,9 +25,13 @@ import { CONTACT } from "../config/contact";
  *
  * TROIS CHANGEMENTS, RIEN D'AUTRE
  *
- * 1. <PageTransition /> est monte au-dessus de tout. Le voile de
- *    navigation doit vivre a la racine : place dans une page, il
- *    disparaitrait au moment meme ou cette page se demonte.
+ * 1. <PageTransition> enveloppe <Outlet />. La transition retenue —
+ *    la profondeur — fait reculer la page sortante et avancer la page
+ *    entrante : elle doit donc envelopper le contenu, et non etre
+ *    posee a cote comme l'ancien voile a iris.
+ *
+ *    Elle vit a la racine, jamais dans une page : placee dans une page,
+ *    elle disparaitrait au moment meme ou cette page se demonte.
  *
  * 2. Le favicon pointe vers /favicon.svg. Un SVG reste net sur les
  *    ecrans a haute densite, la ou le PNG de 32 px bavait. Le PNG est
@@ -195,11 +199,23 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PageTransition />
       <SiteHeader />
+      {/*
+        <PageTransition> ENVELOPPE desormais le contenu au lieu d'etre
+        pose a cote. C'est necessaire : la transition retenue fait
+        reculer puis avancer la page elle-meme, il faut donc qu'elle
+        ait prise sur l'element qui contient la page.
+
+        La barre de navigation reste volontairement en dehors. Elle ne
+        change pas d'une page a l'autre : la faire reculer avec le
+        contenu donnerait l'impression que tout le site clignote, au
+        lieu de suggerer qu'une page passe derriere une autre.
+      */}
       <main>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <PageTransition>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </PageTransition>
       </main>
       <SiteFooter />
     </QueryClientProvider>

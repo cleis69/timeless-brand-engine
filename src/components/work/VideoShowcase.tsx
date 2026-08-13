@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { FEATURED_WORK, type WorkItem } from './work.data'
-import { WorkRail } from './WorkRail'
+import { WorkRibbon } from './WorkRibbon'
 import { MaskReveal, Reveal } from '@/components/Reveal'
 import { Texture } from '@/components/Texture'
 
@@ -43,7 +43,18 @@ export function VideoShowcase({
   return (
     <section
       aria-labelledby="selected-work-title"
-      className={`relative overflow-hidden py-24 sm:py-28 lg:py-32 ${className}`}
+      /*
+        L'ECART AVEC LA SECTION DU DESSUS EST DIVISE PAR DEUX.
+
+        La marge haute passe de 96 px a 40 px, la marge basse reste
+        genereuse. Auparavant les deux etaient identiques : le titre
+        flottait au milieu de deux vides egaux, sans appartenir a rien.
+
+        Un titre doit etre proche de ce qu'il annonce et distant de ce
+        qui precede. C'est cette dissymetrie qui fait qu'on lit une
+        suite plutot que deux blocs sans rapport.
+      */
+      className={`relative overflow-hidden pt-10 pb-24 sm:pt-12 sm:pb-28 lg:pt-14 lg:pb-32 ${className}`}
       style={{
         // Jamais un aplat. Le fond glisse de #0b0b0b a #070707 : l'ecart
         // est presque imperceptible, mais il suffit pour que l'oeil cesse
@@ -54,16 +65,19 @@ export function VideoShowcase({
       {/* Grille technique : elle donne une echelle a l'espace vide. */}
       <Texture tone="dark" size={80} opacity={0.05} from="70% 12%" />
 
-      {/* Halo bleu tres discret. Le bleu reste un accent : jamais un fond. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 right-[-10%] h-[560px] w-[560px] rounded-full opacity-[0.16] blur-[130px]"
-        style={{ background: 'radial-gradient(circle, #1D4ED8 0%, transparent 70%)' }}
-      />
+      {/*
+        L'ancien halo bleu en haut a droite est retire.
+
+        Le ruban porte desormais son propre contre-jour, centre sur la
+        hauteur des cartes. Deux sources bleues dans la meme section se
+        contredisent : l'oeil ne sait plus d'ou vient la lumiere, et le
+        lisere froid sur les aretes des cartes — qui n'a de sens que
+        s'il vient de derriere — devient incoherent.
+      */}
 
       <div className="relative mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16">
         {/* ---------- En-tete de section ---------- */}
-        <header className="mb-14 sm:mb-16">
+        <header className="mb-7 sm:mb-8">
           <Reveal>
             <div className="flex items-center gap-3">
               <span
@@ -76,16 +90,31 @@ export function VideoShowcase({
             </div>
           </Reveal>
 
+          {/*
+            LE TITRE PASSE DE 5,5 rem A 2 rem AU MAXIMUM.
+
+            A `clamp(2.5rem, 7vw, 5.5rem)` il atteignait la taille du
+            titre du hero. Deux consequences, toutes deux mauvaises.
+
+            La premiere est hierarchique : deux titres de meme poids sur
+            une meme page, c'est une page sans hierarchie. Le visiteur ne
+            sait plus lequel compte.
+
+            La seconde est plus grave ici : le sujet de ce bloc, ce sont
+            les images. Un titre de cette taille les ecrase et retarde le
+            moment ou l'oeil les atteint. Une entree de section annonce ;
+            elle ne doit pas concurrencer ce qu'elle annonce.
+          */}
           <h2
             id="selected-work-title"
-            className="font-display mt-8 max-w-4xl text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95] tracking-[-0.035em] text-[#F5F5F3]"
+            className="font-display mt-3 max-w-2xl text-[clamp(1.5rem,3vw,2rem)] leading-[1.05] tracking-[-0.03em] text-[#F5F5F3]"
           >
             <MaskReveal delay={80}>{title}</MaskReveal>
           </h2>
 
-          <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <Reveal delay={160}>
-              <p className="max-w-xl text-[16px] leading-relaxed text-[#8A8A8A] sm:text-[17px]">
+              <p className="max-w-lg text-[14px] leading-relaxed text-[#8A8A8A] sm:text-[15px]">
                 {intro}
               </p>
             </Reveal>
@@ -110,7 +139,7 @@ export function VideoShowcase({
         </header>
 
         {/* ---------- Les realisations ---------- */}
-        <WorkRail items={items} />
+        <WorkRibbon items={items} />
       </div>
     </section>
   )
