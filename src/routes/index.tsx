@@ -3,7 +3,9 @@ import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
 import { IrisBackdrop } from "@/components/IrisBackdrop";
+import { FloatingPlatforms } from "@/components/FloatingPlatforms";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge";
+import { LOOP, MOTION, EASE_RESPOND } from "@/config/motion";
 import { GrowthBackdrop } from "@/components/GrowthBackdrop";
 import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
@@ -189,7 +191,15 @@ function Hero() {
     <section className="relative flex min-h-[92svh] items-center overflow-hidden">
       <IrisBackdrop />
 
-      <div className="shell relative w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
+      {/*
+        Les trois plateformes, posees par-dessus l'iris et en dessous du
+        texte. Elles derivent avec le curseur, chacune a son amplitude :
+        c'est ce decalage qui cree la profondeur. Masquees en dessous de
+        1024 px, ou elles chevaucheraient le titre.
+      */}
+      <FloatingPlatforms />
+
+      <div className="shell relative z-[3] w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
         {/*
           La pastille a quitte le hero : elle vit desormais dans la barre
           de navigation, centree au-dessus des liens. L'afficher aux deux
@@ -279,7 +289,11 @@ function Clients() {
         <p className="eyebrow">Entreprises accompagnées</p>
       </div>
       <div className="mt-8 flex overflow-hidden">
-        <div className="marquee flex shrink-0 items-center gap-16 pr-16">
+        {/* 44 s au lieu de 38 : assez lent pour qu'on lise chaque nom. */}
+        <div
+          className="marquee flex shrink-0 items-center gap-16 pr-16"
+          style={{ animationDuration: `${LOOP.marquee}s` }}
+        >
           {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
             <span
               key={`${c}-${i}`}
@@ -347,15 +361,27 @@ function Why() {
         <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
           {WHY.map((w, i) => (
             <Reveal key={w.title} delay={i * 70}>
+              {/* Survol : 220 ms. Le bloc bleu doit etre la avant que la
+                  main n'ait fini son geste, sinon il donne l'impression
+                  de courir apres le curseur. */}
               <div
                 tabIndex={0}
-                className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none transition-all duration-400 ease-out hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
-                style={{ borderTopColor: "#262626" }}
+                className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
+                style={{
+                  borderTopColor: "#262626",
+                  transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}, border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                }}
               >
-                <h3 className="text-base font-medium transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
+                <h3
+                  className="text-base font-medium group-hover:text-white group-focus-visible:text-white"
+                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+                >
                   {w.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]">
+                <p
+                  className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]"
+                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+                >
                   {w.text}
                 </p>
               </div>
@@ -417,21 +443,28 @@ function Faq() {
                 aria-expanded={open === i}
                 className="group flex w-full items-center justify-between gap-6 py-6 text-left"
               >
-                <span className="text-base font-medium transition-colors duration-300 group-hover:text-accent-hover sm:text-lg">
+                <span
+                  className="text-base font-medium group-hover:text-accent-hover sm:text-lg"
+                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+                >
                   {f.q}
                 </span>
                 {/* La croix pivote et passe au bleu : le seul point de
                     couleur de la section, et il indique l'etat ouvert. */}
                 <span
-                  className={`shrink-0 text-lg transition-all duration-500 group-hover:text-accent-hover ${
+                  className={`shrink-0 text-lg group-hover:text-accent-hover ${
                     open === i ? "rotate-45 text-accent" : "text-muted-foreground"
                   }`}
+                  style={{ transition: `transform ${MOTION.faq}ms ${EASE_RESPOND}, color ${MOTION.respond}ms ${EASE_RESPOND}` }}
                 >
                   +
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-[max-height,opacity] duration-500 ${open === i ? "max-h-60 opacity-100" : "max-h-0 opacity-0"}`}
+                className={`overflow-hidden ${open === i ? "max-h-60 opacity-100" : "max-h-0 opacity-0"}`}
+                style={{
+                  transition: `max-height ${MOTION.faq}ms ${EASE_RESPOND}, opacity ${MOTION.faq}ms ${EASE_RESPOND}`,
+                }}
               >
                 <p className="pb-6 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
               </div>

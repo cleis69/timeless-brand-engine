@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Reveal } from "./Reveal";
+import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
  * ULTRA VISION — la methode, en rail vertical.
@@ -29,7 +30,15 @@ import { Reveal } from "./Reveal";
  * accessible, sans geste a deviner.
  */
 
-const EASE = "cubic-bezier(.19,1,.22,1)";
+/*
+  Vitesses issues de src/config/motion.ts.
+
+  Le point bleu se deplace en 340 ms et non 480. C'est le seul repere
+  visuel de la section : s'il arrive apres que le curseur a change
+  d'etape, il designe la mauvaise ligne pendant un instant — et c'est
+  precisement ce moment que l'oeil remarque.
+*/
+const EASE = EASE_RESPOND;
 
 const ETAPES = [
   {
@@ -96,7 +105,7 @@ export function MethodRail() {
               style={{
                 top: dotTop,
                 boxShadow: "0 0 12px #3B82F6",
-                transition: `top 480ms ${EASE}`,
+                transition: `top ${MOTION.expand}ms ${EASE}`,
               }}
             />
           </div>
@@ -118,8 +127,11 @@ export function MethodRail() {
                   <div className="flex items-baseline gap-4">
                     <span className="text-[0.7rem] tabular-nums text-accent">{e.n}</span>
                     <h3
-                      className="display text-xl transition-colors duration-300 sm:text-2xl"
-                      style={{ color: isActive ? "#F5F5F3" : "#7d7d7b" }}
+                      className="display text-xl sm:text-2xl"
+                      style={{
+                        color: isActive ? "#F5F5F3" : "#7d7d7b",
+                        transition: `color ${MOTION.respond}ms ${EASE}`,
+                      }}
                     >
                       {e.title}
                     </h3>
@@ -133,7 +145,10 @@ export function MethodRail() {
                   */}
                   <div
                     className="overflow-hidden lg:transition-[max-height,opacity]"
-                    style={{ transitionDuration: "500ms", transitionTimingFunction: EASE }}
+                    style={{
+                      transitionDuration: `${MOTION.expand}ms`,
+                      transitionTimingFunction: EASE,
+                    }}
                   >
                     <p
                       className="max-w-md pt-3 pl-8 text-sm leading-relaxed text-muted-foreground lg:pt-0"

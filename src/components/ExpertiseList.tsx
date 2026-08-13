@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
+import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
  * ULTRA VISION — les expertises, en liste editoriale.
@@ -27,7 +28,19 @@ import { Reveal } from "./Reveal";
  * perdu pour la moitie des visiteurs.
  */
 
-const EASE = "cubic-bezier(.19,1,.22,1)";
+/*
+  Vitesses issues de src/config/motion.ts.
+
+  Ces lignes reagissent au survol : elles sont donc en 220 ms, pas en
+  450. La difference se sent immediatement quand on balaie la liste du
+  curseur — a 450 ms, la ligne finit son glissement alors que la souris
+  est deja deux lignes plus bas, et la liste donne l'impression de
+  courir derriere la main.
+
+  Le depliage des prestations, lui, reste plus long (340 ms) : ce n'est
+  pas un changement d'etat mais du contenu qui prend sa place.
+*/
+const EASE = EASE_RESPOND;
 
 const POLES = [
   {
@@ -85,24 +98,30 @@ export function ExpertiseList() {
               tabIndex={0}
               className="group border-b border-hairline outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
               style={{
-                transform: isActive ? "translateX(8px)" : "translateX(0)",
-                transition: `transform 450ms ${EASE}`,
+                transform: isActive ? "translateX(10px)" : "translateX(0)",
+                transition: `transform ${MOTION.respond}ms ${EASE}`,
               }}
             >
               <div className="grid items-baseline gap-x-8 gap-y-3 py-7 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.1fr)]">
                 <span className="text-[0.7rem] tabular-nums text-accent">{p.n}</span>
 
                 <h3
-                  className="display text-2xl transition-colors duration-400 sm:text-3xl lg:text-[2.1rem]"
-                  style={{ color: isActive ? "#F5F5F3" : "#6f6f6d" }}
+                  className="display text-2xl sm:text-3xl lg:text-[2.1rem]"
+                  style={{
+                    color: isActive ? "#F5F5F3" : "#6f6f6d",
+                    transition: `color ${MOTION.respond}ms ${EASE}`,
+                  }}
                 >
                   {p.title}
                 </h3>
 
                 <div className="lg:justify-self-end lg:text-right">
                   <p
-                    className="max-w-sm text-sm leading-relaxed transition-colors duration-400 lg:ml-auto"
-                    style={{ color: isActive ? "#8A8A8A" : "#4f4f4d" }}
+                    className="max-w-sm text-sm leading-relaxed lg:ml-auto"
+                    style={{
+                      color: isActive ? "#8A8A8A" : "#4f4f4d",
+                      transition: `color ${MOTION.respond}ms ${EASE}`,
+                    }}
                   >
                     {p.text}
                   </p>
@@ -114,7 +133,7 @@ export function ExpertiseList() {
                     style={{
                       maxHeight: isActive ? 60 : 0,
                       opacity: isActive ? 1 : 0,
-                      transition: `max-height 500ms ${EASE}, opacity 400ms ${EASE}`,
+                      transition: `max-height ${MOTION.expand}ms ${EASE}, opacity ${MOTION.respond}ms ${EASE}`,
                     }}
                   >
                     <ul className="flex flex-wrap gap-x-4 gap-y-1 pt-3 text-xs text-[#6f6f6d] lg:justify-end">

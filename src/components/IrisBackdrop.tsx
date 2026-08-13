@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { LOOP } from "@/config/motion";
 
 /**
  * ULTRA VISION — l'iris du hero.
@@ -93,7 +94,7 @@ export function IrisBackdrop() {
     >
       <style>{`
         @keyframes uv-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .uv-iris { animation: uv-spin 120s linear infinite; }
+        .uv-iris { animation: uv-spin ${LOOP.iris}s linear infinite; }
         @media (prefers-reduced-motion: reduce) { .uv-iris { animation: none; } }
       `}</style>
 

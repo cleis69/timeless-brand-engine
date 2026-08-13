@@ -3,6 +3,7 @@ import { statsOf, type WorkItem } from "./work.data";
 import { VideoPlayer } from "./VideoPlayer";
 import { WorkStats } from "./WorkStats";
 import { useIsMobile, useReveal } from "@/hooks/useReveal";
+import { EASE_ENTER, EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
  * ULTRA VISION — le rail des realisations.
@@ -38,7 +39,22 @@ import { useIsMobile, useReveal } from "@/hooks/useReveal";
  *   donne acces au meme contenu.
  */
 
-const EASE = "cubic-bezier(.19,1,.22,1)";
+/*
+  Vitesses issues de src/config/motion.ts.
+
+  L'ELARGISSEMENT D'UNE CARTE EST UN CAS A PART
+
+  Ce n'est ni une entree ni un survol. C'est un mouvement de mise en
+  page : quatre colonnes se redistribuent la largeur disponible.
+
+  A 220 ms — la vitesse d'un survol — les quatre colonnes sautent d'une
+  proportion a l'autre et l'oeil ne suit pas ce qui grandit. A 950 ms —
+  la vitesse d'une entree — la main a le temps de traverser trois cartes
+  avant que la premiere ait fini de s'ouvrir.
+
+  700 ms est le compromis : on voit la carte grandir, et on n'attend pas.
+*/
+const EASE = EASE_RESPOND;
 
 export function WorkRail({ items }: { items: WorkItem[] }) {
   const [active, setActive] = useState(0);
@@ -152,7 +168,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
         style={{
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? "translateY(0)" : "translateY(28px)",
-          transition: `opacity 900ms ${EASE}, transform 900ms ${EASE}`,
+          transition: `opacity ${MOTION.enter}ms ${EASE_ENTER}, transform ${MOTION.enter}ms ${EASE_ENTER}`,
         }}
       >
         <style>{`
@@ -193,7 +209,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
                 // `transform` est pilote image par image par la parallaxe :
                 // il ne doit surtout pas etre en transition, sinon les deux
                 // se combattent et le mouvement devient pateux.
-                transition: `flex-grow 620ms ${EASE}, box-shadow 620ms ${EASE}`,
+                transition: `flex-grow ${MOTION.rail}ms ${EASE}, box-shadow ${MOTION.rail}ms ${EASE}`,
                 willChange: "transform",
                 boxShadow: isActive
                   ? "0 30px 70px rgba(0,0,0,.7), 0 0 0 1px rgba(59,130,246,.28)"
@@ -230,7 +246,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
                   style={{
                     opacity: isActive ? 1 : 0,
                     transform: isActive ? "translateY(0)" : "translateY(6px)",
-                    transition: `opacity 450ms ${EASE} 120ms, transform 450ms ${EASE} 120ms`,
+                    transition: `opacity ${MOTION.expand}ms ${EASE} 120ms, transform ${MOTION.expand}ms ${EASE} 120ms`,
                   }}
                 >
                   {item.category}
@@ -244,7 +260,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
                     opacity: isActive ? 1 : 0,
                     maxHeight: isActive ? 80 : 0,
                     overflow: "hidden",
-                    transition: `opacity 450ms ${EASE} 180ms, max-height 550ms ${EASE}`,
+                    transition: `opacity ${MOTION.expand}ms ${EASE} 180ms, max-height ${MOTION.rail}ms ${EASE}`,
                   }}
                 >
                   {item.description}
@@ -279,7 +295,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
             className="h-[2px] flex-1 rounded-full"
             style={{
               background: i === active ? "#3B82F6" : "#262626",
-              transition: "background 400ms ease",
+              transition: `background ${MOTION.expand}ms ease`,
             }}
           />
         ))}

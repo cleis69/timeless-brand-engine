@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { EASE_ENTER, MOTION } from '@/config/motion'
 
 /**
  * ULTRA VISION — apparition au scroll.
@@ -43,7 +44,24 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
  * immediatement, sans transition.
  */
 
-const EASE = 'cubic-bezier(.22,1,.36,1)'
+/*
+  Les durees et les courbes viennent de src/config/motion.ts.
+
+  L'APPARITION RETENUE, ET POURQUOI ELLE A TROIS COMPOSANTES
+
+  1. Une montee de 26 px. Seule, elle donne un glissement plat.
+  2. Une mise a l'echelle de 0,975 a 1. Infime — 2,5 % — mais c'est elle
+     qui fait que le bloc semble AVANCER vers le visiteur au lieu de
+     simplement monter. C'est la composante que l'on ne voit pas et dont
+     l'absence se sent.
+  3. Un flou de 6 px qui se dissipe, et plus vite que le reste : il doit
+     avoir disparu avant la fin du mouvement, sinon le texte reste
+     illisible pendant qu'il bouge encore.
+
+  Les trois ensemble donnent une entree de camera. Prises une par une,
+  aucune ne produit cet effet.
+*/
+const EASE = EASE_ENTER
 
 function useIsVisible<T extends HTMLElement>(safetyMs = 2500) {
   const ref = useRef<T>(null)
@@ -118,8 +136,16 @@ export function Reveal({
       className={className}
       style={{
         opacity: shown ? 1 : 0,
-        transform: shown ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity .8s ${EASE} ${delay}ms, transform .8s ${EASE} ${delay}ms`,
+        transform: shown ? 'translateY(0) scale(1)' : 'translateY(26px) scale(.975)',
+        filter: shown ? 'blur(0px)' : 'blur(6px)',
+        transition: [
+          `opacity ${MOTION.enter}ms ${EASE} ${delay}ms`,
+          `transform ${MOTION.enter}ms ${EASE} ${delay}ms`,
+          // Le flou se leve en avance : le texte doit redevenir net
+          // pendant qu'il finit de monter, pas apres.
+          `filter ${Math.round(MOTION.enter * 0.78)}ms ease-out ${delay}ms`,
+        ].join(', '),
+        willChange: shown ? 'auto' : 'transform, opacity, filter',
       }}
     >
       {children}
@@ -158,7 +184,7 @@ export function MaskReveal({
         className={`block ${className}`}
         style={{
           transform: shown ? 'translateY(0%)' : 'translateY(110%)',
-          transition: `transform .9s cubic-bezier(.19,1,.22,1) ${delay}ms`,
+          transition: `transform ${MOTION.enterTitle}ms ${EASE} ${delay}ms`,
         }}
       >
         {children}
@@ -173,7 +199,7 @@ export function MaskReveal({
  */
 export function RevealGroup({
   children,
-  stagger = 90,
+  stagger = MOTION.stagger,
   delay = 0,
   className = '',
 }: {
@@ -192,8 +218,13 @@ export function RevealGroup({
           key={i}
           style={{
             opacity: shown ? 1 : 0,
-            transform: shown ? 'translateY(0)' : 'translateY(18px)',
-            transition: `opacity .7s ${EASE} ${delay + i * stagger}ms, transform .7s ${EASE} ${delay + i * stagger}ms`,
+            transform: shown ? 'translateY(0) scale(1)' : 'translateY(22px) scale(.982)',
+            filter: shown ? 'blur(0px)' : 'blur(5px)',
+            transition: [
+              `opacity ${MOTION.enter}ms ${EASE} ${delay + i * stagger}ms`,
+              `transform ${MOTION.enter}ms ${EASE} ${delay + i * stagger}ms`,
+              `filter ${Math.round(MOTION.enter * 0.78)}ms ease-out ${delay + i * stagger}ms`,
+            ].join(', '),
           }}
         >
           {child}

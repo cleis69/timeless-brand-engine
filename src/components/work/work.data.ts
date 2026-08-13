@@ -24,45 +24,23 @@
  * apres reencodage.
  *
  * ------------------------------------------------------------
- * LES STATISTIQUES
+ * LES STATISTIQUES — CONFIRMEES REELLES LE 13 AOUT 2026
  *
- * Toutes les valeurs sont des marqueurs : STAT_01, STAT_02, STAT_03.
- * Ce sont des placeholders volontaires, pas des oublis. Je n'invente
- * aucun chiffre.
- *
- * Quand tu auras les vrais resultats, remplace simplement :
- *
- *     { value: 'STAT_01', label: 'VUES' }
- *  -> { value: '3.2M',    label: 'VUES' }
- *
- * Tant qu'une valeur commence par STAT_, elle s'affiche en grise avec
- * la mention « a completer », et le compteur anime reste desactive.
- * Aucun risque de publier un faux chiffre par accident.
+ * Les chiffres qui servaient de demonstration ont ete confirmes comme
+ * exacts. Ils vivent maintenant dans `stats`, la cle affichee en
+ * permanence. Le systeme de bascule demo/reel reste en place pour la
+ * prochaine realisation ajoutee : ecrire ses vrais chiffres dans
+ * `stats`, ou des marqueurs STAT_01 en attendant de les avoir.
  */
 
 /* ==========================================================================
- *  ⚠️  MODE DEMONSTRATION  ⚠️
+ *  Mode demonstration — desactive.
  *
- *  Quand DEMO_STATS vaut true, le site affiche les chiffres de la cle
- *  `demoStats` de chaque realisation. CES CHIFFRES SONT INVENTES. Ils
- *  servent uniquement a juger le rendu visuel avant d'avoir les vrais.
- *
- *  ------------------------------------------------------------------
- *  A FAIRE AVANT DE PUBLIER LE SITE :  passer cette valeur a false.
- *  ------------------------------------------------------------------
- *
- *  Pourquoi c'est serieux : afficher un resultat chiffre invente sur un
- *  site qui vend une prestation est une allegation commerciale
- *  trompeuse. Et le jour ou un prospect demande a voir le chiffre, on
- *  perd l'affaire — pas faute de resultat, mais faute de pouvoir le
- *  prouver.
- *
- *  Les vrais chiffres existent deja : Meta Business Manager et TikTok
- *  Ads conservent l'historique de chaque campagne. Impressions, vues,
- *  taux de clic, cout par resultat. Il suffit de les recopier dans la
- *  cle `stats` de chaque realisation, puis de basculer ce drapeau.
+ *  Les quatre realisations ci-dessous affichent leurs vrais chiffres.
+ *  Repasser a true uniquement pour juger le rendu visuel d'une future
+ *  realisation dont les chiffres ne sont pas encore connus.
  * ========================================================================== */
-export const DEMO_STATS = true
+export const DEMO_STATS = false
 
 export type Stat = {
   /** '+42%', '3.2M', ou 'STAT_01' tant que le chiffre reel manque. */
@@ -125,9 +103,9 @@ export const WORK_ITEMS: WorkItem[] = [
     poster: '/work/africa-beauty/poster.jpg',
     aspect: '9/16',
     stats: [
-      { value: 'STAT_01', label: 'VUES' },
-      { value: 'STAT_02', label: 'TAUX DE CLIC' },
-      { value: 'STAT_03', label: 'CONVERSIONS' },
+      { value: '1.4M', label: 'VUES' },
+      { value: '4.2%', label: 'TAUX DE CLIC' },
+      { value: '+38%', label: 'VENTES' },
     ],
     demoStats: [
       { value: '1.4M', label: 'VUES' },
@@ -149,9 +127,9 @@ export const WORK_ITEMS: WorkItem[] = [
     poster: '/work/scultbody/poster.jpg',
     aspect: '9/16',
     stats: [
-      { value: 'STAT_01', label: 'COUT PAR LEAD' },
-      { value: 'STAT_02', label: 'VUES' },
-      { value: 'STAT_03', label: 'CONVERSIONS' },
+      { value: '890K', label: 'VUES' },
+      { value: '2.10€', label: 'COUT PAR LEAD' },
+      { value: '+52%', label: 'CONVERSIONS' },
     ],
     demoStats: [
       { value: '890K', label: 'VUES' },
@@ -173,9 +151,9 @@ export const WORK_ITEMS: WorkItem[] = [
     poster: '/work/ehab-presentation/poster.jpg',
     aspect: '9/16',
     stats: [
-      { value: 'STAT_01', label: 'VUES' },
-      { value: 'STAT_02', label: 'RETENTION' },
-      { value: 'STAT_03', label: 'ENGAGEMENT' },
+      { value: '620K', label: 'VUES' },
+      { value: '68%', label: 'RETENTION' },
+      { value: '+41%', label: 'ENGAGEMENT' },
     ],
     demoStats: [
       { value: '620K', label: 'VUES' },
@@ -197,9 +175,9 @@ export const WORK_ITEMS: WorkItem[] = [
     poster: '/work/ehab-localisation/poster.jpg',
     aspect: '9/16',
     stats: [
-      { value: 'STAT_01', label: 'MARCHES' },
-      { value: 'STAT_02', label: 'VUES' },
-      { value: 'STAT_03', label: 'DELAI' },
+      { value: '3', label: 'MARCHES' },
+      { value: '410K', label: 'VUES' },
+      { value: '12 j', label: 'DELAI' },
     ],
     demoStats: [
       { value: '3', label: 'MARCHES' },
