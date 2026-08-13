@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { FEATURED_WORK, type WorkItem } from './work.data'
-import { VideoReveal } from './VideoReveal'
+import { WorkRail } from './WorkRail'
 import { MaskReveal, Reveal } from '@/components/Reveal'
 
 /**
@@ -101,16 +101,7 @@ export function VideoShowcase({
         </header>
 
         {/* ---------- Les realisations ---------- */}
-        <div className="flex flex-col gap-20 sm:gap-28 lg:gap-36">
-          {items.map((item, i) => (
-            <VideoReveal
-              key={item.slug}
-              item={item}
-              index={i + 1}
-              total={items.length}
-            />
-          ))}
-        </div>
+        <WorkRail items={items} />
       </div>
     </section>
   )

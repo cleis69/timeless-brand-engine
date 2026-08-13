@@ -183,13 +183,20 @@ export function VideoReveal({ item, index, total }: Props) {
       className="relative"
       style={isPortrait ? { maxWidth: 480, marginInline: "auto" } : undefined}
     >
-      {/* Couche 1 — la plaque inclinee */}
+      {/*
+        Couche 1 — la plaque inclinee.
+
+        Elle doit etre plus GRANDE que la carte, sinon la rotation ne fait
+        depasser que quatre pointes minuscules et l'effet passe inapercu.
+        Avec une marge negative, elle deborde franchement sur deux angles
+        opposes : on lit alors deux objets superposes, et non une ombre.
+      */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-4 top-6 bottom-6 rounded-[26px]"
+        className="absolute -inset-3 rounded-[30px] sm:-inset-4"
         style={{
           background: "linear-gradient(135deg, #1D4ED8, #3B82F6)",
-          opacity: isVisible ? 0.3 : 0,
+          opacity: isVisible ? 0.34 : 0,
           transform: `rotate(${isVisible ? tilt : 0}deg)`,
           transition: `opacity ${enterDuration}ms ${EASE_EXPO} 120ms, transform ${enterDuration}ms ${EASE_EXPO} 120ms`,
         }}

@@ -34,22 +34,41 @@ export function AvailabilityBadge({
   return (
     <div className={`relative inline-block rounded-full p-px ${className}`}>
       <style>{`
-        @keyframes uv-halo { to { transform: rotate(360deg); } }
+        /*
+          Le halo doit etre CARRE, pas etire aux dimensions de la pastille.
+
+          Un degrade conique tourne autour du centre de son conteneur. Dans
+          un rectangle large et plat, ses rayons s'ecrasent et l'on voit des
+          bandes horizontales au lieu d'un arc de lumiere.
+
+          On le pose donc en carre, centre, plus large que la pastille : la
+          rotation redevient circulaire et seul un arc passe derriere le
+          bord. La largeur est exprimee en pourcentage de la largeur de la
+          pastille, et la hauteur suit via aspect-ratio.
+        */
+        @keyframes uv-halo {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
         .uv-halo {
           position: absolute;
-          inset: -140%;
+          top: 50%;
+          left: 50%;
+          width: 165%;
+          aspect-ratio: 1 / 1;
+          transform: translate(-50%, -50%);
           background: conic-gradient(
             from 0deg,
             transparent 0deg,
-            #1D4ED8 42deg,
-            #3B82F6 74deg,
-            #60A5FA 104deg,
-            transparent 168deg
+            #1D4ED8 40deg,
+            #3B82F6 72deg,
+            #60A5FA 96deg,
+            transparent 150deg
           );
           animation: uv-halo 4.5s linear infinite;
         }
         @media (prefers-reduced-motion: reduce) {
-          .uv-halo { animation: none; background: #3B82F6; opacity: .5; }
+          .uv-halo { animation: none; background: #1D4ED8; opacity: .55; }
         }
       `}</style>
 

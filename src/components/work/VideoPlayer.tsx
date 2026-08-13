@@ -38,9 +38,26 @@ type Props = {
   className?: string;
   /** Affiche le bouton de son. Reserve a la premiere video. */
   withSound?: boolean;
+  /**
+   * Pilotage externe de la lecture.
+   *
+   * Non renseigne : la video joue des qu'elle entre dans l'ecran.
+   * Renseigne : elle ne joue que si `active` vaut true ET qu'elle est
+   * visible. C'est ce que le rail utilise pour ne faire tourner qu'une
+   * seule video a la fois — les trois autres restent sur leur image
+   * fixe. Avec des fichiers de 5 a 6 Mo, c'est la difference entre une
+   * page fluide et une page qui rame.
+   */
+  active?: boolean;
 };
 
-export function VideoPlayer({ item, radius = 20, className = "", withSound = false }: Props) {
+export function VideoPlayer({
+  item,
+  radius = 20,
+  className = "",
+  withSound = false,
+  active,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -75,29 +92,38 @@ export function VideoPlayer({ item, radius = 20, className = "", withSound = fal
     return () => io.disconnect();
   }, [shouldLoad]);
 
-  /* --- Etape 2 : lire dans l'ecran, pause en dehors ------------------ */
+  /* --- Etape 2 : savoir si la video est dans l'ecran ----------------- */
+  const [inView, setInView] = useState(false);
+
   useEffect(() => {
     const el = containerRef.current;
-    const video = videoRef.current;
-    if (!el || !video || !shouldLoad) return;
+    if (!el || !shouldLoad) return;
 
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
-          video.play().then(
-            () => setIsPlaying(true),
-            () => setIsPlaying(false), // le navigateur a refuse, ce n'est pas une erreur
-          );
-        } else {
-          video.pause();
-          setIsPlaying(false);
-        }
-      },
+      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.25),
       { threshold: [0, 0.25, 0.6] },
     );
     io.observe(el);
     return () => io.disconnect();
   }, [shouldLoad]);
+
+  /* --- Etape 3 : lire ou mettre en pause ----------------------------- */
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldLoad) return;
+
+    const shouldPlay = inView && (active ?? true);
+
+    if (shouldPlay) {
+      video.play().then(
+        () => setIsPlaying(true),
+        () => setIsPlaying(false), // le navigateur a refuse, ce n'est pas une erreur
+      );
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  }, [inView, active, shouldLoad]);
 
   /* --- Barre de progression ----------------------------------------- */
   useEffect(() => {
@@ -137,7 +163,14 @@ export function VideoPlayer({ item, radius = 20, className = "", withSound = fal
     <div
       ref={containerRef}
       className={`group relative overflow-hidden bg-surface ${className}`}
-      style={{ aspectRatio: item.aspect.replace("/", " / "), borderRadius: radius }}
+      style={{
+        // Dans le rail, la carte impose sa hauteur : on ne force donc pas
+        // de rapport d'image, sinon la video deborderait de sa colonne.
+        ...(className.includes("!absolute")
+          ? {}
+          : { aspectRatio: item.aspect.replace("/", " / ") }),
+        borderRadius: radius,
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
