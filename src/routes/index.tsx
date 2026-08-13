@@ -4,6 +4,9 @@ import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
 import { IrisBackdrop } from "@/components/IrisBackdrop";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge";
+import { GrowthBackdrop } from "@/components/GrowthBackdrop";
+import { ExpertiseList } from "@/components/ExpertiseList";
+import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { useState } from "react";
@@ -86,61 +89,7 @@ export const Route = createFileRoute("/")({
 
 const CLIENTS = ["Africa Beauty", "Scultbody", "Ehab"];
 
-const POLES = [
-  {
-    n: "01",
-    title: "Branding",
-    lines: ["Identité visuelle", "Positionnement", "Charte graphique"],
-    text: "Une marque lisible en trois secondes, cohérente sur chaque point de contact.",
-  },
-  {
-    n: "02",
-    title: "Web & Applications",
-    lines: ["Sites web", "Applications", "Landing pages"],
-    text: "Des interfaces rapides, sobres et pensées pour la conversion.",
-  },
-  {
-    n: "03",
-    title: "IA & Automatisation",
-    lines: ["Agents IA", "Automatisation", "CRM"],
-    text: "Vos processus commerciaux exécutés sans friction, 24 h sur 24.",
-  },
-  {
-    n: "04",
-    title: "Acquisition",
-    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
-    text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
-  },
-  {
-    n: "05",
-    title: "Création de contenu",
-    lines: ["Photo", "Vidéo", "Motion design"],
-    text: "Des assets de niveau maison de luxe, produits en interne.",
-  },
-];
 
-const METHOD = [
-  {
-    n: "01",
-    title: "Diagnostic",
-    text: "Audit de la marque, du tunnel et des données. Nous identifions le point de friction qui coûte le plus cher.",
-  },
-  {
-    n: "02",
-    title: "Stratégie",
-    text: "Positionnement, message, offre et plan d'acquisition. Un document de référence, pas une présentation.",
-  },
-  {
-    n: "03",
-    title: "Design & Build",
-    text: "Identité, site, applications et contenus produits par des seniors, en cycles courts et validés.",
-  },
-  {
-    n: "04",
-    title: "Croissance",
-    text: "Campagnes, automatisations et itérations mensuelles pilotées par la donnée commerciale.",
-  },
-];
 
 const WHY = [
   {
@@ -241,12 +190,14 @@ function Hero() {
       <IrisBackdrop />
 
       <div className="shell relative w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
+        {/*
+          La pastille a quitte le hero : elle vit desormais dans la barre
+          de navigation, centree au-dessus des liens. L'afficher aux deux
+          endroits revenait a repeter la meme phrase a trois cents pixels
+          d'intervalle.
+        */}
         <Reveal>
-          <AvailabilityBadge />
-        </Reveal>
-
-        <Reveal delay={40}>
-          <p className="mt-8 text-[0.7rem] font-medium tracking-[0.22em] uppercase text-accent">
+          <p className="text-[0.7rem] font-semibold tracking-[0.22em] uppercase text-accent">
             Creative growth agency
           </p>
         </Reveal>
@@ -345,43 +296,16 @@ function Clients() {
 
 function Poles() {
   return (
-    <section className="rule bg-surface">
-      <div className="shell py-24 lg:py-32">
-        <Reveal>
-          <p className="eyebrow">Nos expertises</p>
-          <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl lg:text-6xl">
-            Cinq pôles, une seule équipe, une chaîne de valeur complète.
-          </h2>
-        </Reveal>
-
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {POLES.map((p, i) => (
-            <Reveal key={p.title} delay={i * 70}>
-              <article className="surface-card h-full p-8">
-                <span className="text-xs tracking-[0.2em] text-accent">{p.n}</span>
-                <h3 className="display mt-6 text-2xl">{p.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
-                <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-                  {p.lines.map((l) => (
-                    <li key={l} className="flex items-center gap-3">
-                      <span className="h-px w-4 bg-hairline" />
-                      {l}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </Reveal>
-          ))}
-          <Reveal delay={350}>
-            <Link
-              to="/services"
-              className="surface-card flex h-full flex-col justify-between p-8 hover:text-accent-hover"
-            >
-              <span className="eyebrow">Détail complet</span>
-              <span className="display mt-10 text-2xl">Voir tous les services →</span>
-            </Link>
-          </Reveal>
-        </div>
+    /*
+      Le decor de croissance est pose ici, derriere les expertises.
+      C'est la section ou vit le pole Acquisition : la courbe et les
+      plateformes y illustrent exactement ce qui est ecrit au-dessus,
+      au lieu de decorer un propos sans rapport.
+    */
+    <section className="rule relative overflow-hidden bg-surface">
+      <GrowthBackdrop />
+      <div className="shell relative py-24 lg:py-32">
+        <ExpertiseList />
       </div>
     </section>
   );
@@ -391,23 +315,7 @@ function Method() {
   return (
     <section className="rule bg-background">
       <div className="shell py-24 lg:py-32">
-        <Reveal>
-          <p className="eyebrow">Notre méthode</p>
-          <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl lg:text-6xl">
-            Quatre étapes, aucune zone grise.
-          </h2>
-        </Reveal>
-        <div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {METHOD.map((s, i) => (
-            <Reveal key={s.n} delay={i * 80}>
-              <div className="border-t border-hairline pt-6">
-                <span className="text-xs tracking-[0.2em] text-accent">{s.n}</span>
-                <h3 className="display mt-5 text-2xl">{s.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <MethodRail />
       </div>
     </section>
   );
@@ -425,12 +333,31 @@ function Why() {
             </h2>
           </div>
         </Reveal>
-        <div className="grid gap-8 sm:grid-cols-2">
+        {/*
+          Surlignage au survol.
+
+          Un bloc bleu profond glisse derriere l'argument survole. Ca
+          transforme une liste passive en quelque chose qu'on parcourt,
+          et ca ramene du bleu dans une section qui n'en avait aucun.
+
+          Le bleu utilise est #1D4ED8, l'accent sombre de la charte :
+          assez soutenu pour porter du texte blanc, assez sobre pour ne
+          pas transformer la section en aplat colore.
+        */}
+        <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
           {WHY.map((w, i) => (
             <Reveal key={w.title} delay={i * 70}>
-              <div className="border-t border-hairline pt-6">
-                <h3 className="text-base font-medium">{w.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.text}</p>
+              <div
+                tabIndex={0}
+                className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none transition-all duration-400 ease-out hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
+                style={{ borderTopColor: "#262626" }}
+              >
+                <h3 className="text-base font-medium transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
+                  {w.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]">
+                  {w.text}
+                </p>
               </div>
             </Reveal>
           ))}
@@ -488,11 +415,17 @@ function Faq() {
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
-                className="flex w-full items-center justify-between gap-6 py-6 text-left"
+                className="group flex w-full items-center justify-between gap-6 py-6 text-left"
               >
-                <span className="text-base font-medium sm:text-lg">{f.q}</span>
+                <span className="text-base font-medium transition-colors duration-300 group-hover:text-accent-hover sm:text-lg">
+                  {f.q}
+                </span>
+                {/* La croix pivote et passe au bleu : le seul point de
+                    couleur de la section, et il indique l'etat ouvert. */}
                 <span
-                  className={`shrink-0 text-muted-foreground transition-transform duration-500 ${open === i ? "rotate-45" : ""}`}
+                  className={`shrink-0 text-lg transition-all duration-500 group-hover:text-accent-hover ${
+                    open === i ? "rotate-45 text-accent" : "text-muted-foreground"
+                  }`}
                 >
                   +
                 </span>

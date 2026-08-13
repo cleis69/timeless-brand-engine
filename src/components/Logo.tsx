@@ -54,6 +54,17 @@ export function Logo({
     <img
       src={SRC[variant]}
       alt="ULTRA VISION — agence creative growth"
+      /*
+        Les dimensions intrinseques du fichier sont declarees, meme si
+        la taille reelle vient du `className`. Le navigateur en deduit le
+        rapport largeur/hauteur et reserve la place AVANT d'avoir
+        telecharge l'image.
+        Sans elles, le logo occupe zero pixel puis pousse brutalement la
+        navigation : c'est un decalage de mise en page, et Google le
+        sanctionne directement dans son score.
+      */
+      width={1160}
+      height={460}
       className={`${className} w-auto object-contain`}
       loading="eager"
       decoding="async"

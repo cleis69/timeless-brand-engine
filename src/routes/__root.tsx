@@ -46,7 +46,7 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
+        <h1 className="display text-7xl text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Cette page n'existe pas ou a été déplacée.
@@ -118,13 +118,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://api.fontshare.com" },
+      { rel: "preconnect", href: "https://cdn.fontshare.com", crossOrigin: "anonymous" },
+      /*
+        POLICES — huit fichiers reduits a cinq.
+
+        General Sans chargeait 400, 500, 600 et 700 ; Inter chargeait
+        300, 400, 500 et 600. Huit fichiers, alors que le code n'en
+        utilise que cinq :
+
+          General Sans 500 et 700  -> les titres, classe `display`
+          Inter 400, 500 et 600    -> corps, navigation, boutons
+
+        Verifie en listant les classes reellement presentes dans le
+        code : `font-medium` (500) apparait 26 fois, `font-semibold`
+        (600) 7 fois. Inter 300 et General Sans 400 et 600 n'etaient
+        appelees nulle part.
+
+        Chaque graisse inutile est un fichier telecharge, decode et
+        conserve en memoire pour rien — et une feuille de style de
+        police bloque l'affichage du texte tant qu'elle n'est pas lue.
+      */
       {
         rel: "stylesheet",
-        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@400,500,600,700&display=swap",
+        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@500,700&display=swap",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
       },
       {
         rel: "stylesheet",

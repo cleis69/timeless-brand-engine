@@ -1,28 +1,35 @@
 import { MaskReveal, Reveal } from "./Reveal";
-import { Seam, Texture } from "./Texture";
+import { Texture } from "./Texture";
 
 /**
- * ULTRA VISION — la cassure claire.
+ * ULTRA VISION — la respiration claire.
  *
- * POURQUOI CETTE SECTION EXISTE
+ * CE QUI A CHANGE, ET POURQUOI
  *
- * Le site enchainait des sections en #090909 et en #111111. Deux noirs
- * que l'oeil humain ne distingue pas a l'ecran. Resultat : dix mille
- * pixels de tunnel, aucune respiration, et une impression de page qui
- * ne finit jamais.
+ * Version precedente : une bande claire sur toute la largeur, encadree
+ * de deux jointures degradees. Deux defauts.
  *
- * Une seule section en blanc casse suffit a casser ce tunnel. Elle
- * arrive juste apres les videos, au moment ou l'oeil a besoin de
- * souffler, et elle devient le passage dont on se souvient.
+ * D'abord les degrades. Un fond qui passe progressivement du blanc casse
+ * au gris se lit comme une impression ratee, pas comme une intention.
+ * Les degrades fonctionnent sur une lueur ou une ombre, jamais sur un
+ * fond de section : la surface parait sale.
  *
- * Une seule. Deux ruptures claires et l'effet disparait : ce n'est plus
- * une rupture, c'est une alternance.
+ * Ensuite la pleine largeur. Elle produisait exactement le « gros bloc »
+ * qu'on cherchait a eviter — un pave clair colle a un pave sombre.
  *
- * LA REGLE D'ECRITURE
+ * LA NOUVELLE APPROCHE
  *
- * Tres peu de texte, tres grand. Une affirmation, pas une description.
- * Si la phrase tient sur deux lignes, elle est bonne. Si elle en prend
- * cinq, ce n'est plus une conviction, c'est un paragraphe.
+ * Le clair devient un PANNEAU pose sur la page sombre, avec du noir tout
+ * autour. Trois avantages :
+ *
+ *   - Aucune frontiere franche. Le sombre continue de part et d'autre,
+ *     donc rien ne coupe la page en deux.
+ *   - Aucun degrade. Le panneau est en aplat unique, net.
+ *   - Le contraste reste entier, mais il est cadre. C'est un objet dans
+ *     la page, plus une interruption de la page.
+ *
+ * C'est la difference entre peindre un mur en blanc et y accrocher un
+ * tableau.
  */
 
 const PILIERS = [
@@ -38,78 +45,64 @@ const PILIERS = [
 
 export function Conviction() {
   return (
-    <>
-      {/* Jointure haute : le noir se dissout dans le clair sur 120 px
-          au lieu de s'arreter net. C'est ce qui supprime l'effet de bloc. */}
-      <Seam from="#070708" to="#F5F5F3" height={120} />
+    <section aria-labelledby="conviction-title" className="relative bg-background py-16 sm:py-20">
+      <div className="shell">
+        {/* Le panneau clair, en aplat unique. */}
+        <div className="relative overflow-hidden rounded-[28px] bg-[#F2F2EF] px-7 py-16 text-[#090909] sm:px-12 sm:py-20 lg:px-16 lg:py-24">
+          <Texture tone="light" size={72} opacity={0.05} from="14% 6%" />
 
-      <section
-        aria-labelledby="conviction-title"
-        className="relative text-[#090909]"
-        style={{
-          // Le clair non plus n'est pas un aplat : il se creuse legerement
-          // vers le bas pour amorcer le retour au sombre.
-          background: "linear-gradient(to bottom, #F5F5F3 0%, #EFEFEC 62%, #E7E7E3 100%)",
-        }}
-      >
-        <Texture tone="light" size={76} opacity={0.05} from="18% 8%" />
-
-        <div className="shell relative py-24 sm:py-28 lg:py-32">
-        <Reveal>
-          <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-[#6B6B6B]">
-            Notre conviction
-          </p>
-        </Reveal>
-
-        <h2
-          id="conviction-title"
-          className="display mt-10 max-w-4xl text-[clamp(2.1rem,5.4vw,4.25rem)] leading-[1.02] tracking-[-0.035em]"
-        >
-          <MaskReveal delay={80}>Une marque ne se juge pas</MaskReveal>
-          <MaskReveal delay={160}>à sa beauté. Elle se juge</MaskReveal>
-          <MaskReveal delay={240}>à ce qu&apos;elle déclenche.</MaskReveal>
-        </h2>
-
-        {/*
-          Trois colonnes au lieu de deux.
-
-          Avec deux blocs de texte, le tiers droit de la section restait
-          vide et la page paraissait inachevee. La troisieme colonne porte
-          le chiffre qui resume l'agence : elle remplit l'espace et ajoute
-          un argument au lieu d'un remplissage.
-        */}
-        <div className="mt-14 grid gap-10 border-t border-[#D6D6D2] pt-12 sm:mt-16 sm:gap-12 lg:grid-cols-3 lg:gap-14">
-          {PILIERS.map((p, i) => (
-            <Reveal key={p.title} delay={320 + i * 90}>
-              <h3 className="text-base font-medium">{p.title}</h3>
-              <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-[#5A5A57]">
-                {p.text}
+          <div className="relative">
+            <Reveal>
+              <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-[#6B6B6B]">
+                Notre conviction
               </p>
             </Reveal>
-          ))}
 
-          <Reveal delay={500}>
-            <div className="flex h-full flex-col justify-between rounded-2xl bg-[#090909] p-7 text-[#F5F5F3]">
-              <p className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-[#8A8A8A]">
-                Une seule équipe
-              </p>
-              <div className="mt-8">
-                <span className="display block text-[3.2rem] leading-none tracking-[-0.04em]">
-                  10
-                </span>
-                <span className="mt-2 block text-[0.8rem] leading-relaxed text-[#A8A8A6]">
-                  métiers réunis, du branding à l&apos;acquisition, sans jamais passer
-                  par un prestataire externe.
-                </span>
-              </div>
+            <h2
+              id="conviction-title"
+              className="display mt-9 max-w-4xl text-[clamp(2rem,5vw,4rem)] leading-[1.02] tracking-[-0.035em]"
+            >
+              <MaskReveal delay={80}>Une marque ne se juge pas</MaskReveal>
+              <MaskReveal delay={160}>à sa beauté. Elle se juge</MaskReveal>
+              <MaskReveal delay={240}>à ce qu&apos;elle déclenche.</MaskReveal>
+            </h2>
+
+            <div className="mt-14 grid gap-10 border-t border-[#D6D6D2] pt-12 sm:gap-12 lg:grid-cols-3 lg:gap-14">
+              {PILIERS.map((p, i) => (
+                <Reveal key={p.title} delay={320 + i * 90}>
+                  <h3 className="text-base font-medium">{p.title}</h3>
+                  <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-[#5A5A57]">
+                    {p.text}
+                  </p>
+                </Reveal>
+              ))}
+
+              {/*
+                Le bloc sombre au sein du panneau clair.
+                Il remplit le tiers droit qui restait vide, et son
+                inversion de valeurs rappelle la page tout autour :
+                le panneau ne parait pas plaque, il dialogue.
+              */}
+              <Reveal delay={500}>
+                <div className="flex h-full flex-col justify-between rounded-2xl bg-[#090909] p-7 text-[#F5F5F3]">
+                  <p className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-[#8A8A8A]">
+                    Une seule équipe
+                  </p>
+                  <div className="mt-8">
+                    <span className="display block text-[3.2rem] leading-none tracking-[-0.04em]">
+                      10
+                    </span>
+                    <span className="mt-2 block text-[0.8rem] leading-relaxed text-[#A8A8A6]">
+                      métiers réunis, du branding à l&apos;acquisition, sans jamais passer
+                      par un prestataire externe.
+                    </span>
+                  </div>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
+          </div>
         </div>
-        </div>
-      </section>
-
-      {/* Jointure basse : retour au sombre, sans coupure. */}
-      <Seam from="#E7E7E3" to="#090909" height={120} />
-    </>
+      </div>
+    </section>
   );
 }

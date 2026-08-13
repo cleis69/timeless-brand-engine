@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Reveal } from "./Reveal";
+import { MaskReveal, Reveal } from "./Reveal";
+import { Magnetic } from "./Magnetic";
 import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
 
 /**
@@ -47,24 +48,58 @@ export function FinalCTA() {
           "radial-gradient(125% 130% at 50% 135%, #1D4ED8 0%, #101c3d 42%, #0a0d18 68%, #090909 100%)",
       }}
     >
+      {/*
+        L'iris revient en fond, en bas de page.
+
+        Il ouvre le site dans le hero et le referme ici : la page boucle
+        sur la marque. C'est le meme fichier SVG, deja en cache, donc il
+        ne coute rien de plus a charger.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 -bottom-40 hidden w-[520px] select-none opacity-[0.18] md:block"
+      >
+        <style>{`
+          @keyframes uv-cta-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          .uv-cta-iris { animation: uv-cta-spin 150s linear infinite; }
+          @media (prefers-reduced-motion: reduce) { .uv-cta-iris { animation: none; } }
+        `}</style>
+        <img
+          src="/brand/icon/ultravision-icon-blue.svg"
+          alt=""
+          className="uv-cta-iris w-full"
+          draggable={false}
+        />
+      </div>
+
       <div className="shell relative py-28 lg:py-40">
         <Reveal>
-          <p className="eyebrow">Prochaine étape</p>
-          <h2 className="display mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
-            Parlons de votre croissance sur les douze prochains mois.
-          </h2>
+          <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-accent">
+            Prochaine étape
+          </p>
+        </Reveal>
+
+        <h2 className="display mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
+          <MaskReveal delay={80}>Parlons de votre croissance</MaskReveal>
+          <MaskReveal delay={170}>sur les douze prochains mois.</MaskReveal>
+        </h2>
+
+        <Reveal delay={280}>
           <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground">
             30 minutes, sans engagement. Vous repartez avec une lecture claire de votre
             positionnement, de votre tunnel d&apos;acquisition et des leviers prioritaires.
           </p>
 
           <div className="mt-12 flex flex-wrap items-center gap-4">
-            <Link
-              to="/contact"
-              className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
-            >
-              Réserver un appel stratégique
-            </Link>
+            <Magnetic strength={0.3} radius={130}>
+              <Link
+                to="/contact"
+                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-semibold tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
+                style={{ boxShadow: "0 12px 34px rgba(245,245,243,0.14)" }}
+              >
+                Réserver un appel stratégique
+              </Link>
+            </Magnetic>
 
             {hasWhatsapp ? (
               <a

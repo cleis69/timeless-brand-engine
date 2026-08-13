@@ -2,48 +2,71 @@ import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 /**
- * ULTRA VISION — transition entre les pages.
+ * ULTRA VISION — transition entre les pages : l'obturateur.
  *
- * CE QUE CA FAIT
+ * LE PRINCIPE
  *
- * A chaque changement de page, un voile noir monte depuis le bas,
- * couvre l'ecran une fraction de seconde, puis poursuit sa course vers
- * le haut en devoilant la nouvelle page. Le symbole de la marque passe
- * au centre pendant le recouvrement.
+ * A chaque changement de page, l'iris de la marque grandit depuis le
+ * point exact ou le visiteur vient de cliquer, jusqu'a recouvrir
+ * l'ecran. Un eclat bleu marque le declenchement. Puis l'iris se
+ * retracte et devoile la nouvelle page.
  *
- * POURQUOI CA CHANGE LA PERCEPTION
+ * POURQUOI DEPUIS LE POINT CLIQUE, ET NON DEPUIS LE CENTRE
  *
- * Sans transition, une navigation en React donne un remplacement sec :
- * le contenu disparait et un autre apparait au meme instant. C'est
- * rapide, mais ca ne ressemble a rien — l'oeil ne comprend pas ce qui
- * s'est passe.
+ * Le lien que le visiteur vient de toucher devient l'origine du
+ * mouvement. Son regard est deja a cet endroit : il n'a rien a
+ * rattraper. Une transition partant du centre de l'ecran oblige l'oeil
+ * a se deplacer deux fois, une pour la fermeture, une pour la nouvelle
+ * page.
  *
- * Le voile occupe ce vide. Il ne rend pas la navigation plus rapide, il
- * la rend lisible. C'est un des rares effets qui se remarque sans
- * qu'on sache l'expliquer.
+ * POURQUOI L'IRIS ET NON UN VOILE
  *
- * DUREE
+ * Le symbole de la marque s'appelle un iris. Un iris, ca se ferme.
+ * L'analogie n'est pas decorative, elle est exacte — et pour une agence
+ * qui produit de la video, l'obturateur d'objectif est le geste metier
+ * par excellence. C'est aussi la seule transition qu'un concurrent ne
+ * peut pas copier sans copier le logo.
  *
- * 900 ms au total. En dessous, l'oeil ne suit pas. Au-dessus, on attend.
+ * L'ECLAT
+ *
+ * Volontairement discret : 35 % d'opacite, 120 ms. Un flash marque le
+ * declenchement, mais repete a chaque navigation il devient vite
+ * agressif. Assez pour qu'on l'entende, pas assez pour qu'on le
+ * subisse.
  *
  * TROIS PRECAUTIONS
  *
  * - Rien au premier chargement. Une page d'accueil qui demarre par un
  *   rideau noir se fait fermer.
- * - `pointer-events: none` en permanence : le voile ne doit jamais
- *   intercepter un clic, meme pendant qu'il couvre l'ecran.
- * - Neutralise si l'utilisateur a demande moins d'animations. Un voile
- *   plein ecran est exactement ce qui declenche les genes vestibulaires.
+ * - `pointer-events: none` en permanence : jamais d'interception de clic.
+ * - Neutralise si l'utilisateur a demande moins d'animations. Un
+ *   mouvement plein ecran est exactement ce qui declenche les genes
+ *   vestibulaires.
  */
+
+const DURATION = 1560;
 
 export function PageTransition() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const [playing, setPlaying] = useState(false);
-  const [run, setRun] = useState(0);
+  const [phase, setPhase] = useState<"idle" | "close" | "open">("idle");
+  const [origin, setOrigin] = useState({ x: 50, y: 50 });
   const first = useRef(true);
+  const point = useRef({ x: 0.5, y: 0.5 });
+
+  /* On memorise en continu la derniere position cliquee. Au moment ou
+     la route change, on sait d'ou faire partir l'obturateur. */
+  useEffect(() => {
+    const onDown = (e: PointerEvent) => {
+      point.current = {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      };
+    };
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    return () => window.removeEventListener("pointerdown", onDown);
+  }, []);
 
   useEffect(() => {
-    // Premier rendu : on ne joue rien.
     if (first.current) {
       first.current = false;
       return;
@@ -56,44 +79,66 @@ export function PageTransition() {
       return;
     }
 
-    // `run` change a chaque navigation : la cle React remonte l'element
-    // et relance l'animation depuis le debut. Sans ca, deux navigations
-    // rapprochees ne rejoueraient pas le voile.
-    setRun((n) => n + 1);
-    setPlaying(true);
+    setOrigin({ x: point.current.x * 100, y: point.current.y * 100 });
+    setPhase("close");
 
-    const timer = window.setTimeout(() => setPlaying(false), 950);
-    return () => window.clearTimeout(timer);
+    const toOpen = window.setTimeout(() => setPhase("open"), DURATION * 0.46);
+    const toIdle = window.setTimeout(() => setPhase("idle"), DURATION);
+
+    return () => {
+      window.clearTimeout(toOpen);
+      window.clearTimeout(toIdle);
+    };
   }, [pathname]);
 
-  if (!playing) return null;
+  if (phase === "idle") return null;
+
+  const closed = phase === "close";
+
+  /* Le facteur d'echelle doit couvrir l'ecran depuis n'importe quel
+     point. Le pire cas est un clic dans un angle : la diagonale
+     complete. On prend large plutot que de calculer au plus juste. */
+  const cover = 62;
 
   return (
-    <div
-      key={run}
-      aria-hidden="true"
-      className="uv-wipe pointer-events-none fixed inset-0 z-[100] flex items-center justify-center"
-      style={{ backgroundColor: "#090909" }}
-    >
-      <style>{`
-        @keyframes uv-wipe-move {
-          0%   { transform: translateY(100%); }
-          38%  { transform: translateY(0%); }
-          58%  { transform: translateY(0%); }
-          100% { transform: translateY(-100%); }
-        }
-        @keyframes uv-wipe-mark {
-          0%, 26%   { opacity: 0; }
-          44%, 54%  { opacity: 1; }
-          72%, 100% { opacity: 0; }
-        }
-        .uv-wipe { animation: uv-wipe-move 900ms cubic-bezier(.76,0,.24,1) forwards; }
-        .uv-wipe-mark { animation: uv-wipe-mark 900ms linear forwards; }
-      `}</style>
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[100]">
+      {/* L'eclat de declenchement */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at ${origin.x}% ${origin.y}%, #60A5FA 0%, #3B82F6 26%, transparent 62%)`,
+          opacity: closed ? 0.35 : 0,
+          transition: closed ? "opacity 120ms ease-out 560ms" : "opacity 340ms ease-out",
+        }}
+      />
 
-      <span className="uv-wipe-mark text-[0.7rem] tracking-[0.28em] text-accent">
-        ULTRA VISION
-      </span>
+      {/* La pupille : c'est elle qui masque reellement la page */}
+      <div
+        className="absolute h-4 w-4 rounded-full will-change-transform"
+        style={{
+          left: `${origin.x}%`,
+          top: `${origin.y}%`,
+          backgroundColor: "#090909",
+          transform: `translate(-50%, -50%) scale(${closed ? cover * 1.9 : 0})`,
+          transition: `transform ${DURATION * 0.46}ms cubic-bezier(.76,0,.24,1)`,
+        }}
+      />
+
+      {/* L'iris, par-dessus : il donne le geste et la couleur */}
+      <img
+        src="/brand/icon/ultravision-icon-blue.svg"
+        alt=""
+        width={120}
+        height={120}
+        className="absolute w-[120px] will-change-transform"
+        style={{
+          left: `${origin.x}%`,
+          top: `${origin.y}%`,
+          transform: `translate(-50%, -50%) scale(${closed ? 5.4 : 0.2}) rotate(${closed ? 150 : 285}deg)`,
+          opacity: closed ? 0.9 : 0,
+          transition: `transform ${DURATION * 0.46}ms cubic-bezier(.76,0,.24,1), opacity ${closed ? 260 : 400}ms ease-out ${closed ? 0 : 240}ms`,
+        }}
+      />
     </div>
   );
 }

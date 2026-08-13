@@ -157,7 +157,16 @@ export function VideoPlayer({
     setIsMuted(video.muted);
   }, []);
 
-  const controlsVisible = hovered || !isPlaying;
+  /*
+    Le bouton de lecture ne s'affiche que sur la carte active.
+
+    Dans le rail, les trois cartes comprimees ne jouent pas : leur
+    montrer un bouton lecture promet une action qui n'arrivera pas, et
+    quatre gros boutons cote a cote saturent la composition. Une carte
+    inactive se contente de son image — c'est son elargissement qui
+    declenche la lecture, pas un clic.
+  */
+  const controlsVisible = active === false ? false : hovered || !isPlaying;
 
   return (
     <div
@@ -174,16 +183,47 @@ export function VideoPlayer({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Poster : visible immediatement, s'efface quand la video tourne */}
-      <img
-        src={item.poster}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
-        style={{ opacity: canPlay && isPlaying ? 0 : 1 }}
-        loading="lazy"
-        decoding="async"
-      />
+      {/*
+        Poster : visible immediatement, s'efface quand la video tourne.
+
+        Trois fichiers pour une seule image, et le navigateur choisit :
+
+          poster-sm.webp   440 px, environ 20 ko  -> telephones
+          poster.webp      760 px, environ 40 ko  -> ordinateurs
+          poster.jpg       760 px, environ 65 ko  -> repli
+
+        Le WebP pese moitie moins que le JPEG a qualite identique, et il
+        est lu par tous les navigateurs depuis 2020. Le JPEG reste en
+        dernier recours : `<picture>` prend simplement la premiere source
+        que le navigateur sait lire, il n'y a aucun risque.
+
+        Les dimensions sont declarees explicitement. Sans elles, le
+        navigateur ne connait pas la place a reserver et le contenu
+        saute au chargement — c'est le decalage de mise en page que
+        Google penalise directement dans son score.
+      */}
+      <picture>
+        <source
+          srcSet={item.poster.replace(/poster\.jpg$/, "poster-sm.webp")}
+          media="(max-width: 640px)"
+          type="image/webp"
+        />
+        <source
+          srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")}
+          type="image/webp"
+        />
+        <img
+          src={item.poster}
+          alt=""
+          aria-hidden="true"
+          width={760}
+          height={1351}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+          style={{ opacity: canPlay && isPlaying ? 0 : 1 }}
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
 
       {shouldLoad && (
         <video

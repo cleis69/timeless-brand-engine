@@ -174,8 +174,15 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
               aria-label={`${item.title} — ${item.category}`}
               className={[
                 "group relative shrink-0 snap-center overflow-hidden outline-none",
+                // Sur mobile : largeur fixe, une carte par ecran.
                 "w-[78vw] max-w-[330px]",
-                "lg:w-auto lg:min-w-0 lg:shrink lg:snap-align-none",
+                // Sur grand ecran : la largeur redevient libre.
+                //
+                // `lg:max-w-none` est indispensable. Sans lui, le plafond de
+                // 330 px continue de s'appliquer, les quatre cartes restent
+                // identiques et l'accordeon ne peut pas s'ouvrir : flex-grow
+                // n'a aucun effet contre un max-width.
+                "lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:snap-align-none",
                 "focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               ].join(" ")}
               style={{
