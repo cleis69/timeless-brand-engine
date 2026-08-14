@@ -59,6 +59,7 @@ export function SiteFooter() {
             links={[
               { to: "/services", label: "Services" },
               { to: "/realisations", label: "Réalisations" },
+              { to: "/tarifs", label: "Tarifs" },
               { to: "/methode", label: "Notre méthode" },
               { to: "/a-propos", label: "À propos" },
               { to: "/blog", label: "Blog" },

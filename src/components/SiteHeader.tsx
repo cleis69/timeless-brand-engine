@@ -33,9 +33,19 @@ import { Magnetic } from "./Magnetic";
  * defaut sautait aux yeux des l'ajout de la section claire.
  */
 
+/*
+  « Tarifs » est place juste apres « Realisations », et non en fin de
+  navigation.
+
+  L'ordre reproduit le trajet reel du visiteur : il regarde d'abord ce
+  qu'on sait faire, puis ce que ca coute. Un lien tarifs relegue en
+  derniere position se lit comme une information qu'on aurait preferé
+  ne pas donner — exactement l'inverse du message de la page.
+*/
 const NAV = [
   { to: "/services", label: "Services" },
   { to: "/realisations", label: "Réalisations" },
+  { to: "/tarifs", label: "Tarifs" },
   { to: "/a-propos", label: "À propos" },
   { to: "/contact", label: "Contact" },
 ] as const;
