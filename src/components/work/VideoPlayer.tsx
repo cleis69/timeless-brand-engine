@@ -81,7 +81,7 @@ export function VideoPlayer({
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setShouldLoad(true);
           io.disconnect();
         }
@@ -100,7 +100,7 @@ export function VideoPlayer({
     if (!el || !shouldLoad) return;
 
     const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.25),
+      ([entry]) => setInView(!!entry?.isIntersecting && entry.intersectionRatio > 0.25),
       { threshold: [0, 0.25, 0.6] },
     );
     io.observe(el);
