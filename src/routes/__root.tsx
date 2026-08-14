@@ -126,7 +126,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://api.fontshare.com" },
       { rel: "preconnect", href: "https://cdn.fontshare.com", crossOrigin: "anonymous" },
       /*
-        POLICES — huit fichiers reduits a cinq.
+        POLICES — huit fichiers reduits a QUATRE.
+
+        Mise a jour du 15 aout 2026 : General Sans 700 a ete retiree.
+        Verification faite sur tout le code, `font-bold` n'apparait
+        nulle part — la graisse etait telechargee, decodee et gardee en
+        memoire sans qu'aucun texte ne l'utilise.
+
+        Sur mobile, chaque fichier de police en moins avance d'autant
+        le moment ou le texte s'affiche : une feuille de style de
+        police bloque le rendu tant qu'elle n'est pas lue.
+
+        Detail de l'ancien commentaire ci-dessous.
 
         General Sans chargeait 400, 500, 600 et 700 ; Inter chargeait
         300, 400, 500 et 600. Huit fichiers, alors que le code n'en
@@ -146,7 +157,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       */
       {
         rel: "stylesheet",
-        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@500,700&display=swap",
+        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@500&display=swap",
       },
       {
         rel: "stylesheet",
@@ -155,6 +166,109 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+    ],
+    /*
+      ==================================================================
+       FEUILLE DE PERFORMANCE — mobile en priorite
+      ==================================================================
+
+      Ces regles ne changent rien a l'apparence sur ordinateur. Elles
+      retirent, sur petit ecran, trois choses qui coutent cher a
+      afficher et qui n'apportent presque rien a cette taille.
+    */
+    styles: [
+      {
+        children: `
+/* ------------------------------------------------------------------
+   1. LE FLOU D'ARRIERE-PLAN EST DESACTIVE SOUS 1024 px
+
+   « backdrop-filter » oblige le telephone a lire ce qui se trouve
+   derriere l'element, a le flouter, puis a le redessiner — a chaque
+   image, et pour chaque element concerne. Le site en compte onze.
+
+   Sur un ordinateur c'est gratuit. Sur un telephone d'entree de gamme
+   c'est la premiere cause de saccade au defilement.
+
+   On garde donc la couleur de fond, qui suffit a la lisibilite, et on
+   retire uniquement le flou.
+------------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  [style*="backdrop-filter"],
+  [style*="backdropFilter"],
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   2. LES SECTIONS HORS ECRAN NE SONT PAS CALCULEES
+
+   « content-visibility: auto » dit au navigateur de ne pas mettre en
+   page ni peindre une section tant qu'elle n'approche pas de l'ecran.
+   Sur une page de dix mille pixels, c'est le gain le plus important
+   qu'on puisse obtenir sans rien retirer.
+
+   « contain-intrinsic-size » donne une hauteur estimee a la section
+   ignoree. Sans elle, la barre de defilement sauterait a mesure que
+   les sections se calculent — un defaut pire que le probleme resolu.
+
+   La premiere section de chaque page est exclue : elle est visible
+   d'emblee, et l'ignorer retarderait au contraire l'affichage.
+------------------------------------------------------------------ */
+main section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
+/* ------------------------------------------------------------------
+   3. LA POLICE DE SECOURS EST AJUSTEE AUX VRAIES
+
+   Pendant le chargement, le texte s'affiche dans la police du
+   systeme. Quand la vraie arrive, les lettres changent de largeur et
+   la mise en page saute — c'est le decalage que Google mesure et
+   sanctionne.
+
+   Ces deux polices de secours reprennent les proportions d'Inter et
+   de General Sans. L'echange devient invisible.
+------------------------------------------------------------------ */
+@font-face {
+  font-family: "Inter-fallback";
+  src: local("Helvetica Neue"), local("Arial");
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "GeneralSans-fallback";
+  src: local("Helvetica Neue"), local("Arial");
+  size-adjust: 103%;
+  ascent-override: 96%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+/* ------------------------------------------------------------------
+   4. RIEN NE BOUGE POUR QUI A DEMANDE MOINS D'ANIMATIONS
+
+   Regle de securite globale. Chaque composant la respecte deja, mais
+   une regle unique garantit qu'un oubli futur ne passera pas.
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+        `,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
