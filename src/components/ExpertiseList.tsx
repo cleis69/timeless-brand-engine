@@ -50,13 +50,39 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * fabrique juste des cases minuscules.
  */
 
+/*
+ * BRANDING ET CREATION DE CONTENU SONT REUNIS.
+ *
+ * Ils etaient separes, et c'etait une erreur de decoupage.
+ *
+ * Ce sont les memes personnes, au meme moment du projet. Une identite
+ * qui n'existe que sur une charte n'existe pas : elle prend corps dans
+ * les photos, les films et les publicites qui la font circuler. Les
+ * annoncer comme deux prestations distinctes obligeait le prospect a
+ * comprendre lui-meme qu'il lui fallait les deux — et beaucoup n'en
+ * prenaient qu'une.
+ *
+ * Reunis, ils deviennent la porte d'entree naturelle du site : une
+ * marque et tout ce qui la donne a voir. C'est aussi ce que le nouveau
+ * sous-titre du hero annonce, « production de contenu audiovisuel et
+ * publicite » — les deux devaient se repondre.
+ *
+ * On passe donc de cinq poles a quatre. Quatre se retiennent ; cinq se
+ * subissent.
+ */
 const POLES = [
   {
     n: "01",
-    title: "Branding",
-    text: "Une marque lisible en trois secondes, cohérente sur chaque point de contact.",
-    lines: ["Identité visuelle", "Positionnement", "Charte graphique"],
-    /* Grand panneau, deux rangees. C'est la porte d'entree la plus frequente. */
+    title: "Marque & Contenu",
+    text: "Une identité lisible en trois secondes, et tous les contenus qui la font exister — photo, vidéo, motion, publicité.",
+    lines: [
+      "Identité visuelle",
+      "Positionnement",
+      "Charte graphique",
+      "Photo & vidéo",
+      "Motion design",
+    ],
+    /* Grand panneau, deux rangees. C'est la porte d'entree du site. */
     area: "lg:col-span-3 lg:row-span-2",
   },
   {
@@ -74,18 +100,16 @@ const POLES = [
     area: "lg:col-span-3",
   },
   {
+    /*
+      Acquisition prend toute la largeur de la derniere rangee.
+      C'est le pole qui porte le chiffre, donc celui sur lequel la
+      section doit se refermer.
+    */
     n: "04",
     title: "Acquisition",
     text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
     lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
-    area: "lg:col-span-2",
-  },
-  {
-    n: "05",
-    title: "Création de contenu",
-    text: "Des contenus de niveau maison de luxe, produits en interne.",
-    lines: ["Photo", "Vidéo", "Motion design"],
-    area: "lg:col-span-4",
+    area: "lg:col-span-6",
   },
 ];
 
@@ -95,7 +119,7 @@ export function ExpertiseList() {
       <Reveal>
         <p className="eyebrow">Nos expertises</p>
         <h2 className="display mt-5 max-w-3xl text-3xl sm:text-4xl lg:text-5xl">
-          Cinq pôles, une seule équipe, une chaîne de valeur complète.
+          Quatre pôles, une seule équipe, une chaîne de valeur complète.
         </h2>
       </Reveal>
 

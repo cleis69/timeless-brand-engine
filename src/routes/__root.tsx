@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
+import { WhatsAppRail } from "../components/WhatsAppRail";
 import { CONTACT } from "../config/contact";
 
 /**
@@ -218,6 +219,17 @@ function RootComponent() {
         </PageTransition>
       </main>
       <SiteFooter />
+
+      {/*
+        L'appel WhatsApp permanent, sur le bord droit. Monte a la racine
+        et non dans une page : il doit survivre aux changements de page,
+        sinon il disparaitrait puis reapparaitrait a chaque navigation.
+
+        Il est aussi place APRES <PageTransition> a dessein — il ne doit
+        pas reculer et se flouter avec le contenu : c'est un element de
+        chrome, pas de page.
+      */}
+      <WhatsAppRail />
     </QueryClientProvider>
   );
 }

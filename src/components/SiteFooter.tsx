@@ -67,12 +67,19 @@ export function SiteFooter() {
 
           <div>
             <p className="eyebrow">Expertises</p>
+            {/*
+              Aligne sur les quatre poles de la page d'accueil, ou
+              Branding et Creation de contenu sont desormais reunis sous
+              « Marque & Contenu ». Un pied de page qui annonce un
+              decoupage different de celui de la page donne le sentiment
+              de deux sites cousus ensemble.
+            */}
             <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
-              <li>Branding &amp; identité</li>
+              <li>Marque &amp; identité</li>
+              <li>Photo, vidéo &amp; motion</li>
               <li>Sites &amp; applications</li>
               <li>IA &amp; automatisation</li>
               <li>Meta, Google &amp; TikTok Ads</li>
-              <li>Photo, vidéo &amp; motion</li>
               <li>CRM &amp; lead generation</li>
             </ul>
           </div>

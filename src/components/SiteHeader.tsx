@@ -142,6 +142,37 @@ export function SiteHeader() {
         borderBottom: solid ? "1px solid #262626" : "1px solid transparent",
       }}
     >
+      <style>{`
+        /* Le trait, trace de gauche a droite. On anime scaleX et non
+           width : aucune mise en page recalculee, donc aucun a-coup. */
+        .uv-nav::after{
+          content:"";position:absolute;left:0;right:0;bottom:-6px;height:1.5px;border-radius:2px;
+          background:linear-gradient(90deg,#3B82F6,#60A5FA);
+          transform:scaleX(0);transform-origin:right;
+          transition:transform 220ms cubic-bezier(.22,1,.36,1);
+        }
+        .uv-nav:hover::after,.uv-nav:focus-visible::after{transform:scaleX(1);transform-origin:left}
+        .uv-nav-on::after{transform:scaleX(1);transform-origin:left}
+
+        /* Le point, devant le mot. Il pousse le texte de 10 px vers la
+           droite : le lien avance quand on le vise, il ne se contente
+           pas de changer de couleur. */
+        .uv-nav::before{
+          content:"";position:absolute;left:-12px;top:50%;width:4px;height:4px;border-radius:50%;
+          background:#60A5FA;opacity:0;transform:translateY(-50%) scale(.4);
+          transition:opacity 220ms cubic-bezier(.22,1,.36,1),transform 220ms cubic-bezier(.22,1,.36,1);
+        }
+        .uv-nav{transition:color 200ms cubic-bezier(.22,1,.36,1),transform 220ms cubic-bezier(.22,1,.36,1)}
+        .uv-nav:hover,.uv-nav:focus-visible{transform:translateX(5px)}
+        .uv-nav:hover::before,.uv-nav:focus-visible::before,.uv-nav-on::before{opacity:1;transform:translateY(-50%) scale(1)}
+        .uv-nav-on{transform:translateX(5px)}
+
+        @media (prefers-reduced-motion: reduce){
+          .uv-nav,.uv-nav::after,.uv-nav::before{transition:none}
+          .uv-nav:hover{transform:none}
+        }
+      `}</style>
+
       {/* --- Ligne de positionnement, visible en haut de page seulement --- */}
       <div
         className="overflow-hidden transition-[max-height,opacity] duration-500"
@@ -173,16 +204,37 @@ export function SiteHeader() {
           poids d'un paragraphe ne se lit pas comme une navigation : elle
           se fond dans la page au lieu de la structurer.
         */}
+        {/*
+          LES LIENS DE NAVIGATION
+
+          Police : Inter 500, 13 px, interlettrage 0,04 em. C'est la
+          graisse prevue par la charte pour la navigation — entre le
+          corps de texte en 400 et les boutons en 600. Ils etaient
+          auparavant dans la meme graisse que les paragraphes, ce qui
+          faisait qu'ils se fondaient dans la page au lieu de la
+          structurer.
+
+          Couleur : un bleu desature au repos (#8FA8CC), l'accent plein
+          au survol (#60A5FA).
+
+          Le repos n'est volontairement PAS le bleu de la marque. Quatre
+          liens en bleu franc en permanence, et le bleu cesse d'etre un
+          accent : il ne peut plus rien designer, y compris le bouton
+          d'appel a l'action juste a cote. Le bleu desature garde la
+          teinte de la charte tout en laissant au survol de quoi monter.
+
+          L'ANIMATION : un trait qui se trace de gauche a droite, et un
+          point qui s'allume devant le mot. Le trait seul est le geste le
+          plus banal du web ; le point le date et le rattache a la marque,
+          puisque c'est la meme pastille bleue que dans les eyebrows.
+        */}
         <nav className="hidden items-center gap-9 lg:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="link-underline text-[0.82rem] font-medium tracking-[0.04em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
-              activeProps={{
-                className:
-                  "link-underline text-[0.82rem] font-medium tracking-[0.04em] text-foreground",
-              }}
+              className="uv-nav group relative text-[0.82rem] font-medium tracking-[0.04em] text-[#8FA8CC] transition-colors duration-200 hover:text-[#60A5FA]"
+              activeProps={{ className: "uv-nav uv-nav-on relative text-[0.82rem] font-medium tracking-[0.04em] text-[#60A5FA]" }}
             >
               {item.label}
             </Link>

@@ -113,18 +113,41 @@ const WHY = [
 ];
 
 /**
- * Statistiques.
+ * Statistiques — chiffres reels, fournis le 14 aout 2026.
  *
- * Remplace 'STAT_01' par ta vraie valeur, par exemple '+214 %'.
- * Tant qu'une valeur commence par STAT_, elle s'affiche en grise
- * avec la mention « à compléter ». Impossible de publier un faux
- * chiffre par accident.
+ * L'ORDRE N'EST PAS CELUI QUI A ETE DONNE, ET C'EST VOLONTAIRE
+ *
+ * Il va du plus verifiable au plus declaratif :
+ *
+ *   10 000 leads   — sort d'un gestionnaire de publicites
+ *   50 K€ de budget — sort d'une facture
+ *   +15 marques     — se compte
+ *   100 % satisfaits — repose sur la parole de l'agence
+ *
+ * Un chiffre invérifiable place en premier jette le doute sur les
+ * trois suivants. Place en dernier, il est lu comme une conclusion,
+ * apres que la credibilite a deja ete etablie.
+ *
+ * DEUX POINTS A VERIFIER DE TON COTE
+ *
+ * 1. La devise. J'ai mis des euros, par coherence avec la FAQ qui
+ *    annonce des budgets en euros. Si tes campagnes sont pilotees en
+ *    dirhams, remplace « 50 K€ » par « 500 K MAD » ou la valeur juste.
+ *
+ * 2. Le « 100 % de clients satisfaits ». C'est une allegation
+ *    commerciale : en cas de contestation, c'est a l'annonceur de la
+ *    prouver. Une enquete de satisfaction, meme sur quinze clients,
+ *    avec les reponses conservees, suffit. Sans support, la formulation
+ *    prudente serait « Aucun client perdu depuis la creation ».
+ *
+ * Toute valeur commencant par STAT_ s'affiche en grise avec la mention
+ * « a completer » : le garde-fou reste en place pour les prochains.
  */
 const STATS: { value: string; label: string }[] = [
-  { value: "STAT_01", label: "Croissance moyenne du pipeline" },
-  { value: "STAT_02", label: "Marques accompagnées" },
-  { value: "STAT_03", label: "Chiffre d'affaires généré" },
-  { value: "STAT_04", label: "Satisfaction client" },
+  { value: "10 000", label: "Leads générés chaque mois" },
+  { value: "50 K€", label: "Budget publicitaire piloté par mois" },
+  { value: "+15", label: "Marques accompagnées" },
+  { value: "100 %", label: "Clients satisfaits" },
 ];
 
 const FAQ = [
@@ -226,19 +249,58 @@ function Hero() {
           « systemes de croissance » occupe une ligne entiere en gris :
           la respiration tombe au bon endroit.
         */}
+        {/*
+          « systemes de croissance » passe du gris au bleu.
+
+          En gris, cette ligne se lisait comme une mise en retrait — le
+          gris dit « moins important ». Or c'est exactement l'inverse :
+          c'est la promesse commerciale du titre. Le bleu la designe
+          comme le mot sur lequel tout repose, et c'est le seul endroit
+          du premier ecran ou la couleur de marque apparait en grand.
+
+          Un seul segment coloré. Deux, et plus rien n'est designe.
+        */}
         <h1 className="display mt-9 max-w-4xl text-[2.4rem] leading-[1] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.4rem]">
           <MaskReveal delay={80}>Nous concevons</MaskReveal>
           <MaskReveal delay={165}>des marques et des</MaskReveal>
           <MaskReveal delay={250}>
-            <span className="text-[#5c5c5a]">systèmes de croissance</span>
+            <span
+              style={{
+                background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              systèmes de croissance
+            </span>
           </MaskReveal>
           <MaskReveal delay={335}>qui font la différence.</MaskReveal>
         </h1>
 
+        {/*
+          LE SOUS-TITRE
+
+          Il disait « Branding, technologie, intelligence artificielle et
+          acquisition ». Quatre categories abstraites : rien qu'un
+          prospect puisse se representer.
+
+          Il nomme maintenant le metier reel — production audiovisuelle
+          et publicite — puis la maniere de le faire.
+
+          « Pensé, tourné et monté par des humains » avant « décuplé par
+          l'intelligence artificielle », et pas l'inverse. L'ordre est le
+          message : sur un marche ou tout le monde annonce de l'IA, la
+          rarete n'est plus l'IA, c'est la main humaine. Ce qui est mis
+          en avant doit etre ce qui manque ailleurs.
+        */}
         <Reveal delay={430}>
-          <p className="mt-10 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Branding, technologie, intelligence artificielle et acquisition, réunis dans une seule
-            équipe.
+          <p className="mt-10 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Production de contenu audiovisuel et publicité.{" "}
+            <span className="text-foreground">
+              Pensé, tourné et monté par des humains
+            </span>
+            , décuplé par l&apos;intelligence artificielle.
           </p>
         </Reveal>
 
