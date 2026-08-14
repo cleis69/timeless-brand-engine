@@ -208,7 +208,7 @@ function APropos() {
         eyebrow="À propos"
         title="Une équipe restreinte, et vous savez qui fait quoi."
         accent="et vous savez qui fait quoi"
-        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous intervenons uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir."
+        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous intervenons uniquement au Maroc — Casablanca, Rabat, Marrakech, Tanger et Agadir — auprès de dirigeants francophones qui y ont installé leur activité."
       />
 
       {/* ---------------- Parti pris ---------------- */}

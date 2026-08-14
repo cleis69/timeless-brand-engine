@@ -7,8 +7,10 @@ import {
   A_LA_CARTE,
   CUSTOM,
   LAUNCH_OFFER,
+  MAD,
   NOT_INCLUDED,
   PACKS,
+  dirham,
   euro,
   withOffer,
 } from "@/config/pricing";
@@ -230,6 +232,12 @@ function Head() {
         <Reveal delay={340}>
           <p className="mt-4 text-sm text-[#5c5c5a]">
             Montants en euros hors taxes. Le budget publicitaire n&apos;est jamais inclus.
+            {MAD.enabled && (
+              <>
+                {" "}
+                Les équivalents en dirhams sont donnés {MAD.note}.
+              </>
+            )}
           </p>
         </Reveal>
       </div>
@@ -332,6 +340,20 @@ function Packs() {
                   {reduced && (
                     <p className="mt-1.5 text-[0.72rem] text-[#93C5FD]">
                       Prix de la première commande. {euro(full)} ensuite.
+                    </p>
+                  )}
+
+                  {/*
+                    L'equivalent en dirhams, en petit sous le prix.
+                    Neuf clients sur dix sont des expatries : ils
+                    raisonnent en euros mais ils reglent en dirhams.
+                    Repondre aux deux questions evite l'aller-retour
+                    « et ca fait combien en vrai ? ».
+                  */}
+                  {MAD.enabled && (
+                    <p className="mt-1.5 text-[0.76rem] text-[#6d7a99]">
+                      ≈ {dirham(now)}
+                      {p.period ? ` ${p.period}` : ""}
                     </p>
                   )}
 
@@ -532,6 +554,11 @@ function Carte() {
                               style={{ textDecoration: "line-through" }}
                             >
                               {euro(it.price)}
+                            </p>
+                          )}
+                          {MAD.enabled && (
+                            <p className="mt-0.5 text-[0.68rem] text-[#5c6a86]">
+                              ≈ {dirham(now)}
                             </p>
                           )}
                         </div>

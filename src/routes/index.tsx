@@ -196,8 +196,8 @@ const FAQ = [
     a: "Une vidéo publicitaire est livrée en 7 jours. Une landing page en 5 jours, un site vitrine en 3 semaines. Les premières campagnes sont en ligne dès la validation des vidéos.",
   },
   {
-    q: "Travaillez-vous avec des PME ?",
-    a: "Oui, dès lors qu'il existe une ambition de croissance claire et une capacité à absorber les demandes générées.",
+    q: "Pourquoi vos prix sont-ils affichés en euros ?",
+    a: "Parce que c'est la référence de nos clients, majoritairement francophones et habitués aux tarifs français. Le règlement se fait en dirhams au taux du jour, et l'équivalent indicatif figure sous chaque prix sur la page tarifs.",
   },
   {
     q: "Comment mesurez-vous les résultats ?",
@@ -211,8 +211,8 @@ const FAQ = [
       francais : l'equipe est au Maroc, les clients sont en France, et
       le tournage se deplace.
     */
-    q: "Où intervenez-vous ?",
-    a: "Uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir. Le tournage se déplace dans ces cinq villes sans frais supplémentaires. En dehors, nous étudions au cas par cas et les frais de déplacement figurent au devis.",
+    q: "Où intervenez-vous, et pour qui ?",
+    a: "Uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir. Le tournage se déplace dans ces cinq villes sans frais supplémentaires. La grande majorité de nos clients sont des dirigeants francophones installés au Maroc — nous travaillons en français, avec les standards de production auxquels ils sont habitués.",
   },
 ];
 

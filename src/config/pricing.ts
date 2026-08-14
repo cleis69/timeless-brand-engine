@@ -96,6 +96,64 @@ export const withOffer = (price: number) =>
 export const euro = (n: number) => `${n.toLocaleString("fr-FR")} €`;
 
 /* ==========================================================================
+ *  LA SECONDE DEVISE
+ * ========================================================================== */
+
+/**
+ * L'EURO RESTE LA DEVISE PRINCIPALE. LE DIRHAM EST INDICATIF.
+ *
+ * Ce n'est pas un detail d'affichage, c'est une decision commerciale.
+ *
+ * Neuf clients sur dix sont des expatries francophones installes au
+ * Maroc. Ils ont deux references de prix en tete, et ce n'est pas la
+ * meme selon ce qu'on leur montre :
+ *
+ *  - En euros, ils comparent a ce qu'ils payaient en France, ou une
+ *    video publicitaire coute couramment 1 500 a 3 000 €. A 490 €,
+ *    l'ecart est enorme, et il joue en notre faveur.
+ *
+ *  - En dirhams seuls, ils comparent au marche local, dont les reperes
+ *    sont bien plus bas. Le meme prix parait alors cher.
+ *
+ * L'euro en gros, le dirham en petit : on garde l'ancrage favorable
+ * tout en repondant a la question pratique — combien vais-je
+ * reellement virer.
+ *
+ * ------------------------------------------------------------
+ *  LE TAUX EST A REGLER PAR TES SOINS
+ *
+ *  Il n'est PAS mis a jour automatiquement, et c'est volontaire : un
+ *  prix qui bouge entre le moment ou un prospect le lit et celui ou il
+ *  signe est ingerable.
+ *
+ *  Prends un taux commercial rond, legerement au-dessus du taux du
+ *  jour pour absorber les variations, et revois-le deux fois par an.
+ *  La mention « a titre indicatif » qui accompagne le montant te
+ *  protege : c'est l'euro qui fait foi au devis.
+ * ------------------------------------------------------------
+ */
+export const MAD = {
+  /** Passe a false pour n'afficher que l'euro. */
+  enabled: true,
+  /** Taux commercial. 1 euro = X dirhams. A revoir deux fois par an. */
+  rate: 11,
+  /** Mention obligatoire a cote du montant converti. */
+  note: "à titre indicatif — l'euro fait foi au devis",
+} as const;
+
+/**
+ * Convertit et arrondit a la centaine de dirhams.
+ *
+ * L'arrondi est volontairement grossier. Un montant converti au dirham
+ * pres — « 5 390 MAD » — annonce qu'il sort d'une multiplication, donc
+ * qu'il se negocie. Arrondi a « 5 400 MAD », il redevient un prix.
+ */
+export const dirham = (eur: number) => {
+  const v = Math.round((eur * MAD.rate) / 100) * 100;
+  return `${v.toLocaleString("fr-FR")} MAD`;
+};
+
+/* ==========================================================================
  *  LES TROIS FORMULES
  * ========================================================================== */
 
