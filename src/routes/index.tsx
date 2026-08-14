@@ -152,12 +152,19 @@ const STATS: { value: string; label: string }[] = [
 
 const FAQ = [
   {
+    /*
+      Cette reponse annoncait 20 000 € de depart et 40 000 a 100 000 €
+      par an. C'etait le dernier endroit du site qui contredisait
+      encore la grille reelle, laquelle demarre a 490 €.
+      Un ecart de ce rapport ne se lit pas comme une erreur : il se lit
+      comme un prix qui change selon l'interlocuteur.
+    */
     q: "Quel est le budget d'un accompagnement ?",
-    a: "Un projet de marque et de site démarre autour de 20 000 €. Les accompagnements complets, incluant acquisition, contenus et automatisation, se situent généralement entre 40 000 € et 100 000 € par an.",
+    a: "Une première vidéo publicitaire est à 490 €, diffusion comprise pendant 14 jours. Les accompagnements mensuels démarrent à 1 490 € par mois. Le détail complet, prestation par prestation, est publié sur la page tarifs.",
   },
   {
     q: "Quels sont les délais ?",
-    a: "Une identité et un site premium se livrent en 6 à 10 semaines. Les premières campagnes d'acquisition sont en ligne sous 3 semaines.",
+    a: "Une vidéo publicitaire est livrée en 7 jours. Une landing page en 5 jours, un site vitrine en 3 semaines. Les premières campagnes sont en ligne dès la validation des vidéos.",
   },
   {
     q: "Travaillez-vous avec des PME ?",
@@ -168,8 +175,15 @@ const FAQ = [
     a: "Un tableau de bord unique relie dépense média, leads, rendez-vous et chiffre d'affaires signé. Revue mensuelle avec la direction.",
   },
   {
-    q: "Intervenez-vous hors de France ?",
-    a: "Nous accompagnons des clients à Paris, Dubaï, Genève et Casablanca, en français et en anglais.",
+    /*
+      Cette reponse citait « Paris, Dubai, Geneve et Casablanca ». Trois
+      de ces quatre villes ne correspondaient a aucun client. La reponse
+      exacte est plus simple, et plus rassurante pour un prospect
+      francais : l'equipe est au Maroc, les clients sont en France, et
+      le tournage se deplace.
+    */
+    q: "Vous êtes au Maroc, mes clients sont en France. Est-ce un problème ?",
+    a: "C'est notre situation habituelle : la majorité de nos clients sont des entreprises françaises. Le travail se fait à distance, en français, aux horaires français. Pour les tournages, nous nous déplaçons en France ou nous produisons depuis nos studios selon ce que demande le format.",
   },
 ];
 

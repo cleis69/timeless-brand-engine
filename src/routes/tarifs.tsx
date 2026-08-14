@@ -231,6 +231,36 @@ function Packs() {
                     </p>
                   )}
 
+                  {/*
+                    LA DECOMPOSITION.
+
+                    « 1 490 € par mois » se subit en bloc. « soit 372 €
+                    la video » se compare a ce que le lecteur connait.
+                    Un prix comparable parait toujours plus juste qu'un
+                    prix global — et le visiteur peut verifier lui-meme
+                    avec les tarifs unitaires publies plus bas.
+                  */}
+                  {p.equivalent && (
+                    <p className="mt-2 text-[0.78rem] text-[#8792ad]">{p.equivalent}</p>
+                  )}
+
+                  {/*
+                    L'ANCRAGE.
+
+                    Le meme perimetre paye a l'unite. Chaque ligne du
+                    calcul est publiee dans la section « a la carte » :
+                    l'economie est verifiable, donc credible.
+                  */}
+                  {p.anchor && p.anchor > full && (
+                    <p className="mt-3 text-[0.78rem] text-[#6d7a99]">
+                      <span style={{ textDecoration: "line-through" }}>{euro(p.anchor)}</span> en
+                      payant chaque prestation à l&apos;unité{" "}
+                      <span className="text-[#93C5FD]">
+                        — vous économisez {euro(p.anchor - full)}
+                      </span>
+                    </p>
+                  )}
+
                   {/* --- Engagement et delai --- */}
                   <div className="mt-5 flex flex-wrap gap-2">
                     <span
@@ -381,6 +411,11 @@ function Carte() {
                         </div>
 
                         <div className="text-right whitespace-nowrap">
+                          {it.from && (
+                            <span className="mr-1 text-[0.7rem] text-muted-foreground">
+                              à partir de
+                            </span>
+                          )}
                           <span className="display text-[1.25rem]">{euro(now)}</span>
                           {it.unit && (
                             <span className="ml-1 text-[0.72rem] text-muted-foreground">

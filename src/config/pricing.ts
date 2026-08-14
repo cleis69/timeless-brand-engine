@@ -54,9 +54,29 @@ export const LAUNCH_OFFER = {
   until: "Offre de lancement, valable jusqu'au 31 décembre 2026.",
 } as const;
 
-/** Applique la remise si elle est active. Arrondi a l'euro. */
+/**
+ * Arrondi psychologique.
+ *
+ * LE DEFAUT QUE CETTE FONCTION CORRIGE
+ *
+ * La remise de 20 % produisait des montants calcules : 392 €, 1 192 €,
+ * 1 992 €, 712 €. Ces nombres ont un defaut qu'on ne remarque pas
+ * consciemment mais qui se paie : ils annoncent au visiteur qu'ils
+ * sortent d'une multiplication.
+ *
+ * Un prix qui ressemble a un resultat de calcul est percu comme
+ * negociable — puisqu'il vient manifestement d'une formule, une autre
+ * formule pourrait donner moins. Un prix pose, lui, se discute mal.
+ *
+ * On ramene donc chaque montant remise a la dizaine la plus proche :
+ * 392 devient 390, 1 992 devient 1 990. La perte est de quelques euros,
+ * le gain est que le prix redevient une decision et non un quotient.
+ */
+const charm = (n: number) => Math.round(n / 10) * 10;
+
+/** Applique la remise si elle est active, puis l'arrondi psychologique. */
 export const withOffer = (price: number) =>
-  LAUNCH_OFFER.enabled ? Math.round(price * (1 - LAUNCH_OFFER.percent / 100)) : price;
+  LAUNCH_OFFER.enabled ? charm(price * (1 - LAUNCH_OFFER.percent / 100)) : price;
 
 /** Formate un montant : 1490 -> « 1 490 € ». Espace insecable avant l'euro. */
 export const euro = (n: number) => `${n.toLocaleString("fr-FR")} €`;
@@ -80,6 +100,30 @@ export type Pack = {
   features: string[];
   /** Ce qui est offert, affiche en bleu. */
   bonus?: string;
+  /**
+   * DECOMPOSITION — le levier le plus efficace de la page.
+   *
+   * « 1 490 € par mois » est un montant que le lecteur doit accepter en
+   * bloc. « soit 372 € la video » est un montant qu'il peut comparer a
+   * ce qu'il connait. Ramener un prix a son unite la plus petite le
+   * rend evaluable, et un prix evaluable parait toujours plus juste
+   * qu'un prix global.
+   *
+   * C'est aussi la seule facon de faire sentir la remise de volume sans
+   * l'annoncer : le visiteur fait la soustraction lui-meme avec le prix
+   * unitaire publie plus bas, et une conclusion qu'on tire soi-meme ne
+   * se conteste pas.
+   */
+  equivalent?: string;
+  /**
+   * ANCRAGE — ce que couterait le meme perimetre a l'unite.
+   *
+   * Affiche barre a cote du prix de la formule. Le montant doit
+   * correspondre exactement a la somme des prestations a la carte
+   * equivalentes, sinon l'ancrage devient un mensonge verifiable en
+   * trois lignes sur la meme page.
+   */
+  anchor?: number;
   /** La formule mise en avant. Une seule. */
   featured?: boolean;
   /**
@@ -116,6 +160,8 @@ export const PACKS: Pack[] = [
       "14 jours de diffusion pilotée",
       "Rapport de performance à 14 jours",
     ],
+    /* 340 € la vidéo + 490 € le media buying mensuel, au prorata de 14 jours. */
+    anchor: 585,
     cta: "Commander un essai",
   },
   {
@@ -133,6 +179,9 @@ export const PACKS: Pack[] = [
       "Rapport mensuel commenté",
       "Un interlocuteur unique",
     ],
+    equivalent: "soit 372 € la vidéo, diffusion comprise",
+    /* 4 vidéos à 340 € = 1 360 €, plus 490 € de media buying. */
+    anchor: 1850,
     cta: "Démarrer la production",
   },
   {
@@ -150,6 +199,22 @@ export const PACKS: Pack[] = [
       "Optimisation hebdomadaire et arbitrage des budgets",
       "Rapport mensuel et point avec la direction",
     ],
+    equivalent: "soit 622 € la vidéo, diffusion et tunnel compris",
+    /*
+      4 vidéos à 340 € = 1 360 €
+      media buying sur 3 plateformes, 3 x 490 € = 1 470 €
+      ouverture des comptes = 290 €
+      CRM et automatisation = 490 €
+      landing page = 150 €
+      -------------------------------------------------- 3 760 €
+
+      Chacune de ces lignes est publiée plus bas. Le calcul est
+      refaisable par le visiteur, et c'est la condition pour qu'il y
+      croie : un prospect qui refait l'addition et tombe juste vous
+      croit sur tout le reste ; un qui tombe faux ne vous croit plus
+      sur rien.
+    */
+    anchor: 3760,
     bonus: "Landing page de conversion offerte",
     featured: true,
     cta: "Réserver un appel",
@@ -162,7 +227,15 @@ export const PACKS: Pack[] = [
 
 export type AlaCarte = {
   group: string;
-  items: { label: string; detail: string; price: number; unit?: string }[];
+  items: {
+    label: string;
+    detail: string;
+    price: number;
+    /** Suffixe : « / mois », « / mois / plateforme »… */
+    unit?: string;
+    /** Affiche « à partir de » devant le prix. */
+    from?: boolean;
+  }[];
 };
 
 export const A_LA_CARTE: AlaCarte[] = [
@@ -170,9 +243,16 @@ export const A_LA_CARTE: AlaCarte[] = [
     group: "Production",
     items: [
       {
+        /*
+          340 et non 350. Le seuil psychologique n'est pas la dizaine,
+          c'est le demi-cent : un prix a 350 € est lu « trois cent
+          cinquante », un prix a 340 € est lu « trois cent quarante »,
+          et le second se range mentalement du cote des trois cents.
+          Dix euros de moins, une categorie de prix en dessous.
+        */
         label: "Vidéo publicitaire",
         detail: "Angle, script, tournage, montage, formats verticaux.",
-        price: 350,
+        price: 340,
       },
       {
         label: "Vidéo supplémentaire dans un pack",
@@ -192,12 +272,21 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Landing page de conversion",
         detail: "Une page dédiée à une offre, pensée pour le formulaire.",
-        price: 390,
+        price: 150,
       },
       {
+        /*
+          « A partir de » est indispensable ici, et nulle part ailleurs.
+          Un site vitrine n'a pas de perimetre fixe : trois pages ou
+          huit pages, c'est le meme intitule et pas le meme travail.
+          Annoncer un prix ferme obligerait soit a refuser les projets
+          plus larges, soit a renegocier apres coup — c'est-a-dire a
+          faire exactement ce que la page promet d'eviter.
+        */
         label: "Site vitrine",
         detail: "Jusqu'à 5 pages, responsive, optimisé pour la vitesse.",
-        price: 690,
+        price: 590,
+        from: true,
       },
       {
         label: "Référencement technique",
@@ -212,12 +301,12 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Identité visuelle",
         detail: "Logo, palette, typographies, règles d'usage.",
-        price: 890,
+        price: 490,
       },
       {
         label: "Positionnement & message",
         detail: "Cadrage de l'offre, angles, messages clés.",
-        price: 690,
+        price: 590,
       },
     ],
   },
@@ -227,18 +316,30 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Ouverture des comptes publicitaires",
         detail: "Meta, Google, TikTok : comptes, pixels, conversions.",
-        price: 590,
+        price: 290,
       },
       {
         label: "CRM et automatisation des leads",
         detail: "Pipeline, formulaires, notifications, relances.",
-        price: 590,
+        price: 490,
       },
       {
-        label: "Media buying seul",
-        detail: "Pilotage mensuel, vos vidéos, une plateforme.",
+        /*
+          PAR PLATEFORME, ET C'EST UNE PRECISION INDISPENSABLE.
+
+          Piloter Meta seul et piloter Meta, Google et TikTok ne
+          representent pas le meme travail : trois interfaces, trois
+          logiques d'enchere, trois jeux de creations a decliner.
+
+          Sans cette mention, la formule Acquisition — qui est
+          multicanale — paraissait couter plus cher que la somme de ses
+          composants achetes separement. L'argument des formules
+          s'effondrait sur sa propre page.
+        */
+        label: "Media buying",
+        detail: "Pilotage mensuel de vos campagnes, vos vidéos.",
         price: 490,
-        unit: "/ mois",
+        unit: "/ mois / plateforme",
       },
     ],
   },
