@@ -1,166 +1,187 @@
-import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
- * ULTRA VISION — les expertises, en liste editoriale.
+ * ULTRA VISION — les expertises, en mosaique.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/components/ExpertiseList.tsx
+ *  Le nom exporte ne change pas : `ExpertiseList`.
+ *  Aucun autre fichier n'a besoin d'etre modifie.
+ * ============================================================
  *
  * CE QUI REMPLACE QUOI
  *
- * Avant : cinq cartes identiques dans une grille. Le brief l'interdisait
- * explicitement, et pour une bonne raison : une grille de cartes ne
- * hierarchise rien. Les cinq poles ont l'air interchangeables, alors
- * qu'un visiteur en cherche un seul.
+ * Avant : cinq lignes de meme hauteur, empilees. Une liste dit que les
+ * cinq poles se valent et qu'ils se lisent dans l'ordre. Ni l'un ni
+ * l'autre n'est vrai. Un visiteur ne cherche pas « les expertises » :
+ * il cherche la sienne, et il devait parcourir cinq lignes identiques
+ * pour la trouver.
  *
- * Maintenant : une liste. Chaque ligne porte son numero, son nom en
- * grand, et deplie ses prestations au survol. La ligne survolee glisse
- * de huit pixels vers la droite et s'eclaire, les autres s'effacent.
+ * Maintenant : cinq panneaux de tailles inegales, dans une grille
+ * asymetrique.
  *
- * C'est le meme geste que le rail des videos — survoler pour reveler.
- * Le visiteur apprend une fois et reutilise. Deux mecaniques
- * differentes pour la meme intention, ca fait bricolage.
+ * POURQUOI DES TAILLES INEGALES
+ *
+ * La surface porte une information. Branding occupe deux fois la
+ * hauteur des autres, Creation de contenu toute la largeur restante.
+ * Ce sont les deux poles par lesquels un client entre le plus souvent.
+ * Web, IA et Acquisition prennent des formats plus courts.
+ *
+ * Ce n'est pas une decision graphique, c'est une decision commerciale
+ * rendue visible. Une grille reguliere aurait dit l'inverse : que tout
+ * se vaut, donc que rien ne compte.
+ *
+ * LA COULEUR
+ *
+ * Palette du site, inchangee. Au repos, chaque panneau est un bleu
+ * nuit tres sombre — presque noir, mais jamais neutre. Au survol, un
+ * aplat bleu franc monte remplir le panneau.
+ *
+ * L'important est que le bleu ne soit PAS present au repos. Cinq
+ * panneaux bleus cote a cote redeviendraient une grille uniforme.
+ * Le bleu ne sert ici qu'a une chose : designer celui qu'on regarde.
  *
  * SUR TELEPHONE
  *
- * Pas de survol : les prestations restent visibles en permanence sous
- * chaque nom. Un contenu qui n'apparait qu'au survol est un contenu
- * perdu pour la moitie des visiteurs.
+ * L'asymetrie disparait : une colonne, cinq panneaux de meme hauteur.
+ * Une mosaique reduite a 380 px de large ne raconte plus rien, elle
+ * fabrique juste des cases minuscules.
  */
-
-/*
-  Vitesses issues de src/config/motion.ts.
-
-  Ces lignes reagissent au survol : elles sont donc en 220 ms, pas en
-  450. La difference se sent immediatement quand on balaie la liste du
-  curseur — a 450 ms, la ligne finit son glissement alors que la souris
-  est deja deux lignes plus bas, et la liste donne l'impression de
-  courir derriere la main.
-
-  Le depliage des prestations, lui, reste plus long (340 ms) : ce n'est
-  pas un changement d'etat mais du contenu qui prend sa place.
-*/
-const EASE = EASE_RESPOND;
 
 const POLES = [
   {
     n: "01",
     title: "Branding",
-    lines: ["Identité visuelle", "Positionnement", "Charte graphique"],
     text: "Une marque lisible en trois secondes, cohérente sur chaque point de contact.",
+    lines: ["Identité visuelle", "Positionnement", "Charte graphique"],
+    /* Grand panneau, deux rangees. C'est la porte d'entree la plus frequente. */
+    area: "lg:col-span-3 lg:row-span-2",
   },
   {
     n: "02",
     title: "Web & Applications",
-    lines: ["Sites web", "Applications", "Landing pages"],
     text: "Des interfaces rapides, sobres et pensées pour la conversion.",
+    lines: ["Sites web", "Applications", "Landing pages"],
+    area: "lg:col-span-3",
   },
   {
     n: "03",
     title: "IA & Automatisation",
-    lines: ["Agents IA", "Automatisation", "CRM"],
     text: "Vos processus commerciaux exécutés sans friction, 24 h sur 24.",
+    lines: ["Agents IA", "Automatisation", "CRM"],
+    area: "lg:col-span-3",
   },
   {
     n: "04",
     title: "Acquisition",
-    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
     text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
+    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
+    area: "lg:col-span-2",
   },
   {
     n: "05",
     title: "Création de contenu",
-    lines: ["Photo", "Vidéo", "Motion design"],
     text: "Des contenus de niveau maison de luxe, produits en interne.",
+    lines: ["Photo", "Vidéo", "Motion design"],
+    area: "lg:col-span-4",
   },
 ];
 
 export function ExpertiseList() {
-  const [active, setActive] = useState<number | null>(0);
-
   return (
     <div>
       <Reveal>
         <p className="eyebrow">Nos expertises</p>
-        <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl lg:text-6xl">
+        <h2 className="display mt-5 max-w-3xl text-3xl sm:text-4xl lg:text-5xl">
           Cinq pôles, une seule équipe, une chaîne de valeur complète.
         </h2>
       </Reveal>
 
-      <div className="mt-14 border-t border-hairline sm:mt-16">
-        {POLES.map((p, i) => {
-          const isActive = i === active;
-          return (
-            <div
-              key={p.n}
-              onMouseEnter={() => setActive(i)}
-              onFocus={() => setActive(i)}
+      {/*
+        La grille fait six colonnes sur grand ecran, pas cinq. Six se
+        divise par 2 et par 3 : c'est ce qui autorise des panneaux de
+        largeurs differentes qui retombent quand meme juste. Avec cinq
+        colonnes, toute asymetrie laisse un trou en bout de rangee.
+      */}
+      <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 lg:grid-cols-6 lg:grid-rows-[repeat(3,minmax(168px,auto))]">
+        {POLES.map((p, i) => (
+          {/*
+            `h-full` sur l'enveloppe Reveal est indispensable : c'est
+            ELLE qui est la case de la grille, pas le panneau qu'elle
+            contient. Sans cette hauteur, le panneau de Branding ne
+            remplirait pas les deux rangees qui lui sont reservees.
+          */}
+          <Reveal key={p.n} delay={i * MOTION.stagger} className={`h-full ${p.area}`}>
+            <article
               tabIndex={0}
-              className="group border-b border-hairline outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
+              className="group relative flex h-full min-h-[176px] flex-col justify-end overflow-hidden rounded-2xl p-6 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               style={{
-                transform: isActive ? "translateX(10px)" : "translateX(0)",
-                transition: `transform ${MOTION.respond}ms ${EASE}`,
+                // Bleu nuit tres sombre. Presque noir, jamais neutre :
+                // c'est ce qui evite l'effet de trou dans la page.
+                backgroundColor: "#0B1020",
+                border: "1px solid #16203a",
+                transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, transform ${MOTION.respond}ms ${EASE_RESPOND}`,
               }}
             >
-              <div className="grid items-baseline gap-x-8 gap-y-3 py-7 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.1fr)]">
-                <span className="text-[0.7rem] tabular-nums text-accent">{p.n}</span>
+              {/*
+                L'aplat bleu du survol est une COUCHE separee dont on
+                anime l'opacite, et non la couleur de fond du panneau.
 
-                <h3
-                  className="display text-2xl sm:text-3xl lg:text-[2.1rem]"
-                  style={{
-                    color: isActive ? "#F5F5F3" : "#6f6f6d",
-                    transition: `color ${MOTION.respond}ms ${EASE}`,
-                  }}
-                >
-                  {p.title}
-                </h3>
+                Animer `background-color` d'un bleu nuit vers un bleu
+                franc fait passer la transition par des teintes grisees
+                et sales au milieu du parcours. Une couche superposee
+                evite entierement ce passage.
+              */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
+                style={{ background: "linear-gradient(150deg, #2563EB 0%, #1D4ED8 100%)" }}
+              />
 
-                <div className="lg:justify-self-end lg:text-right">
-                  <p
-                    className="max-w-sm text-sm leading-relaxed lg:ml-auto"
-                    style={{
-                      color: isActive ? "#8A8A8A" : "#4f4f4d",
-                      transition: `color ${MOTION.respond}ms ${EASE}`,
-                    }}
-                  >
-                    {p.text}
-                  </p>
+              <span className="relative z-[2] text-[0.66rem] tracking-[0.16em] tabular-nums text-accent transition-colors duration-200 group-hover:text-[#BFDBFE] group-focus-visible:text-[#BFDBFE]">
+                {p.n}
+              </span>
 
-                  {/* Les prestations : depliees au survol sur grand ecran,
-                      toujours visibles sur telephone. */}
-                  <div
-                    className="overflow-hidden"
-                    style={{
-                      maxHeight: isActive ? 60 : 0,
-                      opacity: isActive ? 1 : 0,
-                      transition: `max-height ${MOTION.expand}ms ${EASE}, opacity ${MOTION.respond}ms ${EASE}`,
-                    }}
-                  >
-                    <ul className="flex flex-wrap gap-x-4 gap-y-1 pt-3 text-xs text-[#6f6f6d] lg:justify-end">
-                      {p.lines.map((l) => (
-                        <li key={l} className="flex items-center gap-2">
-                          <span className="h-px w-3 bg-hairline" aria-hidden="true" />
-                          {l}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              <h3 className="display relative z-[2] mt-auto pt-6 text-2xl sm:text-[1.7rem]">
+                {p.title}
+              </h3>
+
+              <p className="relative z-[2] mt-2.5 max-w-sm text-sm leading-relaxed text-[#8792ad] transition-colors duration-200 group-hover:text-[#DBE7FF] group-focus-visible:text-[#DBE7FF]">
+                {p.text}
+              </p>
+
+              {/*
+                Les prestations n'apparaissent qu'au survol sur grand
+                ecran, et restent visibles en permanence sur telephone —
+                ou il n'y a pas de survol pour les reveler.
+              */}
+              <ul className="relative z-[2] mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#6d7a99] opacity-100 transition-opacity duration-200 group-hover:text-[#C7D9FF] lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100">
+                {p.lines.map((l) => (
+                  <li key={l} className="flex items-center gap-1.5">
+                    <span
+                      className="h-px w-2.5 bg-current opacity-50"
+                      aria-hidden="true"
+                    />
+                    {l}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </Reveal>
+        ))}
       </div>
 
       <Reveal delay={200}>
         <Link
           to="/services"
-          className="group mt-12 inline-flex items-center gap-3 text-[0.78rem] font-semibold tracking-[0.14em] uppercase text-foreground outline-none transition-colors duration-300 hover:text-accent-hover focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
+          className="group mt-10 inline-flex items-center gap-3 text-[0.78rem] font-semibold tracking-[0.14em] uppercase text-foreground outline-none transition-colors duration-200 hover:text-accent-hover focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
         >
           Voir le détail des services
           <span
             aria-hidden="true"
-            className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+            className="inline-block transition-transform duration-200 group-hover:translate-x-1"
           >
             &rarr;
           </span>

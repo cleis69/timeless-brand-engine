@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
 import { AvailabilityBadge } from "./AvailabilityBadge";
 import { Magnetic } from "./Magnetic";
@@ -40,33 +40,79 @@ const NAV = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-/** Fil bleu qui se remplit au fil du defilement. */
+/**
+ * Fil bleu qui se remplit au fil du defilement.
+ *
+ * ------------------------------------------------------------
+ * POURQUOI IL SACCADAIT, ET CE QUI A CHANGE
+ *
+ * La version precedente cumulait trois defauts qui se combinaient :
+ *
+ * 1. ELLE ANIMAIT `width`. Changer une largeur oblige le navigateur a
+ *    recalculer la mise en page a chaque image. C'est l'operation la
+ *    plus couteuse qui existe. Seuls `transform` et `opacity` sont
+ *    traites directement par la carte graphique.
+ *
+ * 2. ELLE AVAIT UNE TRANSITION DE 120 ms. Le defilement produit un
+ *    evenement toutes les 8 a 16 ms. Chaque nouvelle valeur interrompait
+ *    donc la transition precedente avant qu'elle ne se termine : le
+ *    filet passait son temps a repartir vers une cible qui avait deja
+ *    change. C'est exactement ce qui produit la saccade.
+ *
+ * 3. ELLE PASSAIT PAR L'ETAT REACT. Chaque pixel defile declenchait un
+ *    nouveau rendu de toute la barre de navigation, alors qu'un seul
+ *    element devait bouger.
+ *
+ * La version ci-dessous ecrit directement dans le style de l'element,
+ * via `transform: scaleX()`, sans transition, et une seule fois par
+ * image d'ecran grace a `requestAnimationFrame`. Le filet est alors
+ * exactement synchronise avec le defilement — il ne le rattrape plus,
+ * il en fait partie.
+ * ------------------------------------------------------------
+ */
 function ScrollProgress() {
-  const [pct, setPct] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => {
+    const el = barRef.current;
+    if (!el) return;
+
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setPct(max > 0 ? (window.scrollY / max) * 100 : 0);
+      const p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+      // scaleX plutot que width : aucune mise en page recalculee.
+      el.style.transform = `scaleX(${p})`;
+      // L'ombre ne s'allume qu'une fois le defilement commence, sinon
+      // un point lumineux flotte a gauche sur une barre vide.
+      el.style.boxShadow = p > 0.002 ? "0 0 12px rgba(59,130,246,.55)" : "none";
     };
-    onScroll();
+
+    const onScroll = () => {
+      // Une seule ecriture par image d'ecran, quoi qu'il arrive.
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
   return (
     <div className="absolute inset-x-0 bottom-0 h-[2px] bg-transparent" aria-hidden="true">
       <div
-        className="h-full origin-left"
+        ref={barRef}
+        className="h-full w-full origin-left will-change-transform"
         style={{
-          width: `${pct}%`,
           background: "linear-gradient(90deg, #1D4ED8, #3B82F6 55%, #60A5FA)",
-          boxShadow: pct > 0 ? "0 0 12px rgba(59,130,246,.55)" : "none",
-          transition: "width 120ms linear",
+          transform: "scaleX(0)",
         }}
       />
     </div>
