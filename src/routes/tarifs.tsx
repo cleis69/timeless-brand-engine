@@ -59,7 +59,7 @@ export const Route = createFileRoute("/tarifs")({
       {
         name: "description",
         content:
-          "Production de vidéos publicitaires et acquisition. Prix affichés, périmètre détaillé, aucune surprise. À partir de 490 € la vidéo.",
+          "Production de vidéos publicitaires et acquisition. Prix affichés, périmètre détaillé, aucune surprise. À partir de 490 € la vidéo, diffusion comprise.",
       },
       { property: "og:title", content: "Tarifs — ULTRA VISION" },
       {
@@ -411,6 +411,11 @@ function Carte() {
                         </div>
 
                         <div className="text-right whitespace-nowrap">
+                          {it.from && (
+                            <span className="mr-1 text-[0.7rem] text-muted-foreground">
+                              à partir de
+                            </span>
+                          )}
                           <span className="display text-[1.25rem]">{euro(now)}</span>
                           {it.unit && (
                             <span className="ml-1 text-[0.72rem] text-muted-foreground">
