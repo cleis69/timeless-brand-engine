@@ -2,14 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
-import {
-  CONTACT,
-  hasPhone,
-  hasWhatsapp,
-  phoneDisplay,
-  telUrl,
-  whatsappUrl,
-} from "@/config/contact";
+import { CONTACT, ORG_LD, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -70,6 +63,47 @@ export const Route = createFileRoute("/contact")({
       { property: "og:type", content: "website" },
     ],
     links: [{ rel: "canonical", href: `${URL}/contact` }],
+    scripts: [
+      {
+        /*
+          ContactPage + Organization. C'est ce balisage qui permet a
+          Google d'afficher directement l'adresse e-mail ou le lien
+          WhatsApp dans ses resultats, sans que le visiteur ait besoin
+          d'ouvrir la page. Sur une page contact, chaque clic evite est
+          un contact gagne.
+        */
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          url: `${URL}/contact`,
+          inLanguage: "fr-FR",
+          mainEntity: {
+            ...ORG_LD(URL),
+            contactPoint: [
+              {
+                "@type": "ContactPoint",
+                contactType: "commercial",
+                email: CONTACT.email,
+                ...(hasWhatsapp ? { url: whatsappUrl() } : {}),
+                availableLanguage: ["fr", "ar", "en"],
+              },
+            ],
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
+            { "@type": "ListItem", position: 2, name: "Contact", item: `${URL}/contact` },
+          ],
+        }),
+      },
+    ],
   }),
 });
 

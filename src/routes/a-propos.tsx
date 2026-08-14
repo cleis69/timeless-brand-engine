@@ -3,7 +3,7 @@ import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { TeamCard, type Member } from "@/components/TeamAvatar";
-import { CONTACT } from "@/config/contact";
+import { CONTACT, ORG_LD } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -47,29 +47,6 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  */
 
 const URL = "https://timeless-brand-engine.lovable.app";
-
-export const Route = createFileRoute("/a-propos")({
-  component: APropos,
-  head: () => ({
-    meta: [
-      { title: "À propos — L'équipe ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Une équipe restreinte de seniors : production audiovisuelle, direction artistique, contenu et media buying. Basée au Maroc, au service de clients français.",
-      },
-      { property: "og:title", content: "À propos — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
-      },
-      { property: "og:url", content: `${URL}/a-propos` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/a-propos` }],
-  }),
-});
 
 /* ==========================================================================
  *  L'EQUIPE
@@ -120,6 +97,83 @@ if (typeof window !== "undefined" && TEAM.some((m) => m.name === NAME_TODO)) {
   );
 }
 
+/*
+  L'EQUIPE EST DECLAREE AVANT LA ROUTE.
+
+  Elle sert maintenant deux fois : a l'affichage, et dans les
+  donnees structurees generees par `head()`. Une constante lue par
+  une fonction ecrite cent lignes plus haut est exactement le genre
+  de dependance qu'on casse sans s'en apercevoir en reorganisant
+  un fichier.
+*/
+export const Route = createFileRoute("/a-propos")({
+  component: APropos,
+  head: () => ({
+    meta: [
+      { title: "À propos — L'équipe ULTRA VISION" },
+      {
+        name: "description",
+        content:
+          "Une équipe restreinte de seniors : production audiovisuelle, direction artistique, contenu et media buying. Nous intervenons à Casablanca, Rabat, Marrakech, Tanger et Agadir.",
+      },
+      { property: "og:title", content: "À propos — ULTRA VISION" },
+      {
+        property: "og:description",
+        content:
+          "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
+      },
+      { property: "og:url", content: `${URL}/a-propos` },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: `${URL}/a-propos` }],
+    scripts: [
+      {
+        /*
+          AboutPage + Organization avec ses membres.
+
+          Nommer les personnes dans les donnees structurees sert deux
+          choses : Google associe l'entreprise a des individus reels,
+          ce qui compte dans son evaluation de fiabilite ; et un
+          assistant interroge sur « qui dirige ULTRA VISION » trouve
+          une reponse attribuable au lieu de deviner.
+
+          On ne declare que les noms et les fonctions — jamais de
+          coordonnees personnelles.
+        */
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          url: `${URL}/a-propos`,
+          inLanguage: "fr-FR",
+          mainEntity: {
+            ...ORG_LD(URL),
+            foundingLocation: { "@type": "Place", name: "Maroc" },
+            numberOfEmployees: { "@type": "QuantitativeValue", value: 4 },
+            employee: TEAM.filter((m) => m.name !== NAME_TODO).map((m) => ({
+              "@type": "Person",
+              name: m.name,
+              jobTitle: m.role,
+              worksFor: { "@type": "Organization", name: "ULTRA VISION" },
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
+            { "@type": "ListItem", position: 2, name: "À propos", item: `${URL}/a-propos` },
+          ],
+        }),
+      },
+    ],
+  }),
+});
+
 /* ==========================================================================
  *  VALEURS
  * ========================================================================== */
@@ -154,7 +208,7 @@ function APropos() {
         eyebrow="À propos"
         title="Une équipe restreinte, et vous savez qui fait quoi."
         accent="et vous savez qui fait quoi"
-        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous sommes basés au Maroc et travaillons principalement pour des entreprises françaises."
+        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous intervenons uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir."
       />
 
       {/* ---------------- Parti pris ---------------- */}

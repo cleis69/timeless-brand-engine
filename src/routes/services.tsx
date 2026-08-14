@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AREA_SERVED, ORG_LD } from "@/config/contact";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -38,29 +39,6 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  */
 
 const URL = "https://timeless-brand-engine.lovable.app";
-
-export const Route = createFileRoute("/services")({
-  component: Services,
-  head: () => ({
-    meta: [
-      { title: "Services — Production publicitaire & acquisition | ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Production de vidéos publicitaires, diffusion Meta / Google / TikTok, sites et landing pages, automatisation des leads. Quatre pôles, une seule équipe.",
-      },
-      { property: "og:title", content: "Services — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Production publicitaire, acquisition, web et automatisation, par la même équipe.",
-      },
-      { property: "og:url", content: `${URL}/services` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/services` }],
-  }),
-});
 
 const POLES = [
   {
@@ -116,6 +94,77 @@ const POLES = [
     ],
   },
 ];
+
+/* Declare avant la route : POLES est lu par `head()` pour generer
+   les donnees structurees, et par le composant pour l'affichage. */
+export const Route = createFileRoute("/services")({
+  component: Services,
+  head: () => ({
+    meta: [
+      { title: "Services — Production publicitaire & acquisition | ULTRA VISION" },
+      {
+        name: "description",
+        content:
+          "Production de vidéos publicitaires, diffusion Meta / Google / TikTok, sites et landing pages, automatisation des leads. Quatre pôles, une seule équipe.",
+      },
+      { property: "og:title", content: "Services — ULTRA VISION" },
+      {
+        property: "og:description",
+        content:
+          "Production publicitaire, acquisition, web et automatisation, par la même équipe.",
+      },
+      { property: "og:url", content: `${URL}/services` },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: `${URL}/services` }],
+    scripts: [
+      {
+        /*
+          Un Service par pole, dans un ItemList. C'est ce decoupage qui
+          permet a un assistant interroge sur « qui fait du media buying
+          a Casablanca » de trouver une correspondance precise, plutot
+          qu'une page generique ou le mot apparait quelque part.
+        */
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          url: `${URL}/services`,
+          inLanguage: "fr-FR",
+          publisher: ORG_LD(URL),
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: POLES.length,
+            itemListElement: POLES.map((p, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "Service",
+                name: p.title,
+                description: p.intro,
+                serviceType: p.items.join(", "),
+                areaServed: AREA_SERVED,
+                provider: { "@type": "Organization", name: "ULTRA VISION", url: URL },
+              },
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
+            { "@type": "ListItem", position: 2, name: "Services", item: `${URL}/services` },
+          ],
+        }),
+      },
+    ],
+  }),
+});
+
 
 function Services() {
   return (

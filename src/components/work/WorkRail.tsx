@@ -151,7 +151,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
     };
   }, [isMobile, items.length]);
 
-  const current = (items[active] ?? items[0])!;
+  const current = items[active] ?? items[0];
 
   return (
     <div ref={sectionRef}>

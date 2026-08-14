@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ORG_LD } from "@/config/contact";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -61,6 +62,53 @@ export const Route = createFileRoute("/realisations")({
       { property: "og:type", content: "website" },
     ],
     links: [{ rel: "canonical", href: `${URL}/realisations` }],
+    scripts: [
+      {
+        /*
+          CollectionPage listant les realisations reelles. Les chiffres
+          declares sont ceux de work.data.ts : ils ne peuvent donc pas
+          diverger de ce qui est affiche. Un resultat balise different
+          du resultat affiche serait traite comme une manipulation.
+        */
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          url: `${URL}/realisations`,
+          inLanguage: "fr-FR",
+          publisher: ORG_LD(URL),
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: WORK_ITEMS.length,
+            itemListElement: WORK_ITEMS.map((w, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "VideoObject",
+                name: w.title,
+                description: w.description,
+                genre: w.category,
+                thumbnailUrl: `${URL}${w.poster}`,
+                contentUrl: `${URL}${w.sources.mp4}`,
+                uploadDate: w.year ? `${w.year}-01-01` : undefined,
+                creator: { "@type": "Organization", name: "ULTRA VISION" },
+              },
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
+            { "@type": "ListItem", position: 2, name: "Réalisations", item: `${URL}/realisations` },
+          ],
+        }),
+      },
+    ],
   }),
 });
 

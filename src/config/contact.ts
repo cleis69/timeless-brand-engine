@@ -61,7 +61,20 @@ export const CONTACT = {
     "Bonjour ULTRA VISION, je viens de votre site. J'aimerais echanger sur mon projet.",
 
   /** Villes affichees dans le pied de page. */
-  locations: "Casablanca — Marrakech — Agadir — Tanger",
+  locations: "Casablanca — Rabat — Marrakech — Tanger — Agadir",
+
+  /**
+   * Les memes villes, en liste, pour les donnees structurees.
+   *
+   * Elles doivent rester identiques a `locations` : Google compare ce
+   * qui est balise et ce qui est affiche, et une divergence entre les
+   * deux est traitee comme une tentative de manipulation.
+   */
+  cities: ["Casablanca", "Rabat", "Marrakech", "Tanger", "Agadir"],
+
+  /** Pays d'intervention, code ISO. Sert aux donnees structurees. */
+  country: "MA",
+  countryName: "Maroc",
 } as const
 
 /** Vrai si un numero de telephone publiable est renseigne. */
@@ -91,3 +104,28 @@ export const mailtoUrl = `mailto:${CONTACT.email}`
 
 /** Lien telephone. */
 export const telUrl = hasPhone ? `tel:${CONTACT.phone}` : ""
+
+/**
+ * Zone d'intervention, au format attendu par les donnees structurees.
+ *
+ * A UTILISER SUR TOUTES LES PAGES, sans exception.
+ *
+ * Declarer une zone differente d'une page a l'autre est l'erreur la
+ * plus courante et la plus couteuse en referencement local : Google
+ * ne sait plus ou situer l'entreprise, et cesse de l'afficher partout.
+ */
+export const AREA_SERVED = [
+  { "@type": "Country", name: CONTACT.countryName },
+  ...CONTACT.cities.map((c) => ({ "@type": "City", name: c })),
+]
+
+/** Bloc Organization reutilisable dans toutes les donnees structurees. */
+export const ORG_LD = (url: string) => ({
+  "@type": "Organization",
+  name: "ULTRA VISION",
+  url,
+  email: CONTACT.email,
+  ...(hasPhone ? { telephone: CONTACT.phone } : {}),
+  address: { "@type": "PostalAddress", addressCountry: CONTACT.country },
+  areaServed: AREA_SERVED,
+})

@@ -51,6 +51,39 @@ import {
 
 const URL = "https://timeless-brand-engine.lovable.app";
 
+/*
+  Declaree AVANT la route, et non plus en bas du fichier.
+
+  Ces questions servent maintenant deux fois : a l'affichage, et dans
+  les donnees structurees FAQPage generees dans `head()`. Les garder
+  plus bas fonctionnerait — `head()` n'est appele qu'au rendu — mais
+  une constante lue par une fonction ecrite trois cents lignes plus
+  haut est exactement le genre de dependance qu'on casse sans s'en
+  rendre compte en reorganisant un fichier.
+*/
+const FAQ_TARIFS = [
+  {
+    q: "Le budget publicitaire est-il compris ?",
+    a: "Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez 800 € à 1 500 € par mois pour démarrer selon votre secteur.",
+  },
+  {
+    q: "Que se passe-t-il après les 3 mois d'engagement ?",
+    a: "L'accompagnement continue au mois, résiliable avec un préavis de 30 jours. Il n'y a pas de reconduction longue automatique.",
+  },
+  {
+    q: "Les prix peuvent-ils changer en cours de mission ?",
+    a: "Non. Le prix validé au devis est ferme pour toute la durée de la mission. Une prestation ajoutée en cours de route fait l'objet d'un avenant chiffré à part, accepté avant d'être exécuté.",
+  },
+  {
+    q: "À qui appartiennent les vidéos et les comptes ?",
+    a: "À vous. Fichiers sources livrés, comptes publicitaires ouverts à votre nom, accès administrateur complet. Si nous arrêtons de travailler ensemble, vous repartez avec tout.",
+  },
+  {
+    q: "Comment se passe le règlement ?",
+    a: "Les formules mensuelles sont réglées en début de mois. Les prestations à l'unité, 50 % à la commande et 50 % à la livraison.",
+  },
+];
+
 export const Route = createFileRoute("/tarifs")({
   component: Tarifs,
   head: () => ({
@@ -70,6 +103,77 @@ export const Route = createFileRoute("/tarifs")({
       { property: "og:url", content: `${URL}/tarifs` },
     ],
     links: [{ rel: "canonical", href: `${URL}/tarifs` }],
+    scripts: [
+      {
+        /*
+          CATALOGUE D'OFFRES — le balisage le plus utile du site.
+
+          « Combien coute une video publicitaire » est une question que
+          les gens posent desormais autant a un assistant qu'a Google.
+          Un assistant qui trouve un prix ecrit en clair dans les
+          donnees structurees le cite ; un assistant qui doit le deviner
+          en lisant une page cite quelqu'un d'autre.
+
+          Les montants sont generes a partir de pricing.ts : ils ne
+          peuvent pas diverger de ce qui est affiche a l'ecran. C'est
+          essentiel — un prix balise different du prix affiche est
+          traite comme une tentative de manipulation.
+        */
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "Production de vidéos publicitaires et acquisition",
+          serviceType: "Publicité vidéo et media buying",
+          provider: { "@type": "Organization", name: "ULTRA VISION", url: URL },
+          areaServed: { "@type": "Country", name: "France" },
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Formules ULTRA VISION",
+            itemListElement: PACKS.map((p) => ({
+              "@type": "Offer",
+              name: p.name,
+              description: p.forWho,
+              price: p.price,
+              priceCurrency: "EUR",
+              /* Le prix est hors taxes : il faut le declarer, sinon il
+                 est suppose TTC et devient faux. */
+              priceSpecification: {
+                "@type": "PriceSpecification",
+                price: p.price,
+                priceCurrency: "EUR",
+                valueAddedTaxIncluded: false,
+              },
+              category: p.period ? "Abonnement mensuel" : "Prestation unique",
+              url: `${URL}/tarifs`,
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ_TARIFS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
+            { "@type": "ListItem", position: 2, name: "Tarifs", item: `${URL}/tarifs` },
+          ],
+        }),
+      },
+    ],
   }),
 });
 
@@ -540,29 +644,6 @@ function Custom() {
 }
 
 /* -------------------------------------------------------------------------- */
-
-const FAQ_TARIFS = [
-  {
-    q: "Le budget publicitaire est-il compris ?",
-    a: "Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez 800 € à 1 500 € par mois pour démarrer selon votre secteur.",
-  },
-  {
-    q: "Que se passe-t-il après les 3 mois d'engagement ?",
-    a: "L'accompagnement continue au mois, résiliable avec un préavis de 30 jours. Il n'y a pas de reconduction longue automatique.",
-  },
-  {
-    q: "Les prix peuvent-ils changer en cours de mission ?",
-    a: "Non. Le prix validé au devis est ferme pour toute la durée de la mission. Une prestation ajoutée en cours de route fait l'objet d'un avenant chiffré à part, accepté avant d'être exécuté.",
-  },
-  {
-    q: "À qui appartiennent les vidéos et les comptes ?",
-    a: "À vous. Fichiers sources livrés, comptes publicitaires ouverts à votre nom, accès administrateur complet. Si nous arrêtons de travailler ensemble, vous repartez avec tout.",
-  },
-  {
-    q: "Comment se passe le règlement ?",
-    a: "Les formules mensuelles sont réglées en début de mois. Les prestations à l'unité, 50 % à la commande et 50 % à la livraison.",
-  },
-];
 
 function Faq() {
   return (

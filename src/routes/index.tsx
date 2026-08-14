@@ -10,7 +10,7 @@ import { GrowthBackdrop } from "@/components/GrowthBackdrop";
 import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
-import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { useState } from "react";
 
 /**
@@ -54,17 +54,29 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: () => ({
     meta: [
-      { title: "ULTRA VISION — Agence créative, IA & acquisition" },
+      /*
+        Le titre et la description annoncaient « branding, sites web et
+        applications, intelligence artificielle, automatisation ». C'est
+        l'ancien positionnement, et il n'a plus rien a voir avec ce que
+        la page raconte : production de videos publicitaires et
+        acquisition.
+
+        C'est le texte que Google affiche dans ses resultats. Un visiteur
+        qui clique sur « branding et applications » et tombe sur des
+        videos publicitaires repart aussitot — et ce depart compte comme
+        un signal negatif.
+      */
+      { title: "ULTRA VISION — Vidéos publicitaires & acquisition" },
       {
         name: "description",
         content:
-          "Agence créative premium : branding, sites web et applications, intelligence artificielle, automatisation et acquisition payante pour entreprises ambitieuses.",
+          "Production de vidéos publicitaires et pilotage de vos campagnes Meta, Google et TikTok. Première vidéo livrée en 7 jours, diffusion comprise, à partir de 490 €.",
       },
-      { property: "og:title", content: "ULTRA VISION — Agence créative, IA & acquisition" },
+      { property: "og:title", content: "ULTRA VISION — Vidéos publicitaires & acquisition" },
       {
         property: "og:description",
         content:
-          "Branding, développement web, IA et acquisition. Nous construisons des marques et des systèmes de croissance mesurables.",
+          "Nous transformons vos vues en ventes. Vidéos publicitaires pensées, tournées et montées par des humains, diffusées et optimisées par nos soins.",
       },
       { property: "og:url", content: `${URL}/` },
       { property: "og:type", content: "website" },
@@ -78,11 +90,28 @@ export const Route = createFileRoute("/")({
           "@type": "ProfessionalService",
           name: "ULTRA VISION",
           description:
-            "Agence créative spécialisée en branding, développement web, intelligence artificielle, automatisation et acquisition de leads.",
+            "Agence de production de vidéos publicitaires et d'acquisition. Écriture, tournage, montage et diffusion sur Meta, Google et TikTok.",
           url: URL,
-          email: "contact@ultravisionagency.com",
-          areaServed: "FR",
-          address: { "@type": "PostalAddress", addressLocality: "Paris", addressCountry: "FR" },
+          email: CONTACT.email,
+          /*
+            L'ADRESSE ANNONCAIT « Paris, FR ». C'ETAIT FAUX.
+
+            C'est le dernier mensonge du site, et le plus discret : il
+            n'apparaissait nulle part a l'ecran, uniquement dans les
+            donnees que Google lit. Google s'en sert pourtant pour
+            decider dans quelles recherches locales faire apparaitre
+            l'entreprise.
+
+            La zone d'intervention vient maintenant de
+            src/config/contact.ts : le Maroc et les cinq villes. Elle
+            est identique sur toutes les pages du site — declarer une
+            zone differente d'une page a l'autre est l'erreur la plus
+            couteuse en referencement local, parce que Google cesse
+            alors de situer l'entreprise et ne l'affiche plus nulle part.
+          */
+          areaServed: AREA_SERVED,
+          address: { "@type": "PostalAddress", addressCountry: CONTACT.country },
+          knowsLanguage: ["fr", "ar", "en"],
         }),
       },
     ],
@@ -182,8 +211,8 @@ const FAQ = [
       francais : l'equipe est au Maroc, les clients sont en France, et
       le tournage se deplace.
     */
-    q: "Vous êtes au Maroc, mes clients sont en France. Est-ce un problème ?",
-    a: "C'est notre situation habituelle : la majorité de nos clients sont des entreprises françaises. Le travail se fait à distance, en français, aux horaires français. Pour les tournages, nous nous déplaçons en France ou nous produisons depuis nos studios selon ce que demande le format.",
+    q: "Où intervenez-vous ?",
+    a: "Uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir. Le tournage se déplace dans ces cinq villes sans frais supplémentaires. En dehors, nous étudions au cas par cas et les frais de déplacement figurent au devis.",
   },
 ];
 

@@ -44,13 +44,23 @@
  * ------------------------------------------------------------
  */
 
+import type { FigureData } from "@/components/Figure";
+
 export type Block =
   | { k: "h2"; v: string }
   | { k: "p"; v: string }
   | { k: "ul"; v: string[] }
   | { k: "quote"; v: string }
   | { k: "note"; v: string }
-  | { k: "table"; v: { head: string[]; rows: string[][] } };
+  | { k: "table"; v: { head: string[]; rows: string[][] } }
+  /**
+   * Infographie. Quatre formes disponibles : `funnel`, `steps`, `bars`
+   * et `split`. Elles sont dessinees en code, pas importees en image :
+   * leur texte reste donc lisible par Google et par les assistants,
+   * et elles pesent quelques centaines d'octets au lieu de plusieurs
+   * centaines de kilo-octets.
+   */
+  | { k: "figure"; v: FigureData };
 
 export type Article = {
   slug: string;
@@ -152,13 +162,30 @@ export const ARTICLES: Article[] = [
         v: "TOFU, MOFU et BOFU découpent l'entonnoir — le tunnel — en trois moments. Le vocabulaire vient de l'anglais top, middle et bottom of funnel : le haut, le milieu et le bas de l'entonnoir. Derrière ces sigles, il n'y a qu'une question : qu'est-ce que la personne sait déjà de vous au moment où votre vidéo apparaît ?",
       },
       {
-        k: "table",
+        k: "figure",
         v: {
-          head: ["Étage", "Ce que la personne sait", "Ce que la vidéo doit faire"],
-          rows: [
-            ["TOFU — haut", "Rien. Elle ne vous connaît pas.", "Arrêter le pouce, poser un problème"],
-            ["MOFU — milieu", "Elle vous a vu, elle n'a pas décidé.", "Prouver que vous savez faire"],
-            ["BOFU — bas", "Elle hésite, elle compare.", "Lever le dernier frein, faire agir"],
+          type: "funnel",
+          caption:
+            "Les trois étages du tunnel. La largeur représente le volume d'audience touchée : beaucoup de monde en haut, peu de monde en bas, mais une valeur par personne qui augmente à chaque étage.",
+          levels: [
+            {
+              label: "TOFU — haut",
+              value: "8 à 15 s",
+              sub: "La personne ne vous connaît pas. La vidéo doit arrêter le pouce et poser un problème qu'elle reconnaît.",
+              note: "Audience froide · 50 à 60 % du budget",
+            },
+            {
+              label: "MOFU — milieu",
+              value: "20 à 45 s",
+              sub: "Elle vous a vu mais n'a pas décidé. La vidéo doit prouver que vous savez faire.",
+              note: "Audience ayant déjà interagi · 20 à 30 % du budget",
+            },
+            {
+              label: "BOFU — bas",
+              value: "10 à 20 s",
+              sub: "Elle hésite et compare. La vidéo doit lever le dernier frein et faire agir.",
+              note: "Audience chaude · 20 % du budget",
+            },
           ],
         },
       },
@@ -238,13 +265,16 @@ export const ARTICLES: Article[] = [
         v: "Sur quatre vidéos par mois, notre répartition de départ est la suivante. Elle bouge ensuite selon ce que disent les chiffres.",
       },
       {
-        k: "table",
+        k: "figure",
         v: {
-          head: ["Étage", "Vidéos par mois", "Part du budget média"],
-          rows: [
-            ["TOFU", "2", "50 à 60 %"],
-            ["MOFU", "1", "20 à 30 %"],
-            ["BOFU", "1", "20 %"],
+          type: "bars",
+          caption:
+            "Répartition du budget média sur quatre vidéos mensuelles. Le haut de tunnel concentre plus de la moitié de la dépense parce que c'est le seul étage où l'on cherche encore.",
+          unit: "Part du budget publicitaire mensuel, hors production.",
+          bars: [
+            { label: "TOFU — 2 vidéos", value: 55, display: "50 à 60 %", highlight: true },
+            { label: "MOFU — 1 vidéo", value: 25, display: "20 à 30 %" },
+            { label: "BOFU — 1 vidéo", value: 20, display: "20 %" },
           ],
         },
       },
@@ -263,12 +293,30 @@ export const ARTICLES: Article[] = [
         v: "Contre-intuitivement, on ne commence pas par le haut. On commence par le bas.",
       },
       {
-        k: "ul",
-        v: [
-          "Semaine 1 — BOFU. Il y a toujours une audience prête quelque part : visiteurs du site, base client, abonnés. C'est ce qui rapporte les premiers résultats, donc ce qui finance la suite.",
-          "Semaine 2 à 4 — MOFU. On installe la preuve pendant que le BOFU tourne.",
-          "Mois 2 — TOFU. On ouvre le robinet du haut une fois que ce qui suit est en place.",
-        ],
+        k: "figure",
+        v: {
+          type: "steps",
+          caption:
+            "L'ordre de construction, à l'envers de l'ordre de lecture. On installe d'abord ce qui convertit, ensuite ce qui attire.",
+          steps: [
+            {
+              label: "Semaine 1 — BOFU",
+              sub: "Une audience prête existe déjà : visiteurs du site, base client, abonnés.",
+            },
+            {
+              label: "Semaines 2 à 4 — MOFU",
+              sub: "On installe la preuve pendant que le BOFU tourne et rapporte.",
+            },
+            {
+              label: "Mois 2 — TOFU",
+              sub: "On ouvre le haut une fois que ce qui suit est en place.",
+            },
+            {
+              label: "Mois 3 — Bascule",
+              sub: "Le budget se déplace vers le haut, le bas fonctionne seul.",
+            },
+          ],
+        },
       },
       {
         k: "p",
@@ -354,13 +402,21 @@ export const ARTICLES: Article[] = [
 
       { k: "h2", v: "Les trois grandes gammes du marché" },
       {
-        k: "table",
+        k: "figure",
         v: {
-          head: ["Gamme", "Prix courant", "Ce que vous obtenez"],
-          rows: [
-            ["Montage seul", "150 à 400 €", "Vos rushes, montés. Aucun tournage."],
-            ["Production légère", "400 à 1 200 €", "Écriture, tournage, montage. Équipe réduite."],
-            ["Production lourde", "3 000 à 15 000 €", "Équipe complète, comédiens, décors, post-production."],
+          type: "bars",
+          caption:
+            "Les trois gammes du marché, en prix moyen constaté. La gamme du milieu est celle qui convient à la quasi-totalité des campagnes en ligne.",
+          unit: "Prix hors taxes pour une vidéo, hors budget publicitaire.",
+          bars: [
+            { label: "Montage seul, sans tournage", value: 275, display: "150 à 400 €" },
+            {
+              label: "Production légère — équipe réduite",
+              value: 800,
+              display: "400 à 1 200 €",
+              highlight: true,
+            },
+            { label: "Production lourde — équipe complète", value: 9000, display: "3 000 à 15 000 €" },
           ],
         },
       },
@@ -458,13 +514,32 @@ export const ARTICLES: Article[] = [
 
       { k: "h2", v: "Ce que quatre vidéos permettent réellement" },
       {
-        k: "ul",
-        v: [
-          "Tester quatre angles au lieu d'en parier un.",
-          "Garder une réserve pendant que la vidéo en tête s'use.",
-          "Alimenter les trois étages du tunnel plutôt qu'un seul.",
-          "Donner à l'algorithme de quoi choisir — c'est lui qui arbitre, pas nous.",
-        ],
+        k: "figure",
+        v: {
+          type: "split",
+          caption:
+            "Ce que change le passage d'une vidéo à quatre. La colonne de gauche décrit un pari, celle de droite un dispositif.",
+          left: {
+            title: "Avec une seule vidéo",
+            items: [
+              "Un seul angle testé, choisi au jugé",
+              "Aucune réserve quand elle s'use",
+              "Un seul étage du tunnel alimenté",
+              "Rien à comparer pour l'algorithme",
+              "Campagne à l'arrêt pendant la production suivante",
+            ],
+          },
+          right: {
+            title: "Avec quatre vidéos par mois",
+            items: [
+              "Quatre angles testés en parallèle",
+              "Une réserve prête quand la première fatigue",
+              "Les trois étages alimentés en continu",
+              "De quoi laisser l'algorithme arbitrer",
+              "Aucune interruption de diffusion",
+            ],
+          },
+        },
       },
       {
         k: "note",
@@ -520,9 +595,23 @@ export const ARTICLES: Article[] = [
 
       { k: "h2", v: "Ce que le recadrage détruit" },
       {
+        k: "figure",
+        v: {
+          type: "bars",
+          caption:
+            "Ce qu'il reste d'une image quand on la fait passer d'un format à l'autre. Le recadrage d'un 16/9 vers du 9/16 ne conserve qu'environ quatre dixièmes de la surface d'origine.",
+          unit: "Surface de l'image conservée après recadrage.",
+          bars: [
+            { label: "Tourné directement en 9/16", value: 100, display: "100 %", highlight: true },
+            { label: "16/9 recadré en 9/16", value: 40, display: "environ 40 %" },
+            { label: "16/9 recadré en 1/1", value: 56, display: "environ 56 %" },
+          ],
+        },
+      },
+      {
         k: "ul",
         v: [
-          "La composition. Un plan large horizontal recadré en vertical perd 60 % de son image, et généralement le sujet avec.",
+          "La composition. Un plan large horizontal recadré en vertical perd la majeure partie de son image, et généralement le sujet avec.",
           "Le texte à l'écran. Positionné pour un cadre large, il sort du cadre ou se retrouve sous l'interface de l'application.",
           "Le rythme. Une vidéo horizontale est écrite pour un écran qu'on regarde ; une verticale, pour un écran qu'on fait défiler.",
         ],
@@ -606,6 +695,32 @@ export const ARTICLES: Article[] = [
       },
 
       { k: "h2", v: "Là où nous ne l'utilisons pas" },
+      {
+        k: "figure",
+        v: {
+          type: "split",
+          caption:
+            "Le partage exact. À gauche ce que nous confions à la machine, à droite ce que nous gardons. Le critère est simple : une erreur y est-elle rattrapable en un coup d'œil ?",
+          left: {
+            title: "Jamais confié à l'IA",
+            items: [
+              "L'angle publicitaire et la promesse",
+              "Le tournage et les visages",
+              "Les témoignages clients",
+              "Le montage final et son rythme",
+            ],
+          },
+          right: {
+            title: "Confié à l'IA",
+            items: [
+              "Le dérushage de plusieurs heures d'images",
+              "La transcription des sous-titres",
+              "Les variantes d'un script déjà validé",
+              "Le premier tri des données de performance",
+            ],
+          },
+        },
+      },
       {
         k: "ul",
         v: [

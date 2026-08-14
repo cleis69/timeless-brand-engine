@@ -8,6 +8,7 @@ import {
   type Article,
   type Block,
 } from "@/content/blog";
+import { Figure } from "@/components/Figure";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -110,16 +111,18 @@ export const Route = createFileRoute("/blog/$slug")({
             datePublished: a.date,
             dateModified: a.date,
             inLanguage: "fr-FR",
-            wordCount: a.body.reduce(
-              (n, b) =>
-                n +
-                (b.k === "ul"
-                  ? b.v.join(" ").split(/\s+/).length
-                  : b.k === "table"
-                    ? 0
-                    : String(b.v).split(/\s+/).length),
-              0,
-            ),
+            /*
+              Le compte de mots ne porte que sur le texte reel. Les
+              tableaux et les infographies sont exclus : ce sont des
+              objets, et les convertir en chaine produirait
+              « [object Object] » — c'est-a-dire un decompte faux
+              declare a Google, ce qui est pire que pas de decompte.
+            */
+            wordCount: a.body.reduce((n, b) => {
+              if (b.k === "ul") return n + b.v.join(" ").split(/\s+/).length;
+              if (b.k === "table" || b.k === "figure") return n;
+              return n + b.v.split(/\s+/).length;
+            }, 0),
             timeRequired: `PT${a.readingTime}M`,
             articleSection: a.category,
             author: { "@type": "Organization", name: "ULTRA VISION", url: URL },
@@ -387,6 +390,9 @@ function BlockView({ block }: { block: Block }) {
           <p className="text-[0.92rem] leading-[1.75] text-[#cddafc]">{block.v}</p>
         </aside>
       );
+
+    case "figure":
+      return <Figure data={block.v} />;
 
     case "table":
       return (
