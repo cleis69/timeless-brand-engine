@@ -153,6 +153,8 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
 
   const current = items[active] ?? items[0];
 
+  if (!current) return null;
+
   return (
     <div ref={sectionRef}>
       {/* ---------------- Le rail ---------------- */}
