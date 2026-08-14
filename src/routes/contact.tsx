@@ -138,7 +138,7 @@ const NEEDS = [
 ];
 
 function Contact() {
-  const [budget, setBudget] = useState(BUDGETS[1]);
+  const [budget, setBudget] = useState<string>(BUDGETS[1] ?? "Je ne sais pas encore");
   const [needs, setNeeds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
