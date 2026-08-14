@@ -131,12 +131,11 @@ export function ExpertiseList() {
       */}
       <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 lg:grid-cols-6 lg:grid-rows-[repeat(3,minmax(168px,auto))]">
         {POLES.map((p, i) => (
-          {/*
+          /*
             `h-full` sur l'enveloppe Reveal est indispensable : c'est
             ELLE qui est la case de la grille, pas le panneau qu'elle
-            contient. Sans cette hauteur, le panneau de Branding ne
-            remplirait pas les deux rangees qui lui sont reservees.
-          */}
+            contient.
+          */
           <Reveal key={p.n} delay={i * MOTION.stagger} className={`h-full ${p.area}`}>
             <article
               tabIndex={0}
