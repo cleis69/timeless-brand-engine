@@ -411,11 +411,6 @@ function Carte() {
                         </div>
 
                         <div className="text-right whitespace-nowrap">
-                          {it.from && (
-                            <span className="mr-1 text-[0.7rem] text-muted-foreground">
-                              à partir de
-                            </span>
-                          )}
                           <span className="display text-[1.25rem]">{euro(now)}</span>
                           {it.unit && (
                             <span className="ml-1 text-[0.72rem] text-muted-foreground">

@@ -201,20 +201,13 @@ export const PACKS: Pack[] = [
     ],
     equivalent: "soit 622 € la vidéo, diffusion et tunnel compris",
     /*
-      4 vidéos à 340 € = 1 360 €
-      media buying sur 3 plateformes, 3 x 490 € = 1 470 €
-      ouverture des comptes = 290 €
-      CRM et automatisation = 490 €
-      landing page = 150 €
-      -------------------------------------------------- 3 760 €
-
-      Chacune de ces lignes est publiée plus bas. Le calcul est
+      4 vidéos à 340 € = 1 360 €, media buying 490 €, ouverture des
+      comptes 490 €, CRM et automatisation 590 €, landing page 390 €.
+      Chacune de ces lignes est publiée plus bas : le calcul est
       refaisable par le visiteur, et c'est la condition pour qu'il y
-      croie : un prospect qui refait l'addition et tombe juste vous
-      croit sur tout le reste ; un qui tombe faux ne vous croit plus
-      sur rien.
+      croie.
     */
-    anchor: 3760,
+    anchor: 3320,
     bonus: "Landing page de conversion offerte",
     featured: true,
     cta: "Réserver un appel",
@@ -227,15 +220,7 @@ export const PACKS: Pack[] = [
 
 export type AlaCarte = {
   group: string;
-  items: {
-    label: string;
-    detail: string;
-    price: number;
-    /** Suffixe : « / mois », « / mois / plateforme »… */
-    unit?: string;
-    /** Affiche « à partir de » devant le prix. */
-    from?: boolean;
-  }[];
+  items: { label: string; detail: string; price: number; unit?: string }[];
 };
 
 export const A_LA_CARTE: AlaCarte[] = [
@@ -272,21 +257,12 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Landing page de conversion",
         detail: "Une page dédiée à une offre, pensée pour le formulaire.",
-        price: 150,
+        price: 390,
       },
       {
-        /*
-          « A partir de » est indispensable ici, et nulle part ailleurs.
-          Un site vitrine n'a pas de perimetre fixe : trois pages ou
-          huit pages, c'est le meme intitule et pas le meme travail.
-          Annoncer un prix ferme obligerait soit a refuser les projets
-          plus larges, soit a renegocier apres coup — c'est-a-dire a
-          faire exactement ce que la page promet d'eviter.
-        */
         label: "Site vitrine",
         detail: "Jusqu'à 5 pages, responsive, optimisé pour la vitesse.",
-        price: 590,
-        from: true,
+        price: 690,
       },
       {
         label: "Référencement technique",
@@ -301,7 +277,7 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Identité visuelle",
         detail: "Logo, palette, typographies, règles d'usage.",
-        price: 490,
+        price: 890,
       },
       {
         label: "Positionnement & message",
@@ -316,30 +292,18 @@ export const A_LA_CARTE: AlaCarte[] = [
       {
         label: "Ouverture des comptes publicitaires",
         detail: "Meta, Google, TikTok : comptes, pixels, conversions.",
-        price: 290,
+        price: 490,
       },
       {
         label: "CRM et automatisation des leads",
         detail: "Pipeline, formulaires, notifications, relances.",
-        price: 490,
+        price: 590,
       },
       {
-        /*
-          PAR PLATEFORME, ET C'EST UNE PRECISION INDISPENSABLE.
-
-          Piloter Meta seul et piloter Meta, Google et TikTok ne
-          representent pas le meme travail : trois interfaces, trois
-          logiques d'enchere, trois jeux de creations a decliner.
-
-          Sans cette mention, la formule Acquisition — qui est
-          multicanale — paraissait couter plus cher que la somme de ses
-          composants achetes separement. L'argument des formules
-          s'effondrait sur sa propre page.
-        */
-        label: "Media buying",
-        detail: "Pilotage mensuel de vos campagnes, vos vidéos.",
+        label: "Media buying seul",
+        detail: "Pilotage mensuel, vos vidéos, une plateforme.",
         price: 490,
-        unit: "/ mois / plateforme",
+        unit: "/ mois",
       },
     ],
   },
