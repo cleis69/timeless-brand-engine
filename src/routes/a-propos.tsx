@@ -2,6 +2,49 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
+import { TeamCard, type Member } from "@/components/TeamAvatar";
+import { CONTACT } from "@/config/contact";
+import { EASE_RESPOND, MOTION } from "@/config/motion";
+
+/**
+ * ULTRA VISION — page À propos.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/routes/a-propos.tsx
+ * ============================================================
+ *
+ * CE QUI A ETE SUPPRIME, ET POURQUOI
+ *
+ * L'ancienne version annoncait « dix-huit specialistes » repartis en
+ * six poles chiffres — 3 directeurs artistiques, 4 developpeurs, etc.
+ * Ces nombres etaient inventes. Sur une page « A propos », c'est le
+ * mensonge le plus facile a verifier : il suffit d'un appel ou d'un
+ * coup d'oeil a LinkedIn.
+ *
+ * Elle annoncait aussi des bureaux a « Paris — Dubai — Casablanca ».
+ * Deux de ces trois villes n'existent pas dans l'entreprise.
+ *
+ * CE QUI LES REMPLACE
+ *
+ * Quatre personnes reelles, nommees, avec leur parcours. Une equipe de
+ * quatre dont on peut citer les noms vaut infiniment mieux qu'une
+ * equipe de dix-huit anonymes — parce qu'elle est verifiable, et parce
+ * qu'un client achete des personnes, pas un organigramme.
+ *
+ * ------------------------------------------------------------
+ *  DEUX CHOSES A COMPLETER DE TON COTE
+ *
+ *  1. LE PRENOM DE LA COMMUNITY MANAGER. Il n'a pas ete communique.
+ *     Le champ contient « Prenom » et un avertissement s'affiche dans
+ *     la console du navigateur tant qu'il n'est pas rempli.
+ *
+ *  2. LES PHOTOS. Depose-les dans public/brand/team/ puis renseigne le
+ *     champ `photo` de chaque membre, par exemple '/brand/team/cleis.jpg'.
+ *     Format conseille : 640 x 800 px, cadrage vertical.
+ *     Tant que le champ est vide, l'avatar dessine prend le relais —
+ *     et si un nom de fichier est faux, l'avatar revient tout seul.
+ * ------------------------------------------------------------
+ */
 
 const URL = "https://timeless-brand-engine.lovable.app";
 
@@ -9,16 +52,17 @@ export const Route = createFileRoute("/a-propos")({
   component: APropos,
   head: () => ({
     meta: [
-      { title: "À propos — L'agence ULTRA VISION" },
+      { title: "À propos — L'équipe ULTRA VISION" },
       {
         name: "description",
         content:
-          "Une équipe de seniors en branding, développement, IA et acquisition, basée à Paris, Dubaï et Casablanca.",
+          "Une équipe restreinte de seniors : production audiovisuelle, direction artistique, contenu et media buying. Basée au Maroc, au service de clients français.",
       },
       { property: "og:title", content: "À propos — ULTRA VISION" },
       {
         property: "og:description",
-        content: "Uniquement des seniors. Peu de clients. Un niveau d'exécution constant.",
+        content:
+          "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
       },
       { property: "og:url", content: `${URL}/a-propos` },
       { property: "og:type", content: "website" },
@@ -27,66 +71,130 @@ export const Route = createFileRoute("/a-propos")({
   }),
 });
 
-const VALUES = [
+/* ==========================================================================
+ *  L'EQUIPE
+ * ========================================================================== */
+
+/** Marqueur du prenom manquant. Ne pas renommer : il sert au controle. */
+const NAME_TODO = "Prénom";
+
+const TEAM: Member[] = [
   {
-    t: "Sobriété",
-    d: "Nous retirons avant d'ajouter. Ce qui reste doit servir la marque ou la conversion.",
+    name: "Cleis Padou",
+    role: "Fondateur",
+    bio: "Dix ans à la tête d'un studio de production audiovisuelle en France. Formé en école de commerce, autodidacte pour le reste. C'est lui qui prend le brief, et c'est lui qui reste sur le projet.",
+    facts: ["Business school", "Autodidacte", "10 ans de studio en France"],
+    // photo: '/brand/team/cleis.jpg',
   },
   {
-    t: "Exigence",
-    d: "Chaque livrable passe une revue de direction artistique avant d'arriver chez vous.",
+    name: "Julien",
+    role: "Directeur artistique",
+    bio: "Photographe et vidéaste depuis plus de dix ans, architecte d'intérieur de formation. Ce double regard explique la façon dont il compose un cadre : il pense l'espace avant de penser l'image.",
+    facts: ["Photo & vidéo", "Architecte d'intérieur", "10 ans d'expérience"],
+    // photo: '/brand/team/julien.jpg',
   },
   {
-    t: "Clarté",
-    d: "Des devis lisibles, des périmètres écrits, aucun coût de dernière minute.",
+    name: NAME_TODO,
+    role: "Community manager",
+    bio: "Elle tient la ligne éditoriale et la présence quotidienne sur les réseaux : ce qui se publie, quand, et sur quel ton. C'est le lien entre les campagnes payantes et ce que la marque raconte le reste du temps.",
+    facts: ["Ligne éditoriale", "Réseaux sociaux", "Community management"],
   },
   {
-    t: "Résultat",
-    d: "Un projet réussi est un projet qui remplit un agenda commercial.",
+    name: "Selim",
+    role: "Media buyer",
+    bio: "Il pilote la diffusion sur Meta, Google et TikTok : structure des campagnes, arbitrage des budgets, coût par résultat. C'est lui qui transforme une bonne vidéo en rendez-vous qualifiés.",
+    facts: ["Meta Ads", "Google Ads", "TikTok Ads"],
   },
 ];
 
-const TEAM = [
-  { role: "Direction artistique", count: "3" },
-  { role: "Design produit & UI", count: "3" },
-  { role: "Développement", count: "4" },
-  { role: "IA & automatisation", count: "2" },
-  { role: "Acquisition & data", count: "3" },
-  { role: "Production photo & vidéo", count: "3" },
+/*
+  Avertissement en console tant que le prenom manque. Il s'affiche pour
+  toi en developpement, jamais pour un visiteur. C'est le meme
+  garde-fou que pour les statistiques : une donnee manquante doit se
+  signaler, pas se faire oublier.
+*/
+if (typeof window !== "undefined" && TEAM.some((m) => m.name === NAME_TODO)) {
+  console.warn(
+    "[ULTRA VISION] Le prénom de la community manager n'est pas renseigné. " +
+      "À compléter dans src/routes/a-propos.tsx, tableau TEAM.",
+  );
+}
+
+/* ==========================================================================
+ *  VALEURS
+ * ========================================================================== */
+
+const VALUES = [
+  {
+    t: "Ceux qui vendent exécutent",
+    d: "Vous parlez aux personnes qui travailleront sur votre projet. Il n'y a pas de seconde équipe derrière la première.",
+  },
+  {
+    t: "Des humains, outillés",
+    d: "L'intelligence artificielle nous fait gagner du temps sur la préparation et le montage. Elle n'écrit pas nos angles et ne tient pas la caméra.",
+  },
+  {
+    t: "Des périmètres écrits",
+    d: "Ce qui est compris, ce qui ne l'est pas, et le prix. Tout figure au devis, avant de commencer.",
+  },
+  {
+    t: "Peu de clients à la fois",
+    d: "Une équipe restreinte ne peut pas tout prendre. Nous préférons refuser une mission que la livrer à moitié.",
+  },
 ];
+
+/* ==========================================================================
+ *  LA PAGE
+ * ========================================================================== */
 
 function APropos() {
   return (
     <>
       <PageHero
         eyebrow="À propos"
-        title="Une agence construite pour les dirigeants qui détestent perdre du temps."
-        intro="ULTRA VISION réunit dix-huit spécialistes en branding, développement, intelligence artificielle et acquisition. Nous acceptons un nombre limité de projets par an."
+        title="Une équipe restreinte, et vous savez qui fait quoi."
+        accent="et vous savez qui fait quoi"
+        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous sommes basés au Maroc et travaillons principalement pour des entreprises françaises."
       />
 
+      {/* ---------------- Parti pris ---------------- */}
       <section className="rule bg-background">
-        <div className="shell grid gap-16 py-20 lg:grid-cols-2 lg:py-28">
+        <div className="shell grid gap-14 py-16 lg:grid-cols-2 lg:gap-20 lg:py-24">
           <Reveal>
             <div>
-              <h2 className="display text-4xl sm:text-5xl">Notre parti pris</h2>
-              <p className="mt-8 text-base leading-relaxed text-muted-foreground">
-                La plupart des entreprises n&apos;ont pas un problème de créativité, mais un
-                problème de cohérence : une marque qui dit une chose, un site qui en dit une autre,
-                des campagnes qui parlent à personne. Nous réalignons l&apos;ensemble.
+              <p className="eyebrow">Notre parti pris</p>
+              <h2 className="display mt-5 text-3xl sm:text-4xl">
+                Une belle vidéo qui ne vend rien reste une dépense.
+              </h2>
+              <p className="mt-7 text-base leading-relaxed text-muted-foreground">
+                La plupart des entreprises n&apos;ont pas un problème de créativité. Elles ont un
+                problème de chaîne : de belles images d&apos;un côté, des campagnes de
+                l&apos;autre, et personne pour relier les deux.
               </p>
-              <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-                Nos équipes créatives et média travaillent dans la même pièce, sur les mêmes
-                objectifs. C&apos;est la seule façon de faire d&apos;une belle marque une marque
-                rentable.
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                Nous produisons et nous diffusons. C&apos;est la même équipe, donc le même
+                objectif — et personne à qui renvoyer la responsabilité quand les résultats ne
+                viennent pas.
               </p>
             </div>
           </Reveal>
-          <div className="grid gap-8 sm:grid-cols-2">
+
+          <div className="grid gap-3 sm:grid-cols-2">
             {VALUES.map((v, i) => (
-              <Reveal key={v.t} delay={i * 70}>
-                <div className="border-t border-hairline pt-6">
-                  <h3 className="text-base font-medium">{v.t}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.d}</p>
+              <Reveal key={v.t} delay={i * MOTION.stagger} className="h-full">
+                <div
+                  tabIndex={0}
+                  className="group h-full rounded-2xl p-5 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  style={{
+                    backgroundColor: "#0B1020",
+                    border: "1px solid #16203a",
+                    transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, background-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                  }}
+                >
+                  <h3 className="text-[0.95rem] font-medium transition-colors duration-200 group-hover:text-[#93C5FD]">
+                    {v.t}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#8792ad]">{v.d}</p>
                 </div>
               </Reveal>
             ))}
@@ -94,26 +202,42 @@ function APropos() {
         </div>
       </section>
 
-      <section className="rule bg-surface">
-        <div className="shell py-24 lg:py-32">
+      {/* ---------------- L'equipe ---------------- */}
+      <section className="rule relative overflow-hidden bg-surface">
+        {/* Contre-jour bleu, le meme dispositif que le ruban des realisations. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(80% 46% at 50% 42%, rgba(59,130,246,.16) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="shell relative py-20 lg:py-28">
           <Reveal>
-            <p className="eyebrow">L&apos;équipe</p>
-            <h2 className="display mt-6 max-w-2xl text-4xl sm:text-5xl">
-              Dix-huit spécialistes, aucun profil junior sur votre projet.
+            <p className="eyebrow" style={{ color: "#60A5FA" }}>
+              L&apos;équipe
+            </p>
+            <h2 className="display mt-5 max-w-2xl text-3xl sm:text-4xl lg:text-5xl">
+              Quatre personnes. Vous les connaîtrez toutes.
             </h2>
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Nous ne prétendons pas être une grande structure. C&apos;est précisément
+              l&apos;intérêt : il n&apos;y a personne entre vous et ceux qui produisent.
+            </p>
           </Reveal>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {TEAM.map((t, i) => (
-              <Reveal key={t.role} delay={i * 60}>
-                <div className="surface-card flex items-baseline justify-between p-6">
-                  <span className="text-sm text-muted-foreground">{t.role}</span>
-                  <span className="display text-3xl">{t.count}</span>
-                </div>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {TEAM.map((m, i) => (
+              <Reveal key={m.role} delay={i * MOTION.stagger} className="h-full">
+                <TeamCard member={m} />
               </Reveal>
             ))}
           </div>
+
           <Reveal delay={200}>
-            <p className="mt-14 text-sm text-muted-foreground">Paris — Dubaï — Casablanca</p>
+            <p className="mt-12 text-sm text-muted-foreground">{CONTACT.locations}</p>
           </Reveal>
         </div>
       </section>

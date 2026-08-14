@@ -2,6 +2,40 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
+import { PACKS, euro, withOffer, LAUNCH_OFFER } from "@/config/pricing";
+import { EASE_RESPOND, MOTION } from "@/config/motion";
+
+/**
+ * ULTRA VISION — page Services.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/routes/services.tsx
+ * ============================================================
+ *
+ * DEUX CORRECTIONS DE FOND
+ *
+ * 1. LES PRIX ETAIENT FAUX ET CONTREDISAIENT LA PAGE TARIFS.
+ *    La page annoncait trois formats — Sprint a partir de 20 000 €,
+ *    Programme a partir de 8 000 € par mois, Partenariat sur mesure.
+ *    La grille reelle demarre a 490 €. Un visiteur qui lisait les deux
+ *    pages ne savait plus laquelle croire, et dans le doute il partait.
+ *
+ *    Les formules affichees ici viennent maintenant de
+ *    src/config/pricing.ts, exactement comme sur /tarifs. Une seule
+ *    source, donc plus aucune divergence possible.
+ *
+ * 2. IL Y AVAIT CINQ POLES, IL Y EN A QUATRE.
+ *    Branding et Creation de contenu ont ete reunis sous « Marque &
+ *    Contenu » sur la page d'accueil. Les laisser separes ici donnait
+ *    l'impression de deux sites cousus ensemble.
+ *
+ * L'ORDRE DES POLES A AUSSI CHANGE
+ *
+ * La production audiovisuelle passe en premier. C'est le metier de
+ * base, celui qui amene les clients, et celui que le sous-titre de la
+ * page d'accueil annonce. Le mettre en cinquieme position revenait a
+ * cacher ce qu'on sait le mieux faire.
+ */
 
 const URL = "https://timeless-brand-engine.lovable.app";
 
@@ -9,17 +43,17 @@ export const Route = createFileRoute("/services")({
   component: Services,
   head: () => ({
     meta: [
-      { title: "Services — Branding, Web, IA & Acquisition | ULTRA VISION" },
+      { title: "Services — Production publicitaire & acquisition | ULTRA VISION" },
       {
         name: "description",
         content:
-          "Branding, sites et applications, agents IA et automatisation, Meta / Google / TikTok Ads, production photo et vidéo. Les cinq pôles d'ULTRA VISION.",
+          "Production de vidéos publicitaires, diffusion Meta / Google / TikTok, sites et landing pages, automatisation des leads. Quatre pôles, une seule équipe.",
       },
       { property: "og:title", content: "Services — ULTRA VISION" },
       {
         property: "og:description",
         content:
-          "Cinq pôles d'expertise : branding, web & applications, IA & automatisation, acquisition, création de contenu.",
+          "Production publicitaire, acquisition, web et automatisation, par la même équipe.",
       },
       { property: "og:url", content: `${URL}/services` },
       { property: "og:type", content: "website" },
@@ -31,82 +65,55 @@ export const Route = createFileRoute("/services")({
 const POLES = [
   {
     n: "01",
-    title: "Branding",
+    title: "Production publicitaire",
     intro:
-      "Un territoire de marque qui justifie vos prix et rend vos concurrents interchangeables.",
+      "Notre métier de base. Des vidéos pensées pour le feed, écrites autour d'un angle de vente, pas d'une belle image.",
     items: [
-      "Plateforme de marque et positionnement",
-      "Identité visuelle et logotype",
-      "Charte graphique complète",
-      "Naming et messages clés",
-      "Déclinaisons print et digitales",
+      "Recherche de l'angle et écriture du script",
+      "Tournage, direction artistique, figuration",
+      "Montage, sous-titres, habillage",
+      "Formats verticaux Reels, Stories et Ads",
+      "Déclinaisons pour tester plusieurs angles",
     ],
   },
   {
     n: "02",
-    title: "Web & Applications",
-    intro: "Des produits digitaux rapides, sobres et conçus autour d'un seul objectif : convertir.",
+    title: "Acquisition & diffusion",
+    intro:
+      "Une vidéo qui ne tourne pas ne vend rien. Nous pilotons la diffusion et le coût par résultat.",
     items: [
-      "Sites vitrines et corporate",
-      "Applications web sur mesure",
-      "Landing pages de campagne",
-      "Design system et composants",
-      "Performance et accessibilité",
+      "Meta Ads, Google Ads, TikTok Ads",
+      "Structuration des comptes, pixels et conversions",
+      "Tests créatifs et arbitrage des budgets",
+      "Suivi du coût par lead et par rendez-vous",
+      "Rapport mensuel commenté",
     ],
   },
   {
     n: "03",
-    title: "IA & Automatisation",
-    intro: "Vos tâches répétitives disparaissent, votre équipe se concentre sur la vente.",
+    title: "Marque & contenu",
+    intro:
+      "Une identité n'existe pas sur une charte. Elle existe dans ce qui la fait circuler.",
     items: [
-      "Agents IA de qualification",
-      "Automatisation des workflows",
-      "Mise en place et migration CRM",
-      "Scoring et relances automatiques",
-      "Reporting consolidé",
+      "Positionnement et messages clés",
+      "Identité visuelle et logotype",
+      "Direction artistique",
+      "Production photo",
+      "Motion design",
     ],
   },
   {
     n: "04",
-    title: "Acquisition",
-    intro: "Un pilotage au rendez-vous qualifié, avec une lecture claire du coût réel.",
+    title: "Web & automatisation",
+    intro:
+      "Ce qui reçoit le trafic et ce qui empêche un lead de se perdre entre le clic et l'appel.",
     items: [
-      "Meta Ads",
-      "Google Ads",
-      "TikTok Ads",
-      "Lead generation B2B et B2C",
-      "Tracking, CRO et tableaux de bord",
+      "Landing pages de conversion",
+      "Sites vitrines rapides et sobres",
+      "Mise en place ou connexion du CRM",
+      "Automatisation des leads et des relances",
+      "Suivi, tracking et tableaux de bord",
     ],
-  },
-  {
-    n: "05",
-    title: "Création de contenu",
-    intro: "Des visuels qui soutiennent le prix que vous demandez.",
-    items: [
-      "Direction artistique",
-      "Production photo",
-      "Production vidéo",
-      "Motion design",
-      "Contenus sociaux récurrents",
-    ],
-  },
-];
-
-const TIERS = [
-  {
-    name: "Sprint",
-    price: "à partir de 20 000 €",
-    text: "Identité ou site premium livré en 6 à 8 semaines, périmètre fermé.",
-  },
-  {
-    name: "Programme",
-    price: "à partir de 8 000 € / mois",
-    text: "Marque, production de contenu et acquisition pilotées sur 6 à 12 mois.",
-  },
-  {
-    name: "Partenariat",
-    price: "sur mesure",
-    text: "Équipe dédiée intégrée à votre direction, engagement sur les indicateurs.",
   },
 ];
 
@@ -115,29 +122,66 @@ function Services() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Cinq pôles qui couvrent l'intégralité de votre chaîne de croissance."
-        intro="De la plateforme de marque au coût par rendez-vous, tout est construit par la même équipe. Vous gardez un interlocuteur unique et une seule feuille de route."
+        title="Nous produisons les vidéos, et nous les faisons tourner."
+        accent="et nous les faisons tourner"
+        intro="Quatre pôles, une seule équipe. La création et la diffusion sont faites par les mêmes personnes — c'est ce qui permet de corriger une campagne en changeant la vidéo, et non en changeant d'agence."
       />
 
+      {/* ---------------- Les quatre poles ---------------- */}
       <section className="rule bg-background">
-        <div className="shell py-20 lg:py-28">
-          <div className="grid gap-6 lg:grid-cols-2">
+        <div className="shell py-16 lg:py-24">
+          <div className="grid gap-4 lg:grid-cols-2">
             {POLES.map((p, i) => (
-              <Reveal key={p.title} delay={i * 60}>
-                <article className="surface-card h-full p-8 lg:p-10">
-                  <span className="text-xs tracking-[0.2em] text-accent">{p.n}</span>
-                  <h2 className="display mt-6 text-3xl sm:text-4xl">{p.title}</h2>
-                  <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
-                    {p.intro}
-                  </p>
-                  <ul className="mt-8 space-y-3 text-sm">
-                    {p.items.map((it) => (
-                      <li key={it} className="flex gap-3 border-t border-hairline pt-3">
-                        <span className="text-accent">—</span>
-                        <span className="text-muted-foreground">{it}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <Reveal key={p.title} delay={i * MOTION.stagger} className="h-full">
+                <article
+                  tabIndex={0}
+                  className="group relative h-full overflow-hidden rounded-3xl p-7 outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-9"
+                  style={{
+                    backgroundColor: "#0B1020",
+                    border: "1px solid #16203a",
+                    transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, transform ${MOTION.respond}ms ${EASE_RESPOND}`,
+                  }}
+                >
+                  {/*
+                    Lueur bleue qui monte du bas au survol. Une couche
+                    superposee dont on anime l'opacite : animer la
+                    couleur de fond ferait passer la transition par des
+                    gris sales a mi-parcours.
+                  */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
+                    style={{
+                      background:
+                        "radial-gradient(120% 90% at 50% 130%, rgba(37,99,235,.34) 0%, transparent 68%)",
+                    }}
+                  />
+
+                  <div className="relative">
+                    <span className="text-[0.68rem] tracking-[0.2em] text-accent">{p.n}</span>
+
+                    <h2 className="display mt-5 text-2xl sm:text-3xl">{p.title}</h2>
+
+                    <p className="mt-4 max-w-md text-sm leading-relaxed text-[#8792ad]">
+                      {p.intro}
+                    </p>
+
+                    <ul className="mt-7 space-y-0 text-sm">
+                      {p.items.map((it) => (
+                        <li
+                          key={it}
+                          className="flex gap-3 border-t border-[#16203a] py-3 text-[#9aa7c2]"
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="mt-[9px] h-1 w-1 shrink-0 rounded-full"
+                            style={{ backgroundColor: "#3B82F6" }}
+                          />
+                          <span className="leading-relaxed">{it}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </article>
               </Reveal>
             ))}
@@ -145,30 +189,91 @@ function Services() {
         </div>
       </section>
 
+      {/* ---------------- Les formules, tirees de pricing.ts ---------------- */}
       <section className="rule bg-surface">
-        <div className="shell py-24 lg:py-32">
+        <div className="shell py-16 lg:py-24">
           <Reveal>
-            <p className="eyebrow">Modalités</p>
-            <h2 className="display mt-6 max-w-3xl text-4xl sm:text-5xl">
-              Trois formats d&apos;engagement, un seul niveau d&apos;exigence.
+            <p className="eyebrow" style={{ color: "#60A5FA" }}>
+              Formules
+            </p>
+            <h2 className="display mt-5 max-w-2xl text-3xl sm:text-4xl">
+              Trois façons de travailler ensemble.
             </h2>
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Le détail complet, les prestations à l&apos;unité et ce qui n&apos;est jamais
+              compris se trouvent sur la page tarifs.
+            </p>
           </Reveal>
-          <div className="mt-16 grid gap-6 lg:grid-cols-3">
-            {TIERS.map((t, i) => (
-              <Reveal key={t.name} delay={i * 80}>
-                <div className="surface-card flex h-full flex-col justify-between p-8">
-                  <div>
-                    <h3 className="display text-2xl">{t.name}</h3>
-                    <p className="mt-2 text-sm text-accent-hover">{t.price}</p>
-                    <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{t.text}</p>
+
+          <div className="mt-12 grid gap-4 lg:grid-cols-3">
+            {PACKS.map((t, i) => {
+              const now = t.noOffer ? t.price : withOffer(t.price);
+              const reduced = LAUNCH_OFFER.enabled && now !== t.price;
+
+              return (
+                <Reveal key={t.id} delay={i * MOTION.stagger} className="h-full">
+                  <div
+                    className="flex h-full flex-col justify-between rounded-3xl p-7"
+                    style={{
+                      backgroundColor: t.featured ? "#0B1020" : "#0E0E0E",
+                      border: t.featured ? "2px solid #2563EB" : "1px solid #262626",
+                    }}
+                  >
+                    <div>
+                      <h3 className="display text-2xl">{t.name}</h3>
+
+                      <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="display text-[1.9rem] leading-none">{euro(now)}</span>
+                        {t.period && (
+                          <span className="text-sm text-muted-foreground">{t.period}</span>
+                        )}
+                        {reduced && (
+                          <span
+                            className="text-[0.8rem] text-[#5c5c5a]"
+                            style={{ textDecoration: "line-through" }}
+                          >
+                            {euro(t.price)}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+                        {t.forWho}
+                      </p>
+
+                      <p className="mt-4 text-[0.72rem] tracking-[0.1em] uppercase text-[#6d7a99]">
+                        {t.commitment}
+                      </p>
+                    </div>
+
+                    <Link
+                      to="/tarifs"
+                      className="link-underline mt-9 text-sm text-accent-hover"
+                    >
+                      Voir le détail
+                    </Link>
                   </div>
-                  <Link to="/contact" className="link-underline mt-10 text-sm">
-                    Demander un devis
-                  </Link>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
+
+          <Reveal delay={200}>
+            <div className="mt-10">
+              <Link
+                to="/tarifs"
+                className="group inline-flex items-center gap-3 text-[0.78rem] font-semibold tracking-[0.14em] uppercase text-foreground transition-colors duration-200 hover:text-accent-hover"
+              >
+                Voir tous les tarifs
+                <span
+                  aria-hidden="true"
+                  className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+                >
+                  &rarr;
+                </span>
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
