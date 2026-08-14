@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { SITE_URL } from "@/config/site";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import {
@@ -64,7 +65,13 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * avant de trouver la reponse choisit une autre source.
  */
 
-const URL = "https://timeless-brand-engine.lovable.app";
+/*
+  L'adresse vient desormais de src/config/site.ts.
+  Le jour du basculement vers ultravisionagency.com, une seule ligne
+  change la-bas et les dix pages suivent — y compris toutes les
+  adresses canoniques et toutes les donnees structurees.
+*/
+const URL = SITE_URL;
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {

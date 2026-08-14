@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
@@ -48,7 +49,13 @@ import { useState } from "react";
  *    Le telephone +33600000000 a ete retire plutot qu'invente.
  */
 
-const URL = "https://timeless-brand-engine.lovable.app";
+/*
+  L'adresse vient desormais de src/config/site.ts.
+  Le jour du basculement vers ultravisionagency.com, une seule ligne
+  change la-bas et les dix pages suivent — y compris toutes les
+  adresses canoniques et toutes les donnees structurees.
+*/
+const URL = SITE_URL;
 
 export const Route = createFileRoute("/")({
   component: Home,

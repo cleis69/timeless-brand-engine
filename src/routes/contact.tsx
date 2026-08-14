@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE_URL } from "@/config/site";
 import { useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { CONTACT, ORG_LD, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
+import { FORM, formReady, sendForm, type SendResult } from "@/config/forms";
 
 /**
  * ULTRA VISION — page Contact.
@@ -42,7 +44,13 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * seule chose qui reste a brancher sur cette page.
  */
 
-const URL = "https://timeless-brand-engine.lovable.app";
+/*
+  L'adresse vient desormais de src/config/site.ts.
+  Le jour du basculement vers ultravisionagency.com, une seule ligne
+  change la-bas et les dix pages suivent — y compris toutes les
+  adresses canoniques et toutes les donnees structurees.
+*/
+const URL = SITE_URL;
 
 export const Route = createFileRoute("/contact")({
   component: Contact,
@@ -132,7 +140,47 @@ const NEEDS = [
 function Contact() {
   const [budget, setBudget] = useState(BUDGETS[1]);
   const [needs, setNeeds] = useState<string[]>([]);
-  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState<SendResult | null>(null);
+
+  /*
+    L'envoi.
+
+    Trois precautions qui evitent les pertes de contact les plus
+    frequentes :
+
+    1. Le bouton se verrouille pendant l'envoi. Sans cela, un visiteur
+       qui trouve que « ca ne repond pas » clique trois fois et envoie
+       trois fois le meme message.
+    2. Les cases cochees sont transmises en texte lisible. Recevoir
+       « needs: [object Object] » dans sa boite ne sert a rien.
+    3. Le formulaire n'est PAS vide en cas d'echec. Refaire saisir
+       vingt lignes a quelqu'un dont l'envoi vient d'echouer, c'est le
+       perdre.
+  */
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending) return;
+
+    const fd = new FormData(e.currentTarget);
+    setSending(true);
+    setResult(null);
+
+    const r = await sendForm({
+      name: String(fd.get("name") ?? ""),
+      company: String(fd.get("company") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      message: String(fd.get("message") ?? ""),
+      besoins: needs.length ? needs.join(", ") : "Non précisé",
+      budget,
+      [FORM.honeypot]: String(fd.get(FORM.honeypot) ?? ""),
+    });
+
+    setSending(false);
+    setResult(r);
+    if (r.ok) e.currentTarget.reset();
+  };
 
   const toggle = (n: string) =>
     setNeeds((cur) => (cur.includes(n) ? cur.filter((x) => x !== n) : [...cur, n]));
@@ -159,13 +207,27 @@ function Contact() {
           {/* ---------------- Le formulaire ---------------- */}
           <Reveal>
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSent(true);
-              }}
+              onSubmit={onSubmit}
               className="rounded-3xl p-7 sm:p-9"
               style={{ backgroundColor: "#0B1020", border: "1px solid #16203a" }}
             >
+              {/*
+                Le champ piege. Invisible pour un humain — il n'est ni
+                affiche, ni atteignable au clavier, ni annonce par un
+                lecteur d'ecran. Un automate, lui, remplit tout ce qu'il
+                trouve : si ce champ revient rempli, le message est jete.
+
+                On n'utilise pas `display: none`, que certains automates
+                detectent. La position hors ecran est plus discrete.
+              */}
+              <input
+                type="text"
+                name={FORM.honeypot}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
+              />
               <div className="grid gap-6 sm:grid-cols-2">
                 <Field label="Nom et prénom" name="name" />
                 <Field label="Entreprise" name="company" />
@@ -239,39 +301,95 @@ function Contact() {
 
               <button
                 type="submit"
+                disabled={sending || !formReady}
                 className="mt-9 inline-flex h-12 items-center rounded-full px-7 text-xs font-medium tracking-[0.14em] uppercase"
                 style={{
-                  backgroundColor: "#2563EB",
-                  color: "#fff",
+                  backgroundColor: sending || !formReady ? "#1f2c48" : "#2563EB",
+                  color: sending || !formReady ? "#7d8aa5" : "#fff",
+                  cursor: sending || !formReady ? "not-allowed" : "pointer",
                   transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}`,
                 }}
               >
-                Envoyer la demande
+                {sending ? "Envoi en cours…" : "Envoyer la demande"}
               </button>
 
-              {sent && (
+              {/*
+                LE FORMULAIRE N'EST PAS ENCORE RELIE.
+
+                Plutot que d'afficher un faux message de confirmation —
+                ce que faisait la version precedente — on le dit, et on
+                donne deux canaux qui fonctionnent vraiment.
+
+                Ce bloc disparait tout seul des que la cle est
+                renseignee dans src/config/forms.ts.
+              */}
+              {!formReady && (
                 <div
                   className="mt-6 rounded-xl p-4"
                   style={{
-                    backgroundColor: "rgba(59,130,246,.1)",
-                    border: "1px solid rgba(96,165,250,.3)",
+                    backgroundColor: "rgba(148,163,184,.06)",
+                    border: "1px solid #2a3346",
                   }}
                 >
-                  <p className="text-sm text-[#93C5FD]">
-                    Merci, votre demande est notée. Nous revenons vers vous sous 24 heures
-                    ouvrées.
+                  <p className="text-sm text-[#c2c6d2]">
+                    Le formulaire est en cours de mise en service.
                   </p>
+                  <p className="mt-2 text-[0.82rem] leading-relaxed text-[#8792ad]">
+                    En attendant, écrivez-nous {hasWhatsapp ? "sur WhatsApp ou " : ""}à{" "}
+                    <a href={`mailto:${CONTACT.email}`} className="link-underline text-[#93C5FD]">
+                      {CONTACT.email}
+                    </a>{" "}
+                    — nous répondons dans la journée.
+                  </p>
+                </div>
+              )}
+
+              {/* --- Resultat de l'envoi --- */}
+              {result && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="mt-6 rounded-xl p-4"
+                  style={{
+                    backgroundColor: result.ok
+                      ? "rgba(59,130,246,.1)"
+                      : "rgba(248,113,113,.08)",
+                    border: `1px solid ${result.ok ? "rgba(96,165,250,.3)" : "rgba(248,113,113,.3)"}`,
+                  }}
+                >
+                  <p
+                    className="text-sm"
+                    style={{ color: result.ok ? "#93C5FD" : "#fca5a5" }}
+                  >
+                    {result.message}
+                  </p>
+
                   {/*
-                    A RETIRER UNE FOIS L'ENVOI BRANCHE.
-                    Tant que le formulaire n'est relie a aucun service, ce
-                    message serait un mensonge s'il restait seul : le
-                    visiteur croirait sa demande partie. On lui donne donc
-                    une voie qui fonctionne vraiment.
+                    En cas d'echec seulement : les canaux de secours.
+                    Un envoi qui echoue ne doit jamais etre un cul-de-sac.
                   */}
-                  <p className="mt-2 text-[0.78rem] text-[#8792ad]">
-                    Pour une réponse immédiate, écrivez-nous directement sur WhatsApp ou à{" "}
-                    {CONTACT.email}.
-                  </p>
+                  {!result.ok && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {hasWhatsapp && (
+                        <a
+                          href={whatsappUrl()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex h-9 items-center rounded-full px-4 text-[0.72rem] font-medium tracking-[0.1em] uppercase"
+                          style={{ border: "1px solid #2b4880", color: "#cddafc" }}
+                        >
+                          WhatsApp
+                        </a>
+                      )}
+                      <a
+                        href={`mailto:${CONTACT.email}`}
+                        className="inline-flex h-9 items-center rounded-full px-4 text-[0.72rem] font-medium tracking-[0.1em] uppercase"
+                        style={{ border: "1px solid #2b4880", color: "#cddafc" }}
+                      >
+                        Nous écrire
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </form>

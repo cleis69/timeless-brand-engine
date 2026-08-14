@@ -16,6 +16,7 @@ import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
 import { WhatsAppRail } from "../components/WhatsAppRail";
 import { CONTACT } from "../config/contact";
+import { SITE_URL } from "../config/site";
 
 /**
  * ULTRA VISION — racine de l'application.
@@ -166,7 +167,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "Organization",
           name: "ULTRA VISION",
           alternateName: "Ultra Vision — Creative Growth Agency",
-          url: "https://timeless-brand-engine.lovable.app",
+          url: SITE_URL,
           email: CONTACT.email,
           ...(CONTACT.phone ? { telephone: CONTACT.phone } : {}),
           sameAs: [],

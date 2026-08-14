@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { Magnetic } from "@/components/Magnetic";
-import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import {
   A_LA_CARTE,
@@ -51,7 +52,13 @@ import {
  *    refus de repondre.
  */
 
-const URL = "https://timeless-brand-engine.lovable.app";
+/*
+  L'adresse vient desormais de src/config/site.ts.
+  Le jour du basculement vers ultravisionagency.com, une seule ligne
+  change la-bas et les dix pages suivent — y compris toutes les
+  adresses canoniques et toutes les donnees structurees.
+*/
+const URL = SITE_URL;
 
 /*
   Declaree AVANT la route, et non plus en bas du fichier.
@@ -128,7 +135,7 @@ export const Route = createFileRoute("/tarifs")({
           name: "Production de vidéos publicitaires et acquisition",
           serviceType: "Publicité vidéo et media buying",
           provider: { "@type": "Organization", name: "ULTRA VISION", url: URL },
-          areaServed: { "@type": "Country", name: "France" },
+          areaServed: AREA_SERVED,
           hasOfferCatalog: {
             "@type": "OfferCatalog",
             name: "Formules ULTRA VISION",
