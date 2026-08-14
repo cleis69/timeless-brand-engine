@@ -152,6 +152,7 @@ export function WorkRail({ items }: { items: WorkItem[] }) {
   }, [isMobile, items.length]);
 
   const current = items[active] ?? items[0];
+  if (!current) return null;
 
   return (
     <div ref={sectionRef}>
