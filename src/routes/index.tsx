@@ -519,31 +519,38 @@ function Why() {
   );
 }
 
-function Stats() {
+function Stat({ value, label }: { value: string; label: string }) {
+  const pending = value.startsWith("STAT_");
+  // Le compteur part a l'entree dans l'ecran, pas au chargement : un
+  // chiffre qui a fini de defiler avant d'etre vu n'a servi a rien.
+  const ref = useCountUp<HTMLParagraphElement>(value, !pending);
   return (
-    <section className="rule bg-background">
+    <div data-reveal>
+      <p
+        ref={ref}
+        className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
+      >
+        {value}
+      </p>
+      <p className="mt-4 text-sm text-muted-foreground">{label}</p>
+      {pending && (
+        <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
+          à compléter
+        </p>
+      )}
+    </div>
+  );
+}
+
+function Stats() {
+  const ref = useSectionReveal<HTMLElement>();
+  return (
+    <section ref={ref} className="rule bg-background">
       <div className="shell py-24 lg:py-28">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {STATS.map((s, i) => {
-            const pending = s.value.startsWith("STAT_");
-            return (
-              <Reveal key={s.label} delay={i * 70}>
-                <div>
-                  <p
-                    className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
-                  {pending && (
-                    <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
-                      à compléter
-                    </p>
-                  )}
-                </div>
-              </Reveal>
-            );
-          })}
+          {STATS.map((s) => (
+            <Stat key={s.label} value={s.value} label={s.label} />
+          ))}
         </div>
       </div>
     </section>
