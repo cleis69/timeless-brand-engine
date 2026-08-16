@@ -15,7 +15,6 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
 import { WhatsAppRail } from "../components/WhatsAppRail";
-import { SmoothScroll } from "../components/SmoothScroll";
 import { CONTACT } from "../config/contact";
 import { SITE_URL } from "../config/site";
 
@@ -208,24 +207,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 }
 
 /* ------------------------------------------------------------------
-   2. LES SECTIONS HORS ECRAN NE SONT PAS CALCULEES
+   2. RETIRE LE 16 AOUT 2026 : content-visibility
 
-   « content-visibility: auto » dit au navigateur de ne pas mettre en
-   page ni peindre une section tant qu'elle n'approche pas de l'ecran.
-   Sur une page de dix mille pixels, c'est le gain le plus important
-   qu'on puisse obtenir sans rien retirer.
+   Cette regle demandait au navigateur d'ignorer les sections hors
+   ecran tant qu'elles n'approchaient pas. Le gain theorique etait
+   reel, mais l'effet de bord ne l'etait pas moins :
 
-   « contain-intrinsic-size » donne une hauteur estimee a la section
-   ignoree. Sans elle, la barre de defilement sauterait a mesure que
-   les sections se calculent — un defaut pire que le probleme resolu.
+   - des sections restaient blanches au lieu de s'afficher,
+   - la barre de defilement sautait pendant la lecture,
+   - la hauteur estimee de 720 px etait fausse pour la plupart des
+     sections, ce qui deformait toute la mise en page.
 
-   La premiere section de chaque page est exclue : elle est visible
-   d'emblee, et l'ignorer retarderait au contraire l'affichage.
+   Une optimisation qui casse l'affichage n'est pas une optimisation.
+   Elle est retiree, et le site retrouve son comportement normal.
+
+   Si on veut la reintroduire un jour, il faudra la poser section par
+   section avec une hauteur estimee juste pour chacune — jamais avec
+   une regle globale comme ici.
 ------------------------------------------------------------------ */
-main section:not(:first-of-type) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 720px;
-}
 
 /* ------------------------------------------------------------------
    3. LA POLICE DE SECOURS EST AJUSTEE AUX VRAIES
@@ -316,13 +315,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/*
-        <SmoothScroll> pose Lenis sur la page entiere et le synchronise
-        avec ScrollTrigger. Il enveloppe tout : la barre de navigation
-        collante et les ancres continuent de fonctionner puisque c'est
-        toujours le document qui defile.
-      */}
-      <SmoothScroll>
       <SiteHeader />
       {/*
         <PageTransition> ENVELOPPE desormais le contenu au lieu d'etre
@@ -353,7 +345,6 @@ function RootComponent() {
         chrome, pas de page.
       */}
       <WhatsAppRail />
-      </SmoothScroll>
     </QueryClientProvider>
   );
 }
