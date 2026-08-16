@@ -15,6 +15,7 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
 import { WhatsAppRail } from "../components/WhatsAppRail";
+import { SmoothScroll } from "../components/SmoothScroll";
 import { CONTACT } from "../config/contact";
 import { SITE_URL } from "../config/site";
 
