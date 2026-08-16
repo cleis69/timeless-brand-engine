@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SITE_URL } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
+import { SplitText } from "@/components/reactbits/SplitText";
+import { VantaBackground } from "@/components/VantaBackground";
+import { useSectionReveal } from "@/hooks/useSectionReveal";
+import { useCountUp } from "@/hooks/useCountUp";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
 import { IrisBackdrop } from "@/components/IrisBackdrop";
@@ -262,6 +266,13 @@ function Home() {
 function Hero() {
   return (
     <section className="relative flex min-h-[92svh] items-center overflow-hidden">
+      {/*
+        Texture Vanta, strictement monochrome et tres basse opacite.
+        Elle est posee SOUS l'iris et sous le texte : c'est un grain de
+        fond, pas un decor. Desactivee sur mobile, sur machine peu
+        puissante, et si le visiteur a demande moins d'animations.
+      */}
+      <VantaBackground opacity={0.22} />
       <IrisBackdrop />
 
       {/*
@@ -311,8 +322,13 @@ function Hero() {
           Un seul segment coloré. Deux, et plus rien n'est designe.
         */}
         <h1 className="display mt-9 max-w-4xl text-[2.4rem] leading-[1] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.4rem]">
-          <MaskReveal delay={80}>Nous concevons</MaskReveal>
-          <MaskReveal delay={165}>des marques et des</MaskReveal>
+          {/*
+            React Bits — SplitText, recopie dans src/components/reactbits.
+            Decoupage par mots : la cascade se lit, les lettres une a une
+            feraient gadget sur un titre de cette taille.
+          */}
+          <SplitText as="span" className="block" text="Nous concevons" delay={0.08} />
+          <SplitText as="span" className="block" text="des marques et des" delay={0.16} />
           <MaskReveal delay={250}>
             <span
               style={{
@@ -325,7 +341,7 @@ function Hero() {
               systèmes de croissance
             </span>
           </MaskReveal>
-          <MaskReveal delay={335}>qui font la différence.</MaskReveal>
+          <SplitText as="span" className="block" text="qui font la différence." delay={0.34} />
         </h1>
 
         {/*
@@ -448,17 +464,18 @@ function Method() {
 }
 
 function Why() {
+  // Apparition pilotee par GSAP + ScrollTrigger : une seule lecture,
+  // cascade sur la grille, meme courbe que le reste du site.
+  const ref = useSectionReveal<HTMLElement>();
   return (
-    <section className="rule bg-surface">
+    <section ref={ref} className="rule bg-surface">
       <div className="shell grid gap-16 py-24 lg:grid-cols-[1fr_1.2fr] lg:py-32">
-        <Reveal>
-          <div>
-            <p className="eyebrow">Pourquoi ULTRA VISION</p>
-            <h2 className="display mt-6 text-4xl sm:text-5xl">
-              Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
-            </h2>
-          </div>
-        </Reveal>
+        <div data-reveal>
+          <p className="eyebrow">Pourquoi ULTRA VISION</p>
+          <h2 className="display mt-6 text-4xl sm:text-5xl">
+            Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
+          </h2>
+        </div>
         {/*
           Surlignage au survol.
 
@@ -471,33 +488,30 @@ function Why() {
           pas transformer la section en aplat colore.
         */}
         <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
-          {WHY.map((w, i) => (
-            <Reveal key={w.title} delay={i * 70}>
-              {/* Survol : 220 ms. Le bloc bleu doit etre la avant que la
-                  main n'ait fini son geste, sinon il donne l'impression
-                  de courir apres le curseur. */}
-              <div
-                tabIndex={0}
-                className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
-                style={{
-                  borderTopColor: "#262626",
-                  transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}, border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
-                }}
+          {WHY.map((w) => (
+            <div
+              key={w.title}
+              data-reveal
+              tabIndex={0}
+              className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
+              style={{
+                borderTopColor: "#262626",
+                transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}, border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+              }}
+            >
+              <h3
+                className="text-base font-medium group-hover:text-white group-focus-visible:text-white"
+                style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
               >
-                <h3
-                  className="text-base font-medium group-hover:text-white group-focus-visible:text-white"
-                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
-                >
-                  {w.title}
-                </h3>
-                <p
-                  className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]"
-                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
-                >
-                  {w.text}
-                </p>
-              </div>
-            </Reveal>
+                {w.title}
+              </h3>
+              <p
+                className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]"
+                style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+              >
+                {w.text}
+              </p>
+            </div>
           ))}
         </div>
       </div>
@@ -505,31 +519,38 @@ function Why() {
   );
 }
 
-function Stats() {
+function Stat({ value, label }: { value: string; label: string }) {
+  const pending = value.startsWith("STAT_");
+  // Le compteur part a l'entree dans l'ecran, pas au chargement : un
+  // chiffre qui a fini de defiler avant d'etre vu n'a servi a rien.
+  const ref = useCountUp<HTMLParagraphElement>(value, !pending);
   return (
-    <section className="rule bg-background">
+    <div data-reveal>
+      <p
+        ref={ref}
+        className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
+      >
+        {value}
+      </p>
+      <p className="mt-4 text-sm text-muted-foreground">{label}</p>
+      {pending && (
+        <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
+          à compléter
+        </p>
+      )}
+    </div>
+  );
+}
+
+function Stats() {
+  const ref = useSectionReveal<HTMLElement>();
+  return (
+    <section ref={ref} className="rule bg-background">
       <div className="shell py-24 lg:py-28">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {STATS.map((s, i) => {
-            const pending = s.value.startsWith("STAT_");
-            return (
-              <Reveal key={s.label} delay={i * 70}>
-                <div>
-                  <p
-                    className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
-                  {pending && (
-                    <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
-                      à compléter
-                    </p>
-                  )}
-                </div>
-              </Reveal>
-            );
-          })}
+          {STATS.map((s) => (
+            <Stat key={s.label} value={s.value} label={s.label} />
+          ))}
         </div>
       </div>
     </section>

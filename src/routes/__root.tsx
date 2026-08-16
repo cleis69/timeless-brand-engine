@@ -15,6 +15,7 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
 import { WhatsAppRail } from "../components/WhatsAppRail";
+import { SmoothScroll } from "../components/SmoothScroll";
 import { CONTACT } from "../config/contact";
 import { SITE_URL } from "../config/site";
 
@@ -315,6 +316,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/*
+        <SmoothScroll> pose Lenis sur la page entiere et le synchronise
+        avec ScrollTrigger. Il enveloppe tout : la barre de navigation
+        collante et les ancres continuent de fonctionner puisque c'est
+        toujours le document qui defile.
+      */}
+      <SmoothScroll>
       <SiteHeader />
       {/*
         <PageTransition> ENVELOPPE desormais le contenu au lieu d'etre
@@ -345,6 +353,7 @@ function RootComponent() {
         chrome, pas de page.
       */}
       <WhatsAppRail />
+      </SmoothScroll>
     </QueryClientProvider>
   );
 }
