@@ -266,6 +266,13 @@ function Home() {
 function Hero() {
   return (
     <section className="relative flex min-h-[92svh] items-center overflow-hidden">
+      {/*
+        Texture Vanta, strictement monochrome et tres basse opacite.
+        Elle est posee SOUS l'iris et sous le texte : c'est un grain de
+        fond, pas un decor. Desactivee sur mobile, sur machine peu
+        puissante, et si le visiteur a demande moins d'animations.
+      */}
+      <VantaBackground opacity={0.22} />
       <IrisBackdrop />
 
       {/*
