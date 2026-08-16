@@ -464,17 +464,18 @@ function Method() {
 }
 
 function Why() {
+  // Apparition pilotee par GSAP + ScrollTrigger : une seule lecture,
+  // cascade sur la grille, meme courbe que le reste du site.
+  const ref = useSectionReveal<HTMLElement>();
   return (
-    <section className="rule bg-surface">
+    <section ref={ref} className="rule bg-surface">
       <div className="shell grid gap-16 py-24 lg:grid-cols-[1fr_1.2fr] lg:py-32">
-        <Reveal>
-          <div>
-            <p className="eyebrow">Pourquoi ULTRA VISION</p>
-            <h2 className="display mt-6 text-4xl sm:text-5xl">
-              Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
-            </h2>
-          </div>
-        </Reveal>
+        <div data-reveal>
+          <p className="eyebrow">Pourquoi ULTRA VISION</p>
+          <h2 className="display mt-6 text-4xl sm:text-5xl">
+            Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
+          </h2>
+        </div>
         {/*
           Surlignage au survol.
 
