@@ -1,4 +1,48 @@
+# ULTRA VISION — regles d'exploration
+#
+# Aucun robot n'est bloque, et c'est deliberé.
+#
+# Beaucoup de sites interdisent les robots d'intelligence artificielle
+# par reflexe. Pour une agence dont les prospects posent desormais
+# leurs questions a un assistant autant qu'a Google, ce serait se
+# rendre invisible la ou l'on veut precisement etre cite.
+#
+# Le contenu de ce site est public et destine a etre lu, y compris par
+# des machines.
+
 User-agent: *
 Allow: /
+
+# Assistants conversationnels, explicitement autorises.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Les fichiers de travail ne sont pas du contenu.
+Disallow: /apercu-
+Disallow: /_A-DEPOSER
 
 Sitemap: https://timeless-brand-engine.lovable.app/sitemap.xml
