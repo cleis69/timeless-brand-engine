@@ -311,8 +311,13 @@ function Hero() {
           Un seul segment coloré. Deux, et plus rien n'est designe.
         */}
         <h1 className="display mt-9 max-w-4xl text-[2.4rem] leading-[1] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.4rem]">
-          <MaskReveal delay={80}>Nous concevons</MaskReveal>
-          <MaskReveal delay={165}>des marques et des</MaskReveal>
+          {/*
+            React Bits — SplitText, recopie dans src/components/reactbits.
+            Decoupage par mots : la cascade se lit, les lettres une a une
+            feraient gadget sur un titre de cette taille.
+          */}
+          <SplitText as="span" className="block" text="Nous concevons" delay={0.08} />
+          <SplitText as="span" className="block" text="des marques et des" delay={0.16} />
           <MaskReveal delay={250}>
             <span
               style={{
