@@ -104,6 +104,8 @@ export function IrisBackdrop() {
         <img
           src="/brand/icon/ultravision-icon-blue.svg"
           alt=""
+          width={512}
+          height={512}
           className="uv-iris absolute top-1/2 right-[-22%] w-[min(96vh,860px)] -translate-y-1/2 opacity-[0.55]"
           draggable={false}
         />

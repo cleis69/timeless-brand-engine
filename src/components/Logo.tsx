@@ -43,6 +43,26 @@ const SRC = {
 
 export type LogoVariant = keyof typeof SRC
 
+/*
+  Dimensions intrinseques de chaque fichier, relevees dans son viewBox.
+
+  ELLES NE SONT PAS TOUTES IDENTIQUES, ET C'EST TOUT L'ENJEU.
+
+  Les trois logos horizontaux font 1160 x 460. La version compacte de
+  la navigation fait 220 x 110 — un rapport different. Declarer 1160 x 460
+  pour tout le monde faisait reserver au logo compact une boite trop
+  large : la barre de navigation se remettait en place au chargement du
+  fichier. C'est un decalage de mise en page (CLS), et c'est l'un des
+  trois criteres de l'audit « navigation agentique » de PageSpeed.
+*/
+const DIMS: Record<LogoVariant, { w: number; h: number }> = {
+  dark: { w: 1160, h: 460 },
+  light: { w: 1160, h: 460 },
+  mono: { w: 1160, h: 460 },
+  compact: { w: 220, h: 110 },
+}
+
+
 export function Logo({
   className = 'h-8',
   variant = 'dark',
@@ -63,8 +83,8 @@ export function Logo({
         navigation : c'est un decalage de mise en page, et Google le
         sanctionne directement dans son score.
       */
-      width={1160}
-      height={460}
+      width={DIMS[variant].w}
+      height={DIMS[variant].h}
       className={`${className} w-auto object-contain`}
       loading="eager"
       decoding="async"

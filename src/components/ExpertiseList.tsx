@@ -147,6 +147,7 @@ export function ExpertiseList() {
           <Reveal key={p.n} delay={i * MOTION.stagger} className={`h-full ${p.area}`}>
             <article
               tabIndex={0}
+              aria-label={`${p.title} — ${p.text}`}
               className="group relative flex h-full min-h-[176px] flex-col justify-end overflow-hidden rounded-2xl p-6 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               style={{
                 // Bleu nuit tres sombre. Presque noir, jamais neutre :

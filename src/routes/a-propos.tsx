@@ -245,6 +245,7 @@ function APropos() {
               <Reveal key={v.t} delay={i * MOTION.stagger} className="h-full">
                 <div
                   tabIndex={0}
+                  aria-label={`${v.t} — ${v.d}`}
                   className="group h-full rounded-2xl p-5 outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   style={{
                     backgroundColor: "#0B1020",

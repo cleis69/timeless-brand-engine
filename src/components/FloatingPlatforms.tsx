@@ -149,8 +149,10 @@ export function FloatingPlatforms() {
               <img
                 src={`/brand/platforms/${p.file}`}
                 alt=""
-                className="w-auto shrink-0"
-                style={{ height: p.height ?? 16 }}
+                width={p.width ?? 16}
+                height={p.height ?? 16}
+                className="shrink-0"
+                style={{ height: p.height ?? 16, width: p.width ?? 16 }}
                 draggable={false}
               />
               <span className="text-[0.72rem] whitespace-nowrap text-[#C8C8C6]">

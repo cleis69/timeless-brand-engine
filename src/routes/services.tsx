@@ -191,6 +191,7 @@ function Services() {
               <Reveal key={p.title} delay={i * MOTION.stagger} className="h-full">
                 <article
                   tabIndex={0}
+                  aria-label={`${p.title} — ${p.intro}`}
                   className="group relative h-full overflow-hidden rounded-3xl p-7 outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-9"
                   style={{
                     backgroundColor: "#0B1020",

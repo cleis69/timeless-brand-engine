@@ -82,6 +82,8 @@ export function PageHero({
         <img
           src="/brand/icon/ultravision-icon-blue.svg"
           alt=""
+          width={512}
+          height={512}
           className="uv-ph-iris absolute top-1/2 right-[-26%] w-[min(72vh,620px)] -translate-y-1/2 opacity-[0.4]"
           draggable={false}
         />

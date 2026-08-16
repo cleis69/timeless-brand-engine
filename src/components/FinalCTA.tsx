@@ -67,7 +67,9 @@ export function FinalCTA() {
         <img
           src="/brand/icon/ultravision-icon-blue.svg"
           alt=""
-          className="uv-cta-iris w-full"
+          width={512}
+          height={512}
+          className="uv-cta-iris h-auto w-full"
           draggable={false}
         />
       </div>

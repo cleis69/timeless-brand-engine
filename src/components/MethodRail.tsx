@@ -122,6 +122,7 @@ export function MethodRail() {
                   onMouseEnter={() => focus(i)}
                   onFocus={() => focus(i)}
                   tabIndex={0}
+                  aria-label={`Étape ${e.n} — ${e.title}`}
                   className="group border-b border-hairline py-5 outline-none last:border-b-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                 >
                   <div className="flex items-baseline gap-4">

@@ -138,7 +138,7 @@ const NEEDS = [
 ];
 
 function Contact() {
-  const [budget, setBudget] = useState<string>(BUDGETS[1] ?? "Je ne sais pas encore");
+  const [budget, setBudget] = useState(BUDGETS[1]);
   const [needs, setNeeds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
@@ -419,7 +419,9 @@ function Contact() {
                         src="/brand/platforms/whatsapp.svg"
                         alt=""
                         aria-hidden="true"
-                        style={{ height: 16, width: "auto" }}
+                        width={16}
+                        height={16}
+                        style={{ height: 16, width: 16 }}
                       />
                       Écrire sur WhatsApp
                     </a>

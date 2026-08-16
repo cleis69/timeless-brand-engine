@@ -190,6 +190,7 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article
       tabIndex={0}
+      aria-label={`${member.name} — ${member.role}`}
       className="group h-full overflow-hidden rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={{
         backgroundColor: "#0B1020",
