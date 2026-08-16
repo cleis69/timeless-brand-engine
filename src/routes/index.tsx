@@ -334,7 +334,7 @@ function Hero() {
               systèmes de croissance
             </span>
           </MaskReveal>
-          <MaskReveal delay={335}>qui font la différence.</MaskReveal>
+          <SplitText as="span" className="block" text="qui font la différence." delay={0.34} />
         </h1>
 
         {/*
