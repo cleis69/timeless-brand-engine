@@ -488,33 +488,30 @@ function Why() {
           pas transformer la section en aplat colore.
         */}
         <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
-          {WHY.map((w, i) => (
-            <Reveal key={w.title} delay={i * 70}>
-              {/* Survol : 220 ms. Le bloc bleu doit etre la avant que la
-                  main n'ait fini son geste, sinon il donne l'impression
-                  de courir apres le curseur. */}
-              <div
-                tabIndex={0}
-                className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
-                style={{
-                  borderTopColor: "#262626",
-                  transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}, border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
-                }}
+          {WHY.map((w) => (
+            <div
+              key={w.title}
+              data-reveal
+              tabIndex={0}
+              className="group h-full rounded-2xl border border-transparent px-5 py-6 outline-none hover:border-[#1D4ED8] hover:bg-[#1D4ED8] focus-visible:border-[#1D4ED8] focus-visible:bg-[#1D4ED8]"
+              style={{
+                borderTopColor: "#262626",
+                transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}, border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+              }}
+            >
+              <h3
+                className="text-base font-medium group-hover:text-white group-focus-visible:text-white"
+                style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
               >
-                <h3
-                  className="text-base font-medium group-hover:text-white group-focus-visible:text-white"
-                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
-                >
-                  {w.title}
-                </h3>
-                <p
-                  className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]"
-                  style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
-                >
-                  {w.text}
-                </p>
-              </div>
-            </Reveal>
+                {w.title}
+              </h3>
+              <p
+                className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-[#D6E4FF] group-focus-visible:text-[#D6E4FF]"
+                style={{ transition: `color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+              >
+                {w.text}
+              </p>
+            </div>
           ))}
         </div>
       </div>
