@@ -198,7 +198,18 @@ export function SiteHeader() {
 
       {/* --- Barre de navigation --- */}
       <div className="shell grid h-[72px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 lg:flex lg:justify-between">
-        <Link to="/" className="min-w-0" onClick={() => setOpen(false)} aria-label="ULTRA VISION">
+        {/*
+          Le lien du logo recoit une hauteur tactile de 44 px, alors que
+          le logo lui-meme en fait 36. `py-1` cree la difference sans
+          agrandir le dessin : la zone cliquable depasse l'image, ce qui
+          est exactement ce qu'on veut sur un ecran tactile.
+        */}
+        <Link
+          to="/"
+          className="flex min-h-11 min-w-0 items-center py-1"
+          onClick={() => setOpen(false)}
+          aria-label="ULTRA VISION"
+        >
           <Logo className="h-9 sm:h-10" />
         </Link>
 
@@ -262,11 +273,23 @@ export function SiteHeader() {
           </Magnetic>
         </div>
 
+        {/*
+          BOUTON DU MENU : 44 x 44 px et non 40.
+
+          C'est la taille minimale recommandee par Apple et Google pour
+          une zone tactile, et elle correspond a la surface moyenne d'un
+          bout de doigt. En dessous, le bouton se rate reguliement — et
+          sur celui qui ouvre le menu, un rate signifie souvent un
+          visiteur qui renonce a naviguer.
+
+          Le trait dessine ne bouge pas : c'est la zone cliquable qui
+          s'agrandit, pas le dessin.
+        */}
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}
-          className="flex h-10 w-10 shrink-0 items-center justify-center lg:hidden"
+          className="-mr-1 flex h-11 w-11 shrink-0 items-center justify-center lg:hidden"
         >
           <span className="relative block h-3 w-6">
             <span

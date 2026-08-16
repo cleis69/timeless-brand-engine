@@ -130,6 +130,19 @@ export function ExpertiseList() {
         colonnes, toute asymetrie laisse un trou en bout de rangee.
       */}
       <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 lg:grid-cols-6 lg:grid-rows-[repeat(3,minmax(168px,auto))]">
+        {/*
+          `h-full` sur l'enveloppe Reveal est indispensable : c'est ELLE
+          qui est la case de la grille, pas le panneau qu'elle contient.
+          Sans cette hauteur, le panneau « Marque & Contenu » ne
+          remplirait pas les deux rangees qui lui sont reservees.
+
+          Ce commentaire est place ICI, avant l'appel a `.map()`, et non
+          a l'interieur. Un commentaire JSX glisse entre la parenthese
+          ouvrante d'une fonction flechee et l'element qu'elle renvoie
+          produit deux expressions la ou le langage n'en attend qu'une :
+          c'est exactement l'erreur qui a fait echouer la construction
+          du site le 15 aout 2026.
+        */}
         {POLES.map((p, i) => (
           <Reveal key={p.n} delay={i * MOTION.stagger} className={`h-full ${p.area}`}>
             <article
