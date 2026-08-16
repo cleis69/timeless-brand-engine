@@ -316,6 +316,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/*
+        <SmoothScroll> pose Lenis sur la page entiere et le synchronise
+        avec ScrollTrigger. Il enveloppe tout : la barre de navigation
+        collante et les ancres continuent de fonctionner puisque c'est
+        toujours le document qui defile.
+      */}
+      <SmoothScroll>
       <SiteHeader />
       {/*
         <PageTransition> ENVELOPPE desormais le contenu au lieu d'etre
