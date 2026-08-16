@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SITE_URL } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
+import { SplitText } from "@/components/reactbits/SplitText";
+import { VantaBackground } from "@/components/VantaBackground";
+import { useSectionReveal } from "@/hooks/useSectionReveal";
+import { useCountUp } from "@/hooks/useCountUp";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
 import { IrisBackdrop } from "@/components/IrisBackdrop";
