@@ -353,6 +353,7 @@ function RootComponent() {
         chrome, pas de page.
       */}
       <WhatsAppRail />
+      </SmoothScroll>
     </QueryClientProvider>
   );
 }
