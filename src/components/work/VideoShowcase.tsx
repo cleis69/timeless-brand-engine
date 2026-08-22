@@ -36,7 +36,7 @@ export function VideoShowcase({
   items = FEATURED_WORK,
   label = 'SELECTED WORK',
   title = 'Ce que nous produisons.',
-  intro = 'Films de marque, campagnes publicitaires et contenus performants. Produits en interne, de l ecriture au montage final.',
+  intro = "Films de marque, campagnes publicitaires et contenus performants. Produits en interne, de l'écriture au montage final.",
   withLink = true,
   className = '',
 }: Props) {
@@ -125,7 +125,7 @@ export function VideoShowcase({
                   to="/realisations"
                   className="group inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F5F5F3] outline-none transition-colors duration-300 hover:text-[#60A5FA] focus-visible:ring-2 focus-visible:ring-[#3B82F6] focus-visible:ring-offset-4 focus-visible:ring-offset-[#090909]"
                 >
-                  Voir toutes les realisations
+                  Voir toutes les réalisations
                   <span
                     aria-hidden="true"
                     className="inline-block transition-transform duration-300 group-hover:translate-x-1"

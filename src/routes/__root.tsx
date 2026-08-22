@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
+import { ScrollToTop } from "../components/ScrollToTop";
 import { WhatsAppRail } from "../components/WhatsAppRail";
 import { CONTACT } from "../config/contact";
 import { SITE_URL } from "../config/site";
@@ -315,6 +316,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/*
+        Remet la page en haut a chaque changement d'adresse. Monte avant
+        tout le reste : il n'affiche rien, il ne fait qu'ecouter le
+        routeur.
+      */}
+      <ScrollToTop />
       <SiteHeader />
       {/*
         <PageTransition> ENVELOPPE desormais le contenu au lieu d'etre

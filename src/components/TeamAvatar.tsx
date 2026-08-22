@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -54,6 +54,16 @@ export type Member = {
    * Laisse vide tant que la photo n'existe pas : l'avatar prend le relais.
    */
   photo?: string;
+  /**
+   * Point de la photo a garder au centre du cadre, au format CSS
+   * `object-position` — par exemple 'center 28%'.
+   *
+   * Le cadre est en 4/5 alors que les photos sortent le plus souvent en
+   * 2/3 : le recadrage automatique rogne donc le haut et le bas. Sur un
+   * plan large, c'est la tete qui part la premiere. Cette valeur permet
+   * de remonter le cadrage sans retoucher le fichier.
+   */
+  objectPosition?: string;
 };
 
 /** Somme stable des caracteres : sert a tirer la teinte et l'angle. */
@@ -93,6 +103,29 @@ export function TeamAvatar({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  /*
+    LE REPLI DOIT AUSSI RATTRAPER UNE ERREUR DEJA PASSEE.
+
+    La page est rendue sur le serveur : le navigateur commence a
+    telecharger la photo des la lecture du HTML, donc AVANT que React
+    ne prenne la main. Si le fichier est absent, l'evenement `error`
+    part a ce moment-la — quand plus personne ne l'ecoute. Le
+    gestionnaire `onError` attache a l'hydratation arrive trop tard, et
+    la carte reste sur l'icone d'image cassee du navigateur.
+
+    On verifie donc l'etat de l'image au montage : une image
+    `complete` dont la largeur naturelle vaut zero est une image qui a
+    echoue. C'est le seul moyen fiable de rattraper une erreur qui a
+    eu lieu avant nous.
+  */
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    if (el.complete && el.naturalWidth === 0) setFailed(true);
+  }, [member.photo]);
+
   const s = seed(member.name);
   const tint = TINTS[s % TINTS.length]!;
   const angle = s % 360;
@@ -101,6 +134,7 @@ export function TeamAvatar({
   if (member.photo && !failed) {
     return (
       <img
+        ref={imgRef}
         src={member.photo}
         alt={`${member.name}, ${member.role}`}
         width={640}
@@ -109,6 +143,23 @@ export function TeamAvatar({
         decoding="async"
         onError={() => setFailed(true)}
         className={`h-full w-full object-cover ${className}`}
+        style={{
+          objectPosition: member.objectPosition ?? "center",
+          /*
+            La saturation est ramenee a 78 %.
+
+            Le voile bleu pose par-dessus ne suffit pas seul : en
+            `soft-light` il conserve les couleurs d'origine, donc un mur
+            ocre reste un mur ocre. C'est la desaturation qui fait
+            reculer les roses et les terres cuites de l'arriere-plan,
+            et le voile qui les rebascule vers le bleu de la page.
+
+            78 % et pas moins : en dessous de 70 % les carnations
+            virent au gris et le portrait prend un air de photo
+            d'identite.
+          */
+          filter: "saturate(.78) contrast(1.03)",
+        }}
         draggable={false}
       />
     );
@@ -211,6 +262,40 @@ export function TeamCard({ member }: { member: Member }) {
         >
           <TeamAvatar member={member} />
         </div>
+
+        {/*
+          ================================================================
+           L'ACCORD CHROMATIQUE DES PHOTOS
+          ================================================================
+
+          Les avatars dessines sont bleu nuit. Une photo prise en
+          exterieur ne l'est jamais : celle du fondateur est un patio
+          marrakchi, donc des ocres et des roses. Posee telle quelle a
+          cote de deux avatars froids, elle ne se lit pas comme le
+          troisieme portrait d'une serie mais comme une image collee au
+          mauvais endroit.
+
+          On ne desature pas — une equipe en niveaux de gris a l'air
+          d'un trombinoscope administratif. On pose une teinte bleue
+          tres legere en `soft-light` : ce mode conserve les valeurs et
+          les carnations, et ne deplace que la temperature. La photo
+          reste une photo, elle entre simplement dans la meme lumiere
+          que le reste de la page.
+
+          Le voile n'existe QUE sur les photos. Sur un avatar dessine,
+          deja bleu, il ne ferait que boucher les noirs.
+        */}
+        {member.photo && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(59,130,246,.62) 0%, rgba(37,99,235,.5) 52%, rgba(11,16,32,.6) 100%)",
+              mixBlendMode: "soft-light",
+            }}
+          />
+        )}
 
         {/* Voile bas : le nom reste lisible meme sur une vraie photo. */}
         <span

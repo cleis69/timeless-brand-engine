@@ -62,13 +62,25 @@ const URL = SITE_URL;
 /** Marqueur du prenom manquant. Ne pas renommer : il sert au controle. */
 const NAME_TODO = "Prénom";
 
-const TEAM: Member[] = [
+const TEAM_ALL: Member[] = [
   {
-    name: "Cleis Padou",
+    name: "Cleis",
     role: "Fondateur",
     bio: "Dix ans à la tête d'un studio de production audiovisuelle en France. Formé en école de commerce, autodidacte pour le reste. C'est lui qui prend le brief, et c'est lui qui reste sur le projet.",
     facts: ["Business school", "Autodidacte", "10 ans de studio en France"],
-    // photo: '/brand/team/cleis.jpg',
+    /*
+      Le fichier est deja cadre en 4/5 sur le buste, exactement le
+      format du cadre. Aucun `objectPosition` n'est donc necessaire :
+      recadrer une seconde fois en CSS ne ferait que rogner un cadrage
+      deja choisi.
+
+      Le plan large d'origine — la personne en pied dans un patio — a
+      ete resserre a la prise de vue plutot qu'en CSS : dans une carte
+      de 330 px, un plan en pied reduit le visage a une trentaine de
+      pixels, et une fiche d'equipe ou l'on ne distingue pas le visage
+      ne sert a rien.
+    */
+    photo: "/brand/team/cleis.jpg",
   },
   {
     name: "Julien",
@@ -92,15 +104,50 @@ const TEAM: Member[] = [
 ];
 
 /*
-  Avertissement en console tant que le prenom manque. Il s'affiche pour
-  toi en developpement, jamais pour un visiteur. C'est le meme
-  garde-fou que pour les statistiques : une donnee manquante doit se
-  signaler, pas se faire oublier.
+  ============================================================
+   UNE FICHE SANS NOM N'EST PAS PUBLIEE.
+  ============================================================
+
+  Le site affichait « Prenom » en gros, en tete d'une fiche, a cote de
+  trois collegues nommes. Sur une page dont l'argument est « une equipe
+  restreinte, et vous savez qui fait quoi », c'est le seul endroit du
+  site ou une negligence se voit immediatement — et elle contredit
+  exactement la phrase qu'elle accompagne.
+
+  La fiche est donc retiree de l'affichage ET des donnees structurees
+  tant que le prenom manque. Trois personnes nommees valent mieux que
+  quatre dont une s'appelle « Prenom ».
+
+  Elle revient toute seule des que le prenom est ecrit ci-dessus : il
+  n'y a rien d'autre a faire que remplacer NAME_TODO par le prenom.
 */
-if (typeof window !== "undefined" && TEAM.some((m) => m.name === NAME_TODO)) {
+export const TEAM: Member[] = TEAM_ALL.filter((m) => m.name !== NAME_TODO);
+
+/*
+  Le nombre de colonnes suit le nombre de fiches REELLEMENT publiees.
+
+  Avec la fiche sans prenom retiree, la grille figee a quatre colonnes
+  laissait une case vide au bout de la rangee : trois personnes alignees
+  a gauche et un trou a droite, ce qui se lit comme un oubli plutot que
+  comme une equipe de trois.
+
+  Les classes sont ecrites en entier et non composees a la volee :
+  Tailwind lit le code source pour decider des classes qu'il genere, et
+  une classe assemblee par concatenation n'existerait pas dans la
+  feuille de style finale.
+*/
+const TEAM_COLS =
+  TEAM.length >= 4
+    ? "lg:grid-cols-4"
+    : TEAM.length === 3
+      ? "lg:grid-cols-3"
+      : "lg:grid-cols-2";
+
+if (typeof window !== "undefined" && TEAM_ALL.some((m) => m.name === NAME_TODO)) {
   console.warn(
-    "[ULTRA VISION] Le prénom de la community manager n'est pas renseigné. " +
-      "À compléter dans src/routes/a-propos.tsx, tableau TEAM.",
+    "[ULTRA VISION] Le prénom de la community manager n'est pas renseigné : " +
+      "sa fiche n'est PAS affichée sur le site. " +
+      "À compléter dans src/routes/a-propos.tsx, tableau TEAM_ALL.",
   );
 }
 
@@ -156,8 +203,17 @@ export const Route = createFileRoute("/a-propos")({
           mainEntity: {
             ...ORG_LD(URL),
             foundingLocation: { "@type": "Place", name: "Maroc" },
-            numberOfEmployees: { "@type": "QuantitativeValue", value: 4 },
-            employee: TEAM.filter((m) => m.name !== NAME_TODO).map((m) => ({
+            /*
+              L'effectif reel reste declare a quatre : l'equipe compte
+              bien quatre personnes. Seule la fiche sans prenom n'est
+              pas nommee — declarer moins d'employes qu'il n'y en a
+              serait aussi faux que d'en nommer une « Prenom ».
+
+              TEAM est deja filtre en amont, il n'y a plus rien a
+              retirer ici.
+            */
+            numberOfEmployees: { "@type": "QuantitativeValue", value: TEAM_ALL.length },
+            employee: TEAM.map((m) => ({
               "@type": "Person",
               name: m.name,
               jobTitle: m.role,
@@ -290,7 +346,16 @@ function APropos() {
             </p>
           </Reveal>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/*
+            Le nombre de colonnes suit le nombre de fiches REELLEMENT
+            publiees, il n'est pas fige a quatre.
+
+            Avec la fiche sans prenom retiree, une grille de quatre
+            colonnes laissait une case vide au bout de la rangee : trois
+            personnes alignees a gauche et un trou a droite, ce qui se
+            lit comme un oubli plutot que comme une equipe de trois.
+          */}
+          <div className={`mt-12 grid gap-4 sm:grid-cols-2 ${TEAM_COLS}`}>
             {TEAM.map((m, i) => (
               <Reveal key={m.role} delay={i * MOTION.stagger} className="h-full">
                 <TeamCard member={m} />

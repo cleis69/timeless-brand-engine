@@ -140,6 +140,61 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /*
+    ============================================================
+     LE MENU MOBILE VERROUILLE LE DEFILEMENT DE LA PAGE.
+    ============================================================
+
+    Le panneau s'ouvrait au-dessus d'une page qui continuait de
+    defiler derriere lui. Deux consequences a l'usage :
+
+    - le contenu passait sous les liens du menu, qui devenaient
+      illisibles des qu'une section claire arrivait derriere ;
+    - un doigt qui visait « Contact » et glissait de quelques pixels
+      faisait defiler la page au lieu d'ouvrir le lien.
+
+    On fige donc le corps de page tant que le menu est ouvert, et on
+    restaure exactement la position au moment de la fermeture. La
+    position est memorisee puis reappliquee : `position: fixed`
+    ramene sinon la page en haut, et le visiteur qui ferme le menu
+    perdrait l'endroit ou il lisait.
+  */
+  useEffect(() => {
+    if (!open) return;
+
+    const y = window.scrollY;
+    const { body } = document;
+    const previous = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+
+    body.style.position = "fixed";
+    body.style.top = `-${y}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+
+    return () => {
+      body.style.position = previous.position;
+      body.style.top = previous.top;
+      body.style.width = previous.width;
+      body.style.overflow = previous.overflow;
+      window.scrollTo(0, y);
+    };
+  }, [open]);
+
+  /* Le menu se referme des qu'on passe en navigation de bureau, sinon
+     le defilement resterait verrouille sur une page ou le panneau
+     n'est plus affiche. */
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => mq.matches && setOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const solid = scrolled || open;
 
   return (
@@ -184,11 +239,21 @@ export function SiteHeader() {
       `}</style>
 
       {/* --- Ligne de positionnement, visible en haut de page seulement --- */}
+      {/*
+        La pastille se replie AUSSI a l'ouverture du menu, et pas
+        seulement au defilement.
+
+        Le panneau mobile commence a 72 px du haut, c'est-a-dire sous la
+        barre de navigation seule. Si la pastille restait depliee, la
+        barre ferait 128 px et le panneau viendrait se poser par-dessus
+        elle : le logo et le bouton de fermeture disparaissaient
+        derriere le menu qu'ils servent a fermer.
+      */}
       <div
         className="overflow-hidden transition-[max-height,opacity] duration-500"
         style={{
-          maxHeight: scrolled ? 0 : 56,
-          opacity: scrolled ? 0 : 1,
+          maxHeight: scrolled || open ? 0 : 56,
+          opacity: scrolled || open ? 0 : 1,
         }}
       >
         <div className="flex justify-center pt-4 pb-1">
@@ -315,18 +380,52 @@ export function SiteHeader() {
       */}
       <ScrollProgress />
 
-      {/* --- Menu mobile --- */}
+      {/*
+        --- Menu mobile, en panneau plein ecran ---
+
+        Il occupait auparavant la hauteur de son contenu et laissait
+        voir la page en dessous. Un menu qui ne couvre pas l'ecran ne se
+        lit pas comme un changement de contexte : on croit a un
+        deroulant pose sur la page, et le regard continue de chercher le
+        contenu derriere.
+
+        `fixed inset-0` sous la barre, et le fond devient opaque. Le
+        panneau est aussi rendu inerte quand il est ferme
+        (`pointer-events` et `visibility`) : sans cela, un panneau
+        transparent mais toujours present capture les clics sur le haut
+        de la page.
+      */}
       <div
-        className={`overflow-hidden border-t border-hairline lg:hidden ${open ? "max-h-[32rem]" : "max-h-0"} transition-[max-height] duration-500`}
-        style={{ backgroundColor: "#090909" }}
+        className="fixed inset-x-0 bottom-0 lg:hidden"
+        style={{
+          top: 72,
+          backgroundColor: "#090909",
+          borderTop: "1px solid #262626",
+          opacity: open ? 1 : 0,
+          visibility: open ? "visible" : "hidden",
+          pointerEvents: open ? "auto" : "none",
+          transition: "opacity 320ms cubic-bezier(.22,1,.36,1), visibility 320ms",
+        }}
+        aria-hidden={!open}
       >
-        <nav className="shell flex flex-col gap-5 py-8">
-          {NAV.map((item) => (
+        <nav className="shell flex h-full flex-col gap-5 overflow-y-auto py-10">
+          {NAV.map((item, i) => (
             <Link
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
               className="display text-3xl"
+              /*
+                Les liens montent l'un apres l'autre. La cascade n'est
+                pas un ornement : elle donne au panneau une direction de
+                lecture, du premier lien vers le dernier, la ou une
+                apparition simultanee laisse l'oeil choisir au hasard.
+              */
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? "translateY(0)" : "translateY(10px)",
+                transition: `opacity 420ms cubic-bezier(.22,1,.36,1) ${90 + i * 45}ms, transform 420ms cubic-bezier(.22,1,.36,1) ${90 + i * 45}ms`,
+              }}
             >
               {item.label}
             </Link>
@@ -334,7 +433,12 @@ export function SiteHeader() {
           <Link
             to="/contact"
             onClick={() => setOpen(false)}
-            className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background"
+            className="mt-2 inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? "translateY(0)" : "translateY(10px)",
+              transition: `opacity 420ms cubic-bezier(.22,1,.36,1) ${90 + NAV.length * 45}ms, transform 420ms cubic-bezier(.22,1,.36,1) ${90 + NAV.length * 45}ms`,
+            }}
           >
             Prendre rendez-vous
           </Link>

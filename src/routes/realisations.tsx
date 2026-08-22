@@ -4,7 +4,10 @@ import { ORG_LD } from "@/config/contact";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
-import { WORK_ITEMS, statsOf } from "@/components/work/work.data";
+import { WORK_ITEMS } from "@/components/work/work.data";
+import { WorkGrid } from "@/components/work/WorkGrid";
+import { SiteGrid } from "@/components/work/SiteGrid";
+import { SITE_ITEMS, SITES_ARE_PLACEHOLDERS } from "@/components/work/sites.data";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -129,109 +132,79 @@ function Realisations() {
         intro="Tout est tourné et monté en interne, de l'écriture de l'angle au montage final. Les chiffres affichés sont ceux relevés dans les gestionnaires de publicités."
       />
 
+      {/* ---------------- Les films et campagnes ---------------- */}
       <section className="rule bg-background">
         <div className="shell py-14 lg:py-20">
-          <div className="grid gap-5">
-            {WORK_ITEMS.map((item, i) => {
-              const stats = statsOf(item);
-              /* Alternance du cote de l'image : la page cesse d'etre une
-                 pile de blocs identiques et devient une lecture. */
-              const flip = i % 2 === 1;
+          <Reveal>
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                  Films & campagnes
+                </p>
+                <h2 className="display mt-4 text-2xl sm:text-3xl">
+                  Formats verticaux, pensés pour le feed.
+                </h2>
+              </div>
+              <p className="max-w-xs text-[0.8rem] leading-relaxed text-[#7d89a6]">
+                Survolez une carte pour lancer la vidéo.
+              </p>
+            </div>
+          </Reveal>
 
-              return (
-                <Reveal key={item.slug} delay={i * MOTION.stagger}>
-                  <article
-                    className="group grid gap-8 overflow-hidden rounded-3xl p-6 sm:p-8 lg:grid-cols-[280px_1fr] lg:gap-12 lg:p-10"
-                    style={{
-                      backgroundColor: "#0B1020",
-                      border: "1px solid #16203a",
-                      transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, transform ${MOTION.respond}ms ${EASE_RESPOND}`,
-                    }}
-                  >
-                    {/* ---- L'affiche, en 9/16 strict ---- */}
-                    <div
-                      className="relative aspect-[9/16] overflow-hidden rounded-2xl"
-                      style={{
-                        order: flip ? 2 : 0,
-                        backgroundColor: "#070A14",
-                        boxShadow:
-                          "inset 0 1px 0 rgba(191,219,254,.28), 0 22px 48px -18px rgba(0,0,0,.9)",
-                      }}
-                    >
-                      <picture>
-                        <source
-                          srcSet={item.poster.replace(/poster\.jpg$/, "poster-sm.webp")}
-                          media="(max-width: 640px)"
-                          type="image/webp"
-                        />
-                        <source
-                          srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")}
-                          type="image/webp"
-                        />
-                        <img
-                          src={item.poster}
-                          alt=""
-                          aria-hidden="true"
-                          width={760}
-                          height={1351}
-                          loading="lazy"
-                          decoding="async"
-                          className="absolute inset-0 h-full w-full object-cover"
-                          style={{ transition: `transform 900ms ${EASE_RESPOND}` }}
-                        />
-                      </picture>
+          <WorkGrid items={WORK_ITEMS} />
+        </div>
+      </section>
 
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(11,16,32,.8) 2%, transparent 46%)",
-                        }}
-                      />
-                      <span className="absolute top-4 left-4 text-[0.66rem] tracking-[0.16em] text-accent">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </div>
+      {/* ---------------- Les sites internet ---------------- */}
+      <section className="rule bg-surface">
+        <div className="shell py-16 lg:py-20">
+          <Reveal>
+            <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                  Sites internet
+                </p>
+                <h2 className="display mt-4 max-w-xl text-2xl sm:text-3xl">
+                  Des interfaces rapides, sobres et pensées pour la conversion.
+                </h2>
+              </div>
 
-                    {/* ---- Le texte ---- */}
-                    <div className="min-w-0 lg:self-center">
-                      <p className="text-[0.64rem] font-medium tracking-[0.16em] uppercase text-accent-hover">
-                        {item.category}
-                      </p>
+              {/*
+                LA MENTION EST OBLIGATOIRE TANT QUE LES PROJETS SONT DES
+                EXEMPLES.
 
-                      <h2 className="display mt-3 text-3xl sm:text-4xl">{item.title}</h2>
+                Elle disparait toute seule le jour ou
+                SITES_ARE_PLACEHOLDERS passe a false dans sites.data.ts.
 
-                      <p className="mt-5 max-w-lg text-sm leading-relaxed text-[#8792ad]">
-                        {item.description}
-                      </p>
+                Presenter six sites inventes sous un titre
+                « Realisations » sans le dire serait exactement la faute
+                que le reste de ce site a corrigee : le premier prospect
+                qui cherche un de ces noms et ne trouve rien ne revient
+                pas.
+              */}
+              {SITES_ARE_PLACEHOLDERS && (
+                <p
+                  className="rounded-full px-3.5 py-1.5 text-[0.68rem] tracking-[0.06em] text-[#93C5FD]"
+                  style={{
+                    background: "rgba(59,130,246,.09)",
+                    border: "1px solid #1c2946",
+                  }}
+                >
+                  Exemples de mise en page — projets réels à venir
+                </p>
+              )}
+            </div>
+          </Reveal>
 
-                      {/* ---- Les chiffres ---- */}
-                      <div className="mt-8 grid gap-6 border-t border-[#16203a] pt-7 sm:grid-cols-3">
-                        {stats.map((s) => (
-                          <div key={s.label}>
-                            <p className="display text-3xl">{s.value}</p>
-                            <p className="mt-2 text-[0.66rem] tracking-[0.14em] uppercase text-[#6d7a99]">
-                              {s.label}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-
-                      {item.year && (
-                        <p className="mt-7 text-[0.72rem] text-[#5c6a86]">{item.year}</p>
-                      )}
-                    </div>
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
+          <SiteGrid items={SITE_ITEMS} />
         </div>
       </section>
 
       {/* ---------------- Ce qui arrive ---------------- */}
-      <section className="rule bg-surface">
+      {/* bg-background, et non bg-surface : la section des sites juste
+          au-dessus est deja en surface, et deux fonds identiques colles
+          l'un a l'autre effacent la separation entre les deux sujets. */}
+      <section className="rule bg-background">
         <div className="shell grid gap-10 py-16 lg:grid-cols-[1fr_1fr] lg:items-center lg:py-20">
           <Reveal>
             <div>

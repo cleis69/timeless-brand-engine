@@ -138,7 +138,16 @@ const NEEDS = [
 ];
 
 function Contact() {
-  const [budget, setBudget] = useState(BUDGETS[1]);
+  /*
+    Aucun budget n'est pre-selectionne.
+
+    La version precedente cochait « 500 a 1 500 € / mois » d'office.
+    Presumer le budget de quelqu'un avant qu'il ait parle, c'est soit
+    l'ancrer sur un montant qui n'est pas le sien, soit le vexer. Et
+    cote reception, un budget arrive rempli sans avoir ete choisi ne
+    vaut rien : impossible de savoir s'il est vrai.
+  */
+  const [budget, setBudget] = useState<string | null>(null);
   const [needs, setNeeds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
@@ -173,7 +182,7 @@ function Contact() {
       phone: String(fd.get("phone") ?? ""),
       message: String(fd.get("message") ?? ""),
       besoins: needs.length ? needs.join(", ") : "Non précisé",
-      budget,
+      budget: budget ?? "Non précisé",
       [FORM.honeypot]: String(fd.get(FORM.honeypot) ?? ""),
     });
 

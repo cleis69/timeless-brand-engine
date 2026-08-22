@@ -94,7 +94,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Africa Beauty',
     category: 'PUBLICITE • META & TIKTOK',
     description:
-      'Campagne publicitaire a l esthetique 80s, tournee et montee en interne. Format vertical pense pour le feed.',
+      "Campagne publicitaire à l'esthétique 80s, tournée et montée en interne. Format vertical pensé pour le feed.",
     year: '2025',
     sources: {
       mp4: '/work/africa-beauty/africa-beauty.mp4',
@@ -118,7 +118,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Scultbody',
     category: 'PUBLICITE',
     description:
-      'Creation publicitaire orientee conversion, pensee pour alimenter un tunnel d acquisition complet.',
+      "Création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet.",
     year: '2025',
     sources: {
       mp4: '/work/scultbody/scultbody.mp4',
@@ -142,7 +142,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Ehab',
     category: 'CONTENU DE MARQUE',
     description:
-      'Film de presentation produit de bout en bout : ecriture, tournage, montage et etalonnage.',
+      'Film de présentation produit de bout en bout : écriture, tournage, montage et étalonnage.',
     year: '2025',
     sources: {
       mp4: '/work/ehab-presentation/ehab-presentation.mp4',
@@ -166,7 +166,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Ehab — Localisation',
     category: 'CONTENU & LOCALISATION',
     description:
-      'Declinaison localisee de la campagne, adaptee a un second marche sans retournage.',
+      'Déclinaison localisée de la campagne, adaptée à un second marché sans retournage.',
     year: '2025',
     sources: {
       mp4: '/work/ehab-localisation/ehab-localisation.mp4',
