@@ -6,30 +6,34 @@
  * ============================================================
  *
  * ------------------------------------------------------------
- *  ATTENTION — CES SIX PROJETS SONT DES EXEMPLES DE MISE EN PAGE
+ *  DEUX PROJETS REELS, QUATRE EXEMPLES DE MISE EN PAGE
  *
- *  Ils servent a juger le rendu de la section en attendant les
- *  vrais projets. Ils ne correspondent a aucun client existant.
+ *  Le drapeau est desormais POSE PAR PROJET (`placeholder: true`) et
+ *  non plus sur toute la section. C'etait necessaire des le premier
+ *  vrai projet livre : un drapeau global obligeait a choisir entre
+ *  presenter un vrai site sous la mention « exemple » — donc a le
+ *  devaloriser — ou presenter quatre inventions sans mention — donc a
+ *  mentir.
  *
- *  TANT QUE `SITES_ARE_PLACEHOLDERS` VAUT `true` :
- *    - la section porte la mention « Exemples de mise en page »,
- *    - aucun chiffre de resultat n'est affiche,
- *    - un avertissement s'affiche dans la console en developpement.
+ *  UN PROJET MARQUE `placeholder: true` :
+ *    - porte la mention « Exemple de mise en page » sur sa carte,
+ *    - n'est jamais cliquable, meme si une `url` est renseignee,
+ *    - est compte dans l'avertissement de console en developpement.
  *
- *  C'est volontaire, et c'est le point important de ce fichier.
- *  Publier des references inventees sous un titre « Realisations »
- *  est une pratique commerciale trompeuse — et le premier prospect
- *  qui cherche un de ces noms et ne trouve rien ne revient pas.
+ *  C'est le point important de ce fichier. Publier des references
+ *  inventees sous un titre « Realisations » est une pratique
+ *  commerciale trompeuse — et le premier prospect qui cherche un de
+ *  ces noms et ne trouve rien ne revient pas.
  *
- *  QUAND TU AURAS LES VRAIS PROJETS :
- *    1. remplace les blocs ci-dessous par les vrais,
- *    2. passe `SITES_ARE_PLACEHOLDERS` a `false`,
- *    3. renseigne `url` pour rendre les cartes cliquables.
+ *  POUR AJOUTER UN VRAI PROJET :
+ *    1. remplace un bloc marque `placeholder: true`,
+ *    2. retire la ligne `placeholder`,
+ *    3. renseigne `url` et `domain`.
  * ------------------------------------------------------------
  */
 
-/** Passe a `false` le jour ou les projets ci-dessous sont reels. */
-export const SITES_ARE_PLACEHOLDERS = true
+/** Vrai tant qu'au moins un projet de la liste est un exemple. */
+export const hasPlaceholders = () => SITE_ITEMS.some((s) => s.placeholder)
 
 export type SiteItem = {
   /** Identifiant en minuscules avec des tirets. */
@@ -40,10 +44,22 @@ export type SiteItem = {
   category: string
   /** Une phrase. Ce que le site devait resoudre. */
   description: string
-  /** Adresse affichee dans la barre du navigateur dessine. */
+  /**
+   * Adresse affichee dans la barre du navigateur dessine.
+   *
+   * Elle est FLOUTEE a l'affichage : on veut la silhouette d'une barre
+   * d'adresse, qui est ce qui fait lire « site web », sans donner a
+   * lire l'adresse elle-meme — un `github.io` ou un `lovable.app` dans
+   * une page de realisations raconte l'hebergeur, pas le client.
+   */
   domain: string
   /** Lien reel. Laisse vide tant que le projet est un exemple. */
   url?: string
+  /**
+   * Vrai tant que le projet est un exemple de mise en page.
+   * Absent = projet reel.
+   */
+  placeholder?: boolean
   /** Trois mots-cles maximum. */
   tags: string[]
   /**
@@ -62,28 +78,32 @@ export type SiteItem = {
 }
 
 export const SITE_ITEMS: SiteItem[] = [
+  /* ---------------- Projets reels ---------------- */
   {
-    slug: 'exemple-vitrine-restaurant',
-    title: 'Vitrine — Restauration',
-    category: 'SITE VITRINE',
+    slug: 'ideal-contemporain',
+    title: 'Idéal Contemporain',
+    category: 'E-COMMERCE • MOBILIER',
     description:
-      'Une carte lisible, des horaires justes et un bouton de réservation visible sans scroller.',
-    domain: 'exemple-restaurant.ma',
-    tags: ['Réservation', 'Carte', 'Mobile'],
-    hue: 24,
-    layout: 'editorial',
-  },
-  {
-    slug: 'exemple-boutique-cosmetique',
-    title: 'Boutique — Cosmétique',
-    category: 'E-COMMERCE',
-    description:
-      'Fiches produit courtes, tunnel en trois étapes et paiement sans création de compte.',
-    domain: 'exemple-cosmetique.ma',
-    tags: ['Catalogue', 'Paiement', 'Panier'],
-    hue: 320,
+      'Boutique de mobilier contemporain sur-mesure à Marrakech. Catalogue, fiches produit et demande de devis.',
+    domain: 'ideal-contemporain.ma',
+    url: 'https://cleis69.github.io/ideal-marrakech-atelier/',
+    tags: ['Catalogue', 'Sur-mesure', 'Devis'],
+    hue: 28,
     layout: 'commerce',
   },
+  {
+    slug: 'garden-coast',
+    title: 'Garden Coast',
+    category: 'SITE VITRINE • RESTAURATION',
+    description:
+      'Vitrine de restaurant : la carte, l’ambiance et la réservation accessibles sans jamais scroller deux fois.',
+    domain: 'garden-coast.ma',
+    url: 'https://garden-coast-vibes.lovable.app/',
+    tags: ['Carte', 'Réservation', 'Mobile'],
+    hue: 150,
+    layout: 'editorial',
+  },
+  /* ---------------- Exemples de mise en page ---------------- */
   {
     slug: 'exemple-landing-immobilier',
     title: 'Landing — Immobilier',
@@ -94,6 +114,7 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Formulaire', 'Ads', 'Conversion'],
     hue: 210,
     layout: 'landing',
+    placeholder: true,
   },
   {
     slug: 'exemple-vitrine-clinique',
@@ -105,6 +126,7 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Rendez-vous', 'Équipe', 'SEO'],
     hue: 168,
     layout: 'editorial',
+    placeholder: true,
   },
   {
     slug: 'exemple-boutique-mode',
@@ -116,6 +138,7 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Collections', 'Filtres', 'Photo'],
     hue: 268,
     layout: 'commerce',
+    placeholder: true,
   },
   {
     slug: 'exemple-landing-formation',
@@ -127,6 +150,7 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Inscription', 'Programme', 'Ads'],
     hue: 42,
     layout: 'landing',
+    placeholder: true,
   },
 ]
 
@@ -136,10 +160,13 @@ export const SITE_ITEMS: SiteItem[] = [
   Meme garde-fou que pour le prenom manquant de la page « A propos » :
   une donnee provisoire doit se signaler, pas se faire oublier.
 */
-if (typeof window !== 'undefined' && SITES_ARE_PLACEHOLDERS) {
-  console.warn(
-    '[ULTRA VISION] La section « Sites internet » affiche des exemples de mise en page, ' +
-      'pas des projets reels. A remplacer dans src/components/work/sites.data.ts, ' +
-      'puis passer SITES_ARE_PLACEHOLDERS a false.',
-  )
+if (typeof window !== 'undefined') {
+  const n = SITE_ITEMS.filter((s) => s.placeholder).length
+  if (n > 0) {
+    console.warn(
+      `[ULTRA VISION] ${n} des ${SITE_ITEMS.length} projets de la section « Sites internet » ` +
+        'sont encore des exemples de mise en page. A remplacer dans ' +
+        'src/components/work/sites.data.ts, puis retirer leur ligne `placeholder`.',
+    )
+  }
 }

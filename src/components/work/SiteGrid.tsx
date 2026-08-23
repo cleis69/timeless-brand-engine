@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SITES_ARE_PLACEHOLDERS, type SiteItem } from "./sites.data";
+import { type SiteItem } from "./sites.data";
 import { Reveal } from "@/components/Reveal";
 import { EASE_PAGE, MOTION } from "@/config/motion";
 
@@ -69,11 +69,15 @@ function SiteCard({ item }: { item: SiteItem }) {
   const [hover, setHover] = useState(false);
 
   /*
-    Une carte n'est cliquable que si elle mene quelque part. Un exemple
-    de mise en page n'a pas d'adresse : en faire un lien mort serait pire
-    que de ne pas le rendre cliquable du tout.
+    Une carte n'est cliquable que si elle mene quelque part ET qu'elle
+    n'est pas un exemple. Un exemple de mise en page n'a pas d'adresse :
+    en faire un lien mort serait pire que de ne pas le rendre cliquable.
+
+    La condition est desormais lue SUR LA CARTE et non sur la section :
+    les vrais projets deviennent cliquables sans attendre que les quatre
+    exemples restants aient ete remplaces.
   */
-  const clickable = Boolean(item.url) && !SITES_ARE_PLACEHOLDERS;
+  const clickable = Boolean(item.url) && !item.placeholder;
   const Wrapper = clickable ? "a" : "div";
 
   return (
@@ -115,9 +119,36 @@ function SiteCard({ item }: { item: SiteItem }) {
             <i className="block h-[7px] w-[7px] rounded-full" style={{ background: "#33405e" }} />
             <i className="block h-[7px] w-[7px] rounded-full" style={{ background: "#33405e" }} />
           </span>
+          {/*
+            L'ADRESSE EST FLOUTEE, PAS SUPPRIMEE.
+
+            La barre d'adresse est ce qui fait lire « site web » plutot
+            que « capture d'ecran » : la retirer casserait la metaphore
+            du navigateur, et la remplacer par un trait gris donnerait
+            une barre vide, qui se lit comme un element non fini.
+
+            On garde donc le texte, sa longueur et son rythme, et on le
+            rend illisible. Ce qui reste — la silhouette d'une adresse —
+            suffit a la lecture, et l'hebergeur ne raconte rien au
+            visiteur : un `github.io` ou un `lovable.app` dans une page
+            de realisations parle de l'outil, jamais du client.
+
+            `aria-hidden` : ce qui est illisible a l'oeil ne doit pas
+            etre lu a voix haute par un lecteur d'ecran. Le nom du
+            projet, lui, est annonce par le `aria-label` de la carte.
+          */}
           <span
-            className="ml-1 flex-1 truncate rounded-full px-2.5 py-1 text-[0.56rem] tracking-[0.04em] text-[#7b88a6]"
-            style={{ background: "#070B16", border: "1px solid #1b2540" }}
+            aria-hidden="true"
+            className="ml-1 flex-1 truncate rounded-full px-2.5 py-1 text-[0.56rem] tracking-[0.04em] text-[#7b88a6] select-none"
+            style={{
+              background: "#070B16",
+              border: "1px solid #1b2540",
+              filter: "blur(3px)",
+              // Le flou deborde du texte : sans ce leger retrait, les
+              // lettres floutees bavent par-dessus la bordure de la
+              // pastille et l'on voit une trainee, pas un flou.
+              opacity: 0.85,
+            }}
           >
             {item.domain}
           </span>
@@ -146,11 +177,41 @@ function SiteCard({ item }: { item: SiteItem }) {
 
       {/* ---------------- Le texte ---------------- */}
       <div className="px-4 pt-1 pb-5">
-        <p className="text-[0.55rem] tracking-[0.16em] uppercase text-accent-hover">
-          {item.category}
-        </p>
-        <h3 className="display mt-1.5 text-[1.15rem] leading-tight text-foreground">
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-[0.55rem] tracking-[0.16em] uppercase text-accent-hover">
+            {item.category}
+          </p>
+
+          {/*
+            La mention voyage AVEC la carte, elle n'est plus posee sur
+            le titre de section. C'est la seule facon de melanger vrais
+            projets et exemples sans qu'un visiteur puisse se tromper
+            sur ce qu'il regarde.
+          */}
+          {item.placeholder && (
+            <span
+              className="shrink-0 rounded-full px-2 py-[3px] text-[0.55rem] tracking-[0.04em] text-[#8792ad]"
+              style={{ background: "rgba(148,163,184,.08)", border: "1px solid #24304a" }}
+            >
+              Exemple
+            </span>
+          )}
+        </div>
+
+        <h3 className="display mt-1.5 flex items-center gap-2 text-[1.15rem] leading-tight text-foreground">
           {item.title}
+          {clickable && (
+            <span
+              aria-hidden="true"
+              className="text-[0.8rem] text-[#60A5FA]"
+              style={{
+                transform: hover ? "translate(2px,-2px)" : "translate(0,0)",
+                transition: `transform ${MOTION.respond}ms ${EASE_PAGE}`,
+              }}
+            >
+              ↗
+            </span>
+          )}
         </h3>
         <p className="mt-2.5 text-[0.8rem] leading-relaxed text-[#8792ad]">{item.description}</p>
 

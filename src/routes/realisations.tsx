@@ -7,7 +7,7 @@ import { FinalCTA } from "@/components/FinalCTA";
 import { WORK_ITEMS } from "@/components/work/work.data";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import { SiteGrid } from "@/components/work/SiteGrid";
-import { SITE_ITEMS, SITES_ARE_PLACEHOLDERS } from "@/components/work/sites.data";
+import { SITE_ITEMS, hasPlaceholders } from "@/components/work/sites.data";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -182,15 +182,15 @@ function Realisations() {
                 qui cherche un de ces noms et ne trouve rien ne revient
                 pas.
               */}
-              {SITES_ARE_PLACEHOLDERS && (
+              {hasPlaceholders() && (
                 <p
-                  className="rounded-full px-3.5 py-1.5 text-[0.68rem] tracking-[0.06em] text-[#93C5FD]"
+                  className="rounded-full px-3.5 py-1.5 text-[0.68rem] tracking-[0.06em] text-[#8792ad]"
                   style={{
-                    background: "rgba(59,130,246,.09)",
-                    border: "1px solid #1c2946",
+                    background: "rgba(148,163,184,.07)",
+                    border: "1px solid #24304a",
                   }}
                 >
-                  Exemples de mise en page — projets réels à venir
+                  Les cartes marquées « Exemple » illustrent une mise en page
                 </p>
               )}
             </div>
