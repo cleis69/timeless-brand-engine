@@ -69,22 +69,19 @@ function SiteCard({ item }: { item: SiteItem }) {
   const [hover, setHover] = useState(false);
 
   /*
-    Une carte n'est cliquable que si elle mene quelque part ET qu'elle
-    n'est pas un exemple. Un exemple de mise en page n'a pas d'adresse :
-    en faire un lien mort serait pire que de ne pas le rendre cliquable.
+    AUCUNE CARTE N'EST CLIQUABLE, PAR CHOIX.
 
-    La condition est desormais lue SUR LA CARTE et non sur la section :
-    les vrais projets deviennent cliquables sans attendre que les quatre
-    exemples restants aient ete remplaces.
+    La vignette montre la mise en page d'un site ; l'adresse reelle du
+    client n'a pas a etre exposee depuis une page de realisations. Un
+    visiteur qui veut en savoir plus passe par le contact.
+
+    La carte reste focalisable (tabIndex, focus visible) pour la
+    navigation clavier, mais elle ne mene nulle part : c'est une
+    vignette de presentation, pas un lien.
   */
-  const clickable = Boolean(item.url) && !item.placeholder;
-  const Wrapper = clickable ? "a" : "div";
 
   return (
-    <Wrapper
-      {...(clickable
-        ? { href: item.url, target: "_blank", rel: "noopener noreferrer" }
-        : {})}
+    <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onFocus={() => setHover(true)}
@@ -104,7 +101,6 @@ function SiteCard({ item }: { item: SiteItem }) {
           `box-shadow 480ms ${EASE_PAGE}`,
           `border-color ${MOTION.respond}ms ${EASE_PAGE}`,
         ].join(", "),
-        textDecoration: "none",
       }}
     >
       {/* ---------------- La fenetre de navigateur ---------------- */}
