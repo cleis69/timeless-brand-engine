@@ -125,9 +125,9 @@ function SiteCard({ item }: { item: SiteItem }) {
 
             On garde donc le texte, sa longueur et son rythme, et on le
             rend illisible. Ce qui reste — la silhouette d'une adresse —
-            suffit a la lecture, et l'hebergeur ne raconte rien au
-            visiteur : un `github.io` ou un `lovable.app` dans une page
-            de realisations parle de l'outil, jamais du client.
+            suffit a la lecture. L'adresse affichee est fictive
+            (`domain`), jamais l'URL reelle du client, et la carte n'est
+            pas cliquable : elle se donne a voir, pas a visiter.
 
             `aria-hidden` : ce qui est illisible a l'oeil ne doit pas
             etre lu a voix haute par un lecteur d'ecran. Le nom du
