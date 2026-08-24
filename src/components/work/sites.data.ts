@@ -52,7 +52,7 @@ export type SiteItem = {
    * lire l'adresse elle-meme — un `github.io` ou un `lovable.app` dans
    * une page de realisations raconte l'hebergeur, pas le client.
    */
-  domain: string
+  domain?: string
   /** Lien reel. Laisse vide tant que le projet est un exemple. */
   url?: string
   /**
