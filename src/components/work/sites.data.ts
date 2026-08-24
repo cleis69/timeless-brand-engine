@@ -103,6 +103,55 @@ export const SITE_ITEMS: SiteItem[] = [
     hue: 150,
     layout: 'editorial',
   },
+  {
+    /*
+      IDEAL — atelier de mobilier a Marrakech.
+
+      PROJET REEL, SANS ADRESSE. La regle de confidentialite est
+      absolue : aucune URL client ne doit apparaitre, ni a l'ecran,
+      ni dans le source, ni dans le HTML rendu. Le champ `url` est
+      absent (la carte n'est donc jamais cliquable vers l'exterieur)
+      et le champ `domain` est absent (la barre du navigateur dessine
+      un flux neutre, pas une adresse). Un visiteur qui inspecte le
+      code source ne trouve aucune trace de l'adresse du site.
+    */
+    slug: 'ideal',
+    title: 'IDEAL — Atelier de mobilier',
+    category: 'E-COMMERCE • MOBILIER',
+    description:
+      "Plateforme e-commerce sur mesure pour un atelier de mobilier à Marrakech. Catalogue produits, fiches détaillées, parcours d'achat optimisé et identité visuelle premium.",
+    tags: ['E-commerce', 'Branding', 'Web Design', 'UX/UI'],
+    hue: 200,
+    layout: 'commerce',
+  },
+  {
+    /*
+      RAPHAEL ANGLESY — chef prive. Meme regle de confidentialite :
+      pas d'URL, pas de domain. La carte n'est pas cliquable.
+    */
+    slug: 'raphael-anglesy',
+    title: 'Raphael Anglesy — Chef privé',
+    category: 'SITE VITRINE • GASTRONOMIE',
+    description:
+      "Site vitrine éditorial pour un chef privé. Mise en scène de l'univers culinaire, présentation des prestations et tunnel de contact orienté conversion.",
+    tags: ['Site vitrine', 'Branding', 'Direction artistique'],
+    hue: 45,
+    layout: 'editorial',
+  },
+  {
+    /*
+      KOOZINA GARDEN — restaurant avec reservation en ligne.
+      Meme regle de confidentialite : pas d'URL, pas de domain.
+    */
+    slug: 'koozina-garden',
+    title: 'Koozina Garden — Restaurant',
+    category: 'SITE VITRINE • RESTAURATION',
+    description:
+      "Site vitrine avec système de réservation en ligne. Expérience immersive, présentation du lieu et de la carte, réservation fluide en quelques clics.",
+    tags: ['Site vitrine', 'Réservation', 'Web App', 'UX/UI'],
+    hue: 120,
+    layout: 'landing',
+  },
   /* ---------------- Exemples de mise en page ---------------- */
   {
     slug: 'exemple-landing-immobilier',
