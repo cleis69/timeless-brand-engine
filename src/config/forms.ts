@@ -60,7 +60,7 @@ export const FORM = {
    * Colle ici la cle recue par e-mail. Exemple de format :
    * "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
    */
-  accessKey: "",
+  accessKey: "d05af8d6-9e6d-4f87-92e6-a34a0baee6c1",
 
   /** Adresse d'envoi du service. A ne pas modifier. */
   endpoint: "https://api.web3forms.com/submit",
