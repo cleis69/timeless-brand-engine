@@ -218,20 +218,8 @@ function SiteCard({ item }: { item: SiteItem }) {
           )}
         </div>
 
-        <h3 className="display mt-1.5 flex items-center gap-2 text-[1.15rem] leading-tight text-foreground">
+        <h3 className="display mt-1.5 text-[1.15rem] leading-tight text-foreground">
           {item.title}
-          {clickable && (
-            <span
-              aria-hidden="true"
-              className="text-[0.8rem] text-[#60A5FA]"
-              style={{
-                transform: hover ? "translate(2px,-2px)" : "translate(0,0)",
-                transition: `transform ${MOTION.respond}ms ${EASE_PAGE}`,
-              }}
-            >
-              ↗
-            </span>
-          )}
         </h3>
         <p className="mt-2.5 text-[0.8rem] leading-relaxed text-[#8792ad]">{item.description}</p>
 
