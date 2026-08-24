@@ -235,7 +235,7 @@ function SiteCard({ item }: { item: SiteItem }) {
           ))}
         </div>
       </div>
-    </Wrapper>
+    </div>
   );
 }
 
