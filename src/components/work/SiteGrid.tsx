@@ -137,21 +137,45 @@ function SiteCard({ item }: { item: SiteItem }) {
             etre lu a voix haute par un lecteur d'ecran. Le nom du
             projet, lui, est annonce par le `aria-label` de la carte.
           */}
-          <span
-            aria-hidden="true"
-            className="ml-1 flex-1 truncate rounded-full px-2.5 py-1 text-[0.56rem] tracking-[0.04em] text-[#7b88a6] select-none"
-            style={{
-              background: "#070B16",
-              border: "1px solid #1b2540",
-              filter: "blur(3px)",
-              // Le flou deborde du texte : sans ce leger retrait, les
-              // lettres floutees bavent par-dessus la bordure de la
-              // pastille et l'on voit une trainee, pas un flou.
-              opacity: 0.85,
-            }}
-          >
-            {item.domain}
-          </span>
+          {item.domain ? (
+            <span
+              aria-hidden="true"
+              className="ml-1 flex-1 truncate rounded-full px-2.5 py-1 text-[0.56rem] tracking-[0.04em] text-[#7b88a6] select-none"
+              style={{
+                background: "#070B16",
+                border: "1px solid #1b2540",
+                filter: "blur(3px)",
+                // Le flou deborde du texte : sans ce leger retrait, les
+                // lettres floutees bavent par-dessus la bordure de la
+                // pastille et l'on voit une trainee, pas un flou.
+                opacity: 0.85,
+              }}
+            >
+              {item.domain}
+            </span>
+          ) : (
+            /*
+              Aucune adresse n'est stockee pour ce projet (regle de
+              confidentialite absolue). On garde la silhouette d'une
+              barre d'adresse — deux traits floutes — pour que la
+              fenetre lise toujours « site web », mais aucun caractere
+              d'URL, reel ou fictif, n'apparait dans le source ni dans
+              le HTML rendu.
+            */
+            <span
+              aria-hidden="true"
+              className="ml-1 flex flex-1 items-center gap-1.5 rounded-full px-2.5 py-1 select-none"
+              style={{
+                background: "#070B16",
+                border: "1px solid #1b2540",
+                filter: "blur(3px)",
+                opacity: 0.85,
+              }}
+            >
+              <span className="block h-[5px] w-[55%] rounded-full" style={{ background: "#2b3855" }} />
+              <span className="block h-[5px] w-[26%] rounded-full" style={{ background: "#1e2740" }} />
+            </span>
+          )}
         </div>
 
         {/* La page, qui defile au survol */}
