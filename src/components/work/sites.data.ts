@@ -2,34 +2,30 @@
  * ULTRA VISION — donnees des realisations web.
  *
  * ============================================================
- *  NOUVEAU FICHIER : src/components/work/sites.data.ts
+ *  NOUVELLE REGLE : AUCUNE CARTE N'EST CLIQUABLE
  * ============================================================
  *
- * ------------------------------------------------------------
- *  DEUX PROJETS REELS, QUATRE EXEMPLES DE MISE EN PAGE
+ *  Les realisations se donnent a voir, pas a visiter. Aucune carte de
+ *  cette section ne mene vers l'adresse reelle du site client : un
+ *  visiteur qui veut en savoir plus passe par le contact, et l'adresse
+ *  d'un client n'a pas a etre exposee depuis une page de realisations.
  *
- *  Le drapeau est desormais POSE PAR PROJET (`placeholder: true`) et
- *  non plus sur toute la section. C'etait necessaire des le premier
- *  vrai projet livre : un drapeau global obligeait a choisir entre
- *  presenter un vrai site sous la mention « exemple » — donc a le
- *  devaloriser — ou presenter quatre inventions sans mention — donc a
- *  mentir.
+ *  C'est aussi une regle de confidentialite absolue : aucune URL reelle
+ *  de site client ne doit subsister dans le depot — ni dans une prop,
+ *  ni dans un href, ni en commentaire. Le champ `url` a ete supprime du
+ *  type. Seul `domain` est renseigne, et il sert d'ADRESSE D'AFFICHAGE
+ *  fictive : il est floute dans la maquette pour garder la silhouette
+ *  d'une barre d'adresse (ce qui fait lire « site web ») sans donner a
+ *  lire l'adresse elle-meme.
  *
  *  UN PROJET MARQUE `placeholder: true` :
  *    - porte la mention « Exemple de mise en page » sur sa carte,
- *    - n'est jamais cliquable, meme si une `url` est renseignee,
  *    - est compte dans l'avertissement de console en developpement.
- *
- *  C'est le point important de ce fichier. Publier des references
- *  inventees sous un titre « Realisations » est une pratique
- *  commerciale trompeuse — et le premier prospect qui cherche un de
- *  ces noms et ne trouve rien ne revient pas.
  *
  *  POUR AJOUTER UN VRAI PROJET :
  *    1. remplace un bloc marque `placeholder: true`,
  *    2. retire la ligne `placeholder`,
- *    3. renseigne `url` et `domain`.
- * ------------------------------------------------------------
+ *    3. renseigne `domain` (adresse d'affichage, pas l'URL reelle).
  */
 
 /** Vrai tant qu'au moins un projet de la liste est un exemple. */
@@ -45,16 +41,13 @@ export type SiteItem = {
   /** Une phrase. Ce que le site devait resoudre. */
   description: string
   /**
-   * Adresse affichee dans la barre du navigateur dessine.
-   *
-   * Elle est FLOUTEE a l'affichage : on veut la silhouette d'une barre
-   * d'adresse, qui est ce qui fait lire « site web », sans donner a
-   * lire l'adresse elle-meme — un `github.io` ou un `lovable.app` dans
-   * une page de realisations raconte l'hebergeur, pas le client.
+   * Adresse d'affichage FICTIVE, affichee floutee dans la barre du
+   * navigateur dessine. Elle n'est jamais un lien, jamais cliquable,
+   * et ne correspond pas a l'URL reelle du site client. On veut la
+   * silhouette d'une barre d'adresse — ce qui fait lire « site web » —
+   * sans donner a lire l'adresse elle-meme.
    */
   domain?: string
-  /** Lien reel. Laisse vide tant que le projet est un exemple. */
-  url?: string
   /**
    * Vrai tant que le projet est un exemple de mise en page.
    * Absent = projet reel.
@@ -86,71 +79,31 @@ export const SITE_ITEMS: SiteItem[] = [
     description:
       'Boutique de mobilier contemporain sur-mesure à Marrakech. Catalogue, fiches produit et demande de devis.',
     domain: 'ideal-contemporain.ma',
-    url: 'https://cleis69.github.io/ideal-marrakech-atelier/',
     tags: ['Catalogue', 'Sur-mesure', 'Devis'],
     hue: 28,
     layout: 'commerce',
   },
   {
-    slug: 'garden-coast',
-    title: 'Garden Coast',
-    category: 'SITE VITRINE • RESTAURATION',
-    description:
-      'Vitrine de restaurant : la carte, l’ambiance et la réservation accessibles sans jamais scroller deux fois.',
-    domain: 'garden-coast.ma',
-    url: 'https://garden-coast-vibes.lovable.app/',
-    tags: ['Carte', 'Réservation', 'Mobile'],
-    hue: 150,
-    layout: 'editorial',
-  },
-  {
-    /*
-      IDEAL — atelier de mobilier a Marrakech.
-
-      PROJET REEL, SANS ADRESSE. La regle de confidentialite est
-      absolue : aucune URL client ne doit apparaitre, ni a l'ecran,
-      ni dans le source, ni dans le HTML rendu. Le champ `url` est
-      absent (la carte n'est donc jamais cliquable vers l'exterieur)
-      et le champ `domain` est absent (la barre du navigateur dessine
-      un flux neutre, pas une adresse). Un visiteur qui inspecte le
-      code source ne trouve aucune trace de l'adresse du site.
-    */
-    slug: 'ideal',
-    title: 'IDEAL — Atelier de mobilier',
-    category: 'E-COMMERCE • MOBILIER',
-    description:
-      "Plateforme e-commerce sur mesure pour un atelier de mobilier à Marrakech. Catalogue produits, fiches détaillées, parcours d'achat optimisé et identité visuelle premium.",
-    tags: ['E-commerce', 'Branding', 'Web Design', 'UX/UI'],
-    hue: 200,
-    layout: 'commerce',
-  },
-  {
-    /*
-      RAPHAEL ANGLESY — chef prive. Meme regle de confidentialite :
-      pas d'URL, pas de domain. La carte n'est pas cliquable.
-    */
     slug: 'raphael-anglesy',
-    title: 'Raphael Anglesy — Chef privé',
-    category: 'SITE VITRINE • GASTRONOMIE',
+    title: 'Raphaël Anglesy',
+    category: 'SITE VITRINE • CHEF PRIVÉ',
     description:
-      "Site vitrine éditorial pour un chef privé. Mise en scène de l'univers culinaire, présentation des prestations et tunnel de contact orienté conversion.",
-    tags: ['Site vitrine', 'Branding', 'Direction artistique'],
-    hue: 45,
+      'Vitrine d\'un chef privé : univers culinaire, prestations et prise de contact, dans une mise en page éditoriale qui laisse la photo respirer.',
+    domain: 'raphael-anglesy.com',
+    tags: ['Éditorial', 'Prestations', 'Contact'],
+    hue: 18,
     layout: 'editorial',
   },
   {
-    /*
-      KOOZINA GARDEN — restaurant avec reservation en ligne.
-      Meme regle de confidentialite : pas d'URL, pas de domain.
-    */
     slug: 'koozina-garden',
-    title: 'Koozina Garden — Restaurant',
-    category: 'SITE VITRINE • RESTAURATION',
+    title: 'Koozina Garden',
+    category: 'SITE VITRINE • RÉSERVATION',
     description:
-      "Site vitrine avec système de réservation en ligne. Expérience immersive, présentation du lieu et de la carte, réservation fluide en quelques clics.",
-    tags: ['Site vitrine', 'Réservation', 'Web App', 'UX/UI'],
-    hue: 120,
-    layout: 'landing',
+      'Vitrine de restaurant avec réservation intégrée : la carte, le lieu et la prise de table sur un même parcours, sans détour.',
+    domain: 'koozina-garden.ma',
+    tags: ['Réservation', 'Carte', 'Mobile'],
+    hue: 96,
+    layout: 'editorial',
   },
   /* ---------------- Exemples de mise en page ---------------- */
   {
@@ -163,18 +116,6 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Formulaire', 'Ads', 'Conversion'],
     hue: 210,
     layout: 'landing',
-    placeholder: true,
-  },
-  {
-    slug: 'exemple-vitrine-clinique',
-    title: 'Vitrine — Clinique',
-    category: 'SITE VITRINE',
-    description:
-      'Prise de rendez-vous en ligne, équipe présentée, et les informations pratiques en tête de page.',
-    domain: 'exemple-clinique.ma',
-    tags: ['Rendez-vous', 'Équipe', 'SEO'],
-    hue: 168,
-    layout: 'editorial',
     placeholder: true,
   },
   {
