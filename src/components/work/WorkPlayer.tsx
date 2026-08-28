@@ -254,7 +254,20 @@ export function WorkPlayer({ item, onClose }: Props) {
         </div>
 
         {/* ---------- La video ---------- */}
-        <div className="relative">
+        {/*
+          L'arrondi est pose ICI, sur le conteneur, EN PLUS de celui de
+          la balise <video>.
+
+          Un `border-radius` sur une <video> n'est pas fiable : plusieurs
+          navigateurs arrondissent la boite sans clipper le flux qu'elle
+          decode, et l'on voit reapparaitre des coins carres des que la
+          lecture demarre — precisement quand on regarde l'image. Le
+          `overflow-hidden` du parent, lui, decoupe pour de bon.
+
+          Les deux rayons sont identiques a dessein : si l'un des deux
+          venait a ne pas s'appliquer, l'autre tient le rendu.
+        */}
+        <div className="relative overflow-hidden rounded-xl">
           <video
             ref={videoRef}
             data-uv-player

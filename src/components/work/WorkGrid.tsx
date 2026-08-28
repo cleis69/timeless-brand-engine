@@ -359,7 +359,12 @@ function GridCard({
       onClick={onPlay}
       tabIndex={0}
       aria-label={`${item.title} — ${item.category}`}
-      className="group relative aspect-[9/16] w-full cursor-pointer overflow-hidden outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      /*
+        `rounded-lg` + `overflow-hidden` : voir la note de WorkRibbon.
+        Sans le couple, la video se lance a angles droits par-dessus une
+        carte arrondie.
+      */
+      className="group relative aspect-[9/16] w-full cursor-pointer overflow-hidden rounded-lg outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={{
         borderRadius: compact ? 14 : 16,
         transform,

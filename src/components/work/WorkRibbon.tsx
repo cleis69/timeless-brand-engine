@@ -344,7 +344,16 @@ function RibbonCard({
       tabIndex={decorative ? -1 : 0}
       aria-hidden={decorative ? true : undefined}
       aria-label={decorative ? undefined : `${item.title} — ${item.category}`}
-      className="group relative aspect-[9/16] w-[190px] shrink-0 cursor-pointer overflow-hidden outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-[214px] lg:w-[238px]"
+      /*
+        `rounded-lg` + `overflow-hidden` : c'est le COUPLE qui compte.
+
+        Le rayon seul n'arrondirait que la bordure de la carte ; l'image
+        fixe et la video, elles, sont en position absolue par-dessus et
+        deborderaient a angle droit. On verrait des coins carres
+        apparaitre au moment ou la video se lance — exactement l'endroit
+        ou le defaut se remarque le plus.
+      */
+      className="group relative aspect-[9/16] w-[190px] shrink-0 cursor-pointer overflow-hidden rounded-lg outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-[214px] lg:w-[238px]"
       style={{
         borderRadius: 17,
         transform: isHovered ? "translateY(-16px) scale(1.06)" : "translateY(0) scale(1)",
