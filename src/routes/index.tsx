@@ -498,26 +498,43 @@ function Clients() {
         >
           {strip.map((c, i) => {
             const first = i < CLIENTS.length;
+
+            /*
+              Les PNG ont un jumeau WebP, exporte a l'identique et pose a
+              cote du fichier d'origine : 121 Ko de PNG deviennent 75 Ko.
+              La transparence est conservee (alpha verifie), ce qui est
+              indispensable ici — un logo sur fond opaque apparaitrait
+              comme un rectangle clair sur le #090909 de la section.
+
+              Koozina est en SVG et n'a pas de jumeau : un vectoriel est
+              deja plus leger et plus net que n'importe quel bitmap.
+              D'ou le test sur l'extension plutot qu'une conversion
+              systematique du chemin.
+            */
+            const webp = c.logo.endsWith(".png") ? c.logo.replace(/\.png$/, ".webp") : null;
+
             return (
-              <img
-                key={`${c.name}-${i}`}
-                src={c.logo}
-                alt={first ? c.name : ""}
-                aria-hidden={first ? undefined : true}
-                width={c.w}
-                height={c.h}
-                loading="lazy"
-                decoding="async"
-                className="shrink-0 opacity-[0.65] transition-opacity duration-300 hover:opacity-100"
-                /*
-                  Les dimensions sont posées EN DUR, en attribut et en
-                  style. Sans elles, les logos n'occupent aucune place
-                  tant qu'ils ne sont pas chargés : la bande naît plate
-                  puis se déplie d'un coup, et tout ce qui suit sur la
-                  page sursaute.
-                */
-                style={{ width: c.w, height: c.h }}
-              />
+              <picture key={`${c.name}-${i}`}>
+                {webp && <source srcSet={webp} type="image/webp" />}
+                <img
+                  src={c.logo}
+                  alt={first ? c.name : ""}
+                  aria-hidden={first ? undefined : true}
+                  width={c.w}
+                  height={c.h}
+                  loading="lazy"
+                  decoding="async"
+                  className="shrink-0 opacity-[0.65] transition-opacity duration-300 hover:opacity-100"
+                  /*
+                    Les dimensions sont posées EN DUR, en attribut et en
+                    style. Sans elles, les logos n'occupent aucune place
+                    tant qu'ils ne sont pas chargés : la bande naît plate
+                    puis se déplie d'un coup, et tout ce qui suit sur la
+                    page sursaute.
+                  */
+                  style={{ width: c.w, height: c.h }}
+                />
+              </picture>
             );
           })}
         </div>

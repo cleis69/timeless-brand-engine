@@ -378,14 +378,40 @@ function RibbonCard({
         transition: `transform 480ms ${EASE_PAGE}, box-shadow 480ms ${EASE_PAGE}, filter 480ms ${EASE_PAGE}`,
       }}
     >
-      {/* --- L'image fixe, toujours presente --- */}
+      {/*
+        --- L'image fixe, toujours presente ---
+
+        TROIS LARGEURS, ET C'EST LE NAVIGATEUR QUI CHOISIT.
+
+        L'ancienne version servait le fichier de 760 px a tout le monde
+        des que l'ecran depassait 640 px. Or une carte de ce ruban fait
+        238 px au plus large : on envoyait donc une image trois fois
+        trop grande, quarante fois par page. Lighthouse chiffrait le
+        gaspillage a 480 Ko.
+
+        `sizes` annonce la largeur REELLE d'affichage, `srcSet` les
+        largeurs disponibles. Le navigateur croise les deux avec la
+        densite de l'ecran :
+
+          ecran 1x, carte 238 px  -> 380 px
+          ecran 2x, carte 238 px  -> 480 px
+          ecran 3x                -> 760 px
+
+        Les valeurs de `sizes` DOIVENT suivre les largeurs de la carte
+        declarees plus haut (190 / 214 / 238). Si tu changes l'une,
+        change l'autre : une `sizes` fausse fait choisir une image trop
+        petite, et elle devient floue.
+      */}
       <picture>
         <source
-          srcSet={item.poster.replace(/poster\.jpg$/, "poster-sm.webp")}
-          media="(max-width: 640px)"
           type="image/webp"
+          srcSet={[
+            `${item.poster.replace(/poster\.jpg$/, "poster-sm.webp")} 380w`,
+            `${item.poster.replace(/poster\.jpg$/, "poster-md.webp")} 480w`,
+            `${item.poster.replace(/poster\.jpg$/, "poster.webp")} 760w`,
+          ].join(", ")}
+          sizes="(min-width: 1024px) 238px, (min-width: 640px) 214px, 190px"
         />
-        <source srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")} type="image/webp" />
         <img
           src={item.poster}
           alt=""
