@@ -128,47 +128,56 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "preconnect", href: "https://api.fontshare.com" },
-      { rel: "preconnect", href: "https://cdn.fontshare.com", crossOrigin: "anonymous" },
       /*
-        POLICES — huit fichiers reduits a QUATRE.
+        POLICES — SERVIES PAR CE SITE, PLUS PAR UN TIERS.
 
-        Mise a jour du 15 aout 2026 : General Sans 700 a ete retiree.
-        Verification faite sur tout le code, `font-bold` n'apparait
-        nulle part — la graisse etait telechargee, decodee et gardee en
-        memoire sans qu'aucun texte ne l'utilise.
+        Il n'y a plus ni preconnect ni feuille de style distante ici.
+        Les @font-face vivent dans src/styles.css et pointent vers
+        /fonts/, et les fichiers sont dans public/fonts/.
 
-        Sur mobile, chaque fichier de police en moins avance d'autant
-        le moment ou le texte s'affiche : une feuille de style de
-        police bloque le rendu tant qu'elle n'est pas lue.
+        CE QUE CELA A CORRIGE
 
-        Detail de l'ancien commentaire ci-dessous.
+        Les deux feuilles distantes bloquaient le rendu : Lighthouse
+        mesurait 959 ms perdues sur fonts.googleapis.com et 930 ms sur
+        api.fontshare.com, pour 2 Ko de CSS. Le plus gros element de
+        l'accueil est un paragraphe de TEXTE — il attendait la fin de
+        cette chaine de requetes pour s'afficher.
 
-        General Sans chargeait 400, 500, 600 et 700 ; Inter chargeait
-        300, 400, 500 et 600. Huit fichiers, alors que le code n'en
-        utilise que cinq :
+        Les preconnect etaient deja la et ne suffisaient pas : ils
+        raccourcissent l'ouverture d'une connexion, ils ne suppriment
+        pas les allers-retours.
 
-          General Sans 500 et 700  -> les titres, classe `display`
-          Inter 400, 500 et 600    -> corps, navigation, boutons
+        NE PAS remettre de <link> vers Google Fonts ou Fontshare : les
+        deux polices sont deja servies localement, un lien distant ne
+        ferait que rajouter la chaine qu'on vient de retirer.
 
-        Verifie en listant les classes reellement presentes dans le
-        code : `font-medium` (500) apparait 26 fois, `font-semibold`
-        (600) 7 fois. Inter 300 et General Sans 400 et 600 n'etaient
-        appelees nulle part.
+        HISTORIQUE — les graisses reellement utilisees
 
-        Chaque graisse inutile est un fichier telecharge, decode et
-        conserve en memoire pour rien — et une feuille de style de
-        police bloque l'affichage du texte tant qu'elle n'est pas lue.
+        General Sans 500  -> les titres, classe `display`
+        Inter 400/500/600 -> corps, navigation, boutons
+
+        General Sans 700 a ete retiree le 15 aout 2026 : `font-bold`
+        n'apparait nulle part dans le code. Inter 300 et General Sans
+        400/600 avaient ete retirees pour la meme raison.
       */
       {
-        rel: "stylesheet",
-        href: "https://api.fontshare.com/v2/css?f%5B%5D=general-sans@500&display=swap",
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: "/fonts/inter-latin.woff2",
+        crossOrigin: "anonymous",
       },
       {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+        /*
+          General Sans porte les titres, donc le plus gros texte de la
+          page. La precharger evite que le titre reste en police de
+          repli le temps que le CSS soit lu puis la police demandee.
+        */
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: "/fonts/general-sans-500.woff2",
+        crossOrigin: "anonymous",
       },
       {
         rel: "stylesheet",

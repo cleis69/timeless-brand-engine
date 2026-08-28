@@ -126,7 +126,21 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
   return (
     <div className="relative">
       <style>{`
-        @keyframes uv-ribbon { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+        /*
+          SENS DE DEFILEMENT : LES CARTES VONT VERS LA DROITE.
+
+          La bande part de -50 % et revient a 0, au lieu de l'inverse.
+
+          Cela fonctionne parce que la bande est faite de DEUX MOITIES
+          IDENTIQUES : a -50 %, la seconde moitie occupe exactement la
+          place de la premiere. Peu importe donc dans quel sens on
+          parcourt l'intervalle, la boucle reste invisible aux deux
+          extremites.
+
+          Ne pas "corriger" en remettant 0 -> -50 % : ce serait repartir
+          vers la gauche.
+        */
+        @keyframes uv-ribbon { from { transform: translate3d(-50%,0,0); } to { transform: translate3d(0,0,0); } }
         @keyframes uv-backlight {
           0%   { opacity: .46; height: 200px; }
           100% { opacity: .74; height: 268px; }

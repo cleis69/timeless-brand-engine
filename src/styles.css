@@ -2,6 +2,110 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* ==========================================================================
+ *  LES POLICES SONT SERVIES PAR CE SITE, PLUS PAR GOOGLE NI PAR FONTSHARE.
+ * ==========================================================================
+ *
+ * POURQUOI
+ *
+ * Les deux feuilles de style distantes etaient RENDER-BLOCKING : le
+ * navigateur ne peignait rien tant qu'elles n'etaient pas revenues.
+ * Lighthouse mesurait 959 ms perdues sur fonts.googleapis.com et 930 ms
+ * sur api.fontshare.com, pour 2 Ko de CSS.
+ *
+ * Le cout ne venait pas du poids mais de la CHAINE : resoudre un domaine,
+ * ouvrir une connexion TLS, telecharger un CSS, y decouvrir l'adresse
+ * d'un fichier de police sur ENCORE un autre domaine, recommencer. Le
+ * plus gros element de la page d'accueil est un paragraphe de TEXTE : il
+ * attendait litteralement la fin de cette chaine pour s'afficher.
+ *
+ * Un preconnect etait deja en place sur les quatre domaines et ne
+ * suffisait pas : il raccourcit l'ouverture de connexion, il ne supprime
+ * pas les allers-retours.
+ *
+ * CE QUI A ETE TELECHARGE, ET CE QUI NE L'A PAS ETE
+ *
+ * Google decoupe Inter par plage Unicode : cyrillique, grec, vietnamien,
+ * latin, latin etendu. Le site est en francais, seuls latin et latin-ext
+ * sont conserves. Les unicode-range ci-dessous sont ceux de Google,
+ * recopies tels quels : ils evitent au navigateur de charger le fichier
+ * etendu pour une page qui n'a que du latin de base.
+ *
+ * Inter est une police VARIABLE : les trois graisses pointent vers le
+ * MEME fichier, verifie par empreinte MD5. Le navigateur ne le
+ * telecharge qu'une fois. Ne pas croire, en lisant trois @font-face,
+ * qu'il y a trois telechargements.
+ *
+ * SI TU AJOUTES UNE GRAISSE : ajoute un bloc pointant sur le meme
+ * fichier, ne retelecharge rien.
+ *
+ * SI TU AJOUTES UNE LANGUE non latine : recupere le sous-ensemble
+ * correspondant sur Google Fonts, sans quoi ces caracteres s'afficheront
+ * en police de repli.
+ */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Latin etendu : charge uniquement si la page contient ces caracteres. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------- General Sans (titres, classe .display) ---------- */
+@font-face {
+  font-family: "General Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/general-sans-500.woff2") format("woff2");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
