@@ -145,7 +145,7 @@ function Blog() {
                   <span className="text-[0.72rem] tracking-[0.12em] uppercase text-[#8fb4f0]">
                     {lead.category}
                   </span>
-                  <span className="text-[0.72rem] text-[#6d7a99]">
+                  <span className="text-[0.72rem] text-[#707d9d]">
                     {formatDate(lead.date)} · {lead.readingTime} min
                   </span>
                 </div>

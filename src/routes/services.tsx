@@ -286,7 +286,7 @@ function Services() {
                         )}
                         {reduced && (
                           <span
-                            className="text-[0.8rem] text-[#5c5c5a]"
+                            className="text-[0.8rem] text-[#797976]"
                             style={{ textDecoration: "line-through" }}
                           >
                             {euro(t.price)}
@@ -298,7 +298,7 @@ function Services() {
                         {t.forWho}
                       </p>
 
-                      <p className="mt-4 text-[0.72rem] tracking-[0.1em] uppercase text-[#6d7a99]">
+                      <p className="mt-4 text-[0.72rem] tracking-[0.1em] uppercase text-[#707d9d]">
                         {t.commitment}
                       </p>
                     </div>

@@ -77,7 +77,7 @@ export function Figure({ data }: { data: FigureData }) {
         {data.type === "bars" && <Bars data={data} />}
         {data.type === "split" && <Split data={data} />}
       </div>
-      <figcaption className="mt-3 text-[0.78rem] leading-relaxed text-[#6d7a99]">
+      <figcaption className="mt-3 text-[0.78rem] leading-relaxed text-[#707d9d]">
         {data.caption}
       </figcaption>
     </figure>
@@ -120,7 +120,7 @@ function Funnel({ data }: { data: Extract<FigureData, { type: "funnel" }> }) {
             </div>
             <p className="mt-1.5 text-[0.8rem] leading-relaxed text-[#8fa3c8]">{l.sub}</p>
             {l.note && (
-              <p className="mt-2 text-[0.72rem] text-[#6d7a99]">{l.note}</p>
+              <p className="mt-2 text-[0.72rem] text-[#707d9d]">{l.note}</p>
             )}
           </div>
 
@@ -217,7 +217,7 @@ function Bars({ data }: { data: Extract<FigureData, { type: "bars" }> }) {
         );
       })}
       {data.unit && (
-        <p className="pt-1 text-[0.72rem] text-[#6d7a99]">{data.unit}</p>
+        <p className="pt-1 text-[0.72rem] text-[#707d9d]">{data.unit}</p>
       )}
     </div>
   );

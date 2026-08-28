@@ -17,8 +17,17 @@ import { Texture } from '@/components/Texture'
  *   Hero -> VideoShowcase -> logos clients -> expertises -> methode -> ...
  *
  * RYTHME
- * Quatre realisations sur l'accueil, pas davantage. Au dela, la page devient
- * un catalogue et perd sa tension. Les autres vivent sur /realisations.
+ * L'accueil montre TOUTES les realisations, a la demande de l'agence.
+ *
+ * Ce que cela coute : la section n'est plus une selection, c'est un
+ * catalogue. La tension d'une vitrine courte est perdue, et /realisations
+ * ne montre plus rien que l'accueil n'ait deja montre.
+ *
+ * Ce que cela ne coute pas : du reseau. Le ruban ne charge la video que
+ * de la carte survolee ; le reste n'est que des posters.
+ *
+ * Pour revenir a une vitrine courte, il suffit de rendre a FEATURED_WORK
+ * un `.slice(0, n)` dans work.data.ts — rien a toucher ici.
  */
 
 type Props = {

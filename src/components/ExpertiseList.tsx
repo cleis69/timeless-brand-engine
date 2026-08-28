@@ -189,7 +189,7 @@ export function ExpertiseList() {
                 ecran, et restent visibles en permanence sur telephone —
                 ou il n'y a pas de survol pour les reveler.
               */}
-              <ul className="relative z-[2] mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#6d7a99] opacity-100 transition-opacity duration-200 group-hover:text-[#C7D9FF] lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100">
+              <ul className="relative z-[2] mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#707d9d] opacity-100 transition-opacity duration-200 group-hover:text-[#C7D9FF] lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100">
                 {p.lines.map((l) => (
                   <li key={l} className="flex items-center gap-1.5">
                     <span

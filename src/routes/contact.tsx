@@ -282,7 +282,7 @@ function Contact() {
                     </button>
                   ))}
                 </div>
-                <p className="mt-3 text-[0.74rem] text-[#5c5c5a]">
+                <p className="mt-3 text-[0.74rem] text-[#797976]">
                   Hors budget publicitaire versé aux plateformes.
                 </p>
               </fieldset>

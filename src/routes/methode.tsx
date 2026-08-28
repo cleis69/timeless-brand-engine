@@ -250,7 +250,7 @@ function Methode() {
                       {s.text}
                     </p>
 
-                    <p className="mt-7 text-[0.64rem] font-medium tracking-[0.16em] uppercase text-[#6d7a99]">
+                    <p className="mt-7 text-[0.64rem] font-medium tracking-[0.16em] uppercase text-[#707d9d]">
                       Ce qui est livré
                     </p>
                     <ul className="mt-3 space-y-0 text-sm">

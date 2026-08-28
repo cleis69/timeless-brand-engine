@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { statsOf, type WorkItem } from "./work.data";
+import { shownStats, type WorkItem } from "./work.data";
+import { WorkPlayer } from "./WorkPlayer";
 import { EASE_PAGE, LOOP } from "@/config/motion";
 
 /**
@@ -77,6 +78,16 @@ const REPEAT = 2;
 export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
   // Cle de la carte survolee : "index dans la sequence". Une seule a la fois.
   const [hovered, setHovered] = useState<string | null>(null);
+
+  /*
+    La realisation ouverte en plein ecran, ou null.
+
+    L'etat vit ICI et non dans la carte : le ruban duplique sa liste pour
+    boucler, donc chaque realisation existe en deux exemplaires. Un etat
+    par carte ouvrirait deux lecteurs pour un meme film selon l'exemplaire
+    clique.
+  */
+  const [playing, setPlaying] = useState<WorkItem | null>(null);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -104,6 +115,7 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
           // contraste qui designe la carte active, jamais un changement
           // de forme : la forme, ici, doit rester intouchable.
           dimmed={hovered !== null && hovered !== key}
+          onPlay={() => setPlaying(item)}
           onEnter={() => setHovered(key)}
           onLeave={() => setHovered((h) => (h === key ? null : h))}
           decorative={copy === 1}
@@ -141,10 +153,7 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
       `}</style>
 
       {/* ================= PLAN 1 — LE CONTRE-JOUR ================= */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-      >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {/*
           La nappe. Elle est centree sur la hauteur du ruban, deborde
           largement sur les cotes, et son opacite comme sa hauteur
@@ -183,8 +192,7 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{
-            backgroundImage:
-              "radial-gradient(rgba(255,255,255,.9) .5px, transparent .5px)",
+            backgroundImage: "radial-gradient(rgba(255,255,255,.9) .5px, transparent .5px)",
             backgroundSize: "3px 3px",
           }}
         />
@@ -235,6 +243,15 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
           }}
         />
       </div>
+
+      {/*
+        Le lecteur plein ecran. Il se rend lui-meme dans un portail vers
+        <body> : le ruban est en `overflow: hidden`, defile par transform
+        et empile des couches de flou — rendu a l'interieur, le lecteur y
+        serait rogne, recale et repeint par-dessus, quel que soit son
+        z-index. Voir l'en-tete de WorkPlayer.tsx.
+      */}
+      <WorkPlayer item={playing} onClose={() => setPlaying(null)} />
     </div>
   );
 }
@@ -249,6 +266,7 @@ function RibbonCard({
   dimmed,
   onEnter,
   onLeave,
+  onPlay,
   decorative,
 }: {
   item: WorkItem;
@@ -258,11 +276,14 @@ function RibbonCard({
   dimmed: boolean;
   onEnter: () => void;
   onLeave: () => void;
+  /** Ouvre le lecteur plein ecran. */
+  onPlay: () => void;
   /** Vrai pour le second exemplaire, celui qui n'existe que pour la boucle. */
   decorative: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const stat = statsOf(item)[0];
+  /* Le premier chiffre REEL ; les marqueurs STAT_ ne s'affichent pas. */
+  const stat = shownStats(item)[0];
 
   /* La video ne demarre que lorsque la carte est survolee. */
   useEffect(() => {
@@ -317,6 +338,7 @@ function RibbonCard({
     <article
       onMouseEnter={handleEnter}
       onMouseLeave={onLeave}
+      onClick={onPlay}
       onFocus={decorative ? undefined : handleEnter}
       onBlur={decorative ? undefined : onLeave}
       tabIndex={decorative ? -1 : 0}
@@ -340,10 +362,7 @@ function RibbonCard({
           media="(max-width: 640px)"
           type="image/webp"
         />
-        <source
-          srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")}
-          type="image/webp"
-        />
+        <source srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")} type="image/webp" />
         <img
           src={item.poster}
           alt=""
@@ -397,9 +416,7 @@ function RibbonCard({
         style={{
           background:
             "linear-gradient(100deg, transparent, rgba(255,255,255,.18) 44%, rgba(214,228,255,.3) 52%, transparent)",
-          transform: isHovered
-            ? "translateX(330%) rotate(7deg)"
-            : "translateX(-230%) rotate(7deg)",
+          transform: isHovered ? "translateX(330%) rotate(7deg)" : "translateX(-230%) rotate(7deg)",
           transition: `transform 900ms ${EASE_PAGE}`,
         }}
       />
@@ -414,19 +431,47 @@ function RibbonCard({
         }}
       />
 
-      {/* --- Bouton de lecture, au survol --- */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-1/2 z-[6] flex h-[50px] w-[50px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30 backdrop-blur-sm"
+      {/*
+        --- Bouton de lecture ---
+
+        C'est un VRAI bouton, plus une pastille decorative : il ouvre le
+        lecteur plein ecran, avec le son et les commandes.
+
+        Il reste visible au survol seulement, mais il est cliquable en
+        permanence (pas de `pointer-events-none`) : sur un ecran tactile
+        il n'y a pas de survol, et un bouton qu'on ne peut atteindre
+        qu'a la souris n'existe pas sur telephone.
+
+        L'exemplaire decoratif du ruban — celui qui n'est la que pour la
+        boucle — reste cliquable a la souris mais sort du parcours
+        clavier : sans cela, chaque film serait annonce deux fois.
+      */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onPlay();
+        }}
+        tabIndex={decorative ? -1 : 0}
+        aria-hidden={decorative ? true : undefined}
+        aria-label={`Lire la vidéo — ${item.title}`}
+        className="absolute top-1/2 left-1/2 z-[7] flex h-[50px] w-[50px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30 outline-none backdrop-blur-sm transition-colors hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-accent"
         style={{
           opacity: isHovered ? 1 : 0,
-          transition: `opacity 300ms ${EASE_PAGE}`,
+          transition: `opacity 300ms ${EASE_PAGE}, background-color 200ms ${EASE_PAGE}`,
         }}
       >
-        <svg width="14" height="16" viewBox="0 0 20 22" fill="#fff" className="ml-[3px]">
+        <svg
+          width="14"
+          height="16"
+          viewBox="0 0 20 22"
+          fill="#fff"
+          className="ml-[3px]"
+          aria-hidden="true"
+        >
           <path d="M0 1.2C0 .3 1 -.3 1.8.2l17 9.8c.8.5.8 1.6 0 2L1.8 21.8C1 22.3 0 21.7 0 20.8V1.2Z" />
         </svg>
-      </span>
+      </button>
 
       {/* --- Informations --- */}
       <div className="absolute inset-x-0 bottom-0 z-[6] p-4">
@@ -434,10 +479,12 @@ function RibbonCard({
           {item.category}
         </p>
         <h3 className="display mt-1 truncate text-[1rem] text-foreground">{item.title}</h3>
-        <div className="mt-1.5 flex items-baseline gap-1.5">
-          <span className="display text-[0.92rem] text-foreground">{stat.value}</span>
-          <span className="text-[0.49rem] tracking-[0.13em] text-[#a9a9a5]">{stat.label}</span>
-        </div>
+        {stat && (
+          <div className="mt-1.5 flex items-baseline gap-1.5">
+            <span className="display text-[0.92rem] text-foreground">{stat.value}</span>
+            <span className="text-[0.49rem] tracking-[0.13em] text-[#a9a9a5]">{stat.label}</span>
+          </div>
+        )}
       </div>
     </article>
   );

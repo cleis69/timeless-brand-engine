@@ -29,15 +29,20 @@ if (typeof window !== "undefined" && DEMO_STATS) {
  * framer-motion, et il n'y a aucune raison de l'ajouter pour trois
  * fondus : ce serait 40 ko de plus pour un resultat identique.
  *
- * DEUX GARDE-FOUS
+ * LES MARQUEURS SONT MASQUES
  *
- * 1. Tant qu'une valeur est un marqueur (STAT_01), elle s'affiche en
- *    grise avec la mention « a completer ». Impossible de publier un
- *    faux chiffre sans le voir.
+ * Une valeur encore marquee (STAT_01) n'est pas affichee : ni le chiffre,
+ * ni son libelle. Si les trois le sont, la bande entiere disparait, avec
+ * son filet de separation — une bande vide surmontee d'un trait se lit
+ * comme un bloc casse, pas comme un bloc en attente.
  *
- * 2. Le compteur anime ne se declenche que sur les vraies valeurs
- *    numeriques, et jamais si l'utilisateur a demande a reduire les
- *    animations.
+ * Ce que cela change : le garde-fou visuel n'existe plus. Un marqueur
+ * oublie ne se voit plus sur le site. Le rappel a bascule dans la console,
+ * dans work.data.ts — ne pas l'y supprimer.
+ *
+ * RESTE UN GARDE-FOU : le compteur anime ne se declenche que sur les
+ * vraies valeurs numeriques, et jamais si l'utilisateur a demande a
+ * reduire les animations.
  */
 
 const EASE = "cubic-bezier(.16,1,.3,1)";
@@ -52,33 +57,39 @@ type Props = {
 export function WorkStats({ stats, delay = 240, className = "" }: Props) {
   const { ref, isVisible } = useReveal<HTMLDivElement>({ amount: 0.25 });
 
+  /*
+    Les marqueurs sont retires AVANT le rendu, pas caches en CSS : une
+    colonne vide dans une grille en trois parts laisse un trou que l'oeil
+    lit comme une donnee manquante.
+  */
+  const shown = stats.filter((s) => !isPlaceholder(s.value));
+
+  /*
+    Aucun chiffre connu : on ne rend rien du tout. Le filet superieur
+    part avec, sinon la section se termine sur un trait suivi de vide.
+  */
+  if (shown.length === 0) return null;
+
   return (
     <div
       ref={ref}
       className={`grid grid-cols-1 gap-y-10 border-t border-hairline pt-10 sm:grid-cols-3 sm:gap-x-8 ${className}`}
     >
-      {stats.map((stat, i) => (
-        <StatCell
-          key={stat.label + i}
-          stat={stat}
-          isVisible={isVisible}
-          delay={delay + i * 60}
-        />
+      {shown.map((stat, i) => (
+        <StatCell key={stat.label + i} stat={stat} isVisible={isVisible} delay={delay + i * 60} />
       ))}
     </div>
   );
 }
 
-function StatCell({
-  stat,
-  isVisible,
-  delay,
-}: {
-  stat: Stat;
-  isVisible: boolean;
-  delay: number;
-}) {
-  const pending = isPlaceholder(stat.value);
+function StatCell({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; delay: number }) {
+  /*
+    Par construction StatCell ne recoit plus de marqueur : WorkStats les
+    filtre en amont. Le garde reste pour que le composant ne puisse pas
+    afficher « STAT_01 » en typographie geante s'il etait un jour appele
+    depuis ailleurs.
+  */
+  if (isPlaceholder(stat.value)) return null;
 
   return (
     <div
@@ -89,36 +100,13 @@ function StatCell({
         transition: `opacity .8s ${EASE} ${delay}ms, transform .8s ${EASE} ${delay}ms`,
       }}
     >
-      {/*
-        Deux tailles, et c'est volontaire.
-
-        Une vraie valeur est courte — « +42% », « 3.2M » — donc elle
-        supporte une typographie tres grande, qui est tout l'effet
-        recherche. Un marqueur comme « STAT_01 » fait sept caracteres :
-        a la meme taille il deborde de sa colonne et chevauche ses
-        voisins. Le marqueur s'affiche donc en petit, en grise, le temps
-        que tu renseignes le vrai chiffre.
-      */}
-      <span
-        className={[
-          "display tabular-nums leading-[0.9] tracking-[-0.03em]",
-          pending
-            ? "text-[clamp(1.05rem,1.8vw,1.35rem)] text-[#3a3a3a]"
-            : "text-[clamp(2.75rem,7vw,4.5rem)] text-foreground",
-        ].join(" ")}
-      >
-        {pending ? stat.value : <CountUp value={stat.value} play={isVisible} delay={delay} />}
+      <span className="display text-[clamp(2.75rem,7vw,4.5rem)] leading-[0.9] tracking-[-0.03em] tabular-nums text-foreground">
+        <CountUp value={stat.value} play={isVisible} delay={delay} />
       </span>
 
       <span className="mt-3 text-[0.7rem] font-medium tracking-[0.16em] uppercase text-muted-foreground">
         {stat.label}
       </span>
-
-      {pending && (
-        <span className="mt-2 text-[0.62rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
-          à compléter
-        </span>
-      )}
     </div>
   );
 }

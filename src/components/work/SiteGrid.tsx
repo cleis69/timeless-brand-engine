@@ -22,27 +22,41 @@ import { EASE_PAGE, MOTION } from "@/config/motion";
  * une colonne d'une grille, un titre d'un paragraphe. C'est le minimum
  * pour que la vignette dise quelque chose.
  *
- * POURQUOI DES MAQUETTES DESSINEES ET NON DES CAPTURES
+ * CAPTURES REELLES, MAQUETTES EN REPLI
  *
- * Une capture d'ecran de site pese entre 200 et 600 Ko, et il en
- * faudrait six. Surtout, une capture reduite a 380 px de large ne se lit
- * plus : le texte devient du bruit gris.
+ * Quand `shot` est renseigne dans sites.data.ts, la carte affiche la
+ * CAPTURE du site. Sinon elle retombe sur une maquette dessinee en CSS.
  *
- * Les maquettes ci-dessous sont dessinees en CSS. Elles ne pesent rien,
- * restent nettes a toutes les densites d'ecran, et montrent ce qu'une
- * capture ne montre plus a cette taille : la STRUCTURE. Trois silhouettes
- * differentes — editorial, commerce, landing — pour qu'on distingue les
- * types de projet d'un coup d'oeil.
+ * L'ordre de priorite n'est pas negociable : les quatre projets reels
+ * d'Ultra Vision partagent la meme signature — fond sombre, accent
+ * chaud. Quatre maquettes dessinees aux teintes voisines se lisent comme
+ * quatre fois le meme site. Seule une capture montre quatre projets
+ * DISTINCTS.
  *
- * Le jour ou de vraies captures existent, elles remplacent le contenu de
- * <Mockup /> sans toucher au reste.
+ * Les maquettes gardent leur role pour les cartes « Exemple », qui n'ont
+ * pas de capture : elles ne pesent rien, restent nettes a toutes les
+ * densites, et leurs trois silhouettes — editorial, commerce, landing —
+ * distinguent des TYPES de projet, ce qui est exactement ce qu'un
+ * exemple doit dire.
  *
  * L'ANIMATION
  *
  * Au survol, la fenetre du navigateur remonte de 10 px et son ombre
- * s'allonge, pendant que la page a l'interieur DEFILE vers le haut. Ce
- * defilement est le seul geste qui dise « c'est un site » plutot que
- * « c'est une image de site » : on montre qu'il y a une suite.
+ * s'allonge, pendant que la page a l'interieur bouge. Ce mouvement est
+ * le seul geste qui dise « c'est un site » plutot que « c'est une image
+ * de site ».
+ *
+ * Le mouvement depend de ce qu'on affiche, et c'est mesure au chargement
+ * de l'image, pas devine :
+ *   - contenu plus HAUT que le cadre (maquette, capture pleine page)
+ *     -> il DEFILE : il y a vraiment une suite a reveler ;
+ *   - capture de FENETRE, a la hauteur du cadre -> elle s'AGRANDIT
+ *     legerement. La faire defiler ne revelerait qu'un aplat noir, et
+ *     promettrait une suite qui n'existe pas.
+ *
+ * Les captures actuelles sont des captures de fenetre (~1456x829). Le
+ * jour ou elles passent en pleine page, le defilement se rebranche tout
+ * seul, sans toucher a ce fichier.
  */
 
 type Props = {
@@ -67,6 +81,14 @@ export function SiteGrid({ items }: Props) {
 
 function SiteCard({ item }: { item: SiteItem }) {
   const [hover, setHover] = useState(false);
+
+  /*
+    Une maquette dessinee fait toujours deux fois la hauteur de son
+    cadre : elle defile, sans qu'on ait rien a mesurer. Une capture, on
+    ne le sait qu'une fois le fichier charge — d'ou la valeur de depart
+    calee sur le cas maquette.
+  */
+  const [scrollable, setScrollable] = useState(!item.shot);
 
   /*
     AUCUNE CARTE N'EST CLIQUABLE, PAR CHOIX.
@@ -168,8 +190,14 @@ function SiteCard({ item }: { item: SiteItem }) {
                 opacity: 0.85,
               }}
             >
-              <span className="block h-[5px] w-[55%] rounded-full" style={{ background: "#2b3855" }} />
-              <span className="block h-[5px] w-[26%] rounded-full" style={{ background: "#1e2740" }} />
+              <span
+                className="block h-[5px] w-[55%] rounded-full"
+                style={{ background: "#2b3855" }}
+              />
+              <span
+                className="block h-[5px] w-[26%] rounded-full"
+                style={{ background: "#1e2740" }}
+              />
             </span>
           )}
         </div>
@@ -179,11 +207,63 @@ function SiteCard({ item }: { item: SiteItem }) {
           <div
             className="absolute inset-x-0 top-0"
             style={{
-              transform: hover ? "translateY(-28%)" : "translateY(0)",
+              /*
+                Une capture de FENETRE fait la hauteur du cadre : il n'y
+                a rien sous la ligne de flottaison, et la faire "defiler"
+                ne revelerait qu'un aplat noir. On l'agrandit legerement
+                a la place — le geste reste, la promesse d'une suite ne
+                ment pas.
+
+                Une capture PLEINE PAGE, elle, deborde vraiment : on la
+                fait defiler comme une maquette. Le choix se fait sur les
+                dimensions reelles du fichier, mesurees au chargement, ce
+                qui rend le composant juste pour les captures d'aujourd'hui
+                comme pour celles qui les remplaceront.
+              */
+              transform: !hover
+                ? "translateY(0) scale(1)"
+                : scrollable
+                  ? "translateY(-28%) scale(1)"
+                  : "translateY(0) scale(1.05)",
+              transformOrigin: "top center",
               transition: `transform 1100ms ${EASE_PAGE}`,
             }}
           >
-            <Mockup layout={item.layout} hue={item.hue} />
+            {item.shot ? (
+              <img
+                src={item.shot}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                onLoad={(e) => {
+                  /*
+                    Le cadre est en 16/11. Une image plus haute que ce
+                    rapport a de la matiere a reveler ; une image plus
+                    plate n'en a pas.
+                  */
+                  const img = e.currentTarget;
+                  if (img.naturalWidth > 0) {
+                    setScrollable(img.naturalHeight / img.naturalWidth > 11 / 16);
+                  }
+                }}
+                className="block w-full"
+                style={{
+                  /*
+                    Tant qu'on ne sait pas encore lire les dimensions (et
+                    pour les captures de fenetre), l'image remplit le
+                    cadre plutot que d'y flotter en laissant une bande
+                    noire. `object-position: top` garde l'en-tete du site,
+                    qui est la partie qui l'identifie.
+                  */
+                  height: scrollable ? "auto" : "100%",
+                  objectFit: scrollable ? undefined : "cover",
+                  objectPosition: "top center",
+                }}
+              />
+            ) : (
+              <Mockup layout={item.layout} hue={item.hue} />
+            )}
           </div>
 
           {/* Ombre basse : elle indique qu'il y a une suite. */}

@@ -40,6 +40,12 @@ import { SITE_URL } from "../config/site";
  *    ecrans a haute densite, la ou le PNG de 32 px bavait. Le PNG est
  *    conserve en second pour les navigateurs anciens.
  *
+ *    /favicon.ico existe aussi, en troisieme. Il n'est pas la pour etre
+ *    affiche : les navigateurs le reclament a la racine QUOI QU'ON
+ *    DECLARE, et son absence produisait une 404 a chaque chargement de
+ *    page — visible en console, et comptee comme une erreur par
+ *    Lighthouse. Ne pas le supprimer sous pretexte qu'il fait doublon.
+ *
  * 3. Les donnees structurees affichaient studio@ultravision.fr et
  *    +33600000000, deux coordonnees inventees. Elles viennent
  *    maintenant du fichier de configuration. Google lit ces donnees et
@@ -273,6 +279,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
     ],
     scripts: [
       {

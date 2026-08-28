@@ -237,7 +237,7 @@ function Head() {
         </Reveal>
 
         <Reveal delay={340}>
-          <p className="mt-4 text-sm text-[#5c5c5a]">
+          <p className="mt-4 text-sm text-[#797976]">
             Montants en euros hors taxes. Le budget publicitaire n&apos;est jamais inclus.
             {MAD.enabled && (
               <>
@@ -284,7 +284,7 @@ function Packs() {
             <div className="mb-10 flex flex-wrap items-center gap-3">
               <OfferBadge />
               {LAUNCH_OFFER.until && (
-                <span className="text-[0.74rem] text-[#5c5c5a]">{LAUNCH_OFFER.until}</span>
+                <span className="text-[0.74rem] text-[#797976]">{LAUNCH_OFFER.until}</span>
               )}
             </div>
           </Reveal>
@@ -337,7 +337,7 @@ function Packs() {
                     )}
                     {reduced && (
                       <span
-                        className="text-sm text-[#5c5c5a]"
+                        className="text-sm text-[#797976]"
                         style={{ textDecoration: "line-through" }}
                       >
                         {euro(full)}
@@ -358,7 +358,7 @@ function Packs() {
                     « et ca fait combien en vrai ? ».
                   */}
                   {MAD.enabled && (
-                    <p className="mt-1.5 text-[0.76rem] text-[#6d7a99]">
+                    <p className="mt-1.5 text-[0.76rem] text-[#707d9d]">
                       ≈ {dirham(now)}
                       {p.period ? ` ${p.period}` : ""}
                     </p>
@@ -385,7 +385,7 @@ function Packs() {
                     l'economie est verifiable, donc credible.
                   */}
                   {p.anchor && p.anchor > full && (
-                    <p className="mt-3 text-[0.78rem] text-[#6d7a99]">
+                    <p className="mt-3 text-[0.78rem] text-[#707d9d]">
                       <span style={{ textDecoration: "line-through" }}>{euro(p.anchor)}</span> en
                       payant chaque prestation à l&apos;unité{" "}
                       <span className="text-[#93C5FD]">
@@ -557,7 +557,7 @@ function Carte() {
                           )}
                           {reduced && (
                             <p
-                              className="mt-0.5 text-[0.72rem] text-[#5c5c5a]"
+                              className="mt-0.5 text-[0.72rem] text-[#797976]"
                               style={{ textDecoration: "line-through" }}
                             >
                               {euro(it.price)}
@@ -582,7 +582,7 @@ function Carte() {
           <Reveal delay={120}>
             <div className="mt-10">
               <OfferBadge />
-              <p className="mt-3 text-[0.78rem] text-[#5c5c5a]">
+              <p className="mt-3 text-[0.78rem] text-[#797976]">
                 La remise s&apos;applique à votre première commande, formule ou prestation à
                 l&apos;unité. {LAUNCH_OFFER.until}
               </p>

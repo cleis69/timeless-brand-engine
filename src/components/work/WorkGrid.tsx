@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { statsOf, type WorkItem } from "./work.data";
+import { shownStats, type WorkItem } from "./work.data";
+import { WorkPlayer } from "./WorkPlayer";
 import { useReveal } from "@/hooks/useReveal";
 import { EASE_ENTER, EASE_PAGE, MOTION } from "@/config/motion";
 
@@ -108,6 +109,9 @@ const PUSH = 26;
 
 export function WorkGrid({ items }: Props) {
   const [hovered, setHovered] = useState<number | null>(null);
+
+  /* La realisation ouverte en plein ecran, ou null. */
+  const [playing, setPlaying] = useState<WorkItem | null>(null);
   const [perRow, setPerRow] = useState(4);
   const { ref: sectionRef, isVisible } = useReveal<HTMLDivElement>({ amount: 0.08 });
 
@@ -247,12 +251,21 @@ export function WorkGrid({ items }: Props) {
                   tilt={compact ? 0 : tilt}
                   compact={compact}
                   onEnter={() => setHovered(i)}
+                  onPlay={() => setPlaying(item)}
                 />
               </div>
             );
           })}
         </div>
       ))}
+
+      {/*
+        Le lecteur plein ecran. Il se rend lui-meme dans un portail vers
+        <body> — indispensable ici, ou chaque carte est inclinee et mise a
+        l'echelle : un ancetre transforme piegerait son `position: fixed`.
+        Voir l'en-tete de WorkPlayer.tsx.
+      */}
+      <WorkPlayer item={playing} onClose={() => setPlaying(null)} />
     </div>
   );
 }
@@ -270,6 +283,7 @@ function GridCard({
   tilt,
   compact,
   onEnter,
+  onPlay,
 }: {
   item: WorkItem;
   index: number;
@@ -283,9 +297,16 @@ function GridCard({
   tilt: number;
   compact: boolean;
   onEnter: () => void;
+  /** Ouvre le lecteur plein ecran. */
+  onPlay: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const stat = statsOf(item)[0];
+  /*
+    Le premier chiffre REEL. Les marqueurs STAT_ sont masques : une carte
+    dont les chiffres ne sont pas encore connus n'affiche pas de ligne de
+    resultat du tout, plutot qu'un « STAT_01 » sous son titre.
+  */
+  const stat = shownStats(item)[0];
 
   useEffect(() => {
     const v = videoRef.current;
@@ -335,6 +356,7 @@ function GridCard({
     <article
       onMouseEnter={onEnter}
       onFocus={onEnter}
+      onClick={onPlay}
       tabIndex={0}
       aria-label={`${item.title} — ${item.category}`}
       className="group relative aspect-[9/16] w-full cursor-pointer overflow-hidden outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -434,20 +456,42 @@ function GridCard({
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* --- Bouton de lecture, au survol --- */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-1/2 z-[6] flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30"
+      {/*
+        --- Bouton de lecture ---
+
+        Un VRAI bouton : il ouvre le lecteur plein ecran, avec le son et
+        les commandes natives. La carte entiere est cliquable aussi, mais
+        le bouton porte le libelle lu par les lecteurs d'ecran.
+
+        Pas de `pointer-events-none` : sur un ecran tactile il n'y a pas
+        de survol, et un bouton qu'on ne peut atteindre qu'a la souris
+        n'existe pas sur telephone.
+      */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onPlay();
+        }}
+        aria-label={`Lire la vidéo — ${item.title}`}
+        className="absolute top-1/2 left-1/2 z-[7] flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30 outline-none transition-colors hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-accent"
         style={{
           opacity: lifted ? 1 : 0,
           transform: `translate(-50%,-50%) scale(${lifted ? 1 : 0.8})`,
-          transition: `opacity 300ms ${EASE_PAGE}, transform 300ms ${EASE_PAGE}`,
+          transition: `opacity 300ms ${EASE_PAGE}, transform 300ms ${EASE_PAGE}, background-color 200ms ${EASE_PAGE}`,
         }}
       >
-        <svg width="12" height="14" viewBox="0 0 20 22" fill="#fff" className="ml-[3px]">
+        <svg
+          width="12"
+          height="14"
+          viewBox="0 0 20 22"
+          fill="#fff"
+          className="ml-[3px]"
+          aria-hidden="true"
+        >
           <path d="M0 1.2C0 .3 1 -.3 1.8.2l17 9.8c.8.5.8 1.6 0 2L1.8 21.8C1 22.3 0 21.7 0 20.8V1.2Z" />
         </svg>
-      </span>
+      </button>
 
       {/* --- Informations --- */}
       <div className="absolute inset-x-0 bottom-0 z-[6] p-3.5 sm:p-4">
@@ -459,15 +503,22 @@ function GridCard({
         </h3>
 
         {/*
-          Le chiffre principal reste lisible sur CHAQUE carte, meme au
-          repos. C'est ce qui empeche la grille de redevenir une planche
-          de vignettes : chaque carte porte un resultat, pas seulement
+          Le chiffre principal reste lisible sur CHAQUE carte QUI EN A UN,
+          meme au repos. C'est ce qui empeche la grille de redevenir une
+          planche de vignettes : la carte porte un resultat, pas seulement
           une image.
+
+          Les cartes sans chiffres connus n'affichent rien ici. Elles sont
+          alors un peu plus basses que leurs voisines — c'est voulu : un
+          emplacement reserve et vide se lirait comme un defaut de
+          chargement.
         */}
-        <div className="mt-1.5 flex items-baseline gap-1.5">
-          <span className="display text-[0.9rem] leading-none text-foreground">{stat.value}</span>
-          <span className="text-[0.47rem] tracking-[0.13em] text-[#a9a9a5]">{stat.label}</span>
-        </div>
+        {stat && (
+          <div className="mt-1.5 flex items-baseline gap-1.5">
+            <span className="display text-[0.9rem] leading-none text-foreground">{stat.value}</span>
+            <span className="text-[0.47rem] tracking-[0.13em] text-[#a9a9a5]">{stat.label}</span>
+          </div>
+        )}
 
         {/*
           La description n'apparait qu'au survol, et seulement sur grand

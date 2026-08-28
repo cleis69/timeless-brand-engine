@@ -125,9 +125,70 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const CLIENTS = ["Africa Beauty", "Scultbody", "Ehab"];
+/**
+ * LES ENTREPRISES ACCOMPAGNÉES.
+ *
+ * ============================================================
+ *  POURQUOI DES LARGEURS ÉCRITES À LA MAIN
+ * ============================================================
+ *
+ * Les quatre logos n'ont pas le même rapport d'image : Centralym fait
+ * 5,66:1, Koozina 1:1. Les afficher à hauteur égale — le réflexe — fait
+ * paraître Koozina trois fois plus petit que ses voisins, parce que
+ * l'œil ne compare pas des hauteurs, il compare des SURFACES.
+ *
+ * Chaque largeur ci-dessous a donc été calculée pour que les quatre
+ * logos occupent la même aire visuelle. Si tu ajoutes un logo, ne
+ * reprends pas la hauteur du voisin : vise la même surface.
+ *
+ * ============================================================
+ *  POURQUOI LES FICHIERS SONT DÉJÀ TRAITÉS
+ * ============================================================
+ *
+ * Le fond de cette section est #090909. Centralym et Gatsby étaient
+ * fournis en noir pur sur transparent : ils étaient donc parfaitement
+ * invisibles. Les fichiers déposés dans public/brand/clients/ sont des
+ * versions BLANCHES, traitées en amont — et non des originaux corrigés
+ * en CSS par un filtre.
+ *
+ * C'est volontaire. Un filtre `brightness(0) invert(1)` donne le même
+ * résultat à l'écran, mais il se déclenche à chaque peinture et il ne
+ * survit pas à un changement de fond : le jour où cette section passe
+ * sur clair, les logos disparaissent à nouveau, en silence.
+ *
+ * Koozina est en SVG et garde ses couleurs : son encre sombre a été
+ * éclaircie et son disque crème retiré, ce que seul le vectoriel
+ * permettait sans perte.
+ *
+ * AVANT D'AJOUTER UN LOGO : vérifie-le sur #090909, pas sur blanc.
+ */
+const CLIENTS: { name: string; logo: string; w: number; h: number }[] = [
+  { name: "The Kop Barber", logo: "/brand/clients/the-kop-barber.png", w: 186, h: 65 },
+  { name: "Centralym Immobilier", logo: "/brand/clients/centralym.png", w: 262, h: 46 },
+  { name: "Gatsby", logo: "/brand/clients/gatsby.png", w: 216, h: 56 },
+  { name: "Koozina Garden", logo: "/brand/clients/koozina-garden.svg", w: 104, h: 104 },
+];
 
-
+/**
+ * NOMBRE DE RÉPÉTITIONS DE LA LISTE — CE CHIFFRE N'EST PAS DÉCORATIF.
+ *
+ * L'animation `marquee-x` translate la bande de 0 à -50 %. Pour que la
+ * boucle soit invisible, la bande doit donc être faite de DEUX MOITIÉS
+ * IDENTIQUES : au moment où la translation atteint -50 %, la seconde
+ * moitié occupe exactement la place qu'occupait la première, et le
+ * retour à zéro ne se voit pas. Ce nombre doit rester PAIR.
+ *
+ * Il doit aussi être assez grand. Une moitié de bande plus étroite que
+ * l'écran laisse apparaître du vide en fin de course — le défaut ne se
+ * voit que sur les grands écrans, donc jamais sur celui où l'on
+ * développe.
+ *
+ * Les quatre logos et leurs gouttières font 1088 px. Avec 8 répétitions,
+ * une moitié fait 4352 px : la bande reste pleine jusqu'aux écrans
+ * ultra-larges. C'est le nombre à AUGMENTER, jamais à baisser, si un
+ * logo est retiré de la liste.
+ */
+const LOOPS = 8;
 
 const WHY = [
   {
@@ -179,12 +240,29 @@ const WHY = [
  * Toute valeur commencant par STAT_ s'affiche en grise avec la mention
  * « a completer » : le garde-fou reste en place pour les prochains.
  */
+/*
+  Rappel en console : les chiffres d'accueil encore en marqueur.
+
+  Ils ne s'affichent plus sur le site — c'est donc ici, et nulle part
+  ailleurs, qu'un oubli se signale. Ne pas retirer ce bloc.
+*/
 const STATS: { value: string; label: string }[] = [
   { value: "10 000", label: "Leads générés chaque mois" },
   { value: "50 K€", label: "Budget publicitaire piloté par mois" },
   { value: "+15", label: "Marques accompagnées" },
   { value: "100 %", label: "Clients satisfaits" },
 ];
+
+if (typeof window !== "undefined") {
+  const enAttente = STATS.filter((s) => s.value.startsWith("STAT_"));
+  if (enAttente.length > 0) {
+    console.warn(
+      `[ULTRA VISION] ${enAttente.length} chiffre(s) d'accueil encore en marqueur : ` +
+        enAttente.map((s) => s.label).join(", ") +
+        ". Ils sont MASQUES sur la page. Renseigner leur valeur dans STATS, src/routes/index.tsx.",
+    );
+  }
+}
 
 const FAQ = [
   {
@@ -383,7 +461,7 @@ function Hero() {
         </Reveal>
 
         <Reveal delay={560}>
-          <div className="mt-20 flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#5c5c5a]">
+          <div className="mt-20 flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#797976]">
             {CONTACT.locations.split("—").map((v) => (
               <span key={v.trim()}>{v.trim()}</span>
             ))}
@@ -395,25 +473,53 @@ function Hero() {
 }
 
 function Clients() {
+  /*
+    Seule la PREMIÈRE série porte un texte alternatif : les autres sont
+    des doublons décoratifs, et un lecteur d'écran qui annoncerait « The
+    Kop Barber » huit fois de suite rendrait la section illisible à
+    l'oreille.
+
+    Le navigateur ne télécharge qu'une fois chaque fichier : les
+    répétitions sont gratuites en réseau, elles ne coûtent que des
+    nœuds DOM.
+  */
+  const strip = Array.from({ length: LOOPS }, () => CLIENTS).flat();
+
   return (
     <section className="rule overflow-hidden bg-background py-10">
       <div className="shell">
         <p className="eyebrow">Entreprises accompagnées</p>
       </div>
+
       <div className="mt-8 flex overflow-hidden">
-        {/* 44 s au lieu de 38 : assez lent pour qu'on lise chaque nom. */}
         <div
           className="marquee flex shrink-0 items-center gap-16 pr-16"
           style={{ animationDuration: `${LOOP.marquee}s` }}
         >
-          {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
-            <span
-              key={`${c}-${i}`}
-              className="display shrink-0 text-2xl text-muted-foreground sm:text-3xl"
-            >
-              {c}
-            </span>
-          ))}
+          {strip.map((c, i) => {
+            const first = i < CLIENTS.length;
+            return (
+              <img
+                key={`${c.name}-${i}`}
+                src={c.logo}
+                alt={first ? c.name : ""}
+                aria-hidden={first ? undefined : true}
+                width={c.w}
+                height={c.h}
+                loading="lazy"
+                decoding="async"
+                className="shrink-0 opacity-[0.65] transition-opacity duration-300 hover:opacity-100"
+                /*
+                  Les dimensions sont posées EN DUR, en attribut et en
+                  style. Sans elles, les logos n'occupent aucune place
+                  tant qu'ils ne sont pas chargés : la bande naît plate
+                  puis se déplie d'un coup, et tout ce qui suit sur la
+                  page sursaute.
+                */
+                style={{ width: c.w, height: c.h }}
+              />
+            );
+          })}
         </div>
       </div>
     </section>
@@ -510,27 +616,27 @@ function Stats() {
   return (
     <section className="rule bg-background">
       <div className="shell py-24 lg:py-28">
+        {/*
+          Les chiffres encore marques STAT_ sont RETIRES, pas grises.
+
+          Meme regle que pour les realisations : on ne montre pas un
+          emplacement en attente a un visiteur. Un « STAT_01 — a
+          completer » sur la page d'accueil se lit comme un site
+          inacheve, ce qui coute plus cher que le chiffre manquant ne
+          rapporte.
+
+          Le rappel a bascule en console (voir plus bas) : c'est
+          desormais le seul endroit ou un oubli se voit.
+        */}
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {STATS.map((s, i) => {
-            const pending = s.value.startsWith("STAT_");
-            return (
-              <Reveal key={s.label} delay={i * 70}>
-                <div>
-                  <p
-                    className={`display text-5xl lg:text-6xl ${pending ? "text-[#3a3a3a]" : ""}`}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
-                  {pending && (
-                    <p className="mt-1 text-[0.65rem] tracking-[0.12em] uppercase text-[#5a5a5a]">
-                      à compléter
-                    </p>
-                  )}
-                </div>
-              </Reveal>
-            );
-          })}
+          {STATS.filter((s) => !s.value.startsWith("STAT_")).map((s, i) => (
+            <Reveal key={s.label} delay={i * 70}>
+              <div>
+                <p className="display text-5xl lg:text-6xl">{s.value}</p>
+                <p className="mt-4 text-sm text-muted-foreground">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
