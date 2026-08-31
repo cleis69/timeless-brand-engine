@@ -323,6 +323,28 @@ export const PACKS: Pack[] = [
 
 /* ==========================================================================
  *  LES PRESTATIONS A L'UNITE
+ * ==========================================================================
+ *
+ *  POURQUOI CERTAINS PRIX EN EUROS NE SE TERMINENT PAS PAR 90
+ *
+ *  Les prestations historiques ont ete pensees EN EUROS, d'ou 290, 390,
+ *  490, 590 — la regle du 90 decrite plus haut.
+ *
+ *  Les cinq dernieres (podcast, vlog, SEO mensuel, GEO, community
+ *  management) ont ete fixees EN DIRHAMS par l'agence : 3 500, 7 000,
+ *  2 500, 2 500 et 8 000 MAD. Le champ `price` etant en euros, la valeur
+ *  stockee est celle qui, convertie au taux 11 et arrondie a la
+ *  centaine, redonne EXACTEMENT le montant voulu :
+ *
+ *    320 EUR -> 3 500 MAD      640 EUR -> 7 000 MAD
+ *    230 EUR -> 2 500 MAD      730 EUR -> 8 000 MAD
+ *
+ *  C'est le dirham qui est juste ici, pas l'euro. NE PAS « corriger »
+ *  ces montants vers une terminaison en 90 : cela decalerait le prix
+ *  affiche, qui est celui que l'agence a annonce.
+ *
+ *  SI MAD.rate CHANGE, ces cinq valeurs ne suivront pas : il faudra les
+ *  recalculer pour retomber sur les memes dirhams.
  * ========================================================================== */
 
 export type AlaCarte = {
@@ -377,14 +399,22 @@ const A_LA_CARTE_BRUT: AlaCarte[] = [
     group: "Contenu long",
     items: [
       {
+        /*
+          « A partir de » : un episode avec un invite en plateau fixe et
+          un episode tourne en deux lieux avec habillage sur mesure ne
+          demandent pas le meme travail. Annoncer un prix ferme
+          obligerait a refuser le second ou a renegocier apres coup.
+        */
         label: "Épisode de podcast",
         detail: "Plateau, deux à trois caméras, montage, habillage, extraits verticaux.",
-        price: 0,
+        price: 320,
+        from: true,
       },
       {
         label: "Vlog format long",
         detail: "Une journée de tournage, montage narratif, 8 à 12 minutes.",
-        price: 0,
+        price: 640,
+        from: true,
       },
     ],
   },
@@ -426,7 +456,7 @@ const A_LA_CARTE_BRUT: AlaCarte[] = [
       {
         label: "Suivi SEO mensuel",
         detail: "Mots-clés, contenus, netlinking, rapport de positions.",
-        price: 0,
+        price: 230,
         unit: "/ mois",
       },
       {
@@ -440,7 +470,7 @@ const A_LA_CARTE_BRUT: AlaCarte[] = [
         */
         label: "Visibilité sur les IA (GEO)",
         detail: "Être cité par ChatGPT, Perplexity et les résumés IA de Google.",
-        price: 0,
+        price: 230,
       },
     ],
   },
@@ -493,7 +523,7 @@ const A_LA_CARTE_BRUT: AlaCarte[] = [
       {
         label: "Community management",
         detail: "Ligne éditoriale, calendrier, publication, modération.",
-        price: 0,
+        price: 730,
         unit: "/ mois",
       },
     ],
