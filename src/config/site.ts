@@ -40,10 +40,11 @@
 /**
  * Adresse publique du site, SANS barre oblique finale.
  *
- * Le jour du basculement :
- *   export const SITE_URL = "https://ultravisionagency.com";
+ * Basculement effectue le 31 aout 2026 : le site repond desormais sur
+ * son domaine propre, et l'ancienne adresse `.lovable.app` n'alimente
+ * plus rien.
  */
-export const SITE_URL = "https://timeless-brand-engine.lovable.app";
+export const SITE_URL = "https://ultravisionagency.com";
 
 /** Nom du domaine seul, sans protocole. Sert aux affichages. */
 export const SITE_DOMAIN = SITE_URL.replace(/^https?:\/\//, "");

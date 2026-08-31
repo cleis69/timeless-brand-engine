@@ -45,4 +45,4 @@ Allow: /
 Disallow: /apercu-
 Disallow: /_A-DEPOSER
 
-Sitemap: https://timeless-brand-engine.lovable.app/sitemap.xml
+Sitemap: https://ultravisionagency.com/sitemap.xml

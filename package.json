@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "find public -name '.DS_Store' -delete; vite build && node scripts/fix-ssr-cycle.mjs && npx wrangler deploy",
+    "deploy": "find public -name '.DS_Store' -delete; vite build && node scripts/fix-ssr-cycle.mjs && node scripts/set-custom-domains.mjs && npx wrangler deploy",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
