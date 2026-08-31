@@ -101,7 +101,7 @@ export const Route = createFileRoute("/tarifs")({
       {
         name: "description",
         content:
-          "Production de vidéos publicitaires et acquisition. Prix affichés, périmètre détaillé, aucune surprise. À partir de 490 € la vidéo, diffusion comprise.",
+          "Production de vidéos publicitaires et acquisition. Prix affichés, périmètre détaillé, aucune surprise. À partir de 5 400 MAD la vidéo, diffusion comprise.",
       },
       { property: "og:title", content: "Tarifs — ULTRA VISION" },
       {
@@ -238,11 +238,11 @@ function Head() {
 
         <Reveal delay={340}>
           <p className="mt-4 text-sm text-[#797976]">
-            Montants en euros hors taxes. Le budget publicitaire n&apos;est jamais inclus.
+            Montants en dirhams hors taxes. Le budget publicitaire n&apos;est jamais inclus.
             {MAD.enabled && (
               <>
                 {" "}
-                Les équivalents en dirhams sont donnés {MAD.note}.
+                Les montants en dirhams sont {MAD.note}.
               </>
             )}
           </p>
@@ -330,7 +330,7 @@ function Packs() {
                   {/* --- Le prix --- */}
                   <div className="mt-7 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
                     <span className="display text-[2.6rem] leading-none tracking-[-0.03em]">
-                      {euro(now)}
+                      {dirham(now)}
                     </span>
                     {p.period && (
                       <span className="text-sm text-muted-foreground">{p.period}</span>
@@ -340,29 +340,32 @@ function Packs() {
                         className="text-sm text-[#797976]"
                         style={{ textDecoration: "line-through" }}
                       >
-                        {euro(full)}
+                        {dirham(full)}
                       </span>
                     )}
                   </div>
                   {reduced && (
                     <p className="mt-1.5 text-[0.72rem] text-[#93C5FD]">
-                      Prix de la première commande. {euro(full)} ensuite.
+                      Prix de la première commande. {dirham(full)} ensuite.
                     </p>
                   )}
 
                   {/*
-                    L'equivalent en dirhams, en petit sous le prix.
-                    Neuf clients sur dix sont des expatries : ils
-                    raisonnent en euros mais ils reglent en dirhams.
-                    Repondre aux deux questions evite l'aller-retour
-                    « et ca fait combien en vrai ? ».
+                    L'EQUIVALENT EN EUROS, EN PETIT SOUS LE PRIX.
+
+                    Le dirham est passe en gros a la demande de
+                    l'agence. L'euro reste affiche dessous, et ce n'est
+                    pas une politesse : neuf clients sur dix sont des
+                    expatries francophones. C'est en euros qu'ils
+                    comparent a ce qu'ils payaient en France, ou une
+                    video publicitaire coute 1 500 a 3 000 € — un ecart
+                    qui joue en notre faveur et qui disparaitrait si le
+                    montant en euros n'apparaissait plus nulle part.
                   */}
-                  {MAD.enabled && (
-                    <p className="mt-1.5 text-[0.76rem] text-[#707d9d]">
-                      ≈ {dirham(now)}
-                      {p.period ? ` ${p.period}` : ""}
-                    </p>
-                  )}
+                  <p className="mt-1.5 text-[0.76rem] text-[#707d9d]">
+                    ≈ {euro(now)}
+                    {p.period ? ` ${p.period}` : ""}
+                  </p>
 
                   {/*
                     LA DECOMPOSITION.
@@ -386,10 +389,10 @@ function Packs() {
                   */}
                   {p.anchor && p.anchor > full && (
                     <p className="mt-3 text-[0.78rem] text-[#707d9d]">
-                      <span style={{ textDecoration: "line-through" }}>{euro(p.anchor)}</span> en
+                      <span style={{ textDecoration: "line-through" }}>{dirham(p.anchor)}</span> en
                       payant chaque prestation à l&apos;unité{" "}
                       <span className="text-[#93C5FD]">
-                        — vous économisez {euro(p.anchor - full)}
+                        — vous économisez {dirham(p.anchor - full)}
                       </span>
                     </p>
                   )}
@@ -549,7 +552,7 @@ function Carte() {
                               à partir de
                             </span>
                           )}
-                          <span className="display text-[1.25rem]">{euro(now)}</span>
+                          <span className="display text-[1.25rem]">{dirham(now)}</span>
                           {it.unit && (
                             <span className="ml-1 text-[0.72rem] text-muted-foreground">
                               {it.unit}
@@ -560,14 +563,12 @@ function Carte() {
                               className="mt-0.5 text-[0.72rem] text-[#797976]"
                               style={{ textDecoration: "line-through" }}
                             >
-                              {euro(it.price)}
+                              {dirham(it.price)}
                             </p>
                           )}
-                          {MAD.enabled && (
-                            <p className="mt-0.5 text-[0.68rem] text-[#5c6a86]">
-                              ≈ {dirham(now)}
-                            </p>
-                          )}
+                          <p className="mt-0.5 text-[0.68rem] text-[#5c6a86]">
+                            ≈ {euro(now)}
+                          </p>
                         </div>
                       </div>
                     );

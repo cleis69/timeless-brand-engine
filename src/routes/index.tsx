@@ -77,7 +77,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Production de vidéos publicitaires et pilotage de vos campagnes Meta, Google et TikTok. Première vidéo livrée en 7 jours, diffusion comprise, à partir de 490 €.",
+          "Production de vidéos publicitaires et pilotage de vos campagnes Meta, Google et TikTok. Première vidéo livrée en 7 jours, diffusion comprise, à partir de 5 400 MAD.",
       },
       { property: "og:title", content: "ULTRA VISION — Vidéos publicitaires & acquisition" },
       {
@@ -274,7 +274,7 @@ const FAQ = [
       comme un prix qui change selon l'interlocuteur.
     */
     q: "Quel est le budget d'un accompagnement ?",
-    a: "Une première vidéo publicitaire est à 490 €, diffusion comprise pendant 14 jours. Les accompagnements mensuels démarrent à 1 490 € par mois. Le détail complet, prestation par prestation, est publié sur la page tarifs.",
+    a: "Une première vidéo publicitaire est à 5 400 MAD, diffusion comprise pendant 14 jours. Les accompagnements mensuels démarrent à 16 400 MAD par mois. Le détail complet, prestation par prestation, est publié sur la page tarifs.",
   },
   {
     q: "Quels sont les délais ?",

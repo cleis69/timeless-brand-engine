@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
+import { PromoBar } from "@/components/PromoBar";
 import { AvailabilityBadge } from "./AvailabilityBadge";
 import { Magnetic } from "./Magnetic";
 
@@ -237,6 +238,21 @@ export function SiteHeader() {
           .uv-nav:hover{transform:none}
         }
       `}</style>
+
+      {/*
+        --- Le lisere promotionnel ---
+
+        Il est le PREMIER element de l'en-tete, donc tout en haut du
+        site. Contrairement a la pastille juste en dessous, il ne se
+        replie pas au defilement : une offre commerciale doit rester
+        lisible au moment ou le visiteur regarde les prix, c'est-a-dire
+        plusieurs ecrans plus bas.
+
+        Il vit DANS l'en-tete et non a cote : l'en-tete est en
+        `position: fixed`, un lisere pose au-dessus resterait fige en
+        haut de la page pendant que la barre, elle, suit le defilement.
+      */}
+      <PromoBar />
 
       {/* --- Ligne de positionnement, visible en haut de page seulement --- */}
       {/*

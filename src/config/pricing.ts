@@ -17,7 +17,7 @@
  * ------------------------------------------------------------
  * L'OFFRE DE LANCEMENT : A LIRE AVANT DE LA LAISSER EN PLACE
  *
- * Les -20 % sont affiches partout ou un prix apparait. C'est efficace
+ * Les -30 % sont affiches partout ou un prix apparait. C'est efficace
  * pour ouvrir un carnet de commandes, mais une remise permanente cesse
  * d'etre une remise : au bout de quelques mois, le marche considere que
  * le prix reel est le prix remise, et le prix barre ne trompe plus
@@ -43,9 +43,9 @@ export const LAUNCH_OFFER = {
   /** Passe a false pour retirer la remise de tout le site. */
   enabled: true,
   /** Pourcentage entier. */
-  percent: 20,
+  percent: 30,
   /** Texte court affiche sur les pastilles. */
-  badge: "-20 % sur votre première commande",
+  badge: "-30 % sur votre première commande",
   /**
    * Date de fin, affichee en petit sous la grille.
    * Laisse une chaine vide pour ne rien afficher — mais lis l'avertissement
@@ -70,12 +70,27 @@ export const LAUNCH_OFFER = {
  * juste : 490 x 0,80 donne 392. Cette fonction ramene donc chaque
  * montant a la dizaine la plus proche.
  *
- * LES TROIS FORMULES TOMBENT PARFAITEMENT
+ * CE QUE LA REMISE A 30 % A COUTE — A SAVOIR
+ *
+ * A -20 %, les trois formules tombaient parfaitement :
  *
  *   490 -> 390     1 490 -> 1 190     2 490 -> 1 990
  *
- * Les trois prix qui comptent le plus se terminent donc par 90 dans
- * les deux colonnes. Sur les prestations a l'unite, le montant remise
+ * Les trois prix se terminaient par 90 dans les deux colonnes. A -30 %,
+ * ils tombent sur 340, 1 040 et 1 740 : la terminaison en 90 est perdue
+ * sur la colonne remisee.
+ *
+ * C'est un vrai renoncement, mais il pese moins qu'avant : depuis que
+ * le DIRHAM est la devise affichee en grand, aucune terminaison en euro
+ * ne survit de toute facon a la conversion et a l'arrondi a la centaine
+ * (390 EUR devient 4 300 MAD). La regle du 90 ne gouverne donc plus que
+ * la ligne en petit.
+ *
+ * SI TU VEUX RETROUVER DES MONTANTS RONDS, c'est desormais sur les
+ * dirhams qu'il faut travailler, pas sur les euros — donc en ajustant
+ * MAD.rate ou en saisissant les prix directement en dirhams.
+ *
+ * Sur les prestations a l'unite, le montant remise
  * finit par 10, 30, 50 ou 70 selon les lignes : forcer un 90 partout
  * aurait exige de deformer la remise jusqu'a 34 % sur certaines
  * lignes, ce qui aurait rendu le « -20 % » affiche indefendable.
@@ -137,8 +152,21 @@ export const MAD = {
   enabled: true,
   /** Taux commercial. 1 euro = X dirhams. A revoir deux fois par an. */
   rate: 11,
-  /** Mention obligatoire a cote du montant converti. */
-  note: "à titre indicatif — l'euro fait foi au devis",
+  /**
+   * Mention obligatoire a cote des montants convertis.
+   *
+   * ELLE NE DIT PLUS « a titre indicatif », ET C'EST VOLONTAIRE.
+   *
+   * Tant que le dirham etait la petite ligne, « indicatif » allait de
+   * soi. Depuis qu'il est le prix affiche en grand, qualifier
+   * d'indicatif le montant principal revenait a dire au visiteur que le
+   * chiffre qu'il lit n'est pas le vrai — exactement l'inverse de ce
+   * que promet le titre de la page.
+   *
+   * La formulation actuelle dit la meme chose juridiquement (l'euro
+   * reste la devise du devis) sans jeter le doute sur le montant lu.
+   */
+  note: "convertis au taux commercial en vigueur ; l'euro fait foi au devis",
 } as const;
 
 /**
@@ -310,7 +338,13 @@ export type AlaCarte = {
   }[];
 };
 
-export const A_LA_CARTE: AlaCarte[] = [
+/**
+ * LES PRESTATIONS, AVANT FILTRAGE.
+ *
+ * Ne pas importer cette constante dans une page : c'est A_LA_CARTE,
+ * plus bas, qui est la liste affichable.
+ */
+const A_LA_CARTE_BRUT: AlaCarte[] = [
   {
     group: "Production",
     items: [
@@ -328,6 +362,29 @@ export const A_LA_CARTE: AlaCarte[] = [
         label: "Série photo",
         detail: "Une demi-journée de tournage, 20 visuels retouchés.",
         price: 390,
+      },
+    ],
+  },
+  {
+    /*
+      LE CONTENU LONG N'EST PAS DE LA PUBLICITE, ET IL A SON GROUPE.
+
+      Une video publicitaire dure quinze secondes et cherche un clic.
+      Un episode de podcast dure quarante minutes et cherche une
+      relation. Les ranger ensemble ferait lire le podcast comme une
+      « grosse pub » et son prix comme un abus.
+    */
+    group: "Contenu long",
+    items: [
+      {
+        label: "Épisode de podcast",
+        detail: "Plateau, deux à trois caméras, montage, habillage, extraits verticaux.",
+        price: 0,
+      },
+      {
+        label: "Vlog format long",
+        detail: "Une journée de tournage, montage narratif, 8 à 12 minutes.",
+        price: 0,
       },
     ],
   },
@@ -354,9 +411,36 @@ export const A_LA_CARTE: AlaCarte[] = [
         from: true,
       },
       {
+        /*
+          PONCTUEL, ET C'EST VOLONTAIREMENT DISTINCT DU SUIVI.
+
+          Le technique se fait une fois : une structure corrigee le
+          reste. Le suivi editorial, lui, n'existe que dans la duree.
+          Les vendre ensemble obligerait un client qui veut juste un
+          site propre a payer un abonnement dont il n'a pas l'usage.
+        */
         label: "Référencement technique",
         detail: "Structure, balises, données structurées, Search Console.",
         price: 290,
+      },
+      {
+        label: "Suivi SEO mensuel",
+        detail: "Mots-clés, contenus, netlinking, rapport de positions.",
+        price: 0,
+        unit: "/ mois",
+      },
+      {
+        /*
+          GEO — pour « Generative Engine Optimization ».
+
+          Le sigle ne dit rien a personne hors du metier, et il se
+          confond avec « geographique ». Le libelle l'ecrit donc en
+          clair : ce qu'on vend, c'est d'etre cite par les assistants,
+          pas un acronyme.
+        */
+        label: "Visibilité sur les IA (GEO)",
+        detail: "Être cité par ChatGPT, Perplexity et les résumés IA de Google.",
+        price: 0,
       },
     ],
   },
@@ -406,9 +490,54 @@ export const A_LA_CARTE: AlaCarte[] = [
         price: 490,
         unit: "/ mois / plateforme",
       },
+      {
+        label: "Community management",
+        detail: "Ligne éditoriale, calendrier, publication, modération.",
+        price: 0,
+        unit: "/ mois",
+      },
     ],
   },
 ];
+
+/* ==========================================================================
+ *  LE FILTRE DES PRESTATIONS SANS PRIX
+ *
+ *  UN PRIX A 0 SIGNIFIE « PAS ENCORE FIXE », ET LA LIGNE N'EST PAS
+ *  AFFICHEE.
+ *
+ *  Cette page promet en titre « des prix affiches, aucune surprise ».
+ *  Une prestation annoncee sans montant, ou pire avec un montant
+ *  invente, contredit la seule chose que la page a a vendre.
+ *
+ *  Le garde-fou est automatique : il n'y a pas d'interrupteur a penser
+ *  a basculer. Des qu'un prix reel remplace le 0, la ligne apparait
+ *  toute seule. Un groupe dont toutes les lignes sont a 0 disparait
+ *  entierement, plutot que de laisser un titre au-dessus du vide.
+ * ========================================================================== */
+
+export const A_LA_CARTE: AlaCarte[] = A_LA_CARTE_BRUT.map((g) => ({
+  ...g,
+  items: g.items.filter((i) => i.price > 0),
+})).filter((g) => g.items.length > 0);
+
+/*
+  Rappel en console, en developpement : la liste des prestations encore
+  sans prix. Elles sont invisibles sur le site, donc c'est le seul
+  endroit ou l'oubli se voit.
+*/
+if (typeof window !== "undefined") {
+  const sansPrix = A_LA_CARTE_BRUT.flatMap((g) =>
+    g.items.filter((i) => i.price <= 0).map((i) => i.label),
+  );
+  if (sansPrix.length > 0) {
+    console.warn(
+      `[ULTRA VISION] ${sansPrix.length} prestation(s) sans prix, donc MASQUEES sur /tarifs et /services : ` +
+        sansPrix.join(", ") +
+        ". Renseigner leur prix dans src/config/pricing.ts pour les faire apparaitre.",
+    );
+  }
+}
 
 /* ==========================================================================
  *  CE QUI N'EST JAMAIS COMPRIS

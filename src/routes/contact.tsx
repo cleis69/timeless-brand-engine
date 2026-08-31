@@ -119,12 +119,21 @@ export const Route = createFileRoute("/contact")({
   Tranches alignees sur la grille tarifaire reelle.
   La premiere doit toujours correspondre a l'essai : c'est elle qui dit
   au petit budget qu'il a le droit d'etre la.
+
+  Montants en DIRHAMS, convertis au taux commercial de pricing.ts
+  (1 € = 11 MAD) et arrondis a la centaine, comme le fait dirham().
+
+  Si MAD.rate change dans pricing.ts, ces quatre lignes ne suivront PAS
+  toutes seules : ce sont des chaines, pas des calculs. C'est volontaire
+  — une tranche de budget doit rester un repere stable pour le prospect,
+  pas un montant qui bouge d'une visite a l'autre. A revoir a la main le
+  jour ou le taux est modifie.
 */
 const BUDGETS = [
-  "Un essai — 490 €",
-  "500 à 1 500 € / mois",
-  "1 500 à 3 000 € / mois",
-  "Plus de 3 000 € / mois",
+  "Un essai — 5 400 MAD",
+  "5 500 à 16 500 MAD / mois",
+  "16 500 à 33 000 MAD / mois",
+  "Plus de 33 000 MAD / mois",
   "Je ne sais pas encore",
 ];
 

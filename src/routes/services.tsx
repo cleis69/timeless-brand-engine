@@ -4,7 +4,7 @@ import { AREA_SERVED, ORG_LD } from "@/config/contact";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
-import { PACKS, euro, withOffer, LAUNCH_OFFER } from "@/config/pricing";
+import { PACKS, euro, dirham, withOffer, LAUNCH_OFFER } from "@/config/pricing";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -280,7 +280,7 @@ function Services() {
                       <h3 className="display text-2xl">{t.name}</h3>
 
                       <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                        <span className="display text-[1.9rem] leading-none">{euro(now)}</span>
+                        <span className="display text-[1.9rem] leading-none">{dirham(now)}</span>
                         {t.period && (
                           <span className="text-sm text-muted-foreground">{t.period}</span>
                         )}
@@ -289,10 +289,21 @@ function Services() {
                             className="text-[0.8rem] text-[#797976]"
                             style={{ textDecoration: "line-through" }}
                           >
-                            {euro(t.price)}
+                            {dirham(t.price)}
                           </span>
                         )}
                       </div>
+
+                      {/*
+                        L'equivalent en euros, en petit. Meme raison que
+                        sur /tarifs : les clients expatries comparent a
+                        ce qu'ils payaient en France, et cet ecart joue
+                        en notre faveur. Le retirer nous en priverait.
+                      */}
+                      <p className="mt-1.5 text-[0.74rem] text-[#707d9d]">
+                        ≈ {euro(now)}
+                        {t.period ? ` ${t.period}` : ""}
+                      </p>
 
                       <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
                         {t.forWho}
