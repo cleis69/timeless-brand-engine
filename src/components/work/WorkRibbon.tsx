@@ -64,7 +64,25 @@ import { EASE_PAGE, LOOP } from "@/config/motion";
  *
  * LE MOUVEMENT S'ARRETE si le visiteur a demande moins d'animations. Le
  * ruban devient alors une simple bande defilante au doigt ou a la molette.
+ *
+ * SUR TELEPHONE, LE RUBAN DEFILE AUSSI TOUT SEUL
+ *
+ * Il etait fige sous 1024 px, pour ne pas lutter contre le doigt du
+ * visiteur. Resultat : sur mobile — la majorite des visites — la
+ * section ressemblait a une rangee d'images immobiles.
+ *
+ * Il tourne desormais partout, et le doigt reste maitre : on attrape la
+ * bande, elle suit le geste, puis elle repart d'elle-meme apres une
+ * courte pause. Le glisser ne deplace pas un defilement natif concurrent
+ * de l'animation : il avance ou recule l'animation elle-meme
+ * (`currentTime`), donc les deux ne peuvent jamais se contredire.
  */
+
+/** Pause apres un glisser, avant que le ruban ne reparte seul. */
+const RESUME_AFTER_DRAG_MS = 1800;
+
+/** Deplacement au-dela duquel un appui devient un glisser, et plus un tap. */
+const DRAG_THRESHOLD_PX = 8;
 
 type Props = {
   items: WorkItem[];
@@ -89,6 +107,8 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
   */
   const [playing, setPlaying] = useState<WorkItem | null>(null);
   const [reduced, setReduced] = useState(false);
+  const bandRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -97,6 +117,101 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
     mq.addEventListener?.("change", on);
     return () => mq.removeEventListener?.("change", on);
   }, []);
+
+  /*
+    LE GLISSER AU DOIGT.
+
+    On ne met jamais l'animation en pause par l'API (`pause()`/`play()`) :
+    une fois appelees, elles court-circuitent pour toujours la regle CSS
+    `animation-play-state`, et l'arret au survol de la souris cesserait
+    de fonctionner. On pose une classe qui met en pause EN CSS, et on
+    deplace seulement la tete de lecture (`currentTime`).
+
+    La souris est ignoree ici : elle a deja le survol pour arreter le
+    ruban, et un glisser a la souris sur des cartes cliquables se
+    confondrait avec un clic.
+  */
+  useEffect(() => {
+    const band = bandRef.current;
+    const track = trackRef.current;
+    if (!band || !track || reduced) return;
+
+    const ribbon = () =>
+      track
+        .getAnimations()
+        .find((a): a is CSSAnimation => (a as CSSAnimation).animationName === "uv-ribbon");
+
+    let pointerId: number | null = null;
+    let originX = 0;
+    let originTime = 0;
+    let dragging = false;
+    let justDragged = false;
+    let resumeTimer = 0;
+
+    const onDown = (e: PointerEvent) => {
+      justDragged = false;
+      if (e.pointerType === "mouse") return;
+      pointerId = e.pointerId;
+      originX = e.clientX;
+      dragging = false;
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerId !== pointerId) return;
+      const anim = ribbon();
+      if (!anim) return;
+
+      if (!dragging) {
+        if (Math.abs(e.clientX - originX) < DRAG_THRESHOLD_PX) return;
+        // Le glisser commence ICI : on repart de la position actuelle,
+        // sinon le ruban sauterait de la distance parcourue pendant
+        // le seuil.
+        dragging = true;
+        originX = e.clientX;
+        originTime = Number(anim.currentTime ?? 0);
+        window.clearTimeout(resumeTimer);
+        band.classList.add("is-held");
+      }
+
+      const duration = Number(anim.effect?.getComputedTiming().duration) || 1;
+      // L'animation parcourt une demi-bande vers la gauche en `duration` ms.
+      // Tirer vers la droite revient donc a remonter le temps.
+      const t = originTime - ((e.clientX - originX) / (track.offsetWidth / 2)) * duration;
+      anim.currentTime = ((t % duration) + duration) % duration;
+    };
+
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerId !== pointerId) return;
+      pointerId = null;
+      if (!dragging) return;
+      dragging = false;
+      justDragged = true;
+      resumeTimer = window.setTimeout(() => band.classList.remove("is-held"), RESUME_AFTER_DRAG_MS);
+    };
+
+    // Un glisser qui se termine sur une carte ne doit pas ouvrir le lecteur.
+    const onClickCapture = (e: MouseEvent) => {
+      if (!justDragged) return;
+      justDragged = false;
+      e.stopPropagation();
+      e.preventDefault();
+    };
+
+    band.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    band.addEventListener("click", onClickCapture, true);
+    return () => {
+      window.clearTimeout(resumeTimer);
+      band.classList.remove("is-held");
+      band.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      band.removeEventListener("click", onClickCapture, true);
+    };
+  }, [reduced]);
 
   /* La sequence affichee dans UNE moitie du ruban. */
   const sequence: WorkItem[] = [];
@@ -127,39 +242,53 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
     <div className="relative">
       <style>{`
         /*
-          SENS DE DEFILEMENT : LES CARTES VONT VERS LA DROITE.
+          SENS DE DEFILEMENT : LES CARTES VONT DE DROITE A GAUCHE.
 
-          La bande part de -50 % et revient a 0, au lieu de l'inverse.
+          La bande part de 0 et glisse jusqu'a -50 %. (Du 28 aout au
+          21 septembre 2026 elle tournait dans l'autre sens, de -50 % a 0,
+          a la demande de l'agence ; elle est revenue au sens de lecture.)
 
           Cela fonctionne parce que la bande est faite de DEUX MOITIES
           IDENTIQUES : a -50 %, la seconde moitie occupe exactement la
-          place de la premiere. Peu importe donc dans quel sens on
-          parcourt l'intervalle, la boucle reste invisible aux deux
-          extremites.
-
-          Ne pas "corriger" en remettant 0 -> -50 % : ce serait repartir
-          vers la gauche.
+          place de la premiere, et la boucle reste invisible.
         */
-        @keyframes uv-ribbon { from { transform: translate3d(-50%,0,0); } to { transform: translate3d(0,0,0); } }
+        @keyframes uv-ribbon { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
         @keyframes uv-backlight {
           0%   { opacity: .46; height: 200px; }
           100% { opacity: .74; height: 268px; }
         }
         .uv-ribbon-track { animation: uv-ribbon var(--uv-speed) linear infinite; }
-        .uv-ribbon-band:hover .uv-ribbon-track { animation-play-state: paused; }
+        /*
+          L'arret au survol est reserve aux vraies souris. Sur un ecran
+          tactile, le « survol » reste colle apres un tap et figeait le
+          ruban jusqu'au tap suivant, ailleurs sur la page.
+        */
+        @media (hover: hover) {
+          .uv-ribbon-band:hover .uv-ribbon-track { animation-play-state: paused; }
+        }
+        /* Pose par le glisser au doigt, retire peu apres le lacher. */
+        .uv-ribbon-band.is-held .uv-ribbon-track { animation-play-state: paused; }
         .uv-backlight { animation: uv-backlight 11s ease-in-out infinite alternate; }
+        /*
+          Le ruban tourne aussi sous 1024 px, un tiers plus lentement :
+          les cartes y sont plus etroites et l'ecran aussi, a la meme
+          vitesse une carte traverserait l'ecran en moins de cinq
+          secondes — trop vite pour lire un titre.
+
+          Le doigt garde la main (voir le glisser plus haut) : l'espace
+          ne defile plus nativement, « touch-action: pan-y » laisse le
+          defilement vertical de la page au navigateur et nous confie
+          les gestes horizontaux.
+        */
+        .uv-ribbon-band { overflow: hidden; touch-action: pan-y; }
+        @media (max-width: 1023px) {
+          .uv-ribbon-track { animation-duration: calc(var(--uv-speed) * 1.5); }
+        }
         @media (prefers-reduced-motion: reduce) {
           .uv-ribbon-track { animation: none; }
           .uv-backlight { animation: none; }
-        }
-        /*
-          En dessous de 1024 px le ruban devient une bande que l'on fait
-          defiler au doigt. Laisser l'animation tourner en meme temps
-          reviendrait a se battre avec le visiteur : le ruban repartirait
-          tout seul pendant qu'il essaie de le retenir.
-        */
-        @media (max-width: 1023px) {
-          .uv-ribbon-track { animation: none; }
+          /* Sans mouvement, la bande redevient un defilement natif. */
+          .uv-ribbon-band { overflow-x: auto; touch-action: auto; }
         }
         /* La barre de defilement du ruban n'apparait jamais. */
         .uv-ribbon-band { scrollbar-width: none; -ms-overflow-style: none; }
@@ -214,11 +343,23 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
 
       {/* ================= LE RUBAN ================= */}
       <div
-        className="uv-ribbon-band relative z-[4] overflow-x-auto overflow-y-hidden py-8 lg:overflow-hidden"
+        ref={bandRef}
+        className="uv-ribbon-band relative z-[4] py-8"
         style={{ ["--uv-speed" as string]: `${speed}s` }}
       >
+        {/*
+          `pr-4 sm:pr-5` reprend exactement l'ecart entre les cartes.
+
+          Sans lui, la bande mesure 2N cartes + (2N - 1) ecarts : sa
+          moitie tombe au milieu d'un ecart, et chaque tour se terminait
+          par un saut d'une demi-marge. Invisible sous le flou des bords
+          sur grand ecran, ce saut se voyait sur telephone, ou les bords
+          sont nets. Avec la marge finale, la moitie vaut pile N cartes
+          + N ecarts.
+        */}
         <div
-          className="uv-ribbon-track flex w-max gap-4 sm:gap-5"
+          ref={trackRef}
+          className="uv-ribbon-track flex w-max gap-4 pr-4 sm:gap-5 sm:pr-5"
           style={reduced ? { animation: "none" } : undefined}
         >
           {renderHalf(0)}
