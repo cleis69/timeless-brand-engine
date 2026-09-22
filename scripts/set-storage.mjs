@@ -8,7 +8,8 @@
  * CE QU'IL FAIT
  *
  * Il declare, dans le `wrangler.json` regenere a chaque construction,
- * le seau R2 ou la page /casting range les photos. Meme raison d'etre
+ * le seau R2 ou la page /casting range les photos, et ou le calendrier
+ * range les rendez-vous. Meme raison d'etre
  * que set-custom-domains.mjs : une modification manuelle de ce fichier
  * serait ecrasee au deploiement suivant.
  *
@@ -40,8 +41,13 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
 const CONFIG = ".output/server/wrangler.json";
 
-/** Doivent rester identiques a CASTING.binding dans src/config/casting.ts. */
-const BINDING = "CASTING";
+/**
+ * Doit rester identique a STORAGE_BINDING dans src/lib/r2.ts.
+ *
+ * Le seau sert au casting ET aux rendez-vous du calendrier : la
+ * liaison s'appelle STORAGE, le seau garde son nom d'origine.
+ */
+const BINDING = "STORAGE";
 const BUCKET = "ultravision-casting";
 
 if (!existsSync(CONFIG)) {

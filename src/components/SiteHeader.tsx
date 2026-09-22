@@ -348,6 +348,7 @@ export function SiteHeader() {
           <Magnetic strength={0.22} radius={90}>
             <Link
               to="/contact"
+              hash="rendez-vous"
               className="inline-flex h-11 items-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
             >
               Prendre rendez-vous
@@ -449,6 +450,7 @@ export function SiteHeader() {
           ))}
           <Link
             to="/contact"
+            hash="rendez-vous"
             onClick={() => setOpen(false)}
             className="mt-2 inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background"
             style={{

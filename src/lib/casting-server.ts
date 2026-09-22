@@ -46,20 +46,7 @@
 
 import { CASTING, EXPERIENCE, LANGUAGES, PROFILES } from "@/config/casting";
 import { FORM } from "@/config/forms";
-
-/** Le strict necessaire de l'API R2, sans dependre des types Cloudflare. */
-type CastingBucket = {
-  put(
-    key: string,
-    value: ArrayBuffer | string,
-    options?: { httpMetadata?: { contentType?: string } },
-  ): Promise<unknown>;
-  get(key: string): Promise<{
-    body: ReadableStream;
-    httpEtag: string;
-    httpMetadata?: { contentType?: string };
-  } | null>;
-};
+import { findBucket, foreignOrigin, json, type Bucket } from "./r2";
 
 const PREFIX = "candidatures";
 
@@ -108,31 +95,8 @@ export async function handleCasting(request: Request, env: unknown): Promise<Res
   return new Response("Not found", { status: 404 });
 }
 
-/**
- * La liaison R2 peut arriver par trois chemins selon la facon dont
- * nitro appelle ce serveur : le second argument de `fetch`, la requete
- * enrichie par nitro, ou la variable globale que nitro renseigne a
- * chaque requete. On prend le premier qui repond.
- */
-function findBucket(request: Request, env: unknown): CastingBucket | undefined {
-  const candidates = [
-    env,
-    (request as { runtime?: { cloudflare?: { env?: unknown } } }).runtime?.cloudflare?.env,
-    (globalThis as { __env__?: unknown }).__env__,
-  ];
-  for (const c of candidates) {
-    const b = (c as Record<string, unknown> | undefined)?.[CASTING.binding] as
-      CastingBucket | undefined;
-    if (b && typeof b.put === "function") return b;
-  }
-  return undefined;
-}
-
-async function receive(request: Request, bucket: CastingBucket): Promise<Response> {
-  const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin) {
-    return json({ ok: false, error: "Origine refusée." }, 403);
-  }
+async function receive(request: Request, bucket: Bucket): Promise<Response> {
+  if (foreignOrigin(request)) return json({ ok: false, error: "Origine refusée." }, 403);
 
   if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY) {
     return json(
@@ -234,7 +198,7 @@ async function receive(request: Request, bucket: CastingBucket): Promise<Respons
   }
 }
 
-async function servePhoto(bucket: CastingBucket, key: string): Promise<Response> {
+async function servePhoto(bucket: Bucket, key: string): Promise<Response> {
   const obj = await bucket.get(key);
   if (!obj) return new Response("Not found", { status: 404 });
   return new Response(obj.body, {
@@ -302,11 +266,4 @@ function slug(name: string) {
     .slice(0, 40)
     .replace(/-+$/, "");
   return s || "candidate";
-}
-
-function json(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
-  });
 }

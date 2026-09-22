@@ -1,7 +1,13 @@
-import { Link } from "@tanstack/react-router";
 import { MaskReveal, Reveal } from "./Reveal";
-import { Magnetic } from "./Magnetic";
-import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
+import { BookingCalendar } from "./BookingCalendar";
+import {
+  CONTACT,
+  hasPhone,
+  hasWhatsapp,
+  phoneDisplay,
+  telUrl,
+  whatsappUrl,
+} from "@/config/contact";
 
 /**
  * ULTRA VISION — bloc de conversion final.
@@ -23,6 +29,15 @@ import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } fro
  * L'adresse e-mail remplace le bouton WhatsApp tant que celui-ci
  * n'est pas configure : le visiteur garde toujours un second moyen
  * de contact a cote du bouton principal.
+ *
+ * 22 SEPTEMBRE 2026 : LE CALENDRIER EST DANS LE BLOC
+ *
+ * Le bouton « Reserver un appel strategique » menait a la page contact,
+ * ou il fallait encore ecrire un message et attendre une reponse. Le
+ * calendrier est desormais ici, a droite du titre : le visiteur arrive
+ * au moment de decider et reserve sans changer de page. WhatsApp et le
+ * telephone restent a gauche pour ceux qui preferent parler tout de
+ * suite.
  */
 
 export function FinalCTA() {
@@ -74,61 +89,60 @@ export function FinalCTA() {
         />
       </div>
 
-      <div className="shell relative py-28 lg:py-40">
-        <Reveal>
-          <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-accent">
-            Prochaine étape
-          </p>
-        </Reveal>
+      <div className="shell relative grid gap-12 py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-center lg:gap-16 lg:py-32">
+        <div>
+          <Reveal>
+            <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-accent">
+              Prochaine étape
+            </p>
+          </Reveal>
 
-        <h2 className="display mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
-          <MaskReveal delay={80}>Parlons de votre croissance</MaskReveal>
-          <MaskReveal delay={170}>sur les douze prochains mois.</MaskReveal>
-        </h2>
+          <h2 className="display mt-8 max-w-3xl text-4xl sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
+            <MaskReveal delay={80}>Parlons de votre croissance</MaskReveal>
+            <MaskReveal delay={170}>sur les douze prochains mois.</MaskReveal>
+          </h2>
 
-        <Reveal delay={280}>
-          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground">
-            30 minutes, sans engagement. Vous repartez avec une lecture claire de votre
-            positionnement, de votre tunnel d&apos;acquisition et des leviers prioritaires.
-          </p>
+          <Reveal delay={280}>
+            <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground">
+              30 minutes, sans engagement. Choisissez votre créneau : vous repartez avec une lecture
+              claire de votre positionnement, de votre tunnel d&apos;acquisition et des leviers
+              prioritaires.
+            </p>
 
-          <div className="mt-12 flex flex-wrap items-center gap-4">
-            <Magnetic strength={0.3} radius={130}>
-              <Link
-                to="/contact"
-                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-semibold tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
-                style={{ boxShadow: "0 12px 34px rgba(245,245,243,0.14)" }}
-              >
-                Réserver un appel stratégique
-              </Link>
-            </Magnetic>
+            <div className="mt-12 flex flex-wrap items-center gap-4">
+              {hasWhatsapp ? (
+                <a
+                  href={whatsappUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+                >
+                  WhatsApp
+                </a>
+              ) : (
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+                >
+                  Nous écrire
+                </a>
+              )}
 
-            {hasWhatsapp ? (
-              <a
-                href={whatsappUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-              >
-                WhatsApp
-              </a>
-            ) : (
-              <a
-                href={`mailto:${CONTACT.email}`}
-                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-              >
-                Nous écrire
-              </a>
-            )}
+              {hasPhone && (
+                <a
+                  href={telUrl}
+                  className="inline-flex h-12 items-center px-2 text-xs font-medium tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {phoneDisplay()}
+                </a>
+              )}
+            </div>
+          </Reveal>
+        </div>
 
-            {hasPhone && (
-              <a
-                href={telUrl}
-                className="inline-flex h-12 items-center px-2 text-xs font-medium tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {phoneDisplay()}
-              </a>
-            )}
+        <Reveal delay={200}>
+          <div id="rendez-vous" className="scroll-mt-32">
+            <BookingCalendar />
           </div>
         </Reveal>
       </div>

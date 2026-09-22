@@ -4,6 +4,7 @@ import { SITE_DOMAIN } from "./config/site";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { handleCasting } from "./lib/casting-server";
+import { handleBooking } from "./lib/booking-server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -75,11 +76,11 @@ export default {
     if (canonical) return canonical;
 
     try {
-      // Les candidatures casting (/api/casting…) ne passent pas par le
-      // rendu des pages : elles ont besoin du stockage R2, que seul ce
-      // point d'entree recoit.
-      const casting = await handleCasting(request, env);
-      if (casting) return casting;
+      // Les candidatures casting (/api/casting…) et les rendez-vous
+      // (/api/rdv…) ne passent pas par le rendu des pages : ils ont
+      // besoin du stockage R2, que seul ce point d'entree recoit.
+      const api = (await handleCasting(request, env)) ?? (await handleBooking(request, env));
+      if (api) return api;
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

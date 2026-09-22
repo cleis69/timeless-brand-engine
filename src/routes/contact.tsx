@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouterState } from "@tanstack/react-router";
 import { SITE_URL } from "@/config/site";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLenis } from "lenis/react";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { CONTACT, ORG_LD, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import { FORM, formReady, sendForm, type SendResult } from "@/config/forms";
+import { BookingCalendar } from "@/components/BookingCalendar";
 
 /**
  * ULTRA VISION — page Contact.
@@ -157,6 +159,29 @@ function Contact() {
     vaut rien : impossible de savoir s'il est vrai.
   */
   const [budget, setBudget] = useState<string | null>(null);
+
+  /*
+    /contact#rendez-vous — le bouton « Prendre rendez-vous » de tout le
+    site — doit arriver SUR le calendrier.
+
+    Le navigateur ne le fait pas seul ici : le defilement doux (Lenis)
+    et l'animation d'entree de page reprennent la main apres lui, et la
+    page restait en haut. Sur telephone, le calendrier est quatre ecrans
+    plus bas : le visiteur ne l'aurait jamais vu. On attend la fin de
+    l'entree de page, puis on y descend.
+  */
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  const lenis = useLenis();
+  useEffect(() => {
+    if (hash !== "rendez-vous") return;
+    const t = window.setTimeout(() => {
+      const el = document.getElementById("rendez-vous");
+      if (!el) return;
+      if (lenis) lenis.scrollTo(el, { offset: -110 });
+      else el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 450);
+    return () => window.clearTimeout(t);
+  }, [hash, lenis]);
   const [needs, setNeeds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
@@ -416,7 +441,16 @@ function Contact() {
           {/* ---------------- Les voies directes ---------------- */}
           <Reveal delay={100}>
             <div className="space-y-9">
-              <div>
+              {/*
+                Le calendrier passe en tete : c'est la voie la plus
+                courte. Le bouton « Prendre rendez-vous » de la
+                navigation pointe ici (/contact#rendez-vous).
+              */}
+              <div id="rendez-vous" className="scroll-mt-32">
+                <BookingCalendar />
+              </div>
+
+              <div className="border-t border-hairline pt-8">
                 <p className="eyebrow" style={{ color: "#60A5FA" }}>
                   Voie rapide
                 </p>

@@ -422,6 +422,7 @@ function Hero() {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
                 to="/contact"
+                hash="rendez-vous"
                 className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
               >
                 Prendre rendez-vous

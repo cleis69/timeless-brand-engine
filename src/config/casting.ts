@@ -38,9 +38,6 @@ export const CASTING = {
   /** Point d'envoi, servi par src/server.ts. */
   endpoint: "/api/casting",
 
-  /** Nom de la liaison R2 declaree dans wrangler.json (scripts/set-storage.mjs). */
-  binding: "CASTING",
-
   minPhotos: 2,
   maxPhotos: 5,
 
