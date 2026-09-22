@@ -62,6 +62,7 @@ export function SiteFooter() {
               { to: "/tarifs", label: "Tarifs" },
               { to: "/methode", label: "Notre méthode" },
               { to: "/a-propos", label: "À propos" },
+              { to: "/casting", label: "Casting" },
               { to: "/blog", label: "Blog" },
             ]}
           />

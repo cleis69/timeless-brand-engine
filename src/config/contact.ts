@@ -93,10 +93,14 @@ export function phoneDisplay() {
   return CONTACT.phone
 }
 
-/** Lien WhatsApp complet, avec le message pre-rempli. */
-export function whatsappUrl() {
+/**
+ * Lien WhatsApp complet, avec le message pre-rempli.
+ * La page casting passe le sien, pour qu'une candidate ne soit pas
+ * confondue avec un prospect.
+ */
+export function whatsappUrl(message: string = CONTACT.whatsappMessage) {
   if (!hasWhatsapp) return ""
-  return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(CONTACT.whatsappMessage)}`
+  return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`
 }
 
 /** Lien mailto. */

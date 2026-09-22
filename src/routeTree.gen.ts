@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CastingRouteImport } from './routes/casting'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as RealisationsRouteImport } from './routes/realisations'
@@ -33,6 +34,11 @@ const AProposRoute = AProposRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CastingRoute = CastingRouteImport.update({
+  id: '/casting',
+  path: '/casting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/blog': typeof BlogRouteWithChildren
+  '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/blog': typeof BlogRouteWithChildren
+  '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/blog'
+    | '/casting'
     | '/contact'
     | '/methode'
     | '/realisations'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/a-propos'
+    | '/casting'
     | '/contact'
     | '/methode'
     | '/realisations'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/blog'
+    | '/casting'
     | '/contact'
     | '/methode'
     | '/realisations'
@@ -149,6 +161,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   BlogRoute: typeof BlogRouteWithChildren
+  CastingRoute: typeof CastingRoute
   ContactRoute: typeof ContactRoute
   MethodeRoute: typeof MethodeRoute
   RealisationsRoute: typeof RealisationsRoute
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/casting': {
+      id: '/casting'
+      path: '/casting'
+      fullPath: '/casting'
+      preLoaderRoute: typeof CastingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -247,6 +267,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   BlogRoute: BlogRouteWithChildren,
+  CastingRoute: CastingRoute,
   ContactRoute: ContactRoute,
   MethodeRoute: MethodeRoute,
   RealisationsRoute: RealisationsRoute,

@@ -43,6 +43,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ultravisionagency.com/casting</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://ultravisionagency.com/contact</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>yearly</changefreq>
