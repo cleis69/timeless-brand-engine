@@ -61,8 +61,13 @@ import { PLATFORMS } from "./PlatformChip";
  * la-bas l'ajoute ici automatiquement.
  */
 
-/** Position de chaque pastille, et sa part d'amplitude. */
-const SLOTS = [
+type Slot = { top: string; left: string; drift: number };
+
+/**
+ * Position de chaque pastille, et sa part d'amplitude — en pourcentage
+ * du conteneur. Le hero passe ses propres positions, autour des films.
+ */
+const SLOTS: Slot[] = [
   { top: "16%", left: "56%", drift: 0.55 },
   { top: "44%", left: "72%", drift: 1.0 },
   { top: "70%", left: "60%", drift: 1.45 },
@@ -71,7 +76,7 @@ const SLOTS = [
 /** Amplitude de base du balayage, en pixels. */
 const AMPLITUDE = 26;
 
-export function FloatingPlatforms() {
+export function FloatingPlatforms({ slots = SLOTS }: { slots?: Slot[] }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -99,7 +104,7 @@ export function FloatingPlatforms() {
 
       chipRefs.current.forEach((el, i) => {
         if (!el) return;
-        const k = AMPLITUDE * (SLOTS[i]?.drift ?? 1);
+        const k = AMPLITUDE * (slots[i]?.drift ?? 1);
         el.style.transform = `translate3d(${(x * k).toFixed(2)}px, ${(y * k * 0.72).toFixed(2)}px, 0)`;
       });
 
@@ -115,7 +120,7 @@ export function FloatingPlatforms() {
       window.removeEventListener("mousemove", onMove);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [slots]);
 
   return (
     <div
@@ -124,7 +129,7 @@ export function FloatingPlatforms() {
       className="pointer-events-none absolute inset-0 z-[2] hidden select-none lg:block"
     >
       {PLATFORMS.map((p, i) => {
-        const slot = SLOTS[i];
+        const slot = slots[i];
         if (!slot) return null;
 
         return (

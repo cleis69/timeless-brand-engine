@@ -3,15 +3,14 @@ import { SITE_URL } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
-import { IrisBackdrop } from "@/components/IrisBackdrop";
-import { FloatingPlatforms } from "@/components/FloatingPlatforms";
+import { HeroReel } from "@/components/HeroReel";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge";
 import { LOOP, MOTION, EASE_RESPOND } from "@/config/motion";
-import { GrowthBackdrop } from "@/components/GrowthBackdrop";
 import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
 import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { MAD } from "@/config/pricing";
 import { useState } from "react";
 
 /**
@@ -281,8 +280,15 @@ const FAQ = [
     a: "Une vidéo publicitaire est livrée en 7 jours. Une landing page en 5 jours, un site vitrine en 3 semaines. Les premières campagnes sont en ligne dès la validation des vidéos.",
   },
   {
-    q: "Pourquoi vos prix sont-ils affichés en euros ?",
-    a: "Parce que c'est la référence de nos clients, majoritairement francophones et habitués aux tarifs français. Le règlement se fait en dirhams au taux du jour, et l'équivalent indicatif figure sous chaque prix sur la page tarifs.",
+    /*
+      La question demandait « pourquoi vos prix sont-ils affiches en
+      euros ? » alors que la page tarifs les affiche en dirhams depuis la
+      fin aout 2026 — et que la reponse juste au-dessus parle deja de
+      5 400 MAD. Une FAQ qui contredit la page qu'elle cite fait douter
+      de tout le reste. La reponse suit maintenant src/config/pricing.ts.
+    */
+    q: "Vos prix sont-ils en dirhams ou en euros ?",
+    a: `En dirhams, convertis au taux commercial de ${MAD.rate} MAD pour 1 €. Le devis est établi en euros, qui font foi, et le règlement se fait en dirhams.`,
   },
   {
     q: "Comment mesurez-vous les résultats ?",
@@ -324,144 +330,152 @@ function Home() {
 /**
  * Le hero.
  *
- * CE QUI A CHANGE
+ * ============================================================
+ *  REFAIT LE 21 SEPTEMBRE 2026 : ON COMPREND EN TROIS SECONDES
+ * ============================================================
  *
- * Le logo a disparu d'ici. Il est deja dans la navigation, trois cents
- * pixels plus haut. L'afficher deux fois ne renforcait pas la marque,
- * ca signalait juste que la page n'avait rien d'autre a montrer.
+ * L'ANCIEN TITRE, « Nous concevons des marques et des systemes de
+ * croissance qui font la difference », etait elegant et ne disait
+ * rien : ni le metier, ni le pays, ni le resultat. Un visiteur devait
+ * defiler pour apprendre que l'agence fait des videos. Sur telephone,
+ * le premier ecran n'etait que du texte.
  *
- * A sa place, l'iris de la marque en tres grand, coupe par le bord
- * droit, en rotation lente. Le titre redevient le sujet.
+ * Trois questions, trois reponses, dans l'ordre ou l'oeil les lit :
  *
- * La ligne de villes en bas ancre l'agence dans le reel. C'est un
- * detail, mais c'est ce genre de detail qui separe un site d'agence
- * d'un gabarit.
+ *   Qui ?        la ligne du dessus  — agence, Maroc
+ *   Quoi ?       le titre            — des videos publicitaires
+ *   Pour quoi ?  la fin du titre     — qui font vendre (en bleu)
+ *
+ * La preuve suit immediatement, a droite sur ordinateur et sous le
+ * titre sur telephone : nos vrais films, qui passent au centre de
+ * l'iris (voir HeroReel). Puis le prix et le delai de la premiere
+ * video, parce que c'est la premiere question de tout prospect et que
+ * nos concurrents ne l'affichent pas.
+ *
+ * SUR TELEPHONE, L'ORDRE CHANGE : titre, films, puis boutons. Les films
+ * doivent entrer dans le premier ecran ; les boutons, eux, restent a
+ * portee de pouce juste en dessous.
  */
 function Hero() {
   return (
-    <section className="relative flex min-h-[92svh] items-center overflow-hidden">
-      <IrisBackdrop />
+    <section className="relative overflow-hidden">
+      {/* Nappe bleue tres diffuse, a gauche : le texte ne flotte pas dans un vide. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: "radial-gradient(60% 50% at 12% 38%, rgba(29,78,216,.14), transparent 70%)",
+        }}
+      />
 
-      {/*
-        Les trois plateformes, posees par-dessus l'iris et en dessous du
-        texte. Elles derivent avec le curseur, chacune a son amplitude :
-        c'est ce decalage qui cree la profondeur. Masquees en dessous de
-        1024 px, ou elles chevaucheraient le titre.
-      */}
-      <FloatingPlatforms />
+      <div className="shell relative z-[3] grid w-full items-center gap-x-8 gap-y-5 pt-[11rem] pb-14 sm:gap-y-8 lg:min-h-[92svh] lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:grid-rows-[1fr_auto_auto_1fr] lg:pt-40 lg:pb-16">
+        <div className="lg:col-start-1 lg:row-start-2">
+          <Reveal>
+            <p className="text-[0.7rem] font-semibold tracking-[0.22em] uppercase text-accent">
+              Agence vidéo &amp; acquisition — Maroc
+            </p>
+          </Reveal>
 
-      <div className="shell relative z-[3] w-full pt-40 pb-20 lg:pt-44 lg:pb-24">
-        {/*
-          La pastille a quitte le hero : elle vit desormais dans la barre
-          de navigation, centree au-dessus des liens. L'afficher aux deux
-          endroits revenait a repeter la meme phrase a trois cents pixels
-          d'intervalle.
-        */}
-        <Reveal>
-          <p className="text-[0.7rem] font-semibold tracking-[0.22em] uppercase text-accent">
-            Creative growth agency
-          </p>
-        </Reveal>
+          {/*
+            Trois lignes ecrites a la main : « publicitaires » tient seul
+            sur la sienne, et la promesse commerciale — « qui font
+            vendre » — occupe la derniere, en bleu. Un seul segment
+            colore : deux, et plus rien n'est designe.
+          */}
+          <h1 className="display mt-5 text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-[3.8rem] lg:mt-7 lg:text-[4.6rem]">
+            <MaskReveal delay={80}>Des vidéos</MaskReveal>
+            <MaskReveal delay={165}>publicitaires</MaskReveal>
+            <MaskReveal delay={250}>
+              <span
+                style={{
+                  background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                qui font vendre.
+              </span>
+            </MaskReveal>
+          </h1>
 
-        {/*
-          Le titre est decoupe en quatre lignes ecrites a la main, et non
-          laisse au navigateur.
+          <Reveal delay={380}>
+            <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-muted-foreground sm:text-lg lg:mt-8">
+              Nous écrivons, tournons et montons vos publicités,{" "}
+              <span className="text-foreground">
+                puis nous les diffusons sur Meta, TikTok et Google
+              </span>{" "}
+              pour vous amener des clients.
+            </p>
+          </Reveal>
+        </div>
 
-          En laissant faire le retour automatique, on obtient des lignes
-          qui se cassent n'importe ou : « marques » et « croissance » se
-          retrouvaient seuls en fin de ligne. Un mot isole en bout de
-          ligne casse le rythme de lecture et se voit immediatement sur
-          un titre de cette taille.
+        {/* Les films. Sur telephone, ils s'intercalent entre le titre et les boutons. */}
+        <div className="lg:col-start-2 lg:row-span-4 lg:row-start-1">
+          <Reveal delay={200}>
+            <HeroReel />
+          </Reveal>
+        </div>
 
-          Chaque ligne est donc calibree pour tenir dans la largeur, et
-          « systemes de croissance » occupe une ligne entiere en gris :
-          la respiration tombe au bon endroit.
-        */}
-        {/*
-          « systemes de croissance » passe du gris au bleu.
+        <div className="lg:col-start-1 lg:row-start-3">
+          <Reveal delay={460}>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <Link
+                to="/contact"
+                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
+              >
+                Prendre rendez-vous
+              </Link>
+              {hasWhatsapp ? (
+                <a
+                  href={whatsappUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+                >
+                  Parler sur WhatsApp
+                </a>
+              ) : (
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
+                >
+                  Nous écrire
+                </a>
+              )}
+            </div>
+          </Reveal>
 
-          En gris, cette ligne se lisait comme une mise en retrait — le
-          gris dit « moins important ». Or c'est exactement l'inverse :
-          c'est la promesse commerciale du titre. Le bleu la designe
-          comme le mot sur lequel tout repose, et c'est le seul endroit
-          du premier ecran ou la couleur de marque apparait en grand.
-
-          Un seul segment coloré. Deux, et plus rien n'est designe.
-        */}
-        <h1 className="display mt-9 max-w-4xl text-[2.4rem] leading-[1] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.4rem]">
-          <MaskReveal delay={80}>Nous concevons</MaskReveal>
-          <MaskReveal delay={165}>des marques et des</MaskReveal>
-          <MaskReveal delay={250}>
-            <span
-              style={{
-                background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              systèmes de croissance
-            </span>
-          </MaskReveal>
-          <MaskReveal delay={335}>qui font la différence.</MaskReveal>
-        </h1>
-
-        {/*
-          LE SOUS-TITRE
-
-          Il disait « Branding, technologie, intelligence artificielle et
-          acquisition ». Quatre categories abstraites : rien qu'un
-          prospect puisse se representer.
-
-          Il nomme maintenant le metier reel — production audiovisuelle
-          et publicite — puis la maniere de le faire.
-
-          « Pensé, tourné et monté par des humains » avant « décuplé par
-          l'intelligence artificielle », et pas l'inverse. L'ordre est le
-          message : sur un marche ou tout le monde annonce de l'IA, la
-          rarete n'est plus l'IA, c'est la main humaine. Ce qui est mis
-          en avant doit etre ce qui manque ailleurs.
-        */}
-        <Reveal delay={430}>
-          <p className="mt-10 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Production de contenu audiovisuel et publicité.{" "}
-            <span className="text-foreground">
-              Pensé, tourné et monté par des humains
-            </span>
-            , décuplé par l&apos;intelligence artificielle.
-          </p>
-        </Reveal>
-
-        <Reveal delay={460}>
-          <div className="mt-11 flex flex-wrap items-center gap-4">
+          {/*
+            Le prix et le delai de la premiere video, tout de suite.
+            C'est la premiere question de chaque prospect ; y repondre
+            avant qu'il la pose, c'est lui eviter un clic — et le plus
+            souvent un depart.
+          */}
+          <Reveal delay={540}>
             <Link
-              to="/contact"
-              className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-xs font-medium tracking-[0.14em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
+              to="/tarifs"
+              className="group mt-6 inline-flex items-center gap-2.5 text-[0.8rem] text-[#a3a3a0] transition-colors duration-200 hover:text-foreground"
             >
-              Prendre rendez-vous
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" aria-hidden="true" />
+              <span>
+                Première vidéo livrée en 7 jours, diffusion comprise —{" "}
+                <span className="text-foreground">dès 5 400 MAD</span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+              >
+                &rarr;
+              </span>
             </Link>
-            {hasWhatsapp ? (
-              <a
-                href={whatsappUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-              >
-                Parler sur WhatsApp
-              </a>
-            ) : (
-              <a
-                href={`mailto:${CONTACT.email}`}
-                className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
-              >
-                Nous écrire
-              </a>
-            )}
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
+      </div>
 
-        <Reveal delay={560}>
-          <div className="mt-20 flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#797976]">
+      <div className="shell relative z-[3] pb-10">
+        <Reveal delay={600}>
+          <div className="flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#797976]">
             {CONTACT.locations.split("—").map((v) => (
               <span key={v.trim()}>{v.trim()}</span>
             ))}
@@ -546,13 +560,14 @@ function Clients() {
 function Poles() {
   return (
     /*
-      Le decor de croissance est pose ici, derriere les expertises.
-      C'est la section ou vit le pole Acquisition : la courbe et les
-      plateformes y illustrent exactement ce qui est ecrit au-dessus,
-      au lieu de decorer un propos sans rapport.
+      Le decor de croissance (courbe et plateformes) qui etait pose
+      derriere les expertises a ete retire le 21 septembre 2026. Les
+      panneaux portent desormais leurs propres images, et le decor ne se
+      voyait plus que par fragments, dans l'interstice entre deux
+      panneaux. Le panneau Acquisition montre la meme chose, avec une
+      vraie publicite et ses vrais chiffres.
     */
     <section className="rule relative overflow-hidden bg-surface">
-      <GrowthBackdrop />
       <div className="shell relative py-24 lg:py-32">
         <ExpertiseList />
       </div>

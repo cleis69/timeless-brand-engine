@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import type { ComponentType } from "react";
 import { Reveal } from "./Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
+import { AdsVisual, AiVisual, ReelVisual, WebVisual } from "./PoleVisuals";
 
 /**
  * ULTRA VISION — les expertises, en mosaique.
@@ -48,6 +50,24 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * L'asymetrie disparait : une colonne, cinq panneaux de meme hauteur.
  * Une mosaique reduite a 380 px de large ne raconte plus rien, elle
  * fabrique juste des cases minuscules.
+ *
+ * ============================================================
+ *  21 SEPTEMBRE 2026 : CHAQUE PANNEAU A SON IMAGE
+ * ============================================================
+ *
+ * Les quatre panneaux n'etaient que du texte sur bleu nuit, au milieu
+ * de six ecrans sans une photo. Chacun montre maintenant ce que le pole
+ * produit (voir PoleVisuals.tsx) : nos films, nos sites, un agent IA au
+ * travail, une de nos publicites avec ses chiffres.
+ *
+ * L'aplat bleu du survol disparait en consequence : il aurait recouvert
+ * les images. Le survol eclaire desormais l'image et allume le contour
+ * du panneau en bleu — le bleu designe toujours celui qu'on regarde,
+ * sans rien cacher.
+ *
+ * Les prestations de chaque pole restent affichees en permanence : les
+ * reveler au survol cachait l'information a quiconque ne passait pas
+ * la souris dessus.
  */
 
 /*
@@ -70,7 +90,19 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * On passe donc de cinq poles a quatre. Quatre se retiennent ; cinq se
  * subissent.
  */
-const POLES = [
+const POLES: {
+  n: string;
+  title: string;
+  text: string;
+  lines: string[];
+  area: string;
+  Visual: ComponentType;
+  /**
+   * Vrai : texte a gauche, image a droite, sur grand ecran. Faux : image
+   * en haut, texte en bas. Sur telephone, toujours image en haut.
+   */
+  split: boolean;
+}[] = [
   {
     n: "01",
     title: "Marque & Contenu",
@@ -84,6 +116,8 @@ const POLES = [
     ],
     /* Grand panneau, deux rangees. C'est la porte d'entree du site. */
     area: "lg:col-span-3 lg:row-span-2",
+    Visual: ReelVisual,
+    split: false,
   },
   {
     n: "02",
@@ -91,6 +125,8 @@ const POLES = [
     text: "Des interfaces rapides, sobres et pensées pour la conversion.",
     lines: ["Sites web", "Applications", "Landing pages"],
     area: "lg:col-span-3",
+    Visual: WebVisual,
+    split: true,
   },
   {
     n: "03",
@@ -98,6 +134,8 @@ const POLES = [
     text: "Vos processus commerciaux exécutés sans friction, 24 h sur 24.",
     lines: ["Agents IA", "Automatisation", "CRM"],
     area: "lg:col-span-3",
+    Visual: AiVisual,
+    split: true,
   },
   {
     /*
@@ -110,6 +148,8 @@ const POLES = [
     text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
     lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
     area: "lg:col-span-6",
+    Visual: AdsVisual,
+    split: true,
   },
 ];
 
@@ -129,7 +169,7 @@ export function ExpertiseList() {
         largeurs differentes qui retombent quand meme juste. Avec cinq
         colonnes, toute asymetrie laisse un trou en bout de rangee.
       */}
-      <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 lg:grid-cols-6 lg:grid-rows-[repeat(3,minmax(168px,auto))]">
+      <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 lg:grid-cols-6 lg:grid-rows-[repeat(2,minmax(300px,auto))_minmax(390px,auto)]">
         {/*
           `h-full` sur l'enveloppe Reveal est indispensable : c'est ELLE
           qui est la case de la grille, pas le panneau qu'elle contient.
@@ -148,58 +188,51 @@ export function ExpertiseList() {
             <article
               tabIndex={0}
               aria-label={`${p.title} — ${p.text}`}
-              className="group relative flex h-full min-h-[176px] flex-col justify-end overflow-hidden rounded-2xl p-6 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className={`group relative flex h-full min-h-[440px] flex-col justify-end overflow-hidden rounded-2xl p-6 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface sm:min-h-[400px] ${p.split ? "lg:min-h-0" : ""}`}
               style={{
                 // Bleu nuit tres sombre. Presque noir, jamais neutre :
                 // c'est ce qui evite l'effet de trou dans la page.
                 backgroundColor: "#0B1020",
                 border: "1px solid #16203a",
-                transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, transform ${MOTION.respond}ms ${EASE_RESPOND}`,
+                transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}, box-shadow ${MOTION.respond}ms ${EASE_RESPOND}`,
               }}
             >
-              {/*
-                L'aplat bleu du survol est une COUCHE separee dont on
-                anime l'opacite, et non la couleur de fond du panneau.
+              <p.Visual />
 
-                Animer `background-color` d'un bleu nuit vers un bleu
-                franc fait passer la transition par des teintes grisees
-                et sales au milieu du parcours. Une couche superposee
-                evite entierement ce passage.
+              {/*
+                Le contour bleu du survol, en couche separee : animer la
+                bordure du panneau lui-meme ferait bouger la mise en page
+                d'un pixel. Ici rien ne bouge, seule l'opacite change.
               */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
-                style={{ background: "linear-gradient(150deg, #2563EB 0%, #1D4ED8 100%)" }}
+                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                style={{
+                  boxShadow:
+                    "inset 0 0 0 1px rgba(96,165,250,.55), inset 0 -120px 120px -60px rgba(37,99,235,.28)",
+                }}
               />
 
-              <span className="relative z-[2] text-[0.66rem] tracking-[0.16em] tabular-nums text-accent transition-colors duration-200 group-hover:text-[#BFDBFE] group-focus-visible:text-[#BFDBFE]">
-                {p.n}
-              </span>
+              <div className={`relative z-[2] ${p.split ? "lg:max-w-[46%]" : ""}`}>
+                <span className="text-[0.66rem] tracking-[0.16em] tabular-nums text-accent">
+                  {p.n}
+                </span>
 
-              <h3 className="display relative z-[2] mt-auto pt-6 text-2xl sm:text-[1.7rem]">
-                {p.title}
-              </h3>
+                <h3 className="display mt-3 text-2xl sm:text-[1.7rem]">{p.title}</h3>
 
-              <p className="relative z-[2] mt-2.5 max-w-sm text-sm leading-relaxed text-[#8792ad] transition-colors duration-200 group-hover:text-[#DBE7FF] group-focus-visible:text-[#DBE7FF]">
-                {p.text}
-              </p>
+                <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-[#8792ad] transition-colors duration-200 group-hover:text-[#c3cde3]">
+                  {p.text}
+                </p>
 
-              {/*
-                Les prestations n'apparaissent qu'au survol sur grand
-                ecran, et restent visibles en permanence sur telephone —
-                ou il n'y a pas de survol pour les reveler.
-              */}
-              <ul className="relative z-[2] mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#707d9d] opacity-100 transition-opacity duration-200 group-hover:text-[#C7D9FF] lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100">
-                {p.lines.map((l) => (
-                  <li key={l} className="flex items-center gap-1.5">
-                    <span
-                      className="h-px w-2.5 bg-current opacity-50"
-                      aria-hidden="true"
-                    />
-                    {l}
-                  </li>
-                ))}
-              </ul>
+                <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#707d9d] transition-colors duration-200 group-hover:text-[#aebbdb]">
+                  {p.lines.map((l) => (
+                    <li key={l} className="flex items-center gap-1.5">
+                      <span className="h-px w-2.5 bg-current opacity-50" aria-hidden="true" />
+                      {l}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </article>
           </Reveal>
         ))}
