@@ -166,6 +166,7 @@ const CLIENTS: { name: string; logo: string; w: number; h: number }[] = [
   { name: "Centralym Immobilier", logo: "/brand/clients/centralym.png", w: 262, h: 46 },
   { name: "Gatsby", logo: "/brand/clients/gatsby.png", w: 216, h: 56 },
   { name: "Koozina Garden", logo: "/brand/clients/koozina-garden.svg", w: 104, h: 104 },
+  { name: "All In Kech", logo: "/brand/clients/all-in-kech.png", w: 104, h: 104 },
 ];
 
 /**
@@ -707,7 +708,9 @@ function Faq() {
                   className={`shrink-0 text-lg group-hover:text-accent-hover ${
                     open === i ? "rotate-45 text-accent" : "text-muted-foreground"
                   }`}
-                  style={{ transition: `transform ${MOTION.faq}ms ${EASE_RESPOND}, color ${MOTION.respond}ms ${EASE_RESPOND}` }}
+                  style={{
+                    transition: `transform ${MOTION.faq}ms ${EASE_RESPOND}, color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                  }}
                 >
                   +
                 </span>

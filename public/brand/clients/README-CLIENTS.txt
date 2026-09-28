@@ -28,6 +28,8 @@ petit, parce que l'oeil compare des aires.
   centralym.png         262 x 46    passe en blanc
   gatsby.png            216 x 56    passe en blanc
   koozina-garden.svg    104 x 104   couleurs conservees
+  all-in-kech.png       104 x 104   passe en blanc (l'encre gardee, le disque
+                                    blanc rendu transparent)
 
 Les PNG sont exportes en x3 pour les ecrans a haute densite.
 

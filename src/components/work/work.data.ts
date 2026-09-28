@@ -217,6 +217,35 @@ export const WORK_ITEMS: WorkItem[] = [
     ],
   },
   {
+    /*
+      Ajoutee le 28 septembre 2026. Placee ICI et non a la suite de
+      « Agent immobilier » ou de « Residence neuve » : deux films du meme
+      secteur ne se suivent jamais dans la grille.
+    */
+    slug: "all-in-kech",
+    title: "All In Kech",
+    category: "PUBLICITE • IMMOBILIER",
+    description:
+      "Visite d'un triplex à Marrakech pour l'agence All In Kech, présentée face caméra. Format vertical, tournée sur place.",
+    year: "2026",
+    sources: {
+      mp4: "/work/all-in-kech/all-in-kech.mp4",
+      mobile: "/work/all-in-kech/all-in-kech-mobile.mp4",
+    },
+    poster: "/work/all-in-kech/poster.jpg",
+    aspect: "9/16",
+    stats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "COUT PAR LEAD" },
+      { value: "STAT_03", label: "VISITES" },
+    ],
+    demoStats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "COUT PAR LEAD" },
+      { value: "STAT_03", label: "VISITES" },
+    ],
+  },
+  {
     slug: "barber-shop",
     title: "Barber shop",
     category: "PUBLICITE • META & TIKTOK",
