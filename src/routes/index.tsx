@@ -369,7 +369,7 @@ function Hero() {
         }}
       />
 
-      <div className="shell relative z-[3] grid w-full items-center gap-x-8 gap-y-5 pt-[11rem] pb-14 sm:gap-y-8 lg:min-h-[92svh] lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:grid-rows-[1fr_auto_auto_1fr] lg:pt-40 lg:pb-16">
+      <div className="shell relative z-[3] grid w-full items-center gap-x-8 gap-y-5 pt-[11rem] pb-14 sm:gap-y-8 lg:min-h-[92svh] lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:grid-rows-[1fr_auto_auto_1fr] xl:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:pt-40 lg:pb-16">
         <div className="lg:col-start-1 lg:row-start-2">
           <Reveal>
             <p className="text-[0.7rem] font-semibold tracking-[0.22em] uppercase text-accent">
@@ -383,7 +383,13 @@ function Hero() {
             vendre » — occupe la derniere, en bleu. Un seul segment
             colore : deux, et plus rien n'est designe.
           */}
-          <h1 className="display mt-5 text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-[3.8rem] lg:mt-7 lg:text-[4.6rem]">
+          {/*
+            La taille suit la largeur de l'ecran entre 1024 et 1600 px.
+            A taille fixe, « publicitaires » demandait 391 px dans une
+            colonne de 336 sur un portable de 1024 : le mot etait coupe
+            net par le cadre de l'animation du titre.
+          */}
+          <h1 className="display mt-5 text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-[3.8rem] lg:mt-7 lg:text-[clamp(2.6rem,4.2vw,4.6rem)]">
             <MaskReveal delay={80}>Des vidéos</MaskReveal>
             <MaskReveal delay={165}>publicitaires</MaskReveal>
             <MaskReveal delay={250}>
