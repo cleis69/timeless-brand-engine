@@ -3,6 +3,10 @@ import type { ComponentType } from "react";
 import { Reveal } from "./Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import { AdsVisual, AiVisual, ReelVisual, WebVisual } from "./PoleVisuals";
+import { servicePath, type ServiceSlug } from "@/content/services";
+
+/** Un mot-cle du panneau, et la page service qu'il ouvre. */
+const to = (label: string, slug: ServiceSlug) => ({ label, to: servicePath(slug) });
 
 /**
  * ULTRA VISION — les expertises, en mosaique.
@@ -94,7 +98,11 @@ const POLES: {
   n: string;
   title: string;
   text: string;
-  lines: string[];
+  /*
+    Chaque mot-cle ouvre la page du service correspondant. Ils etaient
+    du texte simple : l'accueil ne menait a aucun service en particulier.
+  */
+  lines: { label: string; to: string }[];
   area: string;
   Visual: ComponentType;
   /**
@@ -108,11 +116,11 @@ const POLES: {
     title: "Marque & Contenu",
     text: "Une identité lisible en trois secondes, et tous les contenus qui la font exister — photo, vidéo, motion, publicité.",
     lines: [
-      "Identité visuelle",
-      "Positionnement",
-      "Charte graphique",
-      "Photo & vidéo",
-      "Motion design",
+      to("Identité visuelle", "branding"),
+      to("Positionnement", "branding"),
+      to("Charte graphique", "branding"),
+      to("Photo & vidéo", "production-video-photo"),
+      to("Motion design", "production-video-photo"),
     ],
     /* Grand panneau, deux rangees. C'est la porte d'entree du site. */
     area: "lg:col-span-3 lg:row-span-2",
@@ -123,7 +131,11 @@ const POLES: {
     n: "02",
     title: "Web & Applications",
     text: "Des interfaces rapides, sobres et pensées pour la conversion.",
-    lines: ["Sites web", "Applications", "Landing pages"],
+    lines: [
+      to("Sites web", "creation-site-web"),
+      to("Applications", "creation-site-web"),
+      to("Landing pages", "creation-site-web"),
+    ],
     area: "lg:col-span-3",
     Visual: WebVisual,
     split: true,
@@ -132,7 +144,11 @@ const POLES: {
     n: "03",
     title: "IA & Automatisation",
     text: "Vos processus commerciaux exécutés sans friction, 24 h sur 24.",
-    lines: ["Agents IA", "Automatisation", "CRM"],
+    lines: [
+      to("Agents IA", "crm-ia-automatisation"),
+      to("Automatisation", "crm-ia-automatisation"),
+      to("CRM", "crm-ia-automatisation"),
+    ],
     area: "lg:col-span-3",
     Visual: AiVisual,
     split: true,
@@ -146,7 +162,12 @@ const POLES: {
     n: "04",
     title: "Acquisition",
     text: "Un pilotage au coût par rendez-vous qualifié, pas au clic.",
-    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
+    lines: [
+      to("Meta Ads", "meta-ads"),
+      to("Google Ads", "google-ads"),
+      to("TikTok Ads", "tiktok-ads"),
+      to("Génération de leads", "generation-de-leads"),
+    ],
     area: "lg:col-span-6",
     Visual: AdsVisual,
     split: true,
@@ -226,9 +247,14 @@ export function ExpertiseList() {
 
                 <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.72rem] text-[#707d9d] transition-colors duration-200 group-hover:text-[#aebbdb]">
                   {p.lines.map((l) => (
-                    <li key={l} className="flex items-center gap-1.5">
-                      <span className="h-px w-2.5 bg-current opacity-50" aria-hidden="true" />
-                      {l}
+                    <li key={l.label}>
+                      <Link
+                        to={l.to}
+                        className="flex items-center gap-1.5 transition-colors duration-200 hover:text-white"
+                      >
+                        <span className="h-px w-2.5 bg-current opacity-50" aria-hidden="true" />
+                        {l.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>

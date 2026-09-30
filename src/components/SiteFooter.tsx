@@ -1,27 +1,37 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
+import { BRAND, SOCIAL } from "@/config/brand";
+import { SERVICES, servicePath } from "@/content/services";
+import { SECTORS, sectorPath } from "@/content/sectors";
 
 /**
- * ULTRA VISION — pied de page.
+ * UltraVision Agency — pied de page.
  *
  * ============================================================
- *  CE FICHIER REMPLACE src/components/SiteFooter.tsx
+ *  LA PHRASE QUI DIT QUI NOUS SOMMES, SUR CHAQUE PAGE
  * ============================================================
  *
- * CE QUI CHANGE
+ * Le paragraphe sous le logo disait « Agence creative, technologique et
+ * media » : une description qu'aucun moteur ne pouvait rattacher a une
+ * categorie, et sans aucune ville. C'est desormais la definition de
+ * src/config/brand.ts — nom complet, categorie, ville, pays. Elle est
+ * lue sur toutes les pages du site, et c'est ce qui permet a Google et
+ * aux assistants IA de relier toutes ces pages a la meme entreprise.
  *
- * 1. studio@ultravision.fr, qui n'existe pas, devient
- *    contact@ultravisionagency.com.
- * 2. Le faux numero +33 6 00 00 00 00 et le faux lien WhatsApp
- *    disparaissent tant qu'un vrai numero n'est pas renseigne dans
- *    src/config/contact.ts.
- * 3. Les villes affichees viennent aussi de ce fichier de
- *    configuration. « Paris — Dubaï — Casablanca » etait ecrit en
- *    dur : annoncer trois implantations quand on n'en a qu'une se
- *    verifie en trois clics et coute cher en credibilite.
+ * LES EXPERTISES SONT DES LIENS
  *
- * Le reste du pied de page est inchange.
+ * La colonne listait six expertises en texte simple : aucune ne menait
+ * nulle part. Ce sont maintenant les huit services, chacun vers sa page,
+ * puis les secteurs. Toutes les pages importantes sont ainsi a un clic
+ * de n'importe quelle autre.
+ *
+ * LES PROFILS OFFICIELS
+ *
+ * Instagram et TikTok sont lies ici, avec leur identifiant visible, et
+ * declares dans `sameAs` (src/config/brand.ts). Le site pointe vers les
+ * comptes ; quand leur bio pointe vers le site, le lien est confirme
+ * dans les deux sens.
  */
 
 export function SiteFooter() {
@@ -32,8 +42,8 @@ export function SiteFooter() {
           <div className="min-w-0">
             <Logo className="h-8" />
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Agence créative, technologique et média. Nous construisons des marques et des systèmes
-              d&apos;acquisition pour les entreprises ambitieuses.
+              {BRAND.name} est une {BRAND.category} basée à {BRAND.city}, au {BRAND.country} :
+              marque, contenu, publicité et outils digitaux, réunis dans une seule équipe.
             </p>
             {hasWhatsapp ? (
               <a
@@ -57,33 +67,28 @@ export function SiteFooter() {
           <FooterCol
             title="Agence"
             links={[
+              { to: "/agence-marketing-digital-marrakech", label: `L'agence à ${BRAND.city}` },
               { to: "/services", label: "Services" },
               { to: "/realisations", label: "Réalisations" },
               { to: "/tarifs", label: "Tarifs" },
-              { to: "/methode", label: "Notre méthode" },
+              { to: "/methode", label: "Stratégie & méthode" },
               { to: "/a-propos", label: "À propos" },
-              { to: "/casting", label: "Casting" },
               { to: "/blog", label: "Blog" },
+              { to: "/casting", label: "Casting" },
             ]}
           />
 
           <div>
-            <p className="eyebrow">Expertises</p>
-            {/*
-              Aligne sur les quatre poles de la page d'accueil, ou
-              Branding et Creation de contenu sont desormais reunis sous
-              « Marque & Contenu ». Un pied de page qui annonce un
-              decoupage different de celui de la page donne le sentiment
-              de deux sites cousus ensemble.
-            */}
-            <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
-              <li>Marque &amp; identité</li>
-              <li>Photo, vidéo &amp; motion</li>
-              <li>Sites &amp; applications</li>
-              <li>IA &amp; automatisation</li>
-              <li>Meta, Google &amp; TikTok Ads</li>
-              <li>CRM &amp; lead generation</li>
-            </ul>
+            <FooterCol
+              title="Services"
+              links={SERVICES.map((s) => ({ to: servicePath(s.slug), label: s.name }))}
+            />
+            <div className="mt-10">
+              <FooterCol
+                title="Secteurs"
+                links={SECTORS.map((s) => ({ to: sectorPath(s.slug), label: s.name }))}
+              />
+            </div>
           </div>
 
           <div>
@@ -102,6 +107,18 @@ export function SiteFooter() {
                 </li>
               )}
               <li>{CONTACT.locations}</li>
+              {SOCIAL.map((s) => (
+                <li key={s.network}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className="link-underline"
+                  >
+                    {s.network} {s.handle}
+                  </a>
+                </li>
+              ))}
               <li>
                 <Link to="/contact" className="link-underline text-foreground">
                   Demander un devis
@@ -112,8 +129,11 @@ export function SiteFooter() {
         </div>
 
         <div className="rule mt-16 flex flex-col gap-4 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} ULTRA VISION. Tous droits réservés.</p>
-          <p className="tracking-[0.18em] uppercase">Creative growth agency</p>
+          <p>
+            © {new Date().getFullYear()} {BRAND.name} — {BRAND.city}, {BRAND.country}. Tous droits
+            réservés.
+          </p>
+          <p className="tracking-[0.18em] uppercase">{BRAND.category}</p>
         </div>
       </div>
     </footer>

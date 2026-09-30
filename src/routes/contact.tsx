@@ -1,10 +1,11 @@
 import { createFileRoute, useRouterState } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { BRAND, withBrand } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
 import { useEffect, useState } from "react";
 import { useLenis } from "lenis/react";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
-import { CONTACT, ORG_LD, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
+import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import { FORM, formReady, sendForm, type SendResult } from "@/config/forms";
 import { BookingCalendar } from "@/components/BookingCalendar";
@@ -46,75 +47,21 @@ import { BookingCalendar } from "@/components/BookingCalendar";
  * seule chose qui reste a brancher sur cette page.
  */
 
-/*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
-
 export const Route = createFileRoute("/contact")({
   component: Contact,
-  head: () => ({
-    meta: [
-      { title: "Contact — Parlons de votre projet | ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Écrivez-nous sur WhatsApp, par email ou via le formulaire. Réponse sous 24 heures ouvrées.",
-      },
-      { property: "og:title", content: "Contact — ULTRA VISION" },
-      {
-        property: "og:description",
-        content: "WhatsApp, email ou formulaire : réponse sous 24 heures ouvrées.",
-      },
-      { property: "og:url", content: `${URL}/contact` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/contact` }],
-    scripts: [
-      {
-        /*
-          ContactPage + Organization. C'est ce balisage qui permet a
-          Google d'afficher directement l'adresse e-mail ou le lien
-          WhatsApp dans ses resultats, sans que le visiteur ait besoin
-          d'ouvrir la page. Sur une page contact, chaque clic evite est
-          un contact gagne.
-        */
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ContactPage",
-          url: `${URL}/contact`,
-          inLanguage: "fr-FR",
-          mainEntity: {
-            ...ORG_LD(URL),
-            contactPoint: [
-              {
-                "@type": "ContactPoint",
-                contactType: "commercial",
-                email: CONTACT.email,
-                ...(hasWhatsapp ? { url: whatsappUrl() } : {}),
-                availableLanguage: ["fr", "ar", "en"],
-              },
-            ],
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
-            { "@type": "ListItem", position: 2, name: "Contact", item: `${URL}/contact` },
-          ],
-        }),
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/contact",
+      title: withBrand("Contact : rendez-vous, WhatsApp, e-mail"),
+      description: `Contactez ${BRAND.name} à Marrakech : réservez un appel de 30 minutes, écrivez-nous sur WhatsApp ou par e-mail. Réponse sous 24 heures ouvrées.`,
+      ogDescription: "WhatsApp, e-mail ou rendez-vous en ligne : réponse sous 24 heures ouvrées.",
+      pageType: "ContactPage",
+      /* Les moyens de contact sont decrits une fois, sur l'entite
+         (contactPoint, dans src/lib/seo.ts). La page y renvoie. */
+      about: orgRef,
+      mainEntity: orgRef,
+      breadcrumbs: [{ name: "Contact", path: "/contact" }],
+    }),
 });
 
 /*
@@ -139,13 +86,18 @@ const BUDGETS = [
   "Je ne sais pas encore",
 ];
 
+/*
+  Les besoins reprennent les services du site (src/content/services.ts),
+  regroupes pour tenir en six pastilles : ce que coche le visiteur doit
+  porter le meme nom que la page qu'il vient de lire.
+*/
 const NEEDS = [
-  "Vidéos publicitaires",
-  "Diffusion & media buying",
-  "Site ou landing page",
-  "Identité de marque",
-  "Photo",
-  "CRM & automatisation",
+  "Vidéo & photo",
+  "Meta, Google ou TikTok Ads",
+  "Génération de leads",
+  "Site web ou landing page",
+  "Branding & identité",
+  "CRM, IA & automatisation",
 ];
 
 function Contact() {
@@ -243,6 +195,7 @@ function Contact() {
         title="Dites-nous ce que vous voulez vendre."
         accent="ce que vous voulez vendre"
         intro="Quelques lignes suffisent. Nous revenons vers vous sous 24 heures ouvrées avec un créneau et un premier angle de travail."
+        breadcrumbs={[{ name: "Contact", path: "/contact" }]}
       />
 
       <section className="rule bg-background">
@@ -451,9 +404,9 @@ function Contact() {
               </div>
 
               <div className="border-t border-hairline pt-8">
-                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
                   Voie rapide
-                </p>
+                </h2>
                 <div className="mt-5 flex flex-col gap-3">
                   {hasWhatsapp && (
                     <a
@@ -496,9 +449,9 @@ function Contact() {
               </div>
 
               <div className="border-t border-hairline pt-8">
-                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
                   Email
-                </p>
+                </h2>
                 <a
                   href={`mailto:${CONTACT.email}`}
                   className="link-underline mt-4 inline-block text-sm"
@@ -508,20 +461,27 @@ function Contact() {
               </div>
 
               <div className="border-t border-hairline pt-8">
-                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
                   Où nous sommes
-                </p>
+                </h2>
+                {/*
+                  « Nous travaillons principalement pour des entreprises
+                  francaises » contredisait la FAQ, la page A propos et les
+                  tarifs, qui parlent tous de dirigeants francophones
+                  installes au Maroc. Une seule version, desormais.
+                */}
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  {CONTACT.locations}
+                  {CONTACT.base}
                   <br />
-                  Nous travaillons principalement pour des entreprises françaises.
+                  Nous travaillons principalement avec des dirigeants et des entreprises
+                  francophones installés au Maroc.
                 </p>
               </div>
 
               <div className="border-t border-hairline pt-8">
-                <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
                   Délai de réponse
-                </p>
+                </h2>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   24 heures ouvrées. Sur WhatsApp, généralement dans la journée.
                 </p>

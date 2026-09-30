@@ -48,6 +48,9 @@
  * `stats`, ou des marqueurs STAT_01 en attendant de les avoir.
  */
 
+import type { ServiceSlug } from "@/content/services";
+import type { SectorSlug } from "@/content/sectors";
+
 /* ==========================================================================
  *  Mode demonstration — desactive.
  *
@@ -95,6 +98,43 @@ export type WorkItem = {
   stats: [Stat, Stat, Stat];
   /** Chiffres inventes, affiches uniquement quand DEMO_STATS vaut true. */
   demoStats: [Stat, Stat, Stat];
+  /**
+   * Date de mise en ligne de la video SUR CE SITE (AAAA-MM-JJ).
+   * C'est la date de son ajout au depot, pas une date estimee : les
+   * donnees structurees la declarent comme `uploadDate`.
+   */
+  published: string;
+  /** Duree de la video en secondes, mesuree sur le fichier. */
+  durationSec: number;
+  /**
+   * ETUDE DE CAS — facultative.
+   *
+   * Renseignee, elle cree une page /realisations/<slug>. Chaque champ
+   * facultatif n'apparait que s'il est rempli : objectif, probleme,
+   * strategie et outils ne sont JAMAIS ecrits de memoire ou supposes.
+   * A completer avec le client, ou a laisser vide.
+   */
+  caseStudy?: CaseStudy;
+};
+
+export type CaseStudy = {
+  client: string;
+  sector: SectorSlug;
+  location?: string;
+  services: ServiceSlug[];
+  platforms?: string[];
+  /** Titre de la page. */
+  headline: string;
+  /** Titre pour Google, sans le nom de marque. */
+  seoTitle: string;
+  seoDescription: string;
+  /** Resume factuel, qui se comprend seul. */
+  summary: string;
+  objective?: string;
+  challenge?: string;
+  strategy?: string;
+  execution?: string;
+  tools?: string[];
 };
 
 /** Renvoie les chiffres a afficher selon le mode en cours. */
@@ -156,6 +196,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/salon-coiffure/salon-coiffure-mobile.mp4",
     },
     poster: "/work/salon-coiffure/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 22,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -180,6 +222,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/agent-immobilier/agent-immobilier-mobile.mp4",
     },
     poster: "/work/agent-immobilier/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 41,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -204,6 +248,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/cosmetique/cosmetique-mobile.mp4",
     },
     poster: "/work/cosmetique/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 35,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -233,6 +279,20 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/all-in-kech/all-in-kech-mobile.mp4",
     },
     poster: "/work/all-in-kech/poster.jpg",
+    published: "2026-09-28",
+    durationSec: 23,
+    caseStudy: {
+      client: "All In Kech",
+      sector: "immobilier",
+      location: "Marrakech",
+      services: ["production-video-photo"],
+      headline: "All In Kech : la visite d'un triplex à Marrakech, filmée en vertical.",
+      seoTitle: "All In Kech : vidéo de visite immobilière à Marrakech",
+      seoDescription:
+        "Étude de cas : pour l'agence immobilière All In Kech, UltraVision Agency a tourné à Marrakech la visite d'un triplex, présentée face caméra, en format vertical.",
+      summary:
+        "Pour l'agence immobilière All In Kech, UltraVision Agency a tourné sur place, à Marrakech, la visite d'un triplex présentée face caméra, en format vertical pour les réseaux sociaux et la publicité.",
+    },
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -257,6 +317,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/barber-shop/barber-shop-mobile.mp4",
     },
     poster: "/work/barber-shop/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 33,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -281,6 +343,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/promoteur-immobilier/promoteur-immobilier-mobile.mp4",
     },
     poster: "/work/promoteur-immobilier/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 33,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -305,6 +369,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/institut-beaute/institut-beaute-mobile.mp4",
     },
     poster: "/work/institut-beaute/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 24,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -329,6 +395,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/loisirs/loisirs-mobile.mp4",
     },
     poster: "/work/loisirs/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 33,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -353,6 +421,8 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/residence-neuve/residence-neuve-mobile.mp4",
     },
     poster: "/work/residence-neuve/poster.jpg",
+    published: "2026-08-28",
+    durationSec: 26,
     aspect: "9/16",
     stats: [
       { value: "STAT_01", label: "VUES" },
@@ -377,6 +447,19 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/scultbody/scultbody-mobile.mp4",
     },
     poster: "/work/scultbody/poster.jpg",
+    published: "2026-08-12",
+    durationSec: 33,
+    caseStudy: {
+      client: "Scultbody",
+      sector: "beaute-bien-etre",
+      services: ["production-video-photo", "generation-de-leads"],
+      headline: "Scultbody : une création publicitaire au service d'un tunnel d'acquisition.",
+      seoTitle: "Scultbody : publicité vidéo orientée conversion",
+      seoDescription:
+        "Étude de cas Scultbody : une création publicitaire orientée conversion, produite par UltraVision Agency. 890 000 vues, 2,10 € par lead, +52 % de conversions.",
+      summary:
+        "Pour Scultbody, UltraVision Agency a produit une création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet. Résultats relevés dans les gestionnaires de publicités : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions.",
+    },
     aspect: "9/16",
     stats: [
       { value: "890K", label: "VUES" },
@@ -401,6 +484,20 @@ export const WORK_ITEMS: WorkItem[] = [
       mobile: "/work/africa-beauty/africa-beauty-mobile.mp4",
     },
     poster: "/work/africa-beauty/poster.jpg",
+    published: "2026-08-12",
+    durationSec: 26,
+    caseStudy: {
+      client: "Africa Beauty",
+      sector: "beaute-bien-etre",
+      services: ["production-video-photo", "meta-ads", "tiktok-ads"],
+      platforms: ["Meta (Facebook, Instagram)", "TikTok"],
+      headline: "Africa Beauty : une campagne vidéo à l'esthétique années 80.",
+      seoTitle: "Africa Beauty : campagne vidéo Meta et TikTok",
+      seoDescription:
+        "Étude de cas Africa Beauty : une campagne vidéo verticale tournée et montée par UltraVision Agency. 1,4 million de vues, 4,2 % de taux de clic, +38 % de ventes.",
+      summary:
+        "Pour Africa Beauty, UltraVision Agency a tourné et monté en interne une campagne publicitaire verticale à l'esthétique années 80, pensée pour le fil d'Instagram, de Facebook et de TikTok. Résultats relevés dans les gestionnaires de publicités : 1,4 million de vues, 4,2 % de taux de clic et +38 % de ventes.",
+    },
     aspect: "9/16",
     stats: [
       { value: "1.4M", label: "VUES" },
@@ -431,6 +528,17 @@ export const WORK_ITEMS: WorkItem[] = [
  */
 export const FEATURED_WORK = WORK_ITEMS;
 
+/** Retrouve une realisation par son identifiant. */
+export const findWork = (slug: string | undefined) => WORK_ITEMS.find((w) => w.slug === slug);
+
+/** Les realisations qui ont une page d'etude de cas. */
+export const CASE_STUDIES = WORK_ITEMS.filter(
+  (w): w is WorkItem & { caseStudy: CaseStudy } => !!w.caseStudy,
+);
+
+/** Adresse de la page d'etude de cas. */
+export const casePath = (slug: string) => `/realisations/${slug}`;
+
 /*
   Rappel en console : les realisations dont les chiffres ne sont pas
   encore renseignes.
@@ -438,7 +546,7 @@ export const FEATURED_WORK = WORK_ITEMS;
   Les marqueurs STAT_ ne s'affichant plus sur le site, c'est le seul
   endroit ou un oubli se voit encore. Ne pas le retirer.
 */
-if (typeof window !== "undefined") {
+if (import.meta.env.DEV && typeof window !== "undefined") {
   const sansChiffres = WORK_ITEMS.filter((i) => i.stats.every((s) => isPlaceholder(s.value)));
   if (sansChiffres.length > 0) {
     console.warn(
@@ -457,7 +565,7 @@ if (typeof window !== "undefined") {
   comme prevu. Il disparait tout seul des qu'une troisieme et une
   quatrieme realisation sont ajoutees.
 */
-if (typeof window !== "undefined" && WORK_ITEMS.length < 4) {
+if (import.meta.env.DEV && typeof window !== "undefined" && WORK_ITEMS.length < 4) {
   console.warn(
     `[ULTRA VISION] ${WORK_ITEMS.length} realisation(s) dans WORK_ITEMS. ` +
       "En dessous de 4, WorkGrid bascule en mise en page compacte (telephone) " +

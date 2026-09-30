@@ -7,7 +7,7 @@ import { useReveal, usePrefersReducedMotion } from "@/hooks/useReveal";
   Il ne se voit pas sur le site, mais il rappelle a chaque ouverture des
   outils de developpement que les chiffres affiches sont inventes.
 */
-if (typeof window !== "undefined" && DEMO_STATS) {
+if (import.meta.env.DEV && typeof window !== "undefined" && DEMO_STATS) {
   console.warn(
     "%c[ULTRA VISION] Chiffres de DEMONSTRATION affiches. " +
       "Passer DEMO_STATS a false dans src/components/work/work.data.ts avant de publier.",

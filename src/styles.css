@@ -288,3 +288,53 @@
 @utility marquee {
   animation: marquee-x 38s linear infinite;
 }
+
+/*
+  APPARITIONS DU PREMIER ECRAN — jouees par le CSS, sans attendre le JS.
+
+  Memes valeurs que <Reveal> et <MaskReveal> (src/config/motion.ts :
+  950 ms pour les blocs, 1000 ms pour les titres, courbe EASE_ENTER).
+  Le flou se leve a 78 % du mouvement, comme dans la version JS : le
+  texte redevient net pendant qu'il finit de monter.
+
+  Voir `immediate` dans src/components/Reveal.tsx.
+*/
+@keyframes uv-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.975);
+    filter: blur(6px);
+  }
+  78% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes uv-mask-enter {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.uv-enter {
+  animation: uv-enter 950ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.uv-mask-enter {
+  animation: uv-mask-enter 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uv-enter,
+  .uv-mask-enter {
+    animation: none !important;
+  }
+}

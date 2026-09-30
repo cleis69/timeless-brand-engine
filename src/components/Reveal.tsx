@@ -116,6 +116,42 @@ function useIsVisible<T extends HTMLElement>(safetyMs = 2500) {
 }
 
 /**
+ * ============================================================
+ *  `immediate` — POUR LE PREMIER ECRAN UNIQUEMENT
+ * ============================================================
+ *
+ * Sans cette option, le contenu est envoye par le serveur a
+ * `opacity: 0` et ne se revele qu'une fois le JavaScript charge. Sur
+ * un telephone moyen, cela repoussait l'affichage du hero de trois a
+ * cinq secondes : c'est le « Largest Contentful Paint » que Google
+ * mesure, et il etait de 5,8 s sur l'accueil.
+ *
+ * Avec `immediate`, la MEME animation (memes durees, meme courbe, meme
+ * flou) est jouee par le CSS des le premier affichage, sans attendre le
+ * JavaScript. Le rendu est identique ; seul le moment ou il demarre
+ * change. Les keyframes vivent dans src/styles.css (uv-enter,
+ * uv-mask-enter).
+ *
+ * A reserver a ce qui est visible sans defiler : hero, en-tete de page.
+ * Plus bas, l'apparition au defilement reste la regle.
+ */
+function CssReveal({
+  children,
+  delay,
+  className,
+}: {
+  children: ReactNode
+  delay: number
+  className: string
+}) {
+  return (
+    <div className={`uv-enter ${className}`} style={{ animationDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  )
+}
+
+/**
  * Bloc qui monte et se revele.
  * `delay` est exprime en millisecondes, comme dans la version precedente.
  */
@@ -123,10 +159,36 @@ export function Reveal({
   children,
   delay = 0,
   className = '',
+  immediate = false,
 }: {
   children: ReactNode
   delay?: number
   className?: string
+  /** Premier ecran : animation CSS lancee sans attendre le JavaScript. */
+  immediate?: boolean
+}) {
+  if (immediate) {
+    return (
+      <CssReveal delay={delay} className={className}>
+        {children}
+      </CssReveal>
+    )
+  }
+  return (
+    <ScrollReveal delay={delay} className={className}>
+      {children}
+    </ScrollReveal>
+  )
+}
+
+function ScrollReveal({
+  children,
+  delay,
+  className,
+}: {
+  children: ReactNode
+  delay: number
+  className: string
 }) {
   const { ref, shown } = useIsVisible<HTMLDivElement>()
 
@@ -167,10 +229,51 @@ export function MaskReveal({
   children,
   delay = 0,
   className = '',
+  immediate = false,
 }: {
   children: ReactNode
   delay?: number
   className?: string
+  /** Premier ecran : voir `Reveal`. */
+  immediate?: boolean
+}) {
+  /*
+    L'ESPACE FINAL N'EST PAS DECORATIF.
+
+    Les lignes d'un titre sont des <span> poses bout a bout, sans espace
+    entre eux. A l'ecran, rien ne se voit : chaque ligne est un bloc.
+    Mais un robot qui lit le texte brut du HTML — ceux de ChatGPT, de
+    Perplexity, de Claude — recollait les mots : « Des
+    vidéospublicitairesqui font vendre. ». Cet espace, invisible car en
+    fin de ligne, rend au titre sa lecture.
+  */
+  if (immediate) {
+    return (
+      <span
+        className="block overflow-hidden"
+        style={{ paddingBottom: '0.08em', marginBottom: '-0.08em' }}
+      >
+        <span className={`uv-mask-enter block ${className}`} style={{ animationDelay: `${delay}ms` }}>
+          {children}{' '}
+        </span>
+      </span>
+    )
+  }
+  return (
+    <ScrollMaskReveal delay={delay} className={className}>
+      {children}
+    </ScrollMaskReveal>
+  )
+}
+
+function ScrollMaskReveal({
+  children,
+  delay,
+  className,
+}: {
+  children: ReactNode
+  delay: number
+  className: string
 }) {
   const { ref, shown } = useIsVisible<HTMLSpanElement>()
 
@@ -187,7 +290,7 @@ export function MaskReveal({
           transition: `transform ${MOTION.enterTitle}ms ${EASE} ${delay}ms`,
         }}
       >
-        {children}
+        {children}{' '}
       </span>
     </span>
   )

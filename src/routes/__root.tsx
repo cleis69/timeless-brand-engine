@@ -16,8 +16,9 @@ import { SiteFooter } from "../components/SiteFooter";
 import { PageTransition } from "../components/PageTransition";
 import { ScrollToTop } from "../components/ScrollToTop";
 import { WhatsAppRail } from "../components/WhatsAppRail";
-import { CONTACT } from "../config/contact";
-import { SITE_URL } from "../config/site";
+import { url } from "../config/site";
+import { BRAND, OG_IMAGE } from "../config/brand";
+import { rootJsonLd } from "../lib/seo";
 
 /**
  * ULTRA VISION — racine de l'application.
@@ -58,6 +59,13 @@ import { SITE_URL } from "../config/site";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      {/*
+        React 19 remonte ces deux balises dans le <head>. La page 404
+        n'avait aucun titre, et rien ne demandait aux moteurs de ne pas
+        l'indexer.
+      */}
+      <title>{`Page introuvable | ${BRAND.name}`}</title>
+      <meta name="robots" content="noindex, follow" />
       <div className="max-w-md text-center">
         <h1 className="display text-7xl text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
@@ -120,14 +128,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "author", content: "ULTRA VISION" },
+      { name: "author", content: BRAND.name },
       { name: "theme-color", content: "#090909" },
-      { property: "og:site_name", content: "ULTRA VISION" },
+      { property: "og:site_name", content: BRAND.name },
       { property: "og:locale", content: "fr_FR" },
       { property: "og:type", content: "website" },
+      /*
+        L'image de partage par defaut. Chaque page peut la remplacer via
+        pageHead() ; sans elle, un lien colle dans WhatsApp — le premier
+        canal de contact de l'agence — s'affichait sans aucun visuel.
+      */
+      { property: "og:image", content: url(OG_IMAGE.path) },
+      { property: "og:image:width", content: String(OG_IMAGE.width) },
+      { property: "og:image:height", content: String(OG_IMAGE.height) },
+      { property: "og:image:alt", content: OG_IMAGE.alt },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: url(OG_IMAGE.path) },
     ],
     links: [
+      /*
+        LES FAVICONS SONT ICI, DANS `links`.
+
+        Ils etaient declares dans `styles` : aucun <link rel="icon"> ne
+        sortait donc dans le HTML. Le navigateur se rabattait sur
+        /favicon.ico, mais Google, lui, lit la balise de la page
+        d'accueil pour choisir l'icone affichee dans ses resultats.
+      */
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       /*
         POLICES — SERVIES PAR CE SITE, PLUS PAR UN TIERS.
 
@@ -286,24 +316,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 }
         `,
       },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
     ],
     scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "ULTRA VISION",
-          alternateName: "Ultra Vision — Creative Growth Agency",
-          url: SITE_URL,
-          email: CONTACT.email,
-          ...(CONTACT.phone ? { telephone: CONTACT.phone } : {}),
-          sameAs: [],
-        }),
-      },
+      /*
+        L'ENTITE, UNE SEULE FOIS, SUR TOUTES LES PAGES.
+
+        UltraVision Agency (ProfessionalService) et le site (WebSite),
+        chacun avec un identifiant stable. Les pages y renvoient par ces
+        identifiants au lieu de redecrire l'agence : voir src/lib/seo.ts.
+      */
+      { type: "application/ld+json", children: rootJsonLd() },
     ],
   }),
 

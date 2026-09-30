@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { MaskReveal, Reveal } from "./Reveal";
 import { LOOP } from "@/config/motion";
 
@@ -45,11 +46,17 @@ export function PageHero({
    * un morceau de `title`. Laisse vide pour un titre monochrome.
    */
   accent,
+  breadcrumbs,
 }: {
   eyebrow: string;
   title: string;
   intro: string;
   accent?: string;
+  /**
+   * Fil d'Ariane visible, sans l'accueil (ajoute automatiquement). Le
+   * dernier element est la page courante : il n'est pas un lien.
+   */
+  breadcrumbs?: { name: string; path: string }[];
 }) {
   /*
     Le titre est decoupe autour du fragment accentue. On ne fait aucune
@@ -110,7 +117,38 @@ export function PageHero({
       />
 
       <div className="shell relative pt-36 pb-16 lg:pt-44 lg:pb-20">
-        <Reveal>
+        {/*
+          `immediate` sur tout cet en-tete : c'est le premier ecran de chaque
+          page interieure, et son paragraphe d'introduction en est le plus
+          grand element — celui que Google chronometre. Voir Reveal.tsx.
+        */}
+        {breadcrumbs && breadcrumbs.length > 0 && (
+          <Reveal immediate>
+            <nav aria-label="Fil d'Ariane" className="mt-5 mb-6 text-[0.72rem] text-[#7b88a6] md:mt-0">
+              <Link to="/" className="transition-colors hover:text-foreground">
+                Accueil
+              </Link>
+              {breadcrumbs.map((c, i) => (
+                <span key={c.path}>
+                  <span className="mx-2" aria-hidden="true">
+                    /
+                  </span>
+                  {i === breadcrumbs.length - 1 ? (
+                    <span className="text-[#8792ad]" aria-current="page">
+                      {c.name}
+                    </span>
+                  ) : (
+                    <Link to={c.path} className="transition-colors hover:text-foreground">
+                      {c.name}
+                    </Link>
+                  )}
+                </span>
+              ))}
+            </nav>
+          </Reveal>
+        )}
+
+        <Reveal immediate>
           <div className="inline-block">
             <p className="eyebrow" style={{ color: "#60A5FA" }}>
               {eyebrow}
@@ -124,7 +162,7 @@ export function PageHero({
         </Reveal>
 
         <h1 className="display mt-7 max-w-4xl text-[2.2rem] leading-[1.02] tracking-[-0.035em] sm:text-[3rem] lg:text-[3.8rem]">
-          <MaskReveal delay={80}>
+          <MaskReveal delay={80} immediate>
             {before}
             {at >= 0 && (
               <span
@@ -143,7 +181,7 @@ export function PageHero({
           </MaskReveal>
         </h1>
 
-        <Reveal delay={280}>
+        <Reveal delay={280} immediate>
           <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {intro}
           </p>

@@ -234,6 +234,12 @@ export function WorkRibbon({ items, speed = LOOP.marquee + 12 }: Props) {
           onEnter={() => setHovered(key)}
           onLeave={() => setHovered((h) => (h === key ? null : h))}
           decorative={copy === 1}
+          /*
+            Un seul titre par realisation. La bande repete la liste quatre
+            fois pour boucler ; balisees en <h3>, les copies faisaient 44
+            titres pour 11 films dans le plan de la page d'accueil.
+          */
+          heading={copy === 0 && i < items.length}
         />
       );
     });
@@ -423,6 +429,7 @@ function RibbonCard({
   onLeave,
   onPlay,
   decorative,
+  heading,
 }: {
   item: WorkItem;
   cardKey: string;
@@ -435,7 +442,10 @@ function RibbonCard({
   onPlay: () => void;
   /** Vrai pour le second exemplaire, celui qui n'existe que pour la boucle. */
   decorative: boolean;
+  /** Vrai pour la premiere occurrence du film : seule elle porte un titre <h3>. */
+  heading: boolean;
 }) {
+  const Title = heading ? "h3" : "p";
   const videoRef = useRef<HTMLVideoElement>(null);
   /* Le premier chiffre REEL ; les marqueurs STAT_ ne s'affichent pas. */
   const stat = shownStats(item)[0];
@@ -668,7 +678,7 @@ function RibbonCard({
         <p className="text-[0.54rem] tracking-[0.16em] uppercase text-accent-hover">
           {item.category}
         </p>
-        <h3 className="display mt-1 truncate text-[1rem] text-foreground">{item.title}</h3>
+        <Title className="display mt-1 truncate text-[1rem] text-foreground">{item.title}</Title>
         {stat && (
           <div className="mt-1.5 flex items-baseline gap-1.5">
             <span className="display text-[0.92rem] text-foreground">{stat.value}</span>

@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { url } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { Magnetic } from "@/components/Magnetic";
 import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { BRAND, withBrand } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import {
   A_LA_CARTE,
@@ -53,14 +55,6 @@ import {
  */
 
 /*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
-
-/*
   Declaree AVANT la route, et non plus en bas du fichier.
 
   Ces questions servent maintenant deux fois : a l'affichage, et dans
@@ -73,7 +67,7 @@ const URL = SITE_URL;
 const FAQ_TARIFS = [
   {
     q: "Le budget publicitaire est-il compris ?",
-    a: "Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez 800 € à 1 500 € par mois pour démarrer selon votre secteur.",
+    a: `Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez ${dirham(800)} à ${dirham(1500)} par mois (800 à 1 500 €) pour démarrer, selon votre secteur.`,
   },
   {
     q: "Que se passe-t-il après les 3 mois d'engagement ?",
@@ -95,95 +89,66 @@ const FAQ_TARIFS = [
 
 export const Route = createFileRoute("/tarifs")({
   component: Tarifs,
-  head: () => ({
-    meta: [
-      { title: "Tarifs — ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Production de vidéos publicitaires et acquisition. Prix affichés, périmètre détaillé, aucune surprise. À partir de 5 400 MAD la vidéo, diffusion comprise.",
-      },
-      { property: "og:title", content: "Tarifs — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Des prix affichés, un périmètre détaillé, et la liste de ce qui n'est jamais compris.",
-      },
-      { property: "og:url", content: `${URL}/tarifs` },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/tarifs` }],
-    scripts: [
-      {
+  head: () =>
+    pageHead({
+      path: "/tarifs",
+      title: withBrand("Tarifs : vidéo, publicité et sites web"),
+      description: `Prix publics d'${BRAND.name} : essai vidéo à ${dirham(PACKS.find((p) => p.id === "essai")!.price)}, diffusion comprise, formules mensuelles et prestations à l'unité. Aucune surprise.`,
+      ogDescription:
+        "Des prix affichés, un périmètre détaillé, et la liste de ce qui n'est jamais compris.",
+      breadcrumbs: [{ name: "Tarifs", path: "/tarifs" }],
+      faq: FAQ_TARIFS,
+      nodes: [
         /*
           CATALOGUE D'OFFRES — le balisage le plus utile du site.
 
-          « Combien coute une video publicitaire » est une question que
-          les gens posent desormais autant a un assistant qu'a Google.
-          Un assistant qui trouve un prix ecrit en clair dans les
-          donnees structurees le cite ; un assistant qui doit le deviner
-          en lisant une page cite quelqu'un d'autre.
+          « Combien coute une video publicitaire » se pose autant a un
+          assistant qu'a Google. Un assistant qui trouve un prix ecrit en
+          clair dans les donnees structurees le cite.
 
-          Les montants sont generes a partir de pricing.ts : ils ne
-          peuvent pas diverger de ce qui est affiche a l'ecran. C'est
-          essentiel — un prix balise different du prix affiche est
-          traite comme une tentative de manipulation.
+          Les montants viennent de pricing.ts : ils ne peuvent pas diverger
+          de l'ecran. L'euro fait foi au devis ; le dirham affiche est
+          declare a cote, arrondi comme a l'ecran.
         */
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
+        {
           "@type": "Service",
+          "@id": `${url("/tarifs")}#offres`,
           name: "Production de vidéos publicitaires et acquisition",
           serviceType: "Publicité vidéo et media buying",
-          provider: { "@type": "Organization", name: "ULTRA VISION", url: URL },
+          provider: orgRef,
           areaServed: AREA_SERVED,
           hasOfferCatalog: {
             "@type": "OfferCatalog",
-            name: "Formules ULTRA VISION",
+            name: `Formules ${BRAND.name}`,
             itemListElement: PACKS.map((p) => ({
               "@type": "Offer",
               name: p.name,
               description: p.forWho,
               price: p.price,
               priceCurrency: "EUR",
-              /* Le prix est hors taxes : il faut le declarer, sinon il
-                 est suppose TTC et devient faux. */
-              priceSpecification: {
-                "@type": "PriceSpecification",
-                price: p.price,
-                priceCurrency: "EUR",
-                valueAddedTaxIncluded: false,
-              },
+              priceSpecification: [
+                {
+                  "@type": "UnitPriceSpecification",
+                  price: p.price,
+                  priceCurrency: "EUR",
+                  valueAddedTaxIncluded: false,
+                  ...(p.period ? { unitText: "MONTH" } : {}),
+                },
+                {
+                  "@type": "UnitPriceSpecification",
+                  price: Math.round((p.price * MAD.rate) / 100) * 100,
+                  priceCurrency: "MAD",
+                  valueAddedTaxIncluded: false,
+                  ...(p.period ? { unitText: "MONTH" } : {}),
+                },
+              ],
               category: p.period ? "Abonnement mensuel" : "Prestation unique",
-              url: `${URL}/tarifs`,
+              url: url("/tarifs"),
             })),
           },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQ_TARIFS.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
-            { "@type": "ListItem", position: 2, name: "Tarifs", item: `${URL}/tarifs` },
-          ],
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
 });
 
 /* ========================================================================== */
@@ -207,15 +172,15 @@ function Head() {
   return (
     <section className="relative overflow-hidden">
       <div className="shell pt-36 pb-12 lg:pt-40 lg:pb-14">
-        <Reveal>
+        <Reveal immediate>
           <p className="eyebrow" style={{ color: "#3B82F6" }}>
             Tarifs
           </p>
         </Reveal>
 
         <h1 className="display mt-5 max-w-3xl text-[2.2rem] leading-[1.02] tracking-[-0.035em] sm:text-[3rem] lg:text-[3.6rem]">
-          <MaskReveal delay={80}>Des prix affichés,</MaskReveal>
-          <MaskReveal delay={165}>
+          <MaskReveal delay={80} immediate>Des prix affichés,</MaskReveal>
+          <MaskReveal delay={165} immediate>
             <span
               style={{
                 background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
@@ -229,14 +194,14 @@ function Head() {
           </MaskReveal>
         </h1>
 
-        <Reveal delay={280}>
+        <Reveal delay={280} immediate>
           <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Tout est écrit : ce qui est compris, ce qui ne l&apos;est pas, et le prix de chaque
             prestation prise séparément. Vous pouvez refaire le calcul vous-même.
           </p>
         </Reveal>
 
-        <Reveal delay={340}>
+        <Reveal delay={340} immediate>
           <p className="mt-4 text-sm text-[#797976]">
             Montants en dirhams hors taxes. Le budget publicitaire n&apos;est jamais inclus.
             {MAD.enabled && (
@@ -566,7 +531,7 @@ function Carte() {
                               {dirham(it.price)}
                             </p>
                           )}
-                          <p className="mt-0.5 text-[0.68rem] text-[#5c6a86]">
+                          <p className="mt-0.5 text-[0.68rem] text-[#7b88a6]">
                             ≈ {euro(now)}
                           </p>
                         </div>

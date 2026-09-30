@@ -290,7 +290,7 @@ export function SiteHeader() {
           to="/"
           className="flex min-h-11 min-w-0 items-center py-1"
           onClick={() => setOpen(false)}
-          aria-label="ULTRA VISION"
+          aria-label="UltraVision Agency — accueil"
         >
           <Logo className="h-9 sm:h-10" />
         </Link>

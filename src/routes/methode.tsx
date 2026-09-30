@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { url } from "@/config/site";
+import { BRAND, withBrand } from "@/config/brand";
+import { AREA_SERVED } from "@/config/contact";
+import { orgRef, pageHead } from "@/lib/seo";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -44,79 +47,41 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  */
 
 /*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
+  LA STRATEGIE DIGITALE A SA PAGE : CELLE-CI.
 
+  Le brief de l'agence la cite comme un service a part entiere. Elle
+  n'avait pas d'adresse : « strategie » n'apparaissait nulle part dans
+  un titre. La page garde son contenu et son adresse ; son titre dit
+  desormais ce qu'elle est.
+
+  Le balisage HowTo est retire : Google ne l'exploite plus depuis 2023.
+  La page est declaree comme un Service, fourni par l'agence.
+*/
 export const Route = createFileRoute("/methode")({
   component: Methode,
-  head: () => ({
-    meta: [
-      { title: "Accompagnement 360 — Notre méthode sur devis | ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Diagnostic, stratégie, production et croissance : la méthode de nos accompagnements 360, établis sur devis. Intervention à Casablanca, Rabat, Marrakech, Tanger et Agadir.",
-      },
-      { property: "og:title", content: "Accompagnement 360 — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Pour les projets qui dépassent nos formules : diagnostic, stratégie, production et pilotage, chiffrés ligne par ligne.",
-      },
-      { property: "og:url", content: `${URL}/methode` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/methode` }],
-    scripts: [
-      {
-        /*
-          Donnees structurees HowTo : Google et les moteurs
-          conversationnels reprennent volontiers une methode decoupee en
-          etapes datees, parce que la structure est explicite et qu'il
-          n'y a rien a interpreter.
-        */
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "HowTo",
-          name: "Accompagnement 360 ULTRA VISION",
+  head: () =>
+    pageHead({
+      path: "/methode",
+      title: withBrand("Stratégie digitale et accompagnement 360"),
+      description: `Diagnostic, stratégie, production et croissance : la méthode des accompagnements 360 d'${BRAND.name}, à Marrakech, pour les projets établis sur devis.`,
+      ogDescription:
+        "Pour les projets qui dépassent nos formules : diagnostic, stratégie, production et pilotage, chiffrés ligne par ligne.",
+      breadcrumbs: [{ name: "Stratégie & accompagnement 360", path: "/methode" }],
+      about: { "@id": `${url("/methode")}#service` },
+      nodes: [
+        {
+          "@type": "Service",
+          "@id": `${url("/methode")}#service`,
+          name: "Stratégie digitale et accompagnement 360",
+          serviceType: "Stratégie digitale",
           description:
-            "La méthode des accompagnements sur mesure : diagnostic, stratégie, production et croissance pilotée.",
-          inLanguage: "fr-FR",
-          step: [
-            {
-              "@type": "HowToStep",
-              position: 1,
-              name: "Diagnostic",
-              text: "Audit de la marque, de l'offre et du tunnel existant. Nous identifions le point de friction qui coûte le plus cher.",
-            },
-            {
-              "@type": "HowToStep",
-              position: 2,
-              name: "Stratégie",
-              text: "Positionnement, messages, plan d'acquisition et budget par canal. Un document de référence, chiffré.",
-            },
-            {
-              "@type": "HowToStep",
-              position: 3,
-              name: "Production",
-              text: "Identité, contenus, site et campagnes produits en cycles courts avec validations régulières.",
-            },
-            {
-              "@type": "HowToStep",
-              position: 4,
-              name: "Croissance",
-              text: "Diffusion, automatisation des leads, optimisation continue et revue mensuelle avec la direction.",
-            },
-          ],
-        }),
-      },
-    ],
-  }),
+            "La méthode des accompagnements sur mesure : diagnostic, stratégie, production et croissance pilotée, chiffrés sur devis.",
+          provider: orgRef,
+          areaServed: AREA_SERVED,
+          url: url("/methode"),
+        },
+      ],
+    }),
 });
 
 const STEPS = [
@@ -189,10 +154,11 @@ function Methode() {
   return (
     <>
       <PageHero
-        eyebrow="Accompagnement 360"
+        eyebrow="Stratégie digitale — Accompagnement 360"
         title="Pour les projets qui ne rentrent dans aucune formule."
         accent="qui ne rentrent dans aucune formule"
-        intro="Lancement de marque, implantation sur un nouveau marché, dispositif sur plusieurs mois : ces missions se chiffrent sur devis. Voici comment nous les conduisons, étape par étape."
+        intro="Lancement de marque, implantation sur un nouveau marché, dispositif sur plusieurs mois : ces missions se chiffrent sur devis. Voici comment nous conduisons la stratégie digitale et l'accompagnement, étape par étape."
+        breadcrumbs={[{ name: "Stratégie & accompagnement 360", path: "/methode" }]}
       />
 
       {/* ---------------- Les quatre etapes ---------------- */}

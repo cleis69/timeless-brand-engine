@@ -45,6 +45,7 @@
  */
 
 import type { FigureData } from "@/components/Figure";
+import type { ServiceSlug } from "./services";
 
 export type Block =
   | { k: "h2"; v: string }
@@ -106,6 +107,12 @@ export type Article = {
    */
   faq: { q: string; a: string }[];
   body: Block[];
+  /**
+   * Les services dont parle l'article. Affiches en fin d'article : un
+   * lecteur convaincu par la methode doit trouver en un clic le service
+   * qui l'applique.
+   */
+  services?: ServiceSlug[];
 };
 
 export const ARTICLES: Article[] = [
@@ -114,6 +121,7 @@ export const ARTICLES: Article[] = [
    * ==================================================================== */
   {
     slug: "tofu-mofu-bofu-video-publicitaire",
+    services: ["meta-ads", "tiktok-ads", "generation-de-leads"],
     title: "TOFU, MOFU, BOFU : pourquoi une seule vidéo ne peut pas vendre",
     excerpt:
       "La plupart des campagnes échouent pour une raison mécanique : elles montrent le même film à quelqu'un qui découvre la marque et à quelqu'un qui hésite à acheter. Voici comment nous découpons la production en trois étages.",
@@ -350,6 +358,7 @@ export const ARTICLES: Article[] = [
    * ==================================================================== */
   {
     slug: "combien-coute-une-video-publicitaire",
+    services: ["production-video-photo", "meta-ads"],
     title: "Combien coûte une vidéo publicitaire, et pourquoi les écarts sont énormes",
     excerpt:
       "Entre 200 € et 8 000 € pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, et les questions à poser avant de signer.",
@@ -454,6 +463,7 @@ export const ARTICLES: Article[] = [
    * ==================================================================== */
   {
     slug: "pourquoi-quatre-videos-par-mois",
+    services: ["production-video-photo", "meta-ads", "tiktok-ads"],
     title: "Pourquoi quatre vidéos par mois, et pas une très bonne",
     excerpt:
       "Personne ne sait à l'avance quelle accroche va fonctionner — ni vous, ni nous, ni l'algorithme. Ce qui décide, c'est le nombre d'essais.",
@@ -559,6 +569,7 @@ export const ARTICLES: Article[] = [
    * ==================================================================== */
   {
     slug: "format-vertical-9-16",
+    services: ["production-video-photo", "tiktok-ads"],
     title: "Le format vertical n'est pas un recadrage",
     excerpt:
       "Prendre une vidéo horizontale et couper les bords produit une vidéo verticale techniquement conforme et commercialement morte. Ce qui change vraiment quand on tourne pour le 9/16.",
@@ -645,6 +656,7 @@ export const ARTICLES: Article[] = [
    * ==================================================================== */
   {
     slug: "ce-que-l-ia-fait-vraiment-dans-notre-production",
+    services: ["crm-ia-automatisation", "production-video-photo"],
     title: "Ce que l'intelligence artificielle fait vraiment dans notre production",
     excerpt:
       "Tout le monde annonce de l'IA, presque personne ne dit où elle intervient. Voici la liste exacte, y compris ce que nous refusons de lui confier.",
@@ -655,7 +667,7 @@ export const ARTICLES: Article[] = [
     takeaways: [
       "L'intelligence artificielle fait gagner du temps sur quatre tâches de production vidéo : le dérushage, les sous-titres, la déclinaison de scripts validés et le premier tri des données de performance.",
       "Ces quatre tâches ont un point commun : elles sont fastidieuses, vérifiables en un coup d'œil, et une erreur y est sans conséquence.",
-      "Quatre décisions restent humaines chez ULTRA VISION : l'angle publicitaire, le tournage, les témoignages et le montage final.",
+      "Quatre décisions restent humaines chez UltraVision Agency : l'angle publicitaire, le tournage, les témoignages et le montage final.",
       "Un visage généré par intelligence artificielle se repère, et une marque prise à montrer des personnes qui n'existent pas perd davantage de crédibilité qu'elle n'a gagné de temps.",
       "Un faux témoignage client constitue une pratique commerciale trompeuse, quelle que soit la technologie utilisée pour le produire.",
     ],

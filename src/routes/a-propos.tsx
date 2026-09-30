@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { url } from "@/config/site";
+import { BRAND, withBrand } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
+import { ArrowLink } from "@/components/page/Blocks";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { TeamCard, type Member } from "@/components/TeamAvatar";
-import { CONTACT, ORG_LD } from "@/config/contact";
+import { CONTACT } from "@/config/contact";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
 /**
@@ -46,14 +49,6 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  *     et si un nom de fichier est faux, l'avatar revient tout seul.
  * ------------------------------------------------------------
  */
-
-/*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
 
 /* ==========================================================================
  *  L'EQUIPE
@@ -137,13 +132,13 @@ export const TEAM: Member[] = TEAM_ALL.filter((m) => m.name !== NAME_TODO);
   feuille de style finale.
 */
 const TEAM_COLS =
-  TEAM.length >= 4
-    ? "lg:grid-cols-4"
-    : TEAM.length === 3
-      ? "lg:grid-cols-3"
-      : "lg:grid-cols-2";
+  TEAM.length >= 4 ? "lg:grid-cols-4" : TEAM.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
 
-if (typeof window !== "undefined" && TEAM_ALL.some((m) => m.name === NAME_TODO)) {
+if (
+  import.meta.env.DEV &&
+  typeof window !== "undefined" &&
+  TEAM_ALL.some((m) => m.name === NAME_TODO)
+) {
   console.warn(
     "[ULTRA VISION] Le prénom de la community manager n'est pas renseigné : " +
       "sa fiche n'est PAS affichée sur le site. " +
@@ -162,79 +157,34 @@ if (typeof window !== "undefined" && TEAM_ALL.some((m) => m.name === NAME_TODO))
 */
 export const Route = createFileRoute("/a-propos")({
   component: APropos,
-  head: () => ({
-    meta: [
-      { title: "À propos — L'équipe ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Une équipe restreinte de seniors : production audiovisuelle, direction artistique, contenu et media buying. Nous intervenons à Casablanca, Rabat, Marrakech, Tanger et Agadir.",
-      },
-      { property: "og:title", content: "À propos — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
-      },
-      { property: "og:url", content: `${URL}/a-propos` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/a-propos` }],
-    scripts: [
-      {
-        /*
-          AboutPage + Organization avec ses membres.
+  head: () =>
+    pageHead({
+      path: "/a-propos",
+      title: withBrand(`À propos : l'équipe, à ${BRAND.city}`),
+      description: `${BRAND.name}, ${BRAND.category} basée à Marrakech : une équipe restreinte de seniors — production audiovisuelle, direction artistique, contenu et media buying.`,
+      ogDescription:
+        "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
+      pageType: "AboutPage",
+      about: orgRef,
+      mainEntity: orgRef,
+      breadcrumbs: [{ name: "À propos", path: "/a-propos" }],
+      /*
+        L'EQUIPE, NOMMEE.
 
-          Nommer les personnes dans les donnees structurees sert deux
-          choses : Google associe l'entreprise a des individus reels,
-          ce qui compte dans son evaluation de fiabilite ; et un
-          assistant interroge sur « qui dirige ULTRA VISION » trouve
-          une reponse attribuable au lieu de deviner.
-
-          On ne declare que les noms et les fonctions — jamais de
-          coordonnees personnelles.
-        */
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          url: `${URL}/a-propos`,
-          inLanguage: "fr-FR",
-          mainEntity: {
-            ...ORG_LD(URL),
-            foundingLocation: { "@type": "Place", name: "Maroc" },
-            /*
-              L'effectif reel reste declare a quatre : l'equipe compte
-              bien quatre personnes. Seule la fiche sans prenom n'est
-              pas nommee — declarer moins d'employes qu'il n'y en a
-              serait aussi faux que d'en nommer une « Prenom ».
-
-              TEAM est deja filtre en amont, il n'y a plus rien a
-              retirer ici.
-            */
-            numberOfEmployees: { "@type": "QuantitativeValue", value: TEAM_ALL.length },
-            employee: TEAM.map((m) => ({
-              "@type": "Person",
-              name: m.name,
-              jobTitle: m.role,
-              worksFor: { "@type": "Organization", name: "ULTRA VISION" },
-            })),
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
-            { "@type": "ListItem", position: 2, name: "À propos", item: `${URL}/a-propos` },
-          ],
-        }),
-      },
-    ],
-  }),
+        Declarer les personnes relie l'agence a des individus reels : c'est
+        ce qu'evalue Google quand il juge la fiabilite d'une source, et ce
+        qu'un assistant cite quand on lui demande qui dirige l'agence.
+        Uniquement les prenoms et les fonctions — jamais de coordonnees
+        personnelles. La fiche sans prenom n'est pas declaree.
+      */
+      nodes: TEAM.map((m) => ({
+        "@type": "Person",
+        "@id": `${url("/a-propos")}#${m.name.toLowerCase()}`,
+        name: m.name,
+        jobTitle: m.role,
+        worksFor: orgRef,
+      })),
+    }),
 });
 
 /* ==========================================================================
@@ -271,7 +221,8 @@ function APropos() {
         eyebrow="À propos"
         title="Une équipe restreinte, et vous savez qui fait quoi."
         accent="et vous savez qui fait quoi"
-        intro="ULTRA VISION produit des contenus publicitaires et pilote leur diffusion. Nous intervenons uniquement au Maroc — Casablanca, Rabat, Marrakech, Tanger et Agadir — auprès de dirigeants francophones qui y ont installé leur activité."
+        intro={`${BRAND.name} est une ${BRAND.category} basée à Marrakech. Nous produisons des contenus publicitaires, pilotons leur diffusion et construisons les outils qui transforment l'attention en clients — à Marrakech, Casablanca, Rabat, Tanger et Agadir, auprès de dirigeants francophones qui ont installé leur activité au Maroc.`}
+        breadcrumbs={[{ name: "À propos", path: "/a-propos" }]}
       />
 
       {/* ---------------- Parti pris ---------------- */}
@@ -285,13 +236,12 @@ function APropos() {
               </h2>
               <p className="mt-7 text-base leading-relaxed text-muted-foreground">
                 La plupart des entreprises n&apos;ont pas un problème de créativité. Elles ont un
-                problème de chaîne : de belles images d&apos;un côté, des campagnes de
-                l&apos;autre, et personne pour relier les deux.
+                problème de chaîne : de belles images d&apos;un côté, des campagnes de l&apos;autre,
+                et personne pour relier les deux.
               </p>
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Nous produisons et nous diffusons. C&apos;est la même équipe, donc le même
-                objectif — et personne à qui renvoyer la responsabilité quand les résultats ne
-                viennent pas.
+                Nous produisons et nous diffusons. C&apos;est la même équipe, donc le même objectif
+                — et personne à qui renvoyer la responsabilité quand les résultats ne viennent pas.
               </p>
             </div>
           </Reveal>
@@ -337,8 +287,16 @@ function APropos() {
             <p className="eyebrow" style={{ color: "#60A5FA" }}>
               L&apos;équipe
             </p>
+            {/*
+              Le titre suit le nombre de fiches REELLEMENT publiees. Tant que
+              le prenom de la community manager manque, trois fiches
+              s'affichent : annoncer « quatre personnes » au-dessus de trois
+              visages se lit comme un oubli.
+            */}
             <h2 className="display mt-5 max-w-2xl text-3xl sm:text-4xl lg:text-5xl">
-              Quatre personnes. Vous les connaîtrez toutes.
+              {TEAM.length === TEAM_ALL.length
+                ? "Quatre personnes. Vous les connaîtrez toutes."
+                : "Les personnes qui travailleront sur votre projet."}
             </h2>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
               Nous ne prétendons pas être une grande structure. C&apos;est précisément
@@ -364,7 +322,12 @@ function APropos() {
           </div>
 
           <Reveal delay={200}>
-            <p className="mt-12 text-sm text-muted-foreground">{CONTACT.locations}</p>
+            <p className="mt-12 text-sm text-muted-foreground">{CONTACT.base}</p>
+            <div className="mt-8">
+              <ArrowLink to="/agence-marketing-digital-marrakech">
+                L&apos;agence à Marrakech, en détail
+              </ArrowLink>
+            </div>
           </Reveal>
         </div>
       </section>

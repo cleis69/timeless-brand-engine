@@ -74,7 +74,7 @@ const URL_ = SITE_URL;
 
 /** Message pre-rempli quand une candidate ouvre WhatsApp depuis cette page. */
 const WHATSAPP_CASTING =
-  "Bonjour ULTRA VISION, je viens de la page casting de votre site. J'aimerais vous envoyer mon profil.";
+  "Bonjour UltraVision, je viens de la page casting de votre site. J'aimerais vous envoyer mon profil.";
 
 export const Route = createFileRoute("/casting")({
   component: Casting,
@@ -92,7 +92,7 @@ export const Route = createFileRoute("/casting")({
       ? [
           {
             property: "og:title",
-            content: `${t.name} — ${categoryLabel(t.categories[0])} | ULTRA VISION`,
+            content: `${t.name} — ${categoryLabel(t.categories[0])} | UltraVision Agency`,
           },
           {
             property: "og:description",
@@ -102,7 +102,7 @@ export const Route = createFileRoute("/casting")({
           { property: "og:url", content: `${URL_}/casting?profil=${t.slug}` },
         ]
       : [
-          { property: "og:title", content: "Casting — ULTRA VISION" },
+          { property: "og:title", content: "Casting | UltraVision Agency" },
           {
             property: "og:description",
             content: TALENTS.length
@@ -115,8 +115,8 @@ export const Route = createFileRoute("/casting")({
       meta: [
         {
           title: t
-            ? `${t.name} — Casting | ULTRA VISION`
-            : "Casting — Actrices, modèles, créatrices | ULTRA VISION",
+            ? `${t.name} — Casting | UltraVision Agency`
+            : "Casting : actrices, modèles et créatrices au Maroc | UltraVision Agency",
         },
         {
           name: "description",
@@ -703,7 +703,7 @@ function Casting() {
               <div className="mt-9 space-y-4">
                 <Check name="adult">J'ai {CASTING.minAge} ans ou plus.</Check>
                 <Check name="consent">
-                  J'accepte qu'ULTRA VISION conserve ma candidature et mes photos pendant{" "}
+                  J'accepte qu'UltraVision Agency conserve ma candidature et mes photos pendant{" "}
                   {CASTING.retentionMonths} mois au plus, uniquement pour me proposer des rôles. Je
                   peux en demander la suppression à tout moment à {CONTACT.email}.
                 </Check>
@@ -799,7 +799,7 @@ function Casting() {
                   Gratuit, toujours
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  Déposer une candidature est gratuit. ULTRA VISION ne vous demandera jamais
+                  Déposer une candidature est gratuit. UltraVision Agency ne vous demandera jamais
                   d'argent pour participer à un casting.
                 </p>
               </div>

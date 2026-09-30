@@ -11,15 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as AgenceMarketingDigitalMarrakechRouteImport } from './routes/agence-marketing-digital-marrakech'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CastingRouteImport } from './routes/casting'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as RealisationsRouteImport } from './routes/realisations'
+import { Route as SecteursRouteImport } from './routes/secteurs'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as RealisationsIndexRouteImport } from './routes/realisations.index'
+import { Route as RealisationsSlugRouteImport } from './routes/realisations.$slug'
+import { Route as SecteursIndexRouteImport } from './routes/secteurs.index'
+import { Route as SecteursSlugRouteImport } from './routes/secteurs.$slug'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,6 +39,12 @@ const AProposRoute = AProposRouteImport.update({
   path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgenceMarketingDigitalMarrakechRoute =
+  AgenceMarketingDigitalMarrakechRouteImport.update({
+    id: '/agence-marketing-digital-marrakech',
+    path: '/agence-marketing-digital-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -56,6 +70,11 @@ const RealisationsRoute = RealisationsRouteImport.update({
   path: '/realisations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SecteursRoute = SecteursRouteImport.update({
+  id: '/secteurs',
+  path: '/secteurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -76,96 +95,170 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const RealisationsIndexRoute = RealisationsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RealisationsRoute,
+} as any)
+const RealisationsSlugRoute = RealisationsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => RealisationsRoute,
+} as any)
+const SecteursIndexRoute = SecteursIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SecteursRoute,
+} as any)
+const SecteursSlugRoute = SecteursSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => SecteursRoute,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
   '/blog': typeof BlogRouteWithChildren
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
-  '/realisations': typeof RealisationsRoute
-  '/services': typeof ServicesRoute
+  '/realisations': typeof RealisationsRouteWithChildren
+  '/secteurs': typeof SecteursRouteWithChildren
+  '/services': typeof ServicesRouteWithChildren
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/realisations/$slug': typeof RealisationsSlugRoute
+  '/secteurs/$slug': typeof SecteursSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/realisations/': typeof RealisationsIndexRoute
+  '/secteurs/': typeof SecteursIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
-  '/realisations': typeof RealisationsRoute
-  '/services': typeof ServicesRoute
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/realisations/$slug': typeof RealisationsSlugRoute
+  '/secteurs/$slug': typeof SecteursSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/realisations': typeof RealisationsIndexRoute
+  '/secteurs': typeof SecteursIndexRoute
+  '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
   '/blog': typeof BlogRouteWithChildren
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/methode': typeof MethodeRoute
-  '/realisations': typeof RealisationsRoute
-  '/services': typeof ServicesRoute
+  '/realisations': typeof RealisationsRouteWithChildren
+  '/secteurs': typeof SecteursRouteWithChildren
+  '/services': typeof ServicesRouteWithChildren
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/realisations/$slug': typeof RealisationsSlugRoute
+  '/secteurs/$slug': typeof SecteursSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/realisations/': typeof RealisationsIndexRoute
+  '/secteurs/': typeof SecteursIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/a-propos'
+    | '/agence-marketing-digital-marrakech'
     | '/blog'
     | '/casting'
     | '/contact'
     | '/methode'
     | '/realisations'
+    | '/secteurs'
     | '/services'
     | '/tarifs'
     | '/blog/$slug'
+    | '/realisations/$slug'
+    | '/secteurs/$slug'
+    | '/services/$slug'
     | '/blog/'
+    | '/realisations/'
+    | '/secteurs/'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/a-propos'
+    | '/agence-marketing-digital-marrakech'
     | '/casting'
     | '/contact'
     | '/methode'
-    | '/realisations'
-    | '/services'
     | '/tarifs'
     | '/blog/$slug'
+    | '/realisations/$slug'
+    | '/secteurs/$slug'
+    | '/services/$slug'
     | '/blog'
+    | '/realisations'
+    | '/secteurs'
+    | '/services'
   id:
     | '__root__'
     | '/'
     | '/a-propos'
+    | '/agence-marketing-digital-marrakech'
     | '/blog'
     | '/casting'
     | '/contact'
     | '/methode'
     | '/realisations'
+    | '/secteurs'
     | '/services'
     | '/tarifs'
     | '/blog/$slug'
+    | '/realisations/$slug'
+    | '/secteurs/$slug'
+    | '/services/$slug'
     | '/blog/'
+    | '/realisations/'
+    | '/secteurs/'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
+  AgenceMarketingDigitalMarrakechRoute: typeof AgenceMarketingDigitalMarrakechRoute
   BlogRoute: typeof BlogRouteWithChildren
   CastingRoute: typeof CastingRoute
   ContactRoute: typeof ContactRoute
   MethodeRoute: typeof MethodeRoute
-  RealisationsRoute: typeof RealisationsRoute
-  ServicesRoute: typeof ServicesRoute
+  RealisationsRoute: typeof RealisationsRouteWithChildren
+  SecteursRoute: typeof SecteursRouteWithChildren
+  ServicesRoute: typeof ServicesRouteWithChildren
   TarifsRoute: typeof TarifsRoute
 }
 
@@ -183,6 +276,13 @@ declare module '@tanstack/react-router' {
       path: '/a-propos'
       fullPath: '/a-propos'
       preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agence-marketing-digital-marrakech': {
+      id: '/agence-marketing-digital-marrakech'
+      path: '/agence-marketing-digital-marrakech'
+      fullPath: '/agence-marketing-digital-marrakech'
+      preLoaderRoute: typeof AgenceMarketingDigitalMarrakechRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -220,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RealisationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/secteurs': {
+      id: '/secteurs'
+      path: '/secteurs'
+      fullPath: '/secteurs'
+      preLoaderRoute: typeof SecteursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -248,6 +355,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/realisations/': {
+      id: '/realisations/'
+      path: '/'
+      fullPath: '/realisations/'
+      preLoaderRoute: typeof RealisationsIndexRouteImport
+      parentRoute: typeof RealisationsRoute
+    }
+    '/realisations/$slug': {
+      id: '/realisations/$slug'
+      path: '/$slug'
+      fullPath: '/realisations/$slug'
+      preLoaderRoute: typeof RealisationsSlugRouteImport
+      parentRoute: typeof RealisationsRoute
+    }
+    '/secteurs/': {
+      id: '/secteurs/'
+      path: '/'
+      fullPath: '/secteurs/'
+      preLoaderRoute: typeof SecteursIndexRouteImport
+      parentRoute: typeof SecteursRoute
+    }
+    '/secteurs/$slug': {
+      id: '/secteurs/$slug'
+      path: '/$slug'
+      fullPath: '/secteurs/$slug'
+      preLoaderRoute: typeof SecteursSlugRouteImport
+      parentRoute: typeof SecteursRoute
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRoute
+    }
   }
 }
 
@@ -263,15 +412,59 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface RealisationsRouteChildren {
+  RealisationsSlugRoute: typeof RealisationsSlugRoute
+  RealisationsIndexRoute: typeof RealisationsIndexRoute
+}
+
+const RealisationsRouteChildren: RealisationsRouteChildren = {
+  RealisationsSlugRoute: RealisationsSlugRoute,
+  RealisationsIndexRoute: RealisationsIndexRoute,
+}
+
+const RealisationsRouteWithChildren = RealisationsRoute._addFileChildren(
+  RealisationsRouteChildren,
+)
+
+interface SecteursRouteChildren {
+  SecteursSlugRoute: typeof SecteursSlugRoute
+  SecteursIndexRoute: typeof SecteursIndexRoute
+}
+
+const SecteursRouteChildren: SecteursRouteChildren = {
+  SecteursSlugRoute: SecteursSlugRoute,
+  SecteursIndexRoute: SecteursIndexRoute,
+}
+
+const SecteursRouteWithChildren = SecteursRoute._addFileChildren(
+  SecteursRouteChildren,
+)
+
+interface ServicesRouteChildren {
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
+}
+
+const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesSlugRoute: ServicesSlugRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
+}
+
+const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
+  ServicesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
+  AgenceMarketingDigitalMarrakechRoute: AgenceMarketingDigitalMarrakechRoute,
   BlogRoute: BlogRouteWithChildren,
   CastingRoute: CastingRoute,
   ContactRoute: ContactRoute,
   MethodeRoute: MethodeRoute,
-  RealisationsRoute: RealisationsRoute,
-  ServicesRoute: ServicesRoute,
+  RealisationsRoute: RealisationsRouteWithChildren,
+  SecteursRoute: SecteursRouteWithChildren,
+  ServicesRoute: ServicesRouteWithChildren,
   TarifsRoute: TarifsRoute,
 }
 export const routeTree = rootRouteImport

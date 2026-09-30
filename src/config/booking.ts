@@ -206,7 +206,7 @@ export function icsFile(date: string, time: string, title: string, details: stri
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//ULTRA VISION//Rendez-vous//FR",
+    "PRODID:-//UltraVision Agency//Rendez-vous//FR",
     "BEGIN:VEVENT",
     `UID:${slotId(date, time)}@ultravisionagency.com`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
@@ -303,7 +303,7 @@ export async function book(
       body: JSON.stringify({
         access_key: FORM.accessKey,
         subject: `Rendez-vous — ${when} — ${f.name}`,
-        from_name: "Réservation ULTRA VISION",
+        from_name: "Réservation UltraVision Agency",
         rendez_vous: `${when} (heure du Maroc), ${BOOKING.durationMin} minutes`,
         nom: f.name,
         entreprise: f.company || "—",

@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { url } from "@/config/site";
+import { BRAND, withBrand } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -49,62 +51,39 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * avoir a explorer le site.
  */
 
-/*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
-
 export const Route = createFileRoute("/blog/")({
   component: Blog,
-  head: () => ({
-    meta: [
-      { title: "Blog — Publicité vidéo, acquisition et production | ULTRA VISION" },
-      {
-        name: "description",
-        content:
-          "Nos méthodes de production publicitaire et d'acquisition, expliquées sans jargon : tunnel TOFU MOFU BOFU, prix réels, format vertical, usage de l'IA.",
-      },
-      { property: "og:title", content: "Blog — ULTRA VISION" },
-      {
-        property: "og:description",
-        content:
-          "Comment nous produisons et diffusons des vidéos publicitaires. Méthodes, prix et arbitrages, expliqués en détail.",
-      },
-      { property: "og:url", content: `${URL}/blog` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/blog` }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
+  head: () =>
+    pageHead({
+      path: "/blog",
+      title: withBrand("Blog : publicité vidéo et acquisition"),
+      description:
+        "Nos méthodes de production publicitaire et d'acquisition, expliquées sans jargon : tunnel TOFU MOFU BOFU, prix réels, format vertical, usage de l'IA.",
+      ogDescription:
+        "Comment nous produisons et diffusons des vidéos publicitaires. Méthodes, prix et arbitrages, expliqués en détail.",
+      pageType: "CollectionPage",
+      breadcrumbs: [{ name: "Blog", path: "/blog" }],
+      mainEntity: { "@id": `${url("/blog")}#blog` },
+      nodes: [
+        {
           "@type": "Blog",
-          name: "Blog ULTRA VISION",
+          "@id": `${url("/blog")}#blog`,
+          name: `Blog ${BRAND.name}`,
           description:
             "Méthodes de production publicitaire et d'acquisition : tunnel de conversion, prix, formats, usage de l'intelligence artificielle.",
-          url: `${URL}/blog`,
+          url: url("/blog"),
           inLanguage: "fr-FR",
-          publisher: {
-            "@type": "Organization",
-            name: "ULTRA VISION",
-            url: URL,
-          },
+          publisher: orgRef,
           blogPost: ARTICLES_SORTED.map((a) => ({
             "@type": "BlogPosting",
+            "@id": `${url(`/blog/${a.slug}`)}#article`,
             headline: a.title,
-            description: a.excerpt,
+            url: url(`/blog/${a.slug}`),
             datePublished: a.date,
-            url: `${URL}/blog/${a.slug}`,
-            author: { "@type": "Organization", name: "ULTRA VISION" },
           })),
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
 });
 
 function Blog() {
@@ -117,6 +96,7 @@ function Blog() {
         title="Comment nous travaillons, expliqué en détail."
         accent="expliqué en détail"
         intro="Nos méthodes de production et de diffusion, sans jargon et sans zone grise. Chaque article répond à une question qu'un client nous a réellement posée."
+        breadcrumbs={[{ name: "Blog", path: "/blog" }]}
       />
 
       <section className="rule bg-background">
@@ -189,7 +169,7 @@ function Blog() {
                     <span className="text-[0.66rem] font-medium tracking-[0.14em] uppercase text-accent-hover">
                       {a.category}
                     </span>
-                    <span className="text-[0.7rem] text-[#5c6a86]">
+                    <span className="text-[0.7rem] text-[#7b88a6]">
                       {formatDate(a.date)} · {a.readingTime} min
                     </span>
                   </div>
@@ -198,9 +178,7 @@ function Blog() {
                     {a.title}
                   </h2>
 
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-[#8792ad]">
-                    {a.excerpt}
-                  </p>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-[#8792ad]">{a.excerpt}</p>
 
                   <span className="mt-6 inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[0.14em] uppercase text-[#93C5FD]">
                     Lire

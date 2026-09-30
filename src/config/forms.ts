@@ -66,7 +66,7 @@ export const FORM = {
   endpoint: "https://api.web3forms.com/submit",
 
   /** Objet de l'e-mail que tu recevras. */
-  subject: "Nouvelle demande depuis le site ULTRA VISION",
+  subject: "Nouvelle demande depuis le site UltraVision Agency",
 
   /**
    * Nom du champ piege.
@@ -115,7 +115,7 @@ export async function sendForm(data: Record<string, string>): Promise<SendResult
       body: JSON.stringify({
         access_key: FORM.accessKey,
         subject: FORM.subject,
-        from_name: "Site ULTRA VISION",
+        from_name: "Site UltraVision Agency",
         ...data,
       }),
     });

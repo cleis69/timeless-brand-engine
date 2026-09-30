@@ -170,7 +170,7 @@ export function BookingCalendar() {
         </p>
         {hasWhatsapp && (
           <a
-            href={whatsappUrl("Bonjour ULTRA VISION, je souhaite réserver un appel.")}
+            href={whatsappUrl("Bonjour UltraVision, je souhaite réserver un appel.")}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 inline-flex h-12 items-center rounded-full bg-[#2563EB] px-7 text-xs font-medium tracking-[0.14em] text-white uppercase"
@@ -188,13 +188,13 @@ export function BookingCalendar() {
   if (done) {
     const label = `${dayLabel(done.date)} à ${timeLabel(done.time)}`;
     const when = label.charAt(0).toUpperCase() + label.slice(1);
-    const details = `Appel de ${BOOKING.durationMin} minutes avec ULTRA VISION, au ${done.phone}.${
+    const details = `Appel de ${BOOKING.durationMin} minutes avec UltraVision Agency, au ${done.phone}.${
       hasWhatsapp
-        ? ` Un empêchement ? ${whatsappUrl("Bonjour ULTRA VISION, je dois déplacer notre appel.")}`
+        ? ` Un empêchement ? ${whatsappUrl("Bonjour UltraVision, je dois déplacer notre appel.")}`
         : ""
     }`;
     const ics = `data:text/calendar;charset=utf-8,${encodeURIComponent(
-      icsFile(done.date, done.time, "Appel avec ULTRA VISION", details),
+      icsFile(done.date, done.time, "Appel avec UltraVision Agency", details),
     )}`;
     const elsewhere = visitorTimeLabel(done.date, done.time);
     return (
@@ -229,7 +229,7 @@ export function BookingCalendar() {
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           <a
-            href={googleCalendarUrl(done.date, done.time, "Appel avec ULTRA VISION", details)}
+            href={googleCalendarUrl(done.date, done.time, "Appel avec UltraVision Agency", details)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-10 items-center rounded-full bg-foreground px-5 text-[0.7rem] font-medium tracking-[0.12em] text-background uppercase"
@@ -247,7 +247,7 @@ export function BookingCalendar() {
         </div>
         {hasWhatsapp && (
           <a
-            href={whatsappUrl("Bonjour ULTRA VISION, je dois déplacer notre appel.")}
+            href={whatsappUrl("Bonjour UltraVision, je dois déplacer notre appel.")}
             target="_blank"
             rel="noopener noreferrer"
             className="link-underline mt-6 inline-block text-[0.8rem] text-[#93C5FD]"
@@ -341,7 +341,9 @@ export function BookingCalendar() {
       {/* ---------------- Jours ---------------- */}
       <div
         className="mt-4 grid grid-cols-7 gap-1 text-center"
-        role="grid"
+        /* « group » et non « grid » : le role grid exige des lignes et des
+           cellules ARIA, que ces boutons ne sont pas. Lighthouse le signalait. */
+        role="group"
         aria-label="Jours disponibles"
       >
         {WEEKDAYS.map((w, i) => (

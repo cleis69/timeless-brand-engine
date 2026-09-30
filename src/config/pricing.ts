@@ -556,7 +556,7 @@ export const A_LA_CARTE: AlaCarte[] = A_LA_CARTE_BRUT.map((g) => ({
   sans prix. Elles sont invisibles sur le site, donc c'est le seul
   endroit ou l'oubli se voit.
 */
-if (typeof window !== "undefined") {
+if (import.meta.env.DEV && typeof window !== "undefined") {
   const sansPrix = A_LA_CARTE_BRUT.flatMap((g) =>
     g.items.filter((i) => i.price <= 0).map((i) => i.label),
   );
@@ -584,8 +584,8 @@ if (typeof window !== "undefined") {
 export const NOT_INCLUDED = [
   {
     label: "Le budget publicitaire",
-    detail:
-      "Il est versé directement aux plateformes, jamais par nous. Comptez 800 € à 1 500 € par mois pour démarrer.",
+    /* En dirhams d'abord, comme tous les prix de la page ; l'euro suit. */
+    detail: `Il est versé directement aux plateformes, jamais par nous. Comptez ${dirham(800)} à ${dirham(1500)} par mois (800 à 1 500 €) pour démarrer.`,
   },
   {
     label: "Les intervenants externes",

@@ -94,7 +94,7 @@ export function TalentSheet({ talent, onClose }: Props) {
 
   const link = `${SITE_URL}/casting?profil=${talent.slug}`;
   const ask = whatsappUrl(
-    `Bonjour ULTRA VISION, je souhaite travailler avec ${talent.name} pour une campagne : ${link}`,
+    `Bonjour UltraVision, je souhaite travailler avec ${talent.name} pour une campagne : ${link}`,
   );
 
   const share = async () => {
@@ -105,7 +105,7 @@ export function TalentSheet({ talent, onClose }: Props) {
     */
     if (navigator.share) {
       try {
-        await navigator.share({ title: `${talent.name} — ULTRA VISION`, url: link });
+        await navigator.share({ title: `${talent.name} — UltraVision Agency`, url: link });
         return;
       } catch {
         /* Partage annule : on se rabat sur la copie. */

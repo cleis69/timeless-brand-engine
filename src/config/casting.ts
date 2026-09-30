@@ -229,7 +229,7 @@ async function notify(f: CastingFields, photoUrls: string[], id: string) {
       body: JSON.stringify({
         access_key: FORM.accessKey,
         subject: `Casting — ${f.name}, ${f.age} ans, ${f.city}`,
-        from_name: "Casting ULTRA VISION",
+        from_name: "Casting UltraVision Agency",
         nom: f.name,
         age: `${f.age} ans`,
         ville: f.city,

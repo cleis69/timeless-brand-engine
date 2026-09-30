@@ -58,10 +58,15 @@ export const CONTACT = {
    * l'envoi, et le contexte se perd.
    */
   whatsappMessage:
-    "Bonjour ULTRA VISION, je viens de votre site. J'aimerais echanger sur mon projet.",
+    "Bonjour UltraVision, je viens de votre site. J'aimerais échanger sur mon projet.",
 
-  /** Villes affichees dans le pied de page. */
-  locations: "Casablanca — Rabat — Marrakech — Tanger — Agadir",
+  /**
+   * Villes affichees dans le pied de page.
+   *
+   * Marrakech ouvre la liste : c'est la ou l'agence est basee. Les quatre
+   * autres sont les villes ou elle tourne et se deplace.
+   */
+  locations: "Marrakech — Casablanca — Rabat — Tanger — Agadir",
 
   /**
    * Les memes villes, en liste, pour les donnees structurees.
@@ -70,7 +75,10 @@ export const CONTACT = {
    * qui est balise et ce qui est affiche, et une divergence entre les
    * deux est traitee comme une tentative de manipulation.
    */
-  cities: ["Casablanca", "Rabat", "Marrakech", "Tanger", "Agadir"],
+  cities: ["Marrakech", "Casablanca", "Rabat", "Tanger", "Agadir"],
+
+  /** Phrase affichee partout ou l'on dit ou se trouve l'agence. */
+  base: "Basée à Marrakech, l'agence intervient aussi à Casablanca, Rabat, Tanger et Agadir.",
 
   /** Pays d'intervention, code ISO. Sert aux donnees structurees. */
   country: "MA",
@@ -123,13 +131,12 @@ export const AREA_SERVED = [
   ...CONTACT.cities.map((c) => ({ "@type": "City", name: c })),
 ]
 
-/** Bloc Organization reutilisable dans toutes les donnees structurees. */
-export const ORG_LD = (url: string) => ({
-  "@type": "Organization",
-  name: "ULTRA VISION",
-  url,
-  email: CONTACT.email,
-  ...(hasPhone ? { telephone: CONTACT.phone } : {}),
-  address: { "@type": "PostalAddress", addressCountry: CONTACT.country },
-  areaServed: AREA_SERVED,
-})
+/*
+  L'ENTREPRISE N'EST PLUS DECRITE ICI.
+
+  Elle l'etait page par page, sans identifiant commun : chaque page
+  declarait sa propre « Organization », et les moteurs y voyaient
+  plusieurs entreprises homonymes. Elle est desormais decrite une seule
+  fois, dans src/lib/seo.ts (organizationNode), et chaque page y renvoie
+  par son identifiant `@id`.
+*/

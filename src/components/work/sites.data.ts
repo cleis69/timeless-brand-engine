@@ -32,13 +32,14 @@
  *  donc le seul moyen de montrer quatre projets distincts, et `hue` ne
  *  sert plus qu'aux cartes « Exemple », qui n'ont pas de capture.
  *
- *  LES CAPTURES ACTUELLES sont des captures de FENETRE en PNG. Elles
- *  fonctionnent, mais deux ameliorations restent possibles :
- *    - convertir en WebP 900 px (squoosh.app) : ~4x plus leger ;
- *    - refaire en PLEINE PAGE : une capture haute laisse de la matiere
- *      au defilement du survol, qui est le geste qui fait lire
- *      « c'est un site » plutot que « c'est une image de site ».
- *  Remplace le fichier en gardant le meme nom, rien d'autre a toucher.
+ *  LES CAPTURES ACTUELLES sont des captures de FENETRE, servies en WebP
+ *  de 960 px de large (`shot-960.webp`, 15 a 70 Ko) : trois a quatre
+ *  fois plus legeres que les PNG d'origine, gardes a cote comme source.
+ *  Une amelioration reste possible : les refaire en PLEINE PAGE. Une
+ *  capture haute laisse de la matiere au defilement du survol, qui est
+ *  le geste qui fait lire « c'est un site » plutot que « c'est une image
+ *  de site ». Remplace le fichier en gardant le meme nom, rien d'autre a
+ *  toucher.
  *
  *  NE NOMME JAMAIS un fichier d'apres son hebergeur : cela
  *  reintroduirait l'adresse qu'on vient de masquer.
@@ -105,7 +106,7 @@ export const SITE_ITEMS: SiteItem[] = [
     description:
       'Boutique de mobilier contemporain sur-mesure à Marrakech. Catalogue, fiches produit et demande de devis.',
     domain: 'ideal-contemporain.ma',
-    shot: '/work/sites/ideal-contemporain/shot.png',
+    shot: '/work/sites/ideal-contemporain/shot-960.webp',
     tags: ['Catalogue', 'Sur-mesure', 'Devis'],
     hue: 28,
     layout: 'commerce',
@@ -117,7 +118,7 @@ export const SITE_ITEMS: SiteItem[] = [
     description:
       'Vitrine d’un chef de cuisine, construite en sept chapitres : parcours, prestations privées, création de carte et GM Box, avec réservation directe.',
     domain: 'raphael-anglesy.com',
-    shot: '/work/sites/raphael-anglesy/shot.png',
+    shot: '/work/sites/raphael-anglesy/shot-960.webp',
     tags: ['Chapitrée', 'Prestations', 'Réservation'],
     hue: 42,
     layout: 'editorial',
@@ -129,7 +130,7 @@ export const SITE_ITEMS: SiteItem[] = [
     description:
       'Restaurant et boutique à Essaouira : la carte, le jardin, la boutique et les événements sur un site bilingue, avec réservation intégrée.',
     domain: 'koozina-garden.ma',
-    shot: '/work/sites/koozina-garden/shot.png',
+    shot: '/work/sites/koozina-garden/shot-960.webp',
     tags: ['Bilingue', 'Boutique', 'Réservation'],
     hue: 18,
     layout: 'editorial',
@@ -141,7 +142,7 @@ export const SITE_ITEMS: SiteItem[] = [
     description:
       'Site vitrine pour la photographie et la vidéo immobilière, avec formulaire de prise de rendez-vous.',
     domain: 'rev-immobilier.com',
-    shot: '/work/sites/rev/shot.png',
+    shot: '/work/sites/rev/shot-960.webp',
     tags: ['Photo & vidéo', 'Rendez-vous', 'Immobilier'],
     hue: 38,
     layout: 'editorial',
@@ -179,7 +180,7 @@ export const SITE_ITEMS: SiteItem[] = [
 
   Une donnee provisoire doit se signaler, pas se faire oublier.
 */
-if (typeof window !== 'undefined') {
+if (import.meta.env.DEV && typeof window !== 'undefined') {
   const exemples = SITE_ITEMS.filter((s) => s.placeholder).length
   if (exemples > 0) {
     console.warn(

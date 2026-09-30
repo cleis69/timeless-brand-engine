@@ -1,4 +1,4 @@
-# ULTRA VISION — regles d'exploration
+# UltraVision Agency — regles d'exploration
 #
 # Aucun robot n'est bloque, et c'est deliberé.
 #
@@ -8,7 +8,7 @@
 # rendre invisible la ou l'on veut precisement etre cite.
 #
 # Le contenu de ce site est public et destine a etre lu, y compris par
-# des machines.
+# des machines. Un resume pense pour eux est publie a /llms.txt.
 
 User-agent: *
 Allow: /
@@ -40,9 +40,5 @@ Allow: /
 
 User-agent: CCBot
 Allow: /
-
-# Les fichiers de travail ne sont pas du contenu.
-Disallow: /apercu-
-Disallow: /_A-DEPOSER
 
 Sitemap: https://ultravisionagency.com/sitemap.xml

@@ -73,7 +73,7 @@ export function Logo({
   return (
     <img
       src={SRC[variant]}
-      alt="ULTRA VISION — agence creative growth"
+      alt="UltraVision Agency — Creative Growth Agency à Marrakech"
       /*
         Les dimensions intrinseques du fichier sont declarees, meme si
         la taille reelle vient du `className`. Le navigateur en deduit le

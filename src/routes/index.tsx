@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { BRAND } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
+import { ArrowLink } from "@/components/page/Blocks";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
@@ -9,7 +11,7 @@ import { LOOP, MOTION, EASE_RESPOND } from "@/config/motion";
 import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
-import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { MAD } from "@/config/pricing";
 import { useState } from "react";
 
@@ -48,80 +50,31 @@ import { useState } from "react";
  *    Le telephone +33600000000 a ete retire plutot qu'invente.
  */
 
-/*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
-
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => ({
-    meta: [
-      /*
-        Le titre et la description annoncaient « branding, sites web et
-        applications, intelligence artificielle, automatisation ». C'est
-        l'ancien positionnement, et il n'a plus rien a voir avec ce que
-        la page raconte : production de videos publicitaires et
-        acquisition.
+  /*
+    LE TITRE DIT QUI, QUOI ET OU.
 
-        C'est le texte que Google affiche dans ses resultats. Un visiteur
-        qui clique sur « branding et applications » et tombe sur des
-        videos publicitaires repart aussitot — et ce depart compte comme
-        un signal negatif.
-      */
-      { title: "ULTRA VISION — Vidéos publicitaires & acquisition" },
-      {
-        name: "description",
-        content:
-          "Production de vidéos publicitaires et pilotage de vos campagnes Meta, Google et TikTok. Première vidéo livrée en 7 jours, diffusion comprise, à partir de 5 400 MAD.",
-      },
-      { property: "og:title", content: "ULTRA VISION — Vidéos publicitaires & acquisition" },
-      {
-        property: "og:description",
-        content:
-          "Nous transformons vos vues en ventes. Vidéos publicitaires pensées, tournées et montées par des humains, diffusées et optimisées par nos soins.",
-      },
-      { property: "og:url", content: `${URL}/` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${URL}/` }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ProfessionalService",
-          name: "ULTRA VISION",
-          description:
-            "Agence de production de vidéos publicitaires et d'acquisition. Écriture, tournage, montage et diffusion sur Meta, Google et TikTok.",
-          url: URL,
-          email: CONTACT.email,
-          /*
-            L'ADRESSE ANNONCAIT « Paris, FR ». C'ETAIT FAUX.
+    Nom complet, categorie et ville : c'est ce trio qui distingue
+    UltraVision Agency de la dizaine d'homonymes « UltraVision » dans le
+    monde. La recherche « agence marketing digital Marrakech » est
+    portee par la page pilier ; l'accueil, lui, porte la marque.
 
-            C'est le dernier mensonge du site, et le plus discret : il
-            n'apparaissait nulle part a l'ecran, uniquement dans les
-            donnees que Google lit. Google s'en sert pourtant pour
-            decider dans quelles recherches locales faire apparaitre
-            l'entreprise.
-
-            La zone d'intervention vient maintenant de
-            src/config/contact.ts : le Maroc et les cinq villes. Elle
-            est identique sur toutes les pages du site — declarer une
-            zone differente d'une page a l'autre est l'erreur la plus
-            couteuse en referencement local, parce que Google cesse
-            alors de situer l'entreprise et ne l'affiche plus nulle part.
-          */
-          areaServed: AREA_SERVED,
-          address: { "@type": "PostalAddress", addressCountry: CONTACT.country },
-          knowsLanguage: ["fr", "ar", "en"],
-        }),
-      },
-    ],
-  }),
+    L'entreprise elle-meme n'est plus decrite ici : la racine l'emet sur
+    toutes les pages (src/lib/seo.ts). La page d'accueil declare
+    simplement qu'elle parle d'elle (`about`).
+  */
+  head: () =>
+    pageHead({
+      path: "/",
+      title: `${BRAND.name} — ${BRAND.category} à ${BRAND.city}`,
+      description:
+        "Agence de marketing digital basée à Marrakech : vidéos publicitaires, Meta, Google et TikTok Ads, sites web, CRM et IA. Première vidéo livrée en 7 jours.",
+      ogDescription:
+        "Nous transformons vos vues en ventes. Vidéos publicitaires pensées, tournées et montées par des humains à Marrakech, diffusées et optimisées par nos soins.",
+      about: orgRef,
+      faq: FAQ,
+    }),
 });
 
 /**
@@ -253,7 +206,7 @@ const STATS: { value: string; label: string }[] = [
   { value: "100 %", label: "Clients satisfaits" },
 ];
 
-if (typeof window !== "undefined") {
+if (import.meta.env.DEV && typeof window !== "undefined") {
   const enAttente = STATS.filter((s) => s.value.startsWith("STAT_"));
   if (enAttente.length > 0) {
     console.warn(
@@ -265,6 +218,17 @@ if (typeof window !== "undefined") {
 }
 
 const FAQ = [
+  {
+    /*
+      LA PREMIERE QUESTION EST CELLE QU'ON POSE A UN ASSISTANT.
+
+      « Qu'est-ce qu'UltraVision Agency ? » La reponse est la phrase de
+      definition de src/config/brand.ts, mot pour mot : c'est elle que
+      Google, ChatGPT ou Perplexity doivent pouvoir citer telle quelle.
+    */
+    q: "Qu'est-ce qu'UltraVision Agency ?",
+    a: `${BRAND.definition} ${BRAND.summary}`,
+  },
   {
     /*
       Cette reponse annoncait 20 000 € de depart et 40 000 a 100 000 €
@@ -303,8 +267,8 @@ const FAQ = [
       francais : l'equipe est au Maroc, les clients sont en France, et
       le tournage se deplace.
     */
-    q: "Où intervenez-vous, et pour qui ?",
-    a: "Uniquement au Maroc : Casablanca, Rabat, Marrakech, Tanger et Agadir. Le tournage se déplace dans ces cinq villes sans frais supplémentaires. La grande majorité de nos clients sont des dirigeants francophones installés au Maroc — nous travaillons en français, avec les standards de production auxquels ils sont habitués.",
+    q: "Où êtes-vous basés, et pour qui travaillez-vous ?",
+    a: "Nous sommes basés à Marrakech et intervenons dans tout le Maroc : Marrakech, Casablanca, Rabat, Tanger et Agadir. Le tournage se déplace dans ces cinq villes sans frais supplémentaires. La grande majorité de nos clients sont des dirigeants francophones installés au Maroc — nous travaillons en français, avec les standards de production auxquels ils sont habitués.",
   },
 ];
 
@@ -371,9 +335,20 @@ function Hero() {
 
       <div className="shell relative z-[3] grid w-full items-center gap-x-8 gap-y-5 pt-[11rem] pb-14 sm:gap-y-8 lg:min-h-[92svh] lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:grid-rows-[1fr_auto_auto_1fr] xl:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:pt-40 lg:pb-16">
         <div className="lg:col-start-1 lg:row-start-2">
-          <Reveal>
+          {/*
+            QUI ET OU, AVANT QUOI.
+
+            « Agence video & acquisition — Maroc » decrivait un metier et un
+            pays. La ligne donne desormais la categorie de l'agence et sa
+            ville : c'est ce que les moteurs et les visiteurs doivent
+            retenir d'abord. Le titre, juste dessous, garde la promesse.
+
+            Tout le hero est en `immediate` : l'animation est la meme, mais
+            elle part au premier affichage au lieu d'attendre le JavaScript.
+          */}
+          <Reveal immediate>
             <p className="text-[0.7rem] font-semibold tracking-[0.22em] uppercase text-accent">
-              Agence vidéo &amp; acquisition — Maroc
+              {BRAND.category} — {BRAND.city}, {BRAND.country}
             </p>
           </Reveal>
 
@@ -390,9 +365,13 @@ function Hero() {
             net par le cadre de l'animation du titre.
           */}
           <h1 className="display mt-5 text-[2.5rem] leading-[0.98] tracking-[-0.035em] sm:text-[3.8rem] lg:mt-7 lg:text-[clamp(2.6rem,4.2vw,4.6rem)]">
-            <MaskReveal delay={80}>Des vidéos</MaskReveal>
-            <MaskReveal delay={165}>publicitaires</MaskReveal>
-            <MaskReveal delay={250}>
+            <MaskReveal delay={80} immediate>
+              Des vidéos
+            </MaskReveal>
+            <MaskReveal delay={165} immediate>
+              publicitaires
+            </MaskReveal>
+            <MaskReveal delay={250} immediate>
               <span
                 style={{
                   background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
@@ -406,7 +385,7 @@ function Hero() {
             </MaskReveal>
           </h1>
 
-          <Reveal delay={380}>
+          <Reveal delay={380} immediate>
             <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-muted-foreground sm:text-lg lg:mt-8">
               Nous écrivons, tournons et montons vos publicités,{" "}
               <span className="text-foreground">
@@ -419,13 +398,13 @@ function Hero() {
 
         {/* Les films. Sur telephone, ils s'intercalent entre le titre et les boutons. */}
         <div className="lg:col-start-2 lg:row-span-4 lg:row-start-1">
-          <Reveal delay={200}>
+          <Reveal delay={200} immediate>
             <HeroReel />
           </Reveal>
         </div>
 
         <div className="lg:col-start-1 lg:row-start-3">
-          <Reveal delay={460}>
+          <Reveal delay={460} immediate>
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
                 to="/contact"
@@ -460,7 +439,7 @@ function Hero() {
             avant qu'il la pose, c'est lui eviter un clic — et le plus
             souvent un depart.
           */}
-          <Reveal delay={540}>
+          <Reveal delay={540} immediate>
             <Link
               to="/tarifs"
               className="group mt-6 inline-flex items-center gap-2.5 text-[0.8rem] text-[#a3a3a0] transition-colors duration-200 hover:text-foreground"
@@ -482,7 +461,7 @@ function Hero() {
       </div>
 
       <div className="shell relative z-[3] pb-10">
-        <Reveal delay={600}>
+        <Reveal delay={600} immediate>
           <div className="flex flex-wrap gap-x-10 gap-y-2 border-t border-hairline pt-6 text-[0.68rem] tracking-[0.16em] uppercase text-[#797976]">
             {CONTACT.locations.split("—").map((v) => (
               <span key={v.trim()}>{v.trim()}</span>
@@ -599,10 +578,20 @@ function Why() {
       <div className="shell grid gap-16 py-24 lg:grid-cols-[1fr_1.2fr] lg:py-32">
         <Reveal>
           <div>
-            <p className="eyebrow">Pourquoi ULTRA VISION</p>
+            <p className="eyebrow">Pourquoi {BRAND.short}</p>
             <h2 className="display mt-6 text-4xl sm:text-5xl">
               Le niveau d&apos;exigence d&apos;une équipe interne, la vitesse d&apos;un studio.
             </h2>
+            {/*
+              Le lien vers la page pilier. C'est elle qui repond a la
+              question « qu'est-ce que cette agence, et que fait-elle a
+              Marrakech ? » ; l'accueil doit y mener directement.
+            */}
+            <div className="mt-8">
+              <ArrowLink to="/agence-marketing-digital-marrakech">
+                L&apos;agence à Marrakech, en détail
+              </ArrowLink>
+            </div>
           </div>
         </Reveal>
         {/*

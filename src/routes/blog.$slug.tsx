@@ -1,14 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { SITE_URL } from "@/config/site";
+import { url } from "@/config/site";
+import { BRAND, ORG_ID, withBrand } from "@/config/brand";
+import { pageHead, pageUrl } from "@/lib/seo";
+import { LinkCards } from "@/components/page/Blocks";
+import { findService, servicePath } from "@/content/services";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
-import {
-  ARTICLES_SORTED,
-  findArticle,
-  formatDate,
-  type Article,
-  type Block,
-} from "@/content/blog";
+import { ARTICLES_SORTED, findArticle, formatDate, type Article, type Block } from "@/content/blog";
 import { Figure } from "@/components/Figure";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 
@@ -65,14 +63,6 @@ import { EASE_RESPOND, MOTION } from "@/config/motion";
  * avant de trouver la reponse choisit une autre source.
  */
 
-/*
-  L'adresse vient desormais de src/config/site.ts.
-  Le jour du basculement vers ultravisionagency.com, une seule ligne
-  change la-bas et les dix pages suivent — y compris toutes les
-  adresses canoniques et toutes les donnees structurees.
-*/
-const URL = SITE_URL;
-
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
     const article = findArticle(params.slug);
@@ -84,90 +74,81 @@ export const Route = createFileRoute("/blog/$slug")({
     const a = loaderData as Article | undefined;
     if (!a) return {};
 
-    const url = `${URL}/blog/${a.slug}`;
+    const path = `/blog/${a.slug}`;
+    const href = pageUrl(path);
+    /* L'agence, auteur et editeur : reference a l'entite de la racine,
+       avec son nom en clair pour les lecteurs qui ne suivent pas les @id. */
+    const agency = { "@id": ORG_ID, name: BRAND.name, url: url("/") };
 
-    return {
-      meta: [
-        { title: `${a.title} | ULTRA VISION` },
-        { name: "description", content: a.seo },
-        { property: "og:title", content: a.title },
-        { property: "og:description", content: a.seo },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "article" },
+    return pageHead({
+      path,
+      title: withBrand(a.title),
+      description: a.seo,
+      ogTitle: a.title,
+      ogType: "article",
+      breadcrumbs: [
+        { name: "Blog", path: "/blog" },
+        { name: a.title, path },
+      ],
+      datePublished: a.date,
+      dateModified: a.date,
+      faq: a.faq,
+      extraMeta: [
         { property: "article:published_time", content: a.date },
         { property: "article:section", content: a.category },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: a.title },
-        { name: "twitter:description", content: a.seo },
       ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [
+      nodes: [
         {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: a.title,
-            description: a.seo,
-            /*
-              `abstract` reprend les phrases de l'encadre « L'essentiel ».
-              C'est le champ que les moteurs conversationnels lisent en
-              priorite quand ils cherchent a resumer une source.
-            */
-            abstract: a.takeaways.join(" "),
-            datePublished: a.date,
-            dateModified: a.date,
-            inLanguage: "fr-FR",
-            /*
-              Le compte de mots ne porte que sur le texte reel. Les
-              tableaux et les infographies sont exclus : ce sont des
-              objets, et les convertir en chaine produirait
-              « [object Object] » — c'est-a-dire un decompte faux
-              declare a Google, ce qui est pire que pas de decompte.
-            */
-            wordCount: a.body.reduce((n, b) => {
-              if (b.k === "ul") return n + b.v.join(" ").split(/\s+/).length;
-              if (b.k === "table" || b.k === "figure") return n;
-              return n + b.v.split(/\s+/).length;
-            }, 0),
-            timeRequired: `PT${a.readingTime}M`,
-            articleSection: a.category,
-            author: { "@type": "Organization", name: "ULTRA VISION", url: URL },
-            publisher: { "@type": "Organization", name: "ULTRA VISION", url: URL },
-            mainEntityOfPage: { "@type": "WebPage", "@id": url },
-            /* Designe les zones autonomes, citables hors contexte. */
-            speakable: {
-              "@type": "SpeakableSpecification",
-              cssSelector: [".uv-takeaways", ".uv-faq"],
-            },
-          }),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: a.faq.map((f) => ({
-              "@type": "Question",
-              name: f.q,
-              acceptedAnswer: { "@type": "Answer", text: f.a },
-            })),
-          }),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: URL },
-              { "@type": "ListItem", position: 2, name: "Blog", item: `${URL}/blog` },
-              { "@type": "ListItem", position: 3, name: a.title, item: url },
-            ],
-          }),
+          "@type": "BlogPosting",
+          "@id": `${href}#article`,
+          headline: a.title,
+          description: a.seo,
+          /*
+            `abstract` reprend les phrases de l'encadre « L'essentiel » :
+            c'est le champ que les moteurs conversationnels lisent en
+            priorite pour resumer une source.
+          */
+          abstract: a.takeaways.join(" "),
+          datePublished: a.date,
+          dateModified: a.date,
+          inLanguage: "fr-FR",
+          /*
+            Le compte de mots ne porte que sur le texte reel : tableaux et
+            infographies sont exclus, sinon « [object Object] » faussait
+            le decompte declare.
+          */
+          wordCount: a.body.reduce((n, b) => {
+            if (b.k === "ul") return n + b.v.join(" ").split(/\s+/).length;
+            if (b.k === "table" || b.k === "figure") return n;
+            return n + b.v.split(/\s+/).length;
+          }, 0),
+          timeRequired: `PT${a.readingTime}M`,
+          articleSection: a.category,
+          author: agency,
+          publisher: agency,
+          isPartOf: {
+            "@type": "Blog",
+            "@id": `${url("/blog")}#blog`,
+            name: `Blog ${BRAND.name}`,
+            url: url("/blog"),
+          },
+          mainEntityOfPage: { "@id": `${href}#webpage` },
+          image: url("/og/ultravision-agency.jpg"),
+          ...(a.services?.length
+            ? {
+                about: a.services.map((k) => ({
+                  "@id": `${url(servicePath(k))}#service`,
+                })),
+              }
+            : {}),
+          /* Designe les zones autonomes, citables hors contexte. */
+          speakable: {
+            "@type": "SpeakableSpecification",
+            cssSelector: [".uv-takeaways", ".uv-faq"],
+          },
         },
       ],
-    };
+    });
   },
 });
 
@@ -192,8 +173,8 @@ function ArticlePage() {
 
         <div className="shell relative pt-32 pb-10 lg:pt-40 lg:pb-12">
           {/* Fil d'Ariane, visible et declare en donnees structurees. */}
-          <Reveal>
-            <nav aria-label="Fil d'Ariane" className="text-[0.72rem] text-[#5c6a86]">
+          <Reveal immediate>
+            <nav aria-label="Fil d'Ariane" className="text-[0.72rem] text-[#7b88a6]">
               <Link to="/" className="hover:text-foreground">
                 Accueil
               </Link>
@@ -206,25 +187,25 @@ function ArticlePage() {
             </nav>
           </Reveal>
 
-          <Reveal delay={60}>
+          <Reveal delay={60} immediate>
             <h1 className="display mt-6 max-w-4xl text-[2rem] leading-[1.05] tracking-[-0.035em] sm:text-[2.8rem] lg:text-[3.4rem]">
               {a.title}
             </h1>
           </Reveal>
 
-          <Reveal delay={140}>
+          <Reveal delay={140} immediate>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
               {a.excerpt}
             </p>
           </Reveal>
 
-          <Reveal delay={200}>
-            <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.74rem] text-[#5c6a86]">
+          <Reveal delay={200} immediate>
+            <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.74rem] text-[#7b88a6]">
               <time dateTime={a.date}>{formatDate(a.date)}</time>
               <span aria-hidden="true">·</span>
               <span>{a.readingTime} minutes de lecture</span>
               <span aria-hidden="true">·</span>
-              <span>ULTRA VISION</span>
+              <span>{BRAND.name}</span>
             </p>
           </Reveal>
         </div>
@@ -296,9 +277,40 @@ function ArticlePage() {
         </div>
       </section>
 
+      {/* ---------------- Les services lies ---------------- */}
+      {/*
+        L'article explique une methode ; la page service la vend. Sans ce
+        lien, un lecteur convaincu n'avait que le bouton de contact.
+      */}
+      {a.services && a.services.length > 0 && (
+        <section className="rule bg-background">
+          <div className="shell py-14 lg:py-18">
+            <Reveal>
+              <p className="eyebrow" style={{ color: "#60A5FA" }}>
+                Nos services
+              </p>
+              <h2 className="display mt-4 text-2xl sm:text-3xl">
+                Ce que nous faisons de cette méthode.
+              </h2>
+            </Reveal>
+            <LinkCards
+              items={a.services.map((k) => {
+                const s = findService(k)!;
+                return {
+                  to: servicePath(s.slug),
+                  eyebrow: "Service",
+                  title: s.name,
+                  text: s.description,
+                };
+              })}
+            />
+          </div>
+        </section>
+      )}
+
       {/* ---------------- Suite ---------------- */}
       {others.length > 0 && (
-        <section className="rule bg-background">
+        <section className={`rule ${a.services?.length ? "bg-surface" : "bg-background"}`}>
           <div className="shell py-14 lg:py-18">
             <Reveal>
               <p className="eyebrow" style={{ color: "#60A5FA" }}>
@@ -348,14 +360,10 @@ function ArticlePage() {
 function BlockView({ block }: { block: Block }) {
   switch (block.k) {
     case "h2":
-      return (
-        <h2 className="display mt-12 mb-5 text-2xl sm:text-[1.7rem]">{block.v}</h2>
-      );
+      return <h2 className="display mt-12 mb-5 text-2xl sm:text-[1.7rem]">{block.v}</h2>;
 
     case "p":
-      return (
-        <p className="mb-5 text-[1rem] leading-[1.8] text-[#c2c6d2]">{block.v}</p>
-      );
+      return <p className="mb-5 text-[1rem] leading-[1.8] text-[#c2c6d2]">{block.v}</p>;
 
     case "ul":
       return (
@@ -375,10 +383,7 @@ function BlockView({ block }: { block: Block }) {
 
     case "quote":
       return (
-        <blockquote
-          className="my-9 border-l-2 py-1 pl-6"
-          style={{ borderColor: "#3B82F6" }}
-        >
+        <blockquote className="my-9 border-l-2 py-1 pl-6" style={{ borderColor: "#3B82F6" }}>
           <p className="display text-[1.3rem] leading-[1.4] text-foreground sm:text-[1.5rem]">
             {block.v}
           </p>
