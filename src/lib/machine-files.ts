@@ -94,7 +94,7 @@ export function buildSitemap(): string {
         ? `
     <video:video>
       <video:thumbnail_loc>${xml(url(w.poster))}</video:thumbnail_loc>
-      <video:title>${xml(`${w.caseStudy!.client} — ${w.title}`)}</video:title>
+      <video:title>${xml(`${w.title} — vidéo publicitaire`)}</video:title>
       <video:description>${xml(w.caseStudy!.summary)}</video:description>
       <video:content_loc>${xml(url(w.sources.mp4))}</video:content_loc>
       <video:duration>${w.durationSec}</video:duration>
