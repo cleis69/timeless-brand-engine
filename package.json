@@ -8,9 +8,10 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "find public -name '.DS_Store' -delete; vite build && node scripts/fix-ssr-cycle.mjs && node scripts/set-custom-domains.mjs && node scripts/set-storage.mjs && npx wrangler deploy",
+    "deploy": "find public -name '.DS_Store' -delete; vite build && node scripts/fix-ssr-cycle.mjs && node scripts/set-custom-domains.mjs && node scripts/set-storage.mjs && npx wrangler deploy && node scripts/indexnow.mjs",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
