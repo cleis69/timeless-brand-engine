@@ -51,6 +51,16 @@ export const SOCIAL = [
     handle: "@ultravision.agency",
     url: "https://www.tiktok.com/@ultravision.agency",
   },
+  /*
+    Le profil d'agence sur Sortlist, publie le 5 octobre 2026. Un annuaire
+    d'agences qui pointe vers le site, et que le site declare en retour :
+    c'est ce lien dans les deux sens qui fait reconnaitre l'entreprise.
+  */
+  {
+    network: "Sortlist",
+    handle: "UltraVision Agency",
+    url: "https://www.sortlist.com/agency/ultra-vision-360-agency",
+  },
 ] as const;
 
 export const BRAND = {
