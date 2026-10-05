@@ -32,15 +32,17 @@ export const CONTACT = {
   email: "contact@ultravisionagency.com",
 
   /**
-   * Numero de telephone francais, au format international.
+   * Numero de telephone, au format international.
    *
-   * ATTENTION : tu m'as donne "+330675627707". J'ai retire le zero.
-   * En format international, le zero de debut disparait toujours :
-   * le numero national 06 75 62 77 07 s'ecrit +33 675 62 77 07.
-   * Avec le zero en trop, un appel depuis l'etranger echoue.
-   * Si le numero exact est different, corrige ici.
+   * LE NUMERO MAROCAIN, DEPUIS LE 5 OCTOBRE 2026. C'est celui de la
+   * fiche Google de l'agence et de WhatsApp : Google compare le numero
+   * du site et celui de la fiche, et un numero different d'une source a
+   * l'autre affaiblit le referencement local. Un seul numero, partout.
+   *
+   * Le zero de debut disparait en format international : le numero
+   * national 06 38 59 56 58 s'ecrit +212 6 38 59 56 58.
    */
-  phone: "+33675627707",
+  phone: "+212638595658",
 
   /**
    * Numero WhatsApp, sans le plus ni les espaces.
@@ -91,10 +93,13 @@ export const hasPhone = CONTACT.phone.length > 0
 /** Vrai si un numero WhatsApp publiable est renseigne. */
 export const hasWhatsapp = CONTACT.whatsapp.length > 0
 
-/** Numero de telephone formate pour l'affichage : +33 6 12 34 56 78 */
+/** Numero de telephone formate pour l'affichage : +212 6 38 59 56 58, ou +33 6 12 34 56 78 */
 export function phoneDisplay() {
   if (!hasPhone) return ""
   const n = CONTACT.phone.replace(/\s/g, "")
+  if (n.startsWith("+212") && n.length === 13) {
+    return `+212 ${n.slice(4, 5)} ${n.slice(5, 7)} ${n.slice(7, 9)} ${n.slice(9, 11)} ${n.slice(11, 13)}`
+  }
   if (n.startsWith("+33") && n.length === 12) {
     return `+33 ${n.slice(3, 4)} ${n.slice(4, 6)} ${n.slice(6, 8)} ${n.slice(8, 10)} ${n.slice(10, 12)}`
   }
