@@ -45,7 +45,41 @@
  */
 
 import type { FigureData } from "@/components/Figure";
+import { A_LA_CARTE, PACKS, dirham, euro } from "@/config/pricing";
 import type { ServiceSlug } from "./services";
+
+/*
+ * LES PRIX CITES DANS LES ARTICLES SONT LUS DANS pricing.ts.
+ *
+ * Un article qui annonce un prix different de la page tarifs fait douter
+ * des deux. Les montants ci-dessous suivent donc la grille : si un prix
+ * ou le taux du dirham change, les articles changent avec.
+ */
+const carte = (label: string) => {
+  const it = A_LA_CARTE.flatMap((g) => g.items).find((i) => i.label === label);
+  if (!it) throw new Error(`[blog] Prestation introuvable dans pricing.ts : ${label}`);
+  return it.price;
+};
+const pack = (id: string) => {
+  const p = PACKS.find((x) => x.id === id);
+  if (!p) throw new Error(`[blog] Formule introuvable dans pricing.ts : ${id}`);
+  return p.price;
+};
+/** « 4 300 MAD (390 €) » */
+const both = (eur: number) => `${dirham(eur)} (${euro(eur)})`;
+/** « 8 800 à 16 500 MAD (800 à 1 500 €) » */
+const range = (a: number, b: number) =>
+  `${dirham(a).replace(" MAD", "")} à ${dirham(b)} (${a.toLocaleString("fr-FR")} à ${euro(b)})`;
+
+const VIDEO = carte("Vidéo publicitaire");
+const MEDIA = carte("Media buying");
+const LANDING = carte("Landing page de conversion");
+const VITRINE = carte("Site vitrine");
+const SEO_TECH = carte("Référencement technique");
+const ESSAI = pack("essai");
+const PRODUCTION = pack("production");
+/** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
+const AD_BUDGET = range(800, 1500);
 
 export type Block =
   | { k: "h2"; v: string }
@@ -359,16 +393,16 @@ export const ARTICLES: Article[] = [
   {
     slug: "combien-coute-une-video-publicitaire",
     services: ["production-video-photo", "meta-ads"],
-    title: "Combien coûte une vidéo publicitaire, et pourquoi les écarts sont énormes",
-    excerpt:
-      "Entre 200 € et 8 000 € pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, et les questions à poser avant de signer.",
+    title: "Combien coûte une vidéo publicitaire ? Les prix en dirhams et en euros",
+    excerpt: `Entre ${range(200, 8000)} pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, les prix pratiqués à Marrakech, et les questions à poser avant de signer.`,
     category: "Tarifs",
     date: "2026-08-10",
     readingTime: 6,
-    seo: "Prix d'une vidéo publicitaire : ce qui fait varier un devis de 200 à 8 000 €, et les cinq questions à poser avant de choisir un prestataire.",
+    seo: "Prix d'une vidéo publicitaire en dirhams et en euros : ce qui fait varier un devis, nos tarifs à Marrakech et les cinq questions à poser avant de signer.",
     takeaways: [
-      "Le prix d'une vidéo publicitaire varie de 150 € pour un simple montage à plus de 15 000 € pour une production avec équipe complète et comédiens.",
-      "Pour de la publicité en ligne, la gamme pertinente se situe entre 400 et 1 200 € : écriture, tournage et montage avec une équipe réduite.",
+      `Le prix d'une vidéo publicitaire varie de ${both(150)} pour un simple montage à plus de ${both(15000)} pour une production avec équipe complète et comédiens.`,
+      `Pour de la publicité en ligne, la gamme pertinente se situe entre ${range(400, 1200)} : écriture, tournage et montage avec une équipe réduite.`,
+      `À Marrakech, UltraVision Agency facture une vidéo publicitaire ${both(VIDEO)} hors taxes et hors budget publicitaire : angle, script, tournage, montage et formats verticaux compris.`,
       "Cinq facteurs expliquent l'essentiel des écarts : la présence ou non d'un tournage, le temps passé à l'écriture, les intervenants externes, le nombre de déclinaisons et l'inclusion ou non du pilotage des campagnes.",
       "Le budget publicitaire versé aux plateformes n'est presque jamais inclus dans le prix d'une vidéo. C'est la première source de malentendu entre une agence et son client.",
       "Sur un feed de téléphone, un plan à 8 000 € et un plan à 400 € occupent la même surface d'écran pendant la même seconde et demie. L'accroche pèse davantage que le budget de tournage.",
@@ -376,11 +410,15 @@ export const ARTICLES: Article[] = [
     faq: [
       {
         q: "Combien coûte une vidéo publicitaire pour Meta ou TikTok ?",
-        a: "Comptez 400 à 1 200 € pour une production légère comprenant écriture, tournage et montage. En dessous de 400 €, il s'agit généralement d'un montage à partir d'images que vous fournissez. Au-dessus de 3 000 €, on entre dans la production lourde, rarement justifiée pour de la publicité en ligne.",
+        a: `Comptez ${range(400, 1200)} pour une production légère comprenant écriture, tournage et montage. En dessous de ${both(400)}, il s'agit généralement d'un montage à partir d'images que vous fournissez. Au-dessus de ${both(3000)}, on entre dans la production lourde, rarement justifiée pour de la publicité en ligne.`,
+      },
+      {
+        q: "Combien coûte une vidéo publicitaire au Maroc ?",
+        a: `Chez UltraVision Agency, à Marrakech, une vidéo publicitaire coûte ${both(VIDEO)} hors taxes : angle, script, tournage, montage et formats verticaux. Une première vidéo avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}. Le budget publicitaire versé aux plateformes s'ajoute toujours.`,
       },
       {
         q: "Le budget publicitaire est-il compris dans le prix d'une vidéo ?",
-        a: "Non, presque jamais. Le budget média est versé directement aux plateformes depuis votre propre compte publicitaire. Il s'ajoute au coût de production. Prévoyez 800 à 1 500 € par mois pour démarrer selon le secteur.",
+        a: `Non, presque jamais. Le budget média est versé directement aux plateformes depuis votre propre compte publicitaire. Il s'ajoute au coût de production. Prévoyez ${AD_BUDGET} par mois pour démarrer selon le secteur.`,
       },
       {
         q: "Quelles questions poser avant de signer un devis vidéo ?",
@@ -454,6 +492,22 @@ export const ARTICLES: Article[] = [
       {
         k: "p",
         v: "Nous publions nos prix, ligne par ligne, sur la page tarifs — y compris ce qui n'est jamais compris. Ce n'est pas de la transparence pour le principe : c'est parce que la quasi-totalité des ruptures entre une agence et un client vient d'une ligne dont personne n'avait parlé avant de commencer.",
+      },
+      {
+        k: "table",
+        v: {
+          head: ["Prestation, à Marrakech", "Prix hors taxes"],
+          rows: [
+            ["Une vidéo publicitaire : angle, script, tournage, montage", both(VIDEO)],
+            ["Une première vidéo, avec 14 jours de diffusion pilotée", both(ESSAI)],
+            ["Quatre vidéos par mois, diffusion pilotée comprise", `${both(PRODUCTION)} par mois`],
+            ["Budget publicitaire conseillé pour démarrer, versé aux plateformes", `${AD_BUDGET} par mois`],
+          ],
+        },
+      },
+      {
+        k: "note",
+        v: "Les montants en dirhams sont convertis au taux commercial de l'agence ; le devis est établi en euros, qui font foi. Le tournage se déplace à Casablanca, Rabat, Tanger et Agadir sans frais supplémentaires.",
       },
     ],
   },
@@ -755,6 +809,456 @@ export const ARTICLES: Article[] = [
       {
         k: "note",
         v: "Cette page sera mise à jour quand nos pratiques changeront. Si vous lisez cet article dans six mois et que la liste vous paraît datée, dites-le-nous : c'est qu'elle l'est.",
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  6. LE BUDGET META ADS
+   * ==================================================================== */
+  {
+    slug: "budget-meta-ads-maroc",
+    services: ["meta-ads", "production-video-photo", "generation-de-leads"],
+    title: "Quel budget pour Meta Ads au Maroc ? Le calcul, pas une moyenne",
+    excerpt:
+      "Facebook et Instagram acceptent des campagnes à quelques dirhams par jour. La vraie question n'est pas le minimum autorisé, mais le minimum utile : celui qui donne à l'algorithme assez de résultats pour apprendre.",
+    category: "Tarifs",
+    date: "2026-10-05",
+    readingTime: 7,
+    seo: "Budget Meta Ads au Maroc : comment calculer ce qu'il faut dépenser sur Facebook et Instagram, en dirhams, à partir du coût d'un résultat et de la phase d'apprentissage.",
+    takeaways: [
+      "Un budget Meta Ads se calcule à partir du coût d'un résultat, pas à partir d'une moyenne de marché : il doit permettre à chaque ensemble de publicités d'obtenir régulièrement des conversions.",
+      "Selon la documentation de Meta, un ensemble de publicités sort de sa phase d'apprentissage après environ 50 événements d'optimisation sur sept jours. Pendant cette phase, les coûts sont plus élevés et moins stables.",
+      "Le calcul de départ tient en une ligne : le coût estimé d'un résultat, multiplié par 50 résultats par semaine, multiplié par quatre semaines.",
+      "Un petit budget réparti sur plusieurs campagnes n'apprend rien : chaque découpage par audience, par ville ou par format divise les résultats que l'algorithme reçoit.",
+      `Pour démarrer, UltraVision Agency recommande ${AD_BUDGET} par mois de budget publicitaire, versé directement à Meta depuis le compte de l'annonceur, en plus des honoraires de production et de pilotage.`,
+    ],
+    faq: [
+      {
+        q: "Quel est le budget minimum pour faire de la publicité sur Facebook au Maroc ?",
+        a: "Techniquement, Meta accepte de très petits budgets quotidiens. Pour qu'une campagne apprenne, il faut viser environ 50 résultats par semaine et par ensemble de publicités, ce qui représente le plus souvent plusieurs milliers de dirhams par mois selon le coût d'un résultat dans votre secteur.",
+      },
+      {
+        q: "Le budget publicitaire est-il compris dans les honoraires d'une agence ?",
+        a: "Non. Le budget publicitaire est versé directement à Meta depuis le compte de l'annonceur. Les honoraires de l'agence paient la production des vidéos et le pilotage des campagnes. Les deux doivent figurer sur deux lignes distinctes du devis.",
+      },
+      {
+        q: "Combien de temps avant de juger une campagne Meta Ads ?",
+        a: "Deux semaines au minimum. La première semaine sert souvent à sortir de la phase d'apprentissage : juger avant revient à juger l'algorithme pendant qu'il apprend, pas la publicité.",
+      },
+      {
+        q: "Que faire si le budget calculé dépasse ce que je peux dépenser ?",
+        a: "Changer l'événement optimisé plutôt que de couper le budget. Optimiser sur un événement plus fréquent, comme un clic vers WhatsApp ou une visite de la page de contact, permet d'atteindre les 50 événements hebdomadaires avec moins d'argent, au prix d'un signal moins précis.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "« Combien faut-il mettre sur Facebook ? » La réponse honnête commence par une autre question : combien vous coûte un client, et combien vous en rapporte-t-il ? Meta laisse lancer une campagne avec quelques dirhams par jour. Ce minimum technique n'a presque rien à voir avec le minimum utile.",
+      },
+
+      { k: "h2", v: "Le minimum technique et le minimum utile" },
+      {
+        k: "p",
+        v: "Une campagne lancée avec un budget minuscule démarre normalement : des impressions arrivent, quelques clics, puis plus rien. Ce n'est pas que la publicité ne fonctionne pas. C'est que l'algorithme n'a pas reçu assez de résultats pour comprendre à qui la montrer.",
+      },
+      {
+        k: "p",
+        v: "Meta l'écrit dans sa documentation : un ensemble de publicités reste en phase d'apprentissage tant qu'il n'a pas obtenu environ 50 événements d'optimisation — achats, demandes de contact, inscriptions — sur une période de sept jours. Pendant cette phase, la diffusion tâtonne, et chaque résultat coûte plus cher qu'il ne coûtera ensuite.",
+      },
+
+      { k: "h2", v: "Le calcul, en trois lignes" },
+      {
+        k: "ul",
+        v: [
+          "Estimez le coût d'un résultat : une demande de contact, une réservation, un achat. Sans historique, partez d'une hypothèse prudente, et corrigez-la après deux semaines de diffusion.",
+          "Multipliez par 50 : c'est le volume hebdomadaire qui permet à un ensemble de publicités d'apprendre.",
+          "Multipliez par quatre semaines : vous obtenez le budget mensuel qui donne à une campagne une vraie chance.",
+        ],
+      },
+      {
+        k: "table",
+        v: {
+          head: ["Coût d'un résultat (exemple)", "50 résultats par semaine", "Budget sur quatre semaines"],
+          rows: [
+            ["20 MAD — une inscription", "1 000 MAD", "4 000 MAD"],
+            ["50 MAD — une demande de contact", "2 500 MAD", "10 000 MAD"],
+            ["150 MAD — une demande de devis qualifiée", "7 500 MAD", "30 000 MAD"],
+          ],
+        },
+      },
+      {
+        k: "note",
+        v: "Ces coûts sont des exemples choisis pour montrer le calcul, pas des moyennes du marché marocain. Le coût réel d'un résultat dépend de votre secteur, de votre offre, de votre zone et surtout de vos vidéos.",
+      },
+      {
+        k: "p",
+        v: "Quand le budget obtenu dépasse ce que vous pouvez dépenser, ne baissez pas le chiffre : changez l'événement. Optimiser sur une action plus fréquente — un clic vers WhatsApp, une visite de la page de contact — permet d'atteindre les 50 événements avec moins d'argent. Le signal est moins précis, mais la campagne apprend, ce qui vaut mieux qu'une campagne précise qui n'apprend jamais.",
+      },
+
+      { k: "h2", v: "Pourquoi un petit budget se disperse" },
+      {
+        k: "p",
+        v: "L'erreur la plus fréquente n'est pas un budget trop petit, c'est un budget trop découpé. Quatre campagnes à 50 MAD par jour n'apprennent rien ; une seule campagne à 200 MAD par jour a une chance d'apprendre. Chaque découpage — une campagne par ville, par audience, par format — divise les résultats que l'algorithme reçoit.",
+      },
+      { k: "quote", v: "Mieux vaut une campagne bien nourrie que quatre campagnes affamées." },
+      {
+        k: "p",
+        v: "Ce qui doit varier, au départ, ce sont les vidéos, pas les audiences. Quatre vidéos qui testent quatre angles différents dans une même campagne donnent à Meta de quoi choisir, sans diviser le budget.",
+      },
+
+      { k: "h2", v: "Ce qui est propre au Maroc" },
+      {
+        k: "ul",
+        v: [
+          "La carte de paiement. Vérifiez avec votre banque qu'elle est activée pour les paiements en ligne à l'international : une carte refusée est la cause la plus banale d'une campagne qui s'arrête sans prévenir.",
+          "La zone. Meta permet de viser une ville — Marrakech, Casablanca — ou un rayon autour de votre adresse. Pour un commerce de quartier, un rayon de quelques kilomètres vaut mieux que tout le pays.",
+          "L'audience étrangère. Une résidence, un riad ou un service aux non-résidents peut viser des personnes qui vivent en France ou en Belgique : le budget doit alors tenir compte d'un coût souvent plus élevé sur ces marchés.",
+          "La langue. Une vidéo en français ne parle pas au même public qu'une vidéo en darija. Le choix de la langue est un choix de cible, avant d'être un choix de traduction.",
+        ],
+      },
+
+      { k: "h2", v: "Ce que le budget publicitaire ne paie pas" },
+      {
+        k: "p",
+        v: "Le budget publicitaire va à Meta, depuis votre compte, avec votre carte. Il ne paie ni les vidéos, ni le pilotage, ni la page qui reçoit les demandes. Un devis qui annonce un montant « tout compris » sans séparer ces lignes vous laisse deviner ce qui part réellement en publicité.",
+      },
+
+      { k: "h2", v: "Ce que nous recommandons pour démarrer" },
+      {
+        k: "p",
+        v: `Pour une entreprise qui démarre sur Meta, nous recommandons ${AD_BUDGET} par mois de budget publicitaire, concentrés sur une seule campagne et quatre vidéos qui testent quatre angles. Ce budget est versé directement à Meta. Notre pilotage est facturé à part, ${both(MEDIA)} par mois et par plateforme, et une vidéo publicitaire ${both(VIDEO)}.`,
+      },
+      {
+        k: "note",
+        v: "Le compte publicitaire est toujours ouvert à votre nom, avec un accès administrateur complet. Si nous arrêtons de travailler ensemble, vous repartez avec le compte, son historique et ses audiences.",
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  7. META OU GOOGLE
+   * ==================================================================== */
+  {
+    slug: "meta-ads-ou-google-ads",
+    services: ["meta-ads", "google-ads", "generation-de-leads"],
+    title: "Meta Ads ou Google Ads : par où commencer ?",
+    excerpt:
+      "Les deux plateformes ne font pas le même travail. Google répond à quelqu'un qui cherche déjà ; Meta va chercher quelqu'un qui ne cherchait rien. Le bon point de départ dépend d'une seule question : votre client sait-il qu'il a besoin de vous ?",
+    category: "Stratégie",
+    date: "2026-10-05",
+    readingTime: 6,
+    seo: "Meta Ads (Facebook, Instagram) ou Google Ads : laquelle choisir pour démarrer au Maroc, selon que vos clients cherchent déjà votre service ou non.",
+    takeaways: [
+      "Google Ads capte une demande qui existe déjà : la publicité s'affiche quand quelqu'un tape une recherche. Meta Ads crée une demande : la publicité s'affiche à quelqu'un qui ne cherchait rien.",
+      "Si vos clients cherchent votre service sur Google — un plombier, une clinique, une location de voiture — Google Ads est le premier canal à ouvrir.",
+      "Si votre produit se comprend en le voyant — un lieu, un plat, un soin, un bien immobilier — Meta Ads et une vidéo verticale font mieux le travail.",
+      "Sur Google, le résultat dépend d'abord des mots-clés et de la page d'arrivée. Sur Meta, il dépend d'abord de la vidéo, et surtout de ses premières secondes.",
+      "Google Ads ne peut pas dépenser plus que ce que la demande permet : pour un service local peu recherché, le volume de recherches limite la campagne avant le budget.",
+    ],
+    faq: [
+      {
+        q: "Facebook Ads ou Google Ads, lequel est le moins cher ?",
+        a: "Aucun des deux n'est moins cher dans l'absolu. Un clic sur Google coûte souvent plus cher qu'un clic sur Meta, mais il vient de quelqu'un qui cherche déjà. Comparez le coût d'un client, pas le coût d'un clic.",
+      },
+      {
+        q: "Peut-on lancer Meta Ads et Google Ads en même temps ?",
+        a: "Oui, si le budget le permet. Avec un budget serré, mieux vaut commencer par une seule plateforme, la faire fonctionner, puis ouvrir la seconde : deux campagnes sous-alimentées apprennent moins vite qu'une seule.",
+      },
+      {
+        q: "Google Ads fonctionne-t-il au Maroc ?",
+        a: "Oui. Google Ads permet de viser le Maroc entier, une ville comme Marrakech ou Casablanca, ou un rayon autour d'une adresse, et de choisir les langues des internautes visés.",
+      },
+      {
+        q: "Faut-il un site internet pour faire de la publicité ?",
+        a: "Pour Google Ads, oui : l'annonce mène à une page. Pour Meta Ads, un formulaire intégré à Facebook ou un message WhatsApp suffisent pour démarrer, mais une page dédiée mesure et convertit mieux.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "C'est la question qui suit presque toujours celle du budget. Et la réponse n'est pas une préférence d'agence : les deux plateformes ne vendent pas la même chose. Google vend l'accès à quelqu'un qui cherche. Meta vend l'attention de quelqu'un qui fait défiler son fil.",
+      },
+
+      { k: "h2", v: "Deux machines différentes" },
+      {
+        k: "table",
+        v: {
+          head: ["", "Google Ads", "Meta Ads"],
+          rows: [
+            ["Quand la publicité apparaît", "Quand quelqu'un tape une recherche", "Pendant qu'on fait défiler Facebook ou Instagram"],
+            ["Ce qu'on achète", "Une demande qui existe déjà", "De l'attention, pour créer une demande"],
+            ["Ce qui fait le résultat", "Les mots-clés et la page d'arrivée", "La vidéo, surtout ses premières secondes"],
+            ["Ce qui limite le volume", "Le nombre de recherches", "La capacité de la vidéo à arrêter le défilement"],
+            ["Idéal pour", "Les services recherchés, souvent urgents", "Les produits et les lieux qui se montrent"],
+          ],
+        },
+      },
+
+      { k: "h2", v: "La question qui tranche" },
+      {
+        k: "p",
+        v: "Votre client sait-il déjà qu'il a besoin de vous ? Si oui, il cherche, et Google est l'endroit où il cherche. Si non, il faut aller le chercher là où il passe son temps, et lui montrer quelque chose qu'il n'attendait pas.",
+      },
+      {
+        k: "ul",
+        v: [
+          "Une fuite d'eau, une panne de voiture, un rendez-vous chez un dentiste : le besoin précède la recherche. Google Ads d'abord.",
+          "Un nouveau restaurant, un soin du visage, une villa en construction : personne ne le cherche avant de l'avoir vu. Meta Ads d'abord.",
+          "Une formation, un service aux entreprises, un logiciel : les deux, souvent — Meta pour faire connaître, Google pour récupérer ceux qui cherchent ensuite.",
+        ],
+      },
+
+      { k: "h2", v: "Le piège du petit marché" },
+      {
+        k: "p",
+        v: "Une campagne Google ne peut s'afficher que lorsque quelqu'un tape la recherche. Pour un service local et précis, le nombre de recherches mensuelles peut être faible : la campagne plafonne alors, quel que soit le budget. L'outil de planification des mots-clés de Google donne une estimation des volumes avant d'investir — c'est la première chose à regarder.",
+      },
+      {
+        k: "p",
+        v: "Au Maroc, il faut aussi regarder la langue des recherches. Une même demande peut être tapée en français, en arabe ou en darija écrite en lettres latines. Une campagne qui n'en couvre qu'une partie passe à côté du reste.",
+      },
+
+      { k: "h2", v: "Ce qui se travaille en premier" },
+      {
+        k: "ul",
+        v: [
+          "Sur Google : la liste des recherches visées, celles qu'on exclut, et la page d'arrivée. Une annonce parfaite qui mène à une page d'accueil générique perd la plupart des clics.",
+          "Sur Meta : la vidéo. Le ciblage large fonctionne de mieux en mieux, à condition que la création dise d'elle-même à qui elle s'adresse.",
+        ],
+      },
+      { k: "quote", v: "Sur Google, on choisit à qui parler. Sur Meta, c'est la vidéo qui choisit." },
+
+      { k: "h2", v: "L'ordre que nous conseillons" },
+      {
+        k: "p",
+        v: `Une plateforme d'abord, celle qui correspond à la façon dont vos clients vous trouvent. Quand elle produit des demandes à un coût stable, la seconde vient la compléter. Le pilotage de chaque plateforme est facturé ${both(MEDIA)} par mois chez UltraVision Agency ; la formule Acquisition réunit Meta, Google et TikTok, avec les vidéos et le suivi des demandes.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  8. LE PRIX D'UN SITE
+   * ==================================================================== */
+  {
+    slug: "prix-site-internet-maroc",
+    services: ["creation-site-web", "generation-de-leads"],
+    title: "Combien coûte un site internet au Maroc ? Ce qui fait le prix",
+    excerpt:
+      "Deux devis pour « un site internet » peuvent aller du simple au décuple, et décrire deux objets différents. Les cinq éléments qui font le prix, les lignes qu'on oublie, et les questions à poser avant de signer.",
+    category: "Tarifs",
+    date: "2026-10-05",
+    readingTime: 6,
+    seo: `Prix d'un site internet au Maroc : ce qui fait varier un devis, landing page ou site vitrine, les frais oubliés et nos tarifs à Marrakech, en dirhams.`,
+    takeaways: [
+      "Le prix d'un site internet dépend surtout de cinq éléments : le nombre de pages, le design, les contenus, les fonctions et ce qui est compris après la mise en ligne.",
+      `Chez UltraVision Agency, à Marrakech, un site vitrine jusqu'à cinq pages coûte ${both(VITRINE)} et une landing page de conversion ${both(LANDING)}, hors taxes.`,
+      "Une landing page est une page unique construite autour d'une offre et d'une seule action ; un site vitrine présente l'entreprise sur plusieurs pages. Pour recevoir le trafic d'une campagne publicitaire, la landing page est le meilleur choix.",
+      "Le nom de domaine, l'hébergement, la maintenance et le référencement sont souvent facturés à part : ils doivent apparaître sur le devis avant la signature.",
+      "Le nom de domaine doit être enregistré au nom de l'entreprise, pour qu'elle en reste propriétaire si elle change de prestataire.",
+    ],
+    faq: [
+      {
+        q: "Combien coûte un site vitrine au Maroc ?",
+        a: `Chez UltraVision Agency, ${both(VITRINE)} hors taxes pour un site jusqu'à cinq pages. Le prix d'un site vitrine dépend surtout du nombre de pages, des contenus à produire et des fonctions demandées, comme la réservation ou plusieurs langues.`,
+      },
+      {
+        q: "Combien de temps faut-il pour créer un site internet ?",
+        a: "Chez nous, cinq jours pour une landing page et trois semaines pour un site vitrine, à partir du moment où les textes et les visuels sont validés.",
+      },
+      {
+        q: "Le référencement est-il compris dans le prix d'un site ?",
+        a: `Pas toujours, et c'est à vérifier sur le devis. Chez UltraVision Agency, le référencement technique — structure, balises, données structurées, Search Console — est une prestation distincte à ${both(SEO_TECH)}.`,
+      },
+      {
+        q: "Landing page ou site vitrine : que choisir ?",
+        a: "Une landing page pour une offre précise et une campagne publicitaire ; un site vitrine pour présenter l'entreprise et être trouvé sur Google. Beaucoup d'entreprises commencent par la landing page, qui produit des demandes plus vite.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "« Un site internet » désigne aussi bien une page unique montée en deux jours qu'une boutique en ligne en trois langues. Comparer deux devis sans savoir ce qu'ils contiennent revient à comparer le prix d'un scooter et celui d'une camionnette parce que les deux ont des roues.",
+      },
+
+      { k: "h2", v: "Les cinq éléments qui font le prix" },
+      {
+        k: "ul",
+        v: [
+          "Le nombre de pages. Chaque page se conçoit, s'écrit et se met en forme. Cinq pages bien faites valent mieux que quinze pages vides.",
+          "Le design. Un modèle adapté et une maquette dessinée pour votre marque ne demandent pas le même travail.",
+          "Les contenus. Qui écrit les textes, qui fait les photos et les vidéos ? C'est souvent la ligne la plus longue à produire, et la plus souvent oubliée.",
+          "Les fonctions. Réservation, paiement en ligne, plusieurs langues, espace client : chacune ajoute du développement et des tests.",
+          "L'après. Hébergement, mises à jour, corrections, sauvegardes : un site qui n'est plus entretenu se dégrade, même s'il ne change pas.",
+        ],
+      },
+
+      { k: "h2", v: "Landing page ou site vitrine ?" },
+      {
+        k: "table",
+        v: {
+          head: ["", "Landing page", "Site vitrine"],
+          rows: [
+            ["Ce que c'est", "Une page, une offre, une action", "Plusieurs pages qui présentent l'entreprise"],
+            ["Sert à", "Transformer le trafic d'une campagne en demandes", "Être trouvé sur Google et rassurer avant un contact"],
+            ["Délai chez nous", "5 jours", "3 semaines"],
+            ["Prix chez nous, hors taxes", both(LANDING), `${both(VITRINE)}, jusqu'à 5 pages`],
+          ],
+        },
+      },
+      {
+        k: "p",
+        v: "Envoyer le trafic d'une publicité vers une page d'accueil est l'une des fuites les plus coûteuses d'une campagne : le visiteur arrive pour une offre et trouve un menu. Une landing page ne lui propose qu'une chose à faire.",
+      },
+
+      { k: "h2", v: "Les lignes qu'on oublie" },
+      {
+        k: "ul",
+        v: [
+          "Le nom de domaine, qui se renouvelle chaque année.",
+          "L'hébergement, mensuel ou annuel selon le prestataire.",
+          "La maintenance : mises à jour, sauvegardes, corrections.",
+          "Le référencement technique : structure, balises, données structurées, inscription à la Search Console de Google.",
+          "Les traductions, si le site parle à des clients étrangers.",
+          "Les photos et vidéos, quand il n'en existe pas encore.",
+        ],
+      },
+      { k: "quote", v: "Un devis de site se lit par ce qu'il ne dit pas." },
+
+      { k: "h2", v: "Les questions à poser avant de signer" },
+      {
+        k: "ul",
+        v: [
+          "À quel nom le nom de domaine est-il enregistré ? Il doit l'être au nom de votre entreprise.",
+          "Aurai-je un accès administrateur au site et à l'hébergement ?",
+          "Combien d'allers-retours sur la maquette sont compris ?",
+          "Qui écrit les textes, et qui fournit les photos ?",
+          "Que coûte le site chaque année après la mise en ligne ?",
+          "Le site est-il relié à un outil de mesure, et qui le consulte ?",
+        ],
+      },
+
+      { k: "h2", v: "Ce que nous pratiquons" },
+      {
+        k: "p",
+        v: `Nos prix sont publiés : ${both(LANDING)} pour une landing page de conversion, ${both(VITRINE)} pour un site vitrine jusqu'à cinq pages, ${both(SEO_TECH)} pour le référencement technique. Les textes, les photos et les vidéos se pensent ensemble, avant la première ligne de code — c'est ce qui permet de tenir trois semaines pour un site vitrine.`,
+      },
+      {
+        k: "note",
+        v: "Quand un site reçoit des demandes, elles peuvent arriver directement dans un CRM, avec leur source. C'est ce qui permet de savoir, chaque mois, quelle campagne a produit quel client.",
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  9. CHOISIR UNE AGENCE
+   * ==================================================================== */
+  {
+    slug: "choisir-agence-marketing-digital-maroc",
+    services: ["meta-ads", "production-video-photo", "generation-de-leads"],
+    title: "Choisir une agence de marketing digital au Maroc : huit questions à poser",
+    excerpt:
+      "Les sites d'agence se ressemblent : mêmes promesses, mêmes logos, mêmes « résultats ». Les vraies différences apparaissent dans les réponses à quelques questions précises, posées avant de signer.",
+    category: "Stratégie",
+    date: "2026-10-05",
+    readingTime: 7,
+    seo: "Comment choisir une agence de marketing digital au Maroc : les huit questions à poser avant de signer, et les signaux d'alerte qui doivent faire fuir.",
+    takeaways: [
+      "Le compte publicitaire et le nom de domaine doivent être ouverts au nom du client, avec un accès administrateur complet : c'est la première question à poser à une agence de marketing digital.",
+      "Le budget publicitaire versé aux plateformes et les honoraires de l'agence doivent figurer sur deux lignes séparées du devis.",
+      "Une agence sérieuse mesure ses résultats en demandes, en rendez-vous ou en ventes, pas en likes ni en impressions.",
+      "Les réalisations présentées doivent être vérifiables : un nom de client, une vidéo en ligne, un site qui existe.",
+      "Aucune agence ne peut garantir une première place sur Google : Google le précise lui-même dans sa documentation.",
+    ],
+    faq: [
+      {
+        q: "Combien coûte une agence de marketing digital au Maroc ?",
+        a: `Cela dépend du périmètre : production de contenus, pilotage des publicités, site, CRM. Chez UltraVision Agency, à Marrakech, le pilotage d'une plateforme publicitaire coûte ${both(MEDIA)} par mois, et la formule Production — quatre vidéos par mois et leur diffusion — ${both(PRODUCTION)} par mois. Le budget publicitaire s'ajoute toujours.`,
+      },
+      {
+        q: "Faut-il s'engager plusieurs mois avec une agence ?",
+        a: "Pas forcément. Un engagement de quelques mois se justifie quand le travail demande du temps pour produire des résultats, comme la structuration d'un tunnel d'acquisition. Pour juger une agence, un essai sans engagement sur une première vidéo ou une première campagne est plus parlant qu'un long contrat.",
+      },
+      {
+        q: "Une agence peut-elle garantir la première place sur Google ?",
+        a: "Non. Google indique lui-même que personne ne peut garantir un classement en première position. Une agence qui le promet vend autre chose que du référencement.",
+      },
+      {
+        q: "Vaut-il mieux une agence locale ou une agence à distance ?",
+        a: "Pour tout ce qui se tourne — vidéos, photos, visites de lieux — une équipe sur place évite les frais de déplacement et les délais. Pour le pilotage des publicités, la distance compte moins que la réactivité et la clarté des rapports.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Un dirigeant qui cherche une agence voit défiler des sites presque identiques : des promesses de croissance, des logos de clients, des chiffres sans source. Le site ne permet pas de choisir. Les réponses à huit questions, si.",
+      },
+
+      { k: "h2", v: "1. À qui appartiennent les comptes ?" },
+      {
+        k: "p",
+        v: "Le compte publicitaire Meta ou Google, le nom de domaine, le site, les fichiers sources des vidéos : tout doit être à votre nom, avec un accès administrateur complet. Un compte publicitaire ouvert au nom de l'agence emporte avec lui l'historique et les audiences le jour où vous la quittez.",
+      },
+
+      { k: "h2", v: "2. Le budget publicitaire est-il séparé des honoraires ?" },
+      {
+        k: "p",
+        v: "Le budget publicitaire est versé aux plateformes ; les honoraires paient le travail de l'agence. Un devis qui mélange les deux ne permet pas de savoir combien part réellement en publicité.",
+      },
+
+      { k: "h2", v: "3. Qu'est-ce que vous mesurez ?" },
+      {
+        k: "p",
+        v: "Les likes, les vues et les impressions se mesurent facilement et ne paient aucune facture. Demandez quel indicateur figurera en tête du rapport mensuel : le coût d'une demande, d'un rendez-vous ou d'une vente est la seule réponse qui relie le travail de l'agence à votre chiffre d'affaires.",
+      },
+
+      { k: "h2", v: "4. Puis-je voir des réalisations vérifiables ?" },
+      {
+        k: "p",
+        v: "Un nom de client, une vidéo en ligne, un site qui existe : une réalisation se vérifie. Un témoignage sans nom ou un logo sans projet ne prouve rien — et un faux témoignage est une pratique commerciale trompeuse.",
+      },
+
+      { k: "h2", v: "5. Qui fait réellement le travail ?" },
+      {
+        k: "p",
+        v: "Beaucoup d'agences vendent et sous-traitent. Ce n'est pas un défaut en soi, mais vous devez savoir qui écrit, qui tourne, qui pilote les campagnes, et qui vous répond quand quelque chose ne va pas.",
+      },
+
+      { k: "h2", v: "6. Quel est l'engagement ?" },
+      {
+        k: "p",
+        v: "Durée minimale, préavis, conditions de sortie : tout doit être écrit. Un engagement de quelques mois peut se justifier ; un engagement long sans possibilité d'essai fait porter tout le risque au client.",
+      },
+
+      { k: "h2", v: "7. Que se passe-t-il si les résultats ne viennent pas ?" },
+      {
+        k: "p",
+        v: "Ni « on recommence gratuitement », ni « ce n'est pas notre problème ». Une agence sérieuse a une réponse préparée : ce qu'elle change, dans quel délai, et à partir de quand elle recommande d'arrêter.",
+      },
+
+      { k: "h2", v: "8. Vos prix sont-ils publiés ?" },
+      {
+        k: "p",
+        v: "Un prix publié se compare. Un prix donné « après un appel découverte » se négocie, et varie souvent selon l'interlocuteur. Les prix publics ne sont pas une garantie de qualité, mais ils sont une garantie de cohérence.",
+      },
+
+      { k: "h2", v: "Les signaux d'alerte" },
+      {
+        k: "ul",
+        v: [
+          "Une première place sur Google garantie.",
+          "Des abonnés ou des avis achetés, présentés comme une stratégie.",
+          "Un compte publicitaire ouvert au nom de l'agence.",
+          "Un rapport mensuel qui parle de portée, jamais de demandes.",
+          "Un engagement d'un an avant la moindre réalisation.",
+        ],
+      },
+      { k: "quote", v: "Une agence se juge à ce qu'elle accepte d'écrire avant la signature." },
+
+      { k: "h2", v: "Nos réponses" },
+      {
+        k: "p",
+        v: `Les comptes publicitaires sont ouverts à votre nom. Le budget publicitaire est toujours séparé de nos honoraires. Nous pilotons au coût par demande et par rendez-vous. Nos réalisations sont en ligne, avec le nom des clients. L'équipe est restreinte et nommée : ceux qui vendent le projet l'exécutent. La formule Production est sans engagement, et une première vidéo avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}.`,
       },
     ],
   },

@@ -18,6 +18,7 @@ import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { PACKS, dirham, euro } from "@/config/pricing";
 import { POLES, SERVICES, servicePath } from "@/content/services";
 import { SECTORS, sectorPath } from "@/content/sectors";
+import { ARTICLES_SORTED } from "@/content/blog";
 import { orgRef, pageHead } from "@/lib/seo";
 
 /**
@@ -296,8 +297,28 @@ function Pilier() {
         </div>
       </Section>
 
-      {/* ---------------- FAQ ---------------- */}
+      {/* ---------------- Ressources ---------------- */}
       <Section>
+        <SectionIntro
+          eyebrow="Ressources"
+          title="Prix, budgets et méthode, expliqués."
+          text="Les réponses détaillées aux questions qu'on nous pose avant de commencer."
+        />
+        <LinkCards
+          items={ARTICLES_SORTED.slice(0, 6).map((a) => ({
+            to: `/blog/${a.slug}`,
+            eyebrow: a.category,
+            title: a.title,
+            text: a.excerpt,
+          }))}
+        />
+        <div className="mt-10">
+          <ArrowLink to="/blog">Tous les articles</ArrowLink>
+        </div>
+      </Section>
+
+      {/* ---------------- FAQ ---------------- */}
+      <Section surface>
         <FaqList faq={FAQ} />
       </Section>
 

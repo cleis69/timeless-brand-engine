@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BRAND } from "@/config/brand";
 import { orgRef, pageHead } from "@/lib/seo";
-import { ArrowLink } from "@/components/page/Blocks";
+import { ArrowLink, LinkCards, Section, SectionIntro } from "@/components/page/Blocks";
+import { ARTICLES_SORTED } from "@/content/blog";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Conviction } from "@/components/Conviction";
@@ -67,9 +68,14 @@ export const Route = createFileRoute("/")({
   head: () =>
     pageHead({
       path: "/",
-      title: `${BRAND.name} — ${BRAND.category} à ${BRAND.city}`,
+      /*
+        « Creative Growth Agency » ne se tape pas dans Google. Le titre
+        garde le trio nom, metier et ville, mais avec les mots que les
+        prospects cherchent vraiment : video publicitaire et Ads.
+      */
+      title: `${BRAND.name} — Vidéos publicitaires et Ads à ${BRAND.city}`,
       description:
-        "Agence de marketing digital basée à Marrakech : vidéos publicitaires, Meta, Google et TikTok Ads, sites web, CRM et IA. Première vidéo livrée en 7 jours.",
+        "Agence de marketing digital à Marrakech : vidéos publicitaires, campagnes Meta, Google et TikTok Ads, sites web, CRM et IA. Première vidéo livrée en 7 jours.",
       ogDescription:
         "Nous transformons vos vues en ventes. Vidéos publicitaires pensées, tournées et montées par des humains à Marrakech, diffusées et optimisées par nos soins.",
       about: orgRef,
@@ -286,6 +292,7 @@ function Home() {
       <Why />
       <Stats />
       {/* <Testimonials /> — réactiver avec de vrais témoignages clients. */}
+      <Resources />
       <Faq />
       <FinalCTA />
     </>
@@ -669,6 +676,37 @@ function Stats() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * LES ARTICLES, DEPUIS L'ACCUEIL.
+ *
+ * L'accueil est la page qui recoit le plus de liens : ce qu'elle cite,
+ * Google le visite en premier et le juge plus important. Sans cette
+ * section, les articles n'etaient relies qu'au blog et au menu.
+ */
+function Resources() {
+  return (
+    <Section surface labelledBy="ressources-titre">
+      <SectionIntro
+        id="ressources-titre"
+        eyebrow="Ressources"
+        title="Ce qu'il faut savoir avant de lancer une campagne."
+        text="Prix, budgets publicitaires, formats : nos réponses aux questions qu'on nous pose avant chaque projet."
+      />
+      <LinkCards
+        items={ARTICLES_SORTED.slice(0, 3).map((a) => ({
+          to: `/blog/${a.slug}`,
+          eyebrow: a.category,
+          title: a.title,
+          text: a.excerpt,
+        }))}
+      />
+      <div className="mt-10">
+        <ArrowLink to="/blog">Tous les articles</ArrowLink>
+      </div>
+    </Section>
   );
 }
 
