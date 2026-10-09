@@ -246,7 +246,9 @@ function CasePage() {
 
       {story.length > 0 && (
         <Section surface>
-          <div className="grid gap-4 sm:grid-cols-2">
+          {/* Une seule rubrique (Find Estate n'a que l'execution) : pleine
+              mesure de lecture plutot qu'une demi-colonne a cote d'un vide. */}
+          <div className={story.length > 1 ? "grid gap-4 sm:grid-cols-2" : "max-w-3xl"}>
             {story.map((b) => (
               <Reveal key={b.title} className="h-full">
                 <div

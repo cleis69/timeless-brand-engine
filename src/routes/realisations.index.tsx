@@ -62,7 +62,7 @@ function Realisations() {
         eyebrow="Réalisations"
         title="Ce que nous avons produit, et ce que ça a donné."
         accent="et ce que ça a donné"
-        intro="Tout est tourné et monté en interne, de l'écriture de l'angle au montage final. Les chiffres affichés sont ceux relevés dans les gestionnaires de publicités."
+        intro="Les films sont tournés et montés en interne, de l'écriture de l'angle au montage final. Les chiffres affichés sont ceux relevés dans les gestionnaires de publicités."
         breadcrumbs={[{ name: "Réalisations", path: "/realisations" }]}
       />
 
