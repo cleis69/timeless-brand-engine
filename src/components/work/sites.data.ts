@@ -207,14 +207,14 @@ export const SITE_ITEMS: SiteItem[] = [
       // Comme le noeud WebSite du site lui-meme (realestatevision360.com).
       languages: ['fr-FR', 'en-GB'],
       headline:
-        'Refonte de REV : le site d’une agence de croissance immobilière, et un plan de vente interactif pour les promoteurs.',
+        'Refonte de REV — Real Estate Vision : un site bilingue et un plan de vente interactif pour les promoteurs.',
       seoTitle: 'REV : refonte du site et plan de vente interactif',
       seoDescription:
         'Refonte du site de REV, agence de croissance immobilière, en français et en anglais, et plan de vente interactif pour les promoteurs : lots, visites 360°, vues 3D.',
       summary:
         'Pour REV — Real Estate Vision, agence de croissance immobilière qui accompagne promoteurs, agences et agents, UltraVision Agency a réalisé la refonte du site realestatevision360.com, en français et en anglais, puis un plan de vente interactif que les promoteurs peuvent publier et intégrer à leur propre site.',
       execution:
-        'Site vitrine de seize pages, en français et en anglais : accueil où un iPhone fait défiler un catalogue de vingt et une publicités verticales, portfolio, expertises, tarifs, études de cas, contact par WhatsApp. Pages générées à l’avance et servies par un Worker Cloudflare, vidéos chargées à l’approche de l’écran, polices auto-hébergées, données structurées. Plan de vente interactif pour les promoteurs : espace privé, lots modifiables ou importés en CSV, page publique avec statuts mis à jour en temps réel, fiches de lots, comparateur, carte du quartier, vues 3D et visites 360°, mode présentation pour le bureau de vente et version intégrable, en français et en anglais.',
+        'Site vitrine en français et en anglais : accueil où un iPhone fait défiler un catalogue de vingt et une publicités verticales, portfolio, expertises, tarifs, à propos, articles et contact par WhatsApp. Pages générées à l’avance et servies par un Worker Cloudflare, vidéos chargées à l’approche de l’écran, polices auto-hébergées, données structurées. Plan de vente interactif pour les promoteurs : espace privé, lots modifiables ou importés en CSV, page publique avec statuts mis à jour en temps réel, fiches de lots, comparateur, carte du quartier, vues 3D et visites 360°, mode présentation pour le bureau de vente et version intégrable ; pages publiques en français et en anglais.',
       tools: ['TanStack Start', 'Cloudflare Workers', 'Supabase', 'Photo Sphere Viewer', 'MapLibre'],
       website: 'https://realestatevision360.com',
     },
