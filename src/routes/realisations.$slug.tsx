@@ -30,7 +30,7 @@ import { pageHead, pageUrl, siteNode, videoNode } from "@/lib/seo";
  * probleme, strategie, execution, outils — mais chaque bloc n'apparait
  * que si le champ correspondant est rempli dans `caseStudy`.
  *
- * LE SEUL LIEN SORTANT DU SITE est ici : `caseStudy.website`, affiche
+ * LE SEUL LIEN VERS LE SITE D'UN CLIENT est ici : `caseStudy.website`, affiche
  * dans la fiche « En bref ». Il est suivi (rel="noopener", sans
  * nofollow) : c'est un site que l'agence a livre et signe, avec
  * l'accord du client. Voir la REGLE 1 de sites.data.ts.
@@ -139,7 +139,7 @@ function CasePage() {
       value: film ? `Vidéo verticale 9:16 · ${film.durationSec} s` : "Site web",
     },
     /*
-      LE SEUL LIEN SORTANT DU SITE. Suivi, volontairement : pas de
+      LE SEUL LIEN VERS LE SITE D'UN CLIENT. Suivi, volontairement : pas de
       nofollow ni de noreferrer, seulement noopener pour l'ouverture dans
       un nouvel onglet.
     */
@@ -230,6 +230,8 @@ function CasePage() {
                 >
                   <img
                     src={site.shot}
+                    srcSet={site.shotLarge ? `${site.shot} 960w, ${site.shotLarge} 1440w` : undefined}
+                    sizes={site.shotLarge ? "(min-width: 1280px) 1184px, 100vw" : undefined}
                     width={960}
                     height={546}
                     alt={`Page d'accueil du site de ${c.client}${c.website ? ` (${domainOf(c.website)})` : ""}, en capture d'écran.`}

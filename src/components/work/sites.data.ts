@@ -97,6 +97,12 @@ export type SiteItem = {
    */
   shot?: string
   /**
+   * Version large de la capture (1440 px), facultative. Servie par
+   * `srcSet` sur la page d'etude de cas, ou la capture occupe toute la
+   * largeur du contenu : la version 960 y serait agrandie et floue.
+   */
+  shotLarge?: string
+  /**
    * Vrai tant que le projet est un exemple de mise en page.
    * Absent = projet reel.
    */
@@ -192,6 +198,7 @@ export const SITE_ITEMS: SiteItem[] = [
       'Conciergerie de location courte durée en France et à Dubaï : pages propriétaires, estimateur de revenus et demandes reliées directement à la conciergerie.',
     domain: 'find-estate.com',
     shot: '/work/sites/find-estate/shot-960.webp',
+    shotLarge: '/work/sites/find-estate/shot-1440.webp',
     tags: ['Refonte', 'Estimateur', 'Formulaires'],
     hue: 40,
     layout: 'editorial',
@@ -201,14 +208,14 @@ export const SITE_ITEMS: SiteItem[] = [
       sector: 'immobilier',
       location: 'Lyon, Paris et Dubaï',
       services: ['creation-site-web'],
-      headline: 'Refonte de Find Estate : un site de conciergerie aussi soigné que ses logements.',
-      seoTitle: 'Refonte du site de Find Estate, conciergerie location courte durée',
+      headline: 'Refonte de Find Estate : le site d’une conciergerie de location courte durée, de Lyon à Dubaï.',
+      seoTitle: 'Find Estate : refonte du site d’une conciergerie',
       seoDescription:
-        'Refonte du site de Find Estate, conciergerie de location courte durée en France et à Dubaï : estimateur de revenus, formulaires, SEO. Étude de cas UltraVision.',
+        'Refonte du site de Find Estate, conciergerie de location courte durée en France et à Dubaï : estimateur de revenus, formulaires et référencement page par page.',
       summary:
         'Pour Find Estate, conciergerie de location courte durée fondée à Lyon en 2023 et présente en France et à Dubaï, UltraVision Agency a réalisé et mis en ligne un nouveau site de 22 pages sur find-estate.com : pages pour les propriétaires, estimateur de revenus en cinq étapes, formulaires reliés à la conciergerie et référencement page par page.',
       execution:
-        "Vingt-deux pages : formules pour les propriétaires, estimateur de revenus en cinq étapes avec des repères de marché sourcés, destinations, logements, avis et contact. Chaque demande est enregistrée et transmise par e-mail à la conciergerie, avec un consentement explicite. Mentions légales et politique de confidentialité rédigées pour le site, polices auto-hébergées. Refonte visuelle d'après une maquette : Cormorant Garamond et Jost, angles droits, noir et or. Photos : celles des annonces Airbnb de la conciergerie, choisies et ordonnées pour le site. Les notes Airbnb sont affichées avec leur nombre d'avis, et datées sur les fiches des logements et la page Avis.",
+        "Vingt-deux pages : formules pour les propriétaires, estimateur de revenus en cinq étapes avec des repères de marché sourcés, destinations, logements, avis et contact. Chaque demande est enregistrée et transmise par e-mail à la conciergerie, avec un consentement explicite. Mentions légales et politique de confidentialité rédigées pour le site, polices auto-hébergées. Refonte visuelle d'après une maquette : Cormorant Garamond et Jost, angles droits ; palette noir et or. Photos : celles des annonces Airbnb de la conciergerie, choisies et ordonnées pour le site. Les notes Airbnb sont affichées avec leur nombre d'avis, et datées sur les fiches des logements et la page Avis.",
       tools: ['TanStack Start', 'Cloudflare Workers', 'Cloudflare D1'],
       website: 'https://find-estate.com',
     },

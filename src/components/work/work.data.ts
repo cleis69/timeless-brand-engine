@@ -157,10 +157,11 @@ export type CaseStudy = {
   /**
    * Adresse publique du site livre (https://...).
    *
-   * C'est le SEUL lien sortant du site de l'agence : il n'apparait que
-   * sur la page /realisations/<slug>, dans la fiche « En bref », et
-   * nulle part ailleurs — ni sur les cartes, ni dans la grille des
-   * sites. A renseigner uniquement avec l'accord du client, et
+   * C'est le seul lien vers le site d'un client : il n'est cliquable
+   * que sur la page /realisations/<slug>, dans la fiche « En bref » —
+   * ni sur les cartes, ni dans la grille des sites. L'adresse figure
+   * aussi, en texte, dans llms-full.txt et dans les donnees structurees
+   * de la page (noeud WebSite). A renseigner uniquement avec l'accord du client, et
    * uniquement pour un domaine de production : jamais une adresse de
    * previsualisation ou d'hebergeur.
    */

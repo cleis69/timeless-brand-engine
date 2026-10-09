@@ -261,7 +261,7 @@ export function buildLlmsTxt(): string {
     "",
     "## Ce que nous ne faisons pas",
     "",
-    "Nous ne publions pas de témoignages ni de résultats que nous ne pouvons pas prouver. Les chiffres affichés sur les réalisations proviennent des gestionnaires de publicités. Si une information manque sur le site, c'est qu'elle n'est pas encore vérifiable — pas qu'elle est cachée.",
+    "Nous ne publions pas de témoignages ni de résultats que nous ne pouvons pas prouver. Les chiffres de performance affichés sur les réalisations proviennent des gestionnaires de publicités. Si une information manque sur le site, c'est qu'elle n'est pas encore vérifiable — pas qu'elle est cachée.",
     "",
     "## Optional",
     "",
