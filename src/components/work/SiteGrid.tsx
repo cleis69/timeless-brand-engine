@@ -27,11 +27,11 @@ import { EASE_PAGE, MOTION } from "@/config/motion";
  * Quand `shot` est renseigne dans sites.data.ts, la carte affiche la
  * CAPTURE du site. Sinon elle retombe sur une maquette dessinee en CSS.
  *
- * L'ordre de priorite n'est pas negociable : les quatre projets reels
- * d'Ultra Vision partagent la meme signature — fond sombre, accent
- * chaud. Quatre maquettes dessinees aux teintes voisines se lisent comme
- * quatre fois le meme site. Seule une capture montre quatre projets
- * DISTINCTS.
+ * L'ordre de priorite n'est pas negociable : les projets reels d'Ultra
+ * Vision (cinq aujourd'hui) partagent la meme signature — fond sombre,
+ * accent chaud. Des maquettes dessinees aux teintes voisines se lisent
+ * comme plusieurs fois le meme site. Seule une capture montre des
+ * projets DISTINCTS.
  *
  * Les maquettes gardent leur role pour les cartes « Exemple », qui n'ont
  * pas de capture : elles ne pesent rien, restent nettes a toutes les
@@ -96,6 +96,13 @@ function SiteCard({ item }: { item: SiteItem }) {
     La vignette montre la mise en page d'un site ; l'adresse reelle du
     client n'a pas a etre exposee depuis une page de realisations. Un
     visiteur qui veut en savoir plus passe par le contact.
+
+    UNE SEULE EXCEPTION, ET ELLE N'EST PAS ICI : `caseStudy.website`
+    (sites.data.ts). C'est l'adresse d'un domaine de production, publiee
+    avec l'accord du client, et liee UNIQUEMENT depuis la page d'etude de
+    cas /realisations/<slug> — jamais une adresse de previsualisation ou
+    d'hebergeur. Ce composant ne la lit pas : meme la carte d'un projet
+    qui a son etude de cas reste une vignette sans lien.
 
     La carte reste focalisable (tabIndex, focus visible) pour la
     navigation clavier, mais elle ne mene nulle part : c'est une

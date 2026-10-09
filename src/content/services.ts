@@ -702,7 +702,7 @@ export const SERVICES: Service[] = [
       { carte: "Suivi SEO mensuel" },
       { carte: "Visibilité sur les IA (GEO)" },
     ],
-    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "rev"],
+    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "rev", "find-estate"],
     related: ["generation-de-leads", "crm-ia-automatisation", "branding"],
     sectors: ["restauration-hospitality", "immobilier"],
     faq: [

@@ -25,7 +25,8 @@ import { SITE_URL, url } from "@/config/site";
 import { BRAND, LOGO, LOGO_ID, OG_IMAGE, ORG_ID, WEBSITE_ID } from "@/config/brand";
 import { AREA_SERVED, CONTACT, hasPhone, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { POLES, SERVICES, servicePath, type Service } from "@/content/services";
-import type { WorkItem } from "@/components/work/work.data";
+import type { CaseStudy, WorkItem } from "@/components/work/work.data";
+import type { SiteItem } from "@/components/work/sites.data";
 
 type Node = Record<string, unknown>;
 
@@ -168,6 +169,25 @@ export function videoNode(w: WorkItem, pagePath?: string): Node {
     inLanguage: "fr",
     creator: orgRef,
     publisher: orgRef,
+  };
+}
+
+/**
+ * Un site livre par l'agence, sujet d'une etude de cas. Le pendant de
+ * `videoNode` pour les realisations web : `url` est l'adresse publique
+ * du site (`caseStudy.website`), `creator` renvoie a l'agence.
+ */
+export function siteNode(s: SiteItem & { caseStudy: CaseStudy }, pagePath: string): Node {
+  const c = s.caseStudy;
+  return {
+    "@type": "WebSite",
+    "@id": `${pageUrl(pagePath)}#site-${s.slug}`,
+    name: s.title,
+    description: c.summary,
+    ...(c.website ? { url: c.website } : {}),
+    ...(s.shot ? { image: url(s.shot) } : {}),
+    inLanguage: "fr",
+    creator: orgRef,
   };
 }
 

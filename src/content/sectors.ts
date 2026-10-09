@@ -8,7 +8,7 @@
  * Trois secteurs ont une page, parce que le site montre deja des
  * realisations reelles pour chacun :
  *
- *   immobilier                 4 films, 1 site, 2 clients cites
+ *   immobilier                 4 films, 2 sites, 2 clients cites
  *   beaute-bien-etre           6 films, 1 client cite
  *   restauration-hospitality   2 sites, 1 film, 1 client cite
  *
@@ -83,7 +83,7 @@ export const SECTORS: Sector[] = [
       "crm-ia-automatisation",
     ],
     works: ["all-in-kech", "agent-immobilier", "promoteur-immobilier", "residence-neuve"],
-    sites: ["rev"],
+    sites: ["rev", "find-estate"],
     clients: ["All In Kech", "Centralym Immobilier"],
     faq: [
       {

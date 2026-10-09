@@ -95,7 +95,12 @@ export const Route = createFileRoute("/agence-marketing-digital-marrakech")({
   component: Pilier,
 });
 
-/* Les films montres ici : les trois etudes de cas et un film de lieu. */
+/*
+  Les films montres ici : les trois etudes de cas filmees et un film de
+  lieu. Les cartes « Etude de cas », plus bas, lisent CASE_STUDIES et
+  listent donc aussi les etudes de cas de sites (Find Estate), qui
+  n'ont pas de film a placer dans cette grille.
+*/
 const WORKS = ["africa-beauty", "all-in-kech", "scultbody", "institut-beaute"]
   .map(findWork)
   .filter((w): w is WorkItem => !!w);

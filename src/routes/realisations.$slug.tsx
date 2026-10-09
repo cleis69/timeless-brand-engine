@@ -5,52 +5,90 @@ import { Reveal } from "@/components/Reveal";
 import { FactList, LinkCards, Section, SectionIntro } from "@/components/page/Blocks";
 import { VideoPlayer } from "@/components/work/VideoPlayer";
 import { WorkStats } from "@/components/work/WorkStats";
-import { CASE_STUDIES, casePath, findWork, shownStats } from "@/components/work/work.data";
+import { CASE_STUDIES, casePath, findCase, isFilm, shownStats } from "@/components/work/work.data";
 import { withBrand } from "@/config/brand";
 import { findService, servicePath } from "@/content/services";
 import { findSector, sectorPath } from "@/content/sectors";
-import { pageHead, pageUrl, videoNode } from "@/lib/seo";
+import { pageHead, pageUrl, siteNode, videoNode } from "@/lib/seo";
 
 /**
  * UltraVision Agency — une etude de cas.
  *
  * ============================================================
- *  RIEN N'EST ECRIT ICI QUI NE SOIT DANS work.data.ts.
+ *  RIEN N'EST ECRIT ICI QUI NE SOIT DANS work.data.ts OU sites.data.ts.
  * ============================================================
+ *
+ * Deux sortes d'etudes de cas partagent cette page :
+ *
+ *   un FILM (work.data.ts)  le film en colonne, a cote de la fiche, et
+ *                           les chiffres des gestionnaires de publicites
+ *                           quand ils existent ;
+ *   un SITE (sites.data.ts) la capture du site en pleine largeur, la
+ *                           fiche dessous, et le lien vers le site livre.
  *
  * La structure complete d'une etude de cas est prevue — objectif,
  * probleme, strategie, execution, outils — mais chaque bloc n'apparait
- * que si le champ correspondant est rempli dans `caseStudy`. Aujourd'hui,
- * seuls les faits deja publies sur le site le sont : client, secteur,
- * prestations, format, et les chiffres releves dans les gestionnaires de
- * publicites quand ils existent.
+ * que si le champ correspondant est rempli dans `caseStudy`.
  *
- * Completer une etude de cas se fait donc dans work.data.ts, avec le
- * client, jamais de memoire.
+ * LE SEUL LIEN SORTANT DU SITE est ici : `caseStudy.website`, affiche
+ * dans la fiche « En bref ». Il est suivi (rel="noopener", sans
+ * nofollow) : c'est un site que l'agence a livre et signe, avec
+ * l'accord du client. Voir la REGLE 1 de sites.data.ts.
+ *
+ * Completer une etude de cas se fait donc dans les fichiers de donnees,
+ * avec le client, jamais de memoire.
  */
+
+/** Le domaine lisible d'une adresse : « https://www.x.com/ » -> « x.com ». */
+const domainOf = (href: string) => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return href;
+  }
+};
 
 export const Route = createFileRoute("/realisations/$slug")({
   loader: ({ params }) => {
-    const w = findWork(params.slug);
-    if (!w || !w.caseStudy) throw notFound();
+    if (!findCase(params.slug)) throw notFound();
     return { slug: params.slug };
   },
   head: ({ loaderData }) => {
-    const w = findWork(loaderData?.slug);
-    if (!w?.caseStudy) return {};
+    const w = findCase(loaderData?.slug);
+    if (!w) return {};
     const c = w.caseStudy;
     const path = casePath(w.slug);
-    return pageHead({
+    const base = {
       path,
       title: withBrand(c.seoTitle),
       description: c.seoDescription,
-      image: { path: w.poster, alt: `${c.client} — ${w.title}` },
       breadcrumbs: [
         { name: "Réalisations", path: "/realisations" },
         { name: c.client, path },
       ],
-      mainEntity: { "@id": `${pageUrl(path)}#video-${w.slug}` },
-      nodes: [videoNode(w, path)],
+    };
+    if (isFilm(w)) {
+      return pageHead({
+        ...base,
+        image: { path: w.poster, alt: `${c.client} — ${w.title}` },
+        mainEntity: { "@id": `${pageUrl(path)}#video-${w.slug}` },
+        nodes: [videoNode(w, path)],
+      });
+    }
+    /*
+      Un site n'a pas d'affiche : l'image de partage est `og.jpg`, en
+      1200x630, deposee a cote de sa capture (voir sites.data.ts).
+    */
+    return pageHead({
+      ...base,
+      image: {
+        path: `/work/sites/${w.slug}/og.jpg`,
+        width: 1200,
+        height: 630,
+        alt: `${c.client} — site web`,
+      },
+      mainEntity: { "@id": `${pageUrl(path)}#site-${w.slug}` },
+      nodes: [siteNode(w, path)],
     });
   },
   component: CasePage,
@@ -58,10 +96,12 @@ export const Route = createFileRoute("/realisations/$slug")({
 
 function CasePage() {
   const { slug } = Route.useLoaderData();
-  const w = findWork(slug)!;
-  const c = w.caseStudy!;
+  const w = findCase(slug)!;
+  const c = w.caseStudy;
+  const film = isFilm(w) ? w : null;
+  const site = isFilm(w) ? null : w;
   const sector = findSector(c.sector);
-  const hasStats = shownStats(w).length > 0;
+  const hasStats = !!film && shownStats(film).length > 0;
 
   const facts = [
     { label: "Client", value: c.client },
@@ -94,7 +134,27 @@ function CasePage() {
       ),
     },
     ...(c.platforms?.length ? [{ label: "Plateformes", value: c.platforms.join(", ") }] : []),
-    { label: "Format", value: `Vidéo verticale 9:16 · ${w.durationSec} s` },
+    {
+      label: "Format",
+      value: film ? `Vidéo verticale 9:16 · ${film.durationSec} s` : "Site web",
+    },
+    /*
+      LE SEUL LIEN SORTANT DU SITE. Suivi, volontairement : pas de
+      nofollow ni de noreferrer, seulement noopener pour l'ouverture dans
+      un nouvel onglet.
+    */
+    ...(c.website
+      ? [
+          {
+            label: "Site",
+            value: (
+              <a href={c.website} target="_blank" rel="noopener" className="link-underline">
+                {domainOf(c.website)}
+              </a>
+            ),
+          },
+        ]
+      : []),
     ...(w.year ? [{ label: "Année", value: w.year }] : []),
   ];
 
@@ -107,6 +167,28 @@ function CasePage() {
   ].filter((b): b is { title: string; text: string } => !!b.text);
 
   const others = CASE_STUDIES.filter((x) => x.slug !== w.slug);
+
+  const details = (
+    <div>
+      <SectionIntro eyebrow="Le projet" title="En bref." />
+      <FactList facts={facts} />
+
+      {film && hasStats && (
+        <>
+          <WorkStats stats={film.stats} className="mt-12" />
+          <p className="mt-5 text-[0.78rem] leading-relaxed text-[#797976]">
+            Chiffres relevés dans les gestionnaires de publicités.
+          </p>
+        </>
+      )}
+
+      {c.tools && c.tools.length > 0 && (
+        <p className="mt-8 text-sm text-muted-foreground">
+          Outils : <span className="text-foreground">{c.tools.join(", ")}</span>
+        </p>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -122,33 +204,44 @@ function CasePage() {
       />
 
       <Section>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,380px)_1fr] lg:items-start lg:gap-16">
-          <Reveal>
-            <div className="mx-auto w-full max-w-[380px]">
-              <VideoPlayer item={w} radius={20} withSound />
-            </div>
-          </Reveal>
-
-          <div>
-            <SectionIntro eyebrow="Le projet" title="En bref." />
-            <FactList facts={facts} />
-
-            {hasStats && (
-              <>
-                <WorkStats stats={w.stats} className="mt-12" />
-                <p className="mt-5 text-[0.78rem] leading-relaxed text-[#797976]">
-                  Chiffres relevés dans les gestionnaires de publicités.
-                </p>
-              </>
-            )}
-
-            {c.tools && c.tools.length > 0 && (
-              <p className="mt-8 text-sm text-muted-foreground">
-                Outils : <span className="text-foreground">{c.tools.join(", ")}</span>
-              </p>
-            )}
+        {film ? (
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,380px)_1fr] lg:items-start lg:gap-16">
+            <Reveal>
+              <div className="mx-auto w-full max-w-[380px]">
+                <VideoPlayer item={film} radius={20} withSound />
+              </div>
+            </Reveal>
+            {details}
           </div>
-        </div>
+        ) : (
+          <>
+            {/*
+              Un site se montre en largeur : la capture tient la place du
+              film, sur toute la largeur du contenu, et la fiche passe
+              dessous. Une capture de fenetre (16/9 environ) reduite a la
+              colonne de 380 px d'un film ne montrerait plus aucune mise
+              en page.
+            */}
+            {site?.shot && (
+              <Reveal>
+                <figure
+                  className="overflow-hidden rounded-2xl"
+                  style={{ backgroundColor: "#05070F", border: "1px solid #16203a" }}
+                >
+                  <img
+                    src={site.shot}
+                    width={960}
+                    height={546}
+                    alt={`Page d'accueil du site de ${c.client}${c.website ? ` (${domainOf(c.website)})` : ""}, en capture d'écran.`}
+                    decoding="async"
+                    className="block h-auto w-full"
+                  />
+                </figure>
+              </Reveal>
+            )}
+            <div className={site?.shot ? "mt-14 lg:mt-16" : undefined}>{details}</div>
+          </>
+        )}
       </Section>
 
       {story.length > 0 && (

@@ -2,7 +2,7 @@
  * ULTRA VISION — donnees des realisations.
  *
  * ============================================================
- *  C'EST LE SEUL FICHIER QUE TU AURAS A MODIFIER TOI-MEME.
+ *  LES FILMS VIVENT ICI, LES SITES DANS sites.data.ts.
  * ============================================================
  *
  * Pour ajouter une realisation : copie un bloc, change les valeurs.
@@ -10,6 +10,19 @@
  * Pour changer l'ordre a l'ecran : deplace le bloc.
  *
  * Le code ne bouge pas. Jamais.
+ *
+ * ------------------------------------------------------------
+ * ETAT AU 9 OCTOBRE 2026 — UNE ETUDE DE CAS PEUT PORTER SUR UN SITE
+ *
+ * Une etude de cas n'est plus forcement un film. Celle d'un SITE WEB,
+ * sans video, s'ecrit dans le bloc du site, dans sites.data.ts (cle
+ * `caseStudy`), et non ici. CASE_STUDIES, plus bas, reunit les deux
+ * listes — les films d'abord, puis les sites — et c'est elle que lisent
+ * la page /realisations/<slug>, les cartes « Etude de cas », le sitemap
+ * et llms.txt. Premier cas : Find Estate.
+ *
+ * Pour distinguer les deux sortes : `isFilm(x)`. Un film a des `sources`
+ * video, un site n'en a pas.
  *
  * ------------------------------------------------------------
  * ETAT AU 28 AOUT 2026
@@ -50,6 +63,12 @@
 
 import type { ServiceSlug } from "@/content/services";
 import type { SectorSlug } from "@/content/sectors";
+/*
+  Import a l'execution, et dans ce sens seulement : sites.data.ts ne
+  lit de ce fichier qu'un TYPE (`import type`), efface a la compilation.
+  Aucune boucle d'import n'existe donc a l'execution.
+*/
+import { SITE_ITEMS, type SiteItem } from "./sites.data";
 
 /* ==========================================================================
  *  Mode demonstration — desactive.
@@ -135,6 +154,17 @@ export type CaseStudy = {
   strategy?: string;
   execution?: string;
   tools?: string[];
+  /**
+   * Adresse publique du site livre (https://...).
+   *
+   * C'est le SEUL lien sortant du site de l'agence : il n'apparait que
+   * sur la page /realisations/<slug>, dans la fiche « En bref », et
+   * nulle part ailleurs — ni sur les cartes, ni dans la grille des
+   * sites. A renseigner uniquement avec l'accord du client, et
+   * uniquement pour un domaine de production : jamais une adresse de
+   * previsualisation ou d'hebergeur.
+   */
+  website?: string;
 };
 
 /** Renvoie les chiffres a afficher selon le mode en cours. */
@@ -528,16 +558,48 @@ export const WORK_ITEMS: WorkItem[] = [
  */
 export const FEATURED_WORK = WORK_ITEMS;
 
-/** Retrouve une realisation par son identifiant. */
+/** Retrouve un FILM par son identifiant (les sites n'y sont pas). */
 export const findWork = (slug: string | undefined) => WORK_ITEMS.find((w) => w.slug === slug);
 
-/** Les realisations qui ont une page d'etude de cas. */
-export const CASE_STUDIES = WORK_ITEMS.filter(
-  (w): w is WorkItem & { caseStudy: CaseStudy } => !!w.caseStudy,
-);
+/** Une realisation — film ou site — qui a sa page d'etude de cas. */
+export type CaseItem = (WorkItem | SiteItem) & { caseStudy: CaseStudy };
+
+/** Vrai pour un film, faux pour un site : seul un film a des `sources` video. */
+export const isFilm = (x: WorkItem | SiteItem): x is WorkItem => "sources" in x;
+
+/**
+ * Les realisations qui ont une page d'etude de cas : les films d'abord,
+ * puis les sites. Un site encore marque `placeholder` n'en a jamais,
+ * meme si un `caseStudy` trainait dans son bloc.
+ */
+export const CASE_STUDIES: CaseItem[] = [
+  ...WORK_ITEMS.filter((w): w is WorkItem & { caseStudy: CaseStudy } => !!w.caseStudy),
+  ...SITE_ITEMS.filter(
+    (s): s is SiteItem & { caseStudy: CaseStudy } => !!s.caseStudy && !s.placeholder,
+  ),
+];
+
+/** Retrouve une etude de cas — film ou site — par son identifiant. */
+export const findCase = (slug: string | undefined) => CASE_STUDIES.find((c) => c.slug === slug);
 
 /** Adresse de la page d'etude de cas. */
 export const casePath = (slug: string) => `/realisations/${slug}`;
+
+/*
+  Un film et un site qui partagent un identifiant se disputeraient la
+  meme adresse /realisations/<slug> : seul le premier trouve aurait sa
+  page, l'autre disparaitrait sans bruit. Signale en developpement.
+*/
+if (import.meta.env.DEV && typeof window !== "undefined") {
+  const doublons = WORK_ITEMS.filter((w) => SITE_ITEMS.some((s) => s.slug === w.slug));
+  if (doublons.length > 0) {
+    console.warn(
+      `[ULTRA VISION] Identifiant(s) present(s) a la fois dans work.data.ts et sites.data.ts : ` +
+        doublons.map((w) => w.slug).join(", ") +
+        ". Les deux realisations visent la meme adresse /realisations/<slug> : en renommer une.",
+    );
+  }
+}
 
 /*
   Rappel en console : les realisations dont les chiffres ne sont pas

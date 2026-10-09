@@ -12,7 +12,7 @@ import {
 } from "@/components/page/Blocks";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import { SiteGrid } from "@/components/work/SiteGrid";
-import { casePath, findWork, type WorkItem } from "@/components/work/work.data";
+import { casePath, findWork, type CaseItem, type WorkItem } from "@/components/work/work.data";
 import { SITE_ITEMS } from "@/components/work/sites.data";
 import { withBrand } from "@/config/brand";
 import { findService, servicePath } from "@/content/services";
@@ -55,7 +55,10 @@ function SectorPage() {
 
   const works = (s.works ?? []).map(findWork).filter((w): w is WorkItem => !!w);
   const sites = SITE_ITEMS.filter((x) => s.sites?.includes(x.slug));
-  const cases = works.filter((w) => w.caseStudy);
+  /* Les etudes de cas des films, puis celles des sites (meme page /realisations/<slug>). */
+  const cases = [...works, ...sites].filter(
+    (x): x is CaseItem => !!x.caseStudy && !("placeholder" in x && x.placeholder),
+  );
 
   return (
     <>
@@ -132,8 +135,8 @@ function SectorPage() {
             items={cases.map((w) => ({
               to: casePath(w.slug),
               eyebrow: "Étude de cas",
-              title: w.caseStudy!.client,
-              text: w.caseStudy!.headline,
+              title: w.caseStudy.client,
+              text: w.caseStudy.headline,
             }))}
           />
         </Section>
