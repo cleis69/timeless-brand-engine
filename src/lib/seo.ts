@@ -182,11 +182,13 @@ export function siteNode(s: SiteItem & { caseStudy: CaseStudy }, pagePath: strin
   return {
     "@type": "WebSite",
     "@id": `${pageUrl(pagePath)}#site-${s.slug}`,
-    name: s.title,
+    // Le nom complet du client (ex. « REV — Real Estate Vision »), celui
+    // que son propre site declare, plutot que le titre court de la carte.
+    name: c.client,
     description: c.summary,
     ...(c.website ? { url: c.website } : {}),
     ...(s.shot ? { image: url(s.shot) } : {}),
-    inLanguage: "fr",
+    inLanguage: c.languages?.length ? c.languages : "fr",
     creator: orgRef,
   };
 }

@@ -175,16 +175,24 @@ export const SITE_ITEMS: SiteItem[] = [
   {
     /*
       Etude de cas ajoutee le 9 octobre 2026, deuxieme site apres Find
-      Estate. La capture est celle de la page Portfolio, et non de
-      l'accueil : le hero de l'accueil affiche des compteurs de
-      demonstration (vues, leads, likes) qui ne sont pas des chiffres
-      reels.
+      Estate. La capture est celle de la page Expertises (/services,
+      « Quatre piliers, un seul moteur de croissance. »), en fenetre
+      1440x819 : ni chiffres, ni visages, ni nom de programme.
+      PAS l'accueil : son hero affiche des compteurs de demonstration
+      (vues, leads, likes) qui ne sont pas des chiffres reels.
+      PAS le Portfolio : ses vignettes montrent les publicites des
+      clients de REV (logo d'un programme, visages), alors qu'aucun
+      client n'est nomme tant qu'il n'a pas dit lesquelles peuvent etre
+      creditees ; et sa phrase sur les videos « produites pour des
+      promoteurs » se lirait, sous « Tout est tourne et monte en
+      interne » (pages secteur et service), comme un travail
+      d'UltraVision. Meme regle pour og.jpg, l'image de partage.
     */
     slug: 'rev',
-    title: 'R.E.V',
+    title: 'REV',
     category: 'REFONTE • IMMOBILIER',
     description:
-      'Site bilingue d’une agence de croissance immobilière, et plan de vente interactif que les promoteurs publient pour leurs programmes.',
+      'Site bilingue d’une agence de croissance immobilière, et plan de vente interactif que les promoteurs peuvent publier pour leurs programmes.',
     domain: 'realestatevision360.com',
     shot: '/work/sites/rev/shot-960.webp',
     shotLarge: '/work/sites/rev/shot-1440.webp',
@@ -196,6 +204,8 @@ export const SITE_ITEMS: SiteItem[] = [
       client: 'REV — Real Estate Vision',
       sector: 'immobilier',
       services: ['creation-site-web'],
+      // Comme le noeud WebSite du site lui-meme (realestatevision360.com).
+      languages: ['fr-FR', 'en-GB'],
       headline:
         'Refonte de REV : le site d’une agence de croissance immobilière, et un plan de vente interactif pour les promoteurs.',
       seoTitle: 'REV : refonte du site et plan de vente interactif',
@@ -204,7 +214,7 @@ export const SITE_ITEMS: SiteItem[] = [
       summary:
         'Pour REV — Real Estate Vision, agence de croissance immobilière qui accompagne promoteurs, agences et agents, UltraVision Agency a réalisé la refonte du site realestatevision360.com, en français et en anglais, puis un plan de vente interactif que les promoteurs peuvent publier et intégrer à leur propre site.',
       execution:
-        'Site vitrine de seize pages, en français et en anglais : accueil où un iPhone fait défiler un catalogue de vingt et une publicités verticales, portfolio, expertises, tarifs, études de cas, contact par WhatsApp et lien de prise de rendez-vous. Pages générées à l’avance et servies par un Worker Cloudflare, vidéos chargées à l’approche de l’écran, polices auto-hébergées, données structurées. Plan de vente interactif pour les promoteurs : espace privé, lots modifiables ou importés en CSV, page publique avec statuts mis à jour en temps réel, fiches de lots, comparateur, carte du quartier, vues 3D et visites 360°, mode présentation pour le bureau de vente et version intégrable, en français et en anglais.',
+        'Site vitrine de seize pages, en français et en anglais : accueil où un iPhone fait défiler un catalogue de vingt et une publicités verticales, portfolio, expertises, tarifs, études de cas, contact par WhatsApp. Pages générées à l’avance et servies par un Worker Cloudflare, vidéos chargées à l’approche de l’écran, polices auto-hébergées, données structurées. Plan de vente interactif pour les promoteurs : espace privé, lots modifiables ou importés en CSV, page publique avec statuts mis à jour en temps réel, fiches de lots, comparateur, carte du quartier, vues 3D et visites 360°, mode présentation pour le bureau de vente et version intégrable, en français et en anglais.',
       tools: ['TanStack Start', 'Cloudflare Workers', 'Supabase', 'Photo Sphere Viewer', 'MapLibre'],
       website: 'https://realestatevision360.com',
     },

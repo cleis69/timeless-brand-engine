@@ -155,6 +155,13 @@ export type CaseStudy = {
   execution?: string;
   tools?: string[];
   /**
+   * Langues du site livre, en codes BCP 47 (ex. ['fr-FR', 'en-GB']).
+   * Reprises telles quelles dans le `inLanguage` du noeud WebSite de la
+   * page d'etude de cas ; sans ce champ, le noeud declare "fr".
+   * A aligner sur ce que le site du client declare lui-meme.
+   */
+  languages?: string[];
+  /**
    * Adresse publique du site livre (https://...).
    *
    * C'est le seul lien vers le site d'un client : il n'est cliquable
