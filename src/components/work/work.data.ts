@@ -19,7 +19,7 @@
  * `caseStudy`), et non ici. CASE_STUDIES, plus bas, reunit les deux
  * listes — les films d'abord, puis les sites — et c'est elle que lisent
  * la page /realisations/<slug>, les cartes « Etude de cas », le sitemap
- * et llms.txt. Premier cas : Find Estate.
+ * et llms.txt. Premier cas : Find Estate, puis REV.
  *
  * Pour distinguer les deux sortes : `isFilm(x)`. Un film a des `sources`
  * video, un site n'en a pas.
@@ -154,6 +154,13 @@ export type CaseStudy = {
   strategy?: string;
   execution?: string;
   tools?: string[];
+  /**
+   * Langues du site livre, en codes BCP 47 (ex. ['fr-FR', 'en-GB']).
+   * Reprises telles quelles dans le `inLanguage` du noeud WebSite de la
+   * page d'etude de cas ; sans ce champ, le noeud declare "fr".
+   * A aligner sur ce que le site du client declare lui-meme.
+   */
+  languages?: string[];
   /**
    * Adresse publique du site livre (https://...).
    *

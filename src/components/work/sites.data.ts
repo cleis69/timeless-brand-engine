@@ -22,8 +22,8 @@
  *  page d'etude de cas /realisations/<slug>, dans sa fiche « En bref ».
  *  Jamais depuis une carte (les cartes restent non cliquables, y compris
  *  celle d'un projet qui a son etude de cas), et jamais une adresse de
- *  previsualisation ou d'hebergeur. Premier et seul cas : Find Estate.
- *  Pour ce projet, `domain` reprend donc l'adresse reelle, deja publique
+ *  previsualisation ou d'hebergeur. Deux cas : Find Estate, puis REV.
+ *  Pour ces projets, `domain` reprend donc l'adresse reelle, deja publique
  *  par ce lien ; elle reste floutee dans la vignette comme les autres.
  *
  * ============================================================
@@ -173,23 +173,58 @@ export const SITE_ITEMS: SiteItem[] = [
     layout: 'editorial',
   },
   {
+    /*
+      Etude de cas ajoutee le 9 octobre 2026, deuxieme site apres Find
+      Estate. La capture est celle de la page Expertises (/services,
+      « Quatre piliers, un seul moteur de croissance. »), en fenetre
+      1440x819 : ni chiffres, ni visages, ni nom de programme.
+      PAS l'accueil : son hero affiche des compteurs de demonstration
+      (vues, leads, likes) qui ne sont pas des chiffres reels.
+      PAS le Portfolio : ses vignettes montrent les publicites des
+      clients de REV (logo d'un programme, visages), alors qu'aucun
+      client n'est nomme tant qu'il n'a pas dit lesquelles peuvent etre
+      creditees ; et sa phrase sur les videos « produites pour des
+      promoteurs » se lirait, sous « Tout est tourne et monte en
+      interne » (pages secteur et service), comme un travail
+      d'UltraVision. Meme regle pour og.jpg, l'image de partage.
+    */
     slug: 'rev',
-    title: 'R.E.V',
-    category: 'SITE VITRINE • IMMOBILIER',
+    title: 'REV',
+    category: 'REFONTE • IMMOBILIER',
     description:
-      'Site vitrine pour la photographie et la vidéo immobilière, avec formulaire de prise de rendez-vous.',
-    domain: 'rev-immobilier.com',
+      'Site bilingue d’une agence de croissance immobilière, et plan de vente interactif que les promoteurs peuvent publier pour leurs programmes.',
+    domain: 'realestatevision360.com',
     shot: '/work/sites/rev/shot-960.webp',
-    tags: ['Photo & vidéo', 'Rendez-vous', 'Immobilier'],
+    shotLarge: '/work/sites/rev/shot-1440.webp',
+    tags: ['Bilingue', 'Plan de vente', 'Visite 360°'],
     hue: 38,
     layout: 'editorial',
+    year: '2026',
+    caseStudy: {
+      client: 'REV — Real Estate Vision',
+      sector: 'immobilier',
+      services: ['creation-site-web'],
+      // Comme le noeud WebSite du site lui-meme (realestatevision360.com).
+      languages: ['fr-FR', 'en-GB'],
+      headline:
+        'Refonte de REV — Real Estate Vision : un site bilingue et un plan de vente interactif pour les promoteurs.',
+      seoTitle: 'REV : refonte du site et plan de vente interactif',
+      seoDescription:
+        'Refonte du site de REV, agence de croissance immobilière, en français et en anglais, et plan de vente interactif pour les promoteurs : lots, visites 360°, vues 3D.',
+      summary:
+        'Pour REV — Real Estate Vision, agence de croissance immobilière qui accompagne promoteurs, agences et agents, UltraVision Agency a réalisé la refonte du site realestatevision360.com, en français et en anglais, puis un plan de vente interactif que les promoteurs peuvent publier et intégrer à leur propre site.',
+      execution:
+        'Site vitrine en français et en anglais : accueil où un iPhone fait défiler un catalogue de vingt et une publicités verticales, portfolio, expertises, tarifs, à propos, articles et contact par WhatsApp. Pages générées à l’avance et servies par un Worker Cloudflare, vidéos chargées à l’approche de l’écran, polices auto-hébergées, données structurées. Plan de vente interactif pour les promoteurs : espace privé, lots modifiables ou importés en CSV, page publique avec statuts mis à jour en temps réel, fiches de lots, comparateur, carte du quartier, vues 3D et visites 360°, mode présentation pour le bureau de vente et version intégrable ; pages publiques en français et en anglais.',
+      tools: ['TanStack Start', 'Cloudflare Workers', 'Supabase', 'Photo Sphere Viewer', 'MapLibre'],
+      website: 'https://realestatevision360.com',
+    },
   },
   {
     /*
       Ajoute le 9 octobre 2026, a la place de l'exemple « Landing —
       Formation » : la grille garde ses six cartes. Premier site avec
-      une etude de cas, et seul projet dont l'adresse reelle est liee
-      (voir la REGLE 1, en tete de fichier).
+      une etude de cas, et premier projet dont l'adresse reelle est liee
+      (voir la REGLE 1, en tete de fichier) ; REV a suivi.
     */
     slug: 'find-estate',
     title: 'Find Estate',

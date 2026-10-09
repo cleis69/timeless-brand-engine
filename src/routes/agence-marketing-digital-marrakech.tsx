@@ -100,8 +100,8 @@ export const Route = createFileRoute("/agence-marketing-digital-marrakech")({
   lieu. Les cartes « Etude de cas », plus bas, ne gardent que les films
   (isFilm) : la section annonce « Tout est tourne et monte en interne »,
   ce qui ne vaut pas pour un site. Les etudes de cas de sites (Find
-  Estate, dont les photos sont celles des annonces Airbnb du client)
-  restent sur /realisations et sur les pages secteur et service.
+  Estate, dont les photos sont celles des annonces Airbnb du client, et
+  REV) restent sur /realisations et sur les pages secteur et service.
 */
 const WORKS = ["africa-beauty", "all-in-kech", "scultbody", "institut-beaute"]
   .map(findWork)
