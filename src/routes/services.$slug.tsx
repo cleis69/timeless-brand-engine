@@ -14,7 +14,7 @@ import {
 } from "@/components/page/Blocks";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import { SiteGrid } from "@/components/work/SiteGrid";
-import { findWork, casePath, type WorkItem } from "@/components/work/work.data";
+import { findWork, casePath, type CaseItem, type WorkItem } from "@/components/work/work.data";
 import { SITE_ITEMS } from "@/components/work/sites.data";
 import { withBrand } from "@/config/brand";
 import { findService, resolvePrice, servicePath } from "@/content/services";
@@ -80,14 +80,17 @@ function ServicePage() {
   const works = (s.works ?? []).map(findWork).filter((w): w is WorkItem => !!w);
   const sites = SITE_ITEMS.filter((x) => s.sites?.includes(x.slug));
   const prices = s.prices.map(resolvePrice).filter((p) => p !== null);
-  const cases = works.filter((w) => w.caseStudy);
+  /* Les etudes de cas des films, puis celles des sites (meme page /realisations/<slug>). */
+  const cases = [...works, ...sites].filter(
+    (x): x is CaseItem => !!x.caseStudy && !("placeholder" in x && x.placeholder),
+  );
 
   const next = [
     ...cases.map((w) => ({
       to: casePath(w.slug),
       eyebrow: "Étude de cas",
-      title: w.caseStudy!.client,
-      text: w.caseStudy!.headline,
+      title: w.caseStudy.client,
+      text: w.caseStudy.headline,
     })),
     ...s.related.map((r) => {
       const o = findService(r)!;

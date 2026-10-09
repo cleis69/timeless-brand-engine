@@ -33,11 +33,19 @@ import { A_LA_CARTE, LAUNCH_OFFER, MAD, NOT_INCLUDED, PACKS, dirham, euro } from
 import { POLES, SERVICES, servicePath } from "@/content/services";
 import { SECTORS, sectorPath } from "@/content/sectors";
 import { ARTICLES_SORTED } from "@/content/blog";
-import { CASE_STUDIES, WORK_ITEMS, casePath, shownStats } from "@/components/work/work.data";
+import {
+  CASE_STUDIES,
+  WORK_ITEMS,
+  casePath,
+  isFilm,
+  shownStats,
+  type CaseItem,
+  type WorkItem,
+} from "@/components/work/work.data";
 import { SITE_ITEMS } from "@/components/work/sites.data";
 
 /** Date de la derniere modification de fond des pages. */
-export const CONTENT_UPDATED = "2026-09-30";
+export const CONTENT_UPDATED = "2026-10-09";
 
 /* ==========================================================================
  *  LES PAGES DU SITE
@@ -80,12 +88,17 @@ const xml = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /**
- * Le sitemap, avec l'extension video pour les etudes de cas : chacune
- * est une vraie page de visionnage, ou le film est le sujet principal —
- * la condition posee par Google pour indexer une video.
+ * Le sitemap, avec l'extension video pour les etudes de cas FILMEES :
+ * chacune est une vraie page de visionnage, ou le film est le sujet
+ * principal — la condition posee par Google pour indexer une video.
+ *
+ * Les etudes de cas de SITES (sites.data.ts) ont leur page dans le
+ * sitemap comme les autres, mais sans bloc <video:video> : elles n'ont
+ * pas de film, et en declarer un serait faux.
  */
 export function buildSitemap(): string {
-  const cases = new Map(CASE_STUDIES.map((w) => [casePath(w.slug), w]));
+  const films = CASE_STUDIES.filter((c): c is CaseItem & WorkItem => isFilm(c));
+  const cases = new Map(films.map((w) => [casePath(w.slug), w]));
   const urls = entries()
     .map((e) => {
       const loc = e.path === "/" ? `${SITE_URL}/` : url(e.path);
@@ -215,7 +228,8 @@ export function buildLlmsTxt(): string {
       (w) => `- [${w.caseStudy.client}](${url(casePath(w.slug))}) : ${w.caseStudy.summary}`,
     ),
     ...WORK_ITEMS.filter((w) => !w.caseStudy).map((w) => `- ${w.title} : ${w.description}`),
-    ...SITE_ITEMS.filter((s) => !s.placeholder).map(
+    /* Un site qui a son etude de cas est deja liste plus haut, avec sa page. */
+    ...SITE_ITEMS.filter((s) => !s.placeholder && !s.caseStudy).map(
       (s) => `- Site web ${s.title} : ${s.description}`,
     ),
     `- Galerie complète : ${url("/realisations")}`,
@@ -247,7 +261,7 @@ export function buildLlmsTxt(): string {
     "",
     "## Ce que nous ne faisons pas",
     "",
-    "Nous ne publions pas de témoignages ni de résultats que nous ne pouvons pas prouver. Les chiffres affichés sur les réalisations proviennent des gestionnaires de publicités. Si une information manque sur le site, c'est qu'elle n'est pas encore vérifiable — pas qu'elle est cachée.",
+    "Nous ne publions pas de témoignages ni de résultats que nous ne pouvons pas prouver. Les chiffres de performance affichés sur les réalisations proviennent des gestionnaires de publicités. Si une information manque sur le site, c'est qu'elle n'est pas encore vérifiable — pas qu'elle est cachée.",
     "",
     "## Optional",
     "",
@@ -314,11 +328,14 @@ export function buildLlmsFullTxt(): string {
   }
 
   for (const w of CASE_STUDIES) {
-    const stats = shownStats(w);
+    /* Les chiffres des gestionnaires de publicites n'existent que pour les films. */
+    const stats = isFilm(w) ? shownStats(w) : [];
+    const website = !isFilm(w) ? w.caseStudy.website : undefined;
     out.push(
       `## Étude de cas : ${w.caseStudy.client}`,
       "",
       `Page : ${url(casePath(w.slug))}`,
+      ...(website ? [`Site : ${website}`] : []),
       "",
       w.caseStudy.summary,
       ...(stats.length

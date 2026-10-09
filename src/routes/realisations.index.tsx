@@ -23,7 +23,9 @@ import { pageHead, videoNode } from "@/lib/seo";
  * Chaque film est declare en VideoObject, avec sa vraie date de mise en
  * ligne et sa vraie duree (mesurees sur les fichiers), et non plus une
  * date estimee au 1er janvier. Les etudes de cas ont chacune leur page,
- * avec le meme film : /realisations/<slug>.
+ * /realisations/<slug> : avec le meme film, ou, pour un site, avec sa
+ * capture (CASE_STUDIES reunit les deux). La liste VideoObject ci-dessous
+ * ne compte que les films.
  */
 
 export const Route = createFileRoute("/realisations/")({
@@ -60,7 +62,7 @@ function Realisations() {
         eyebrow="Réalisations"
         title="Ce que nous avons produit, et ce que ça a donné."
         accent="et ce que ça a donné"
-        intro="Tout est tourné et monté en interne, de l'écriture de l'angle au montage final. Les chiffres affichés sont ceux relevés dans les gestionnaires de publicités."
+        intro="Les films sont tournés et montés en interne, de l'écriture de l'angle au montage final. Les chiffres affichés sont ceux relevés dans les gestionnaires de publicités."
         breadcrumbs={[{ name: "Réalisations", path: "/realisations" }]}
       />
 

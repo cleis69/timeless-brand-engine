@@ -12,7 +12,7 @@ import {
   SectionIntro,
 } from "@/components/page/Blocks";
 import { WorkGrid } from "@/components/work/WorkGrid";
-import { CASE_STUDIES, casePath, findWork, type WorkItem } from "@/components/work/work.data";
+import { CASE_STUDIES, casePath, findWork, isFilm, type WorkItem } from "@/components/work/work.data";
 import { BRAND, SOCIAL, withBrand } from "@/config/brand";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { PACKS, dirham, euro } from "@/config/pricing";
@@ -95,7 +95,14 @@ export const Route = createFileRoute("/agence-marketing-digital-marrakech")({
   component: Pilier,
 });
 
-/* Les films montres ici : les trois etudes de cas et un film de lieu. */
+/*
+  Les films montres ici : les trois etudes de cas filmees et un film de
+  lieu. Les cartes « Etude de cas », plus bas, ne gardent que les films
+  (isFilm) : la section annonce « Tout est tourne et monte en interne »,
+  ce qui ne vaut pas pour un site. Les etudes de cas de sites (Find
+  Estate, dont les photos sont celles des annonces Airbnb du client)
+  restent sur /realisations et sur les pages secteur et service.
+*/
 const WORKS = ["africa-beauty", "all-in-kech", "scultbody", "institut-beaute"]
   .map(findWork)
   .filter((w): w is WorkItem => !!w);
@@ -254,7 +261,7 @@ function Pilier() {
           <WorkGrid items={WORKS} />
         </div>
         <LinkCards
-          items={CASE_STUDIES.map((w) => ({
+          items={CASE_STUDIES.filter(isFilm).map((w) => ({
             to: casePath(w.slug),
             eyebrow: "Étude de cas",
             title: w.caseStudy.client,

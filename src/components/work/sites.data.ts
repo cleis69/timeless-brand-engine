@@ -16,6 +16,16 @@
  *  garder la silhouette d'une barre d'adresse (ce qui fait lire
  *  « site web ») sans donner a lire l'adresse elle-meme.
  *
+ *  UNE SEULE EXCEPTION, DOCUMENTEE (9 octobre 2026) :
+ *  `caseStudy.website`. C'est l'adresse d'un domaine de PRODUCTION,
+ *  publiee avec l'accord du client, et elle n'est liee QUE depuis la
+ *  page d'etude de cas /realisations/<slug>, dans sa fiche « En bref ».
+ *  Jamais depuis une carte (les cartes restent non cliquables, y compris
+ *  celle d'un projet qui a son etude de cas), et jamais une adresse de
+ *  previsualisation ou d'hebergeur. Premier et seul cas : Find Estate.
+ *  Pour ce projet, `domain` reprend donc l'adresse reelle, deja publique
+ *  par ce lien ; elle reste floutee dans la vignette comme les autres.
+ *
  * ============================================================
  *  REGLE 2 : UNE VRAIE CAPTURE BAT TOUJOURS UNE MAQUETTE
  * ============================================================
@@ -24,13 +34,13 @@
  *  renseigne, la carte affiche la capture ; sinon elle retombe sur la
  *  maquette dessinee en CSS.
  *
- *  Ce repli n'est pas un luxe. Les quatre projets reels d'Ultra Vision
- *  partagent la meme signature — fond sombre, accent chaud. Le champ
- *  `hue` etait cense les distinguer ; il n'y arrive pas, parce que la
- *  ressemblance est REELLE. Quatre maquettes dessinees aux teintes
- *  voisines se lisent comme quatre fois le meme site. Les captures sont
- *  donc le seul moyen de montrer quatre projets distincts, et `hue` ne
- *  sert plus qu'aux cartes « Exemple », qui n'ont pas de capture.
+ *  Ce repli n'est pas un luxe. Les projets reels d'Ultra Vision (cinq
+ *  aujourd'hui) partagent la meme signature — fond sombre, accent
+ *  chaud. Le champ `hue` etait cense les distinguer ; il n'y arrive pas,
+ *  parce que la ressemblance est REELLE. Des maquettes dessinees aux
+ *  teintes voisines se lisent comme plusieurs fois le meme site. Les
+ *  captures sont donc le seul moyen de montrer des projets distincts, et
+ *  `hue` ne sert plus qu'aux cartes « Exemple », qui n'ont pas de capture.
  *
  *  LES CAPTURES ACTUELLES sont des captures de FENETRE, servies en WebP
  *  de 960 px de large (`shot-960.webp`, 15 a 70 Ko) : trois a quatre
@@ -50,8 +60,18 @@
  *    2. retire la ligne `placeholder`,
  *    3. renseigne `domain` (adresse d'affichage, pas l'URL reelle),
  *    4. depose la capture et renseigne `shot`.
+ *
+ *  POUR LUI DONNER UNE ETUDE DE CAS (page /realisations/<slug>) :
+ *    5. renseigne `caseStudy` (meme forme que pour un film, voir
+ *       work.data.ts) et `year` ;
+ *    6. depose a cote de la capture une image de partage `og.jpg` en
+ *       1200x630 : la page d'etude de cas la declare en og:image ;
+ *    7. ajoute le slug dans `sites` du secteur (sectors.ts) et du
+ *       service (services.ts) concernes.
  * ------------------------------------------------------------
  */
+
+import type { CaseStudy } from './work.data'
 
 /** Vrai tant qu'au moins un projet de la liste est un exemple. */
 export const hasPlaceholders = () => SITE_ITEMS.some((s) => s.placeholder)
@@ -77,6 +97,12 @@ export type SiteItem = {
    */
   shot?: string
   /**
+   * Version large de la capture (1440 px), facultative. Servie par
+   * `srcSet` sur la page d'etude de cas, ou la capture occupe toute la
+   * largeur du contenu : la version 960 y serait agrandie et floue.
+   */
+  shotLarge?: string
+  /**
    * Vrai tant que le projet est un exemple de mise en page.
    * Absent = projet reel.
    */
@@ -95,6 +121,17 @@ export type SiteItem = {
    *   'landing'    -> un bloc d'accroche et un formulaire
    */
   layout: 'editorial' | 'commerce' | 'landing'
+  /** Annee de mise en ligne, affichee sur la page d'etude de cas. */
+  year?: string
+  /**
+   * ETUDE DE CAS — facultative, comme pour un film (voir work.data.ts).
+   *
+   * Renseignee, elle cree une page /realisations/<slug>, sans video :
+   * la capture y tient la place du film. Objectif, probleme et strategie
+   * ne sont JAMAIS ecrits de memoire : a completer avec le client, ou a
+   * laisser vides. La carte de la grille, elle, reste non cliquable.
+   */
+  caseStudy?: CaseStudy
 }
 
 export const SITE_ITEMS: SiteItem[] = [
@@ -147,6 +184,42 @@ export const SITE_ITEMS: SiteItem[] = [
     hue: 38,
     layout: 'editorial',
   },
+  {
+    /*
+      Ajoute le 9 octobre 2026, a la place de l'exemple « Landing —
+      Formation » : la grille garde ses six cartes. Premier site avec
+      une etude de cas, et seul projet dont l'adresse reelle est liee
+      (voir la REGLE 1, en tete de fichier).
+    */
+    slug: 'find-estate',
+    title: 'Find Estate',
+    category: 'REFONTE • CONCIERGERIE',
+    description:
+      'Conciergerie de location courte durée en France et à Dubaï : pages propriétaires, estimateur de revenus et demandes reliées directement à la conciergerie.',
+    domain: 'find-estate.com',
+    shot: '/work/sites/find-estate/shot-960.webp',
+    shotLarge: '/work/sites/find-estate/shot-1440.webp',
+    tags: ['Refonte', 'Estimateur', 'Formulaires'],
+    hue: 40,
+    layout: 'editorial',
+    year: '2026',
+    caseStudy: {
+      client: 'Find Estate',
+      sector: 'immobilier',
+      location: 'Lyon, Paris et Dubaï',
+      services: ['creation-site-web'],
+      headline: 'Refonte de Find Estate : le site d’une conciergerie de location courte durée, de Lyon à Dubaï.',
+      seoTitle: 'Find Estate : refonte du site d’une conciergerie',
+      seoDescription:
+        'Refonte du site de Find Estate, conciergerie de location courte durée en France et à Dubaï : estimateur de revenus, formulaires et référencement page par page.',
+      summary:
+        'Pour Find Estate, conciergerie de location courte durée fondée à Lyon en 2023 et présente en France et à Dubaï, UltraVision Agency a réalisé et mis en ligne un nouveau site de 22 pages sur find-estate.com : pages pour les propriétaires, estimateur de revenus en cinq étapes, formulaires reliés à la conciergerie et référencement page par page.',
+      execution:
+        "Vingt-deux pages : formules pour les propriétaires, estimateur de revenus en cinq étapes avec des repères de marché sourcés, destinations, logements, avis et contact. Chaque demande est enregistrée et transmise par e-mail à la conciergerie, avec un consentement explicite. Mentions légales et politique de confidentialité rédigées pour le site, polices auto-hébergées. Refonte visuelle d'après une maquette : Cormorant Garamond et Jost, angles droits ; palette noir et or. Photos : celles des annonces Airbnb de la conciergerie, choisies et ordonnées pour le site. Les notes Airbnb sont affichées avec leur nombre d'avis, et datées sur les fiches des logements et la page Avis.",
+      tools: ['TanStack Start', 'Cloudflare Workers', 'Cloudflare D1'],
+      website: 'https://find-estate.com',
+    },
+  },
   /* ---------------- Exemples de mise en page ---------------- */
   {
     slug: 'exemple-boutique-mode',
@@ -158,18 +231,6 @@ export const SITE_ITEMS: SiteItem[] = [
     tags: ['Collections', 'Filtres', 'Photo'],
     hue: 268,
     layout: 'commerce',
-    placeholder: true,
-  },
-  {
-    slug: 'exemple-landing-formation',
-    title: 'Landing — Formation',
-    category: 'LANDING PAGE',
-    description:
-      'Programme détaillé, preuve sociale et inscription en un écran, sans menu pour se perdre.',
-    domain: 'exemple-formation.ma',
-    tags: ['Inscription', 'Programme', 'Ads'],
-    hue: 42,
-    layout: 'landing',
     placeholder: true,
   },
 ]
