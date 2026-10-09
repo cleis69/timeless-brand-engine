@@ -234,7 +234,7 @@ function CasePage() {
                     sizes={site.shotLarge ? "(min-width: 1280px) 1184px, 100vw" : undefined}
                     width={960}
                     height={546}
-                    alt={`Page d'accueil du site de ${c.client}${c.website ? ` (${domainOf(c.website)})` : ""}, en capture d'écran.`}
+                    alt={`Le site de ${c.client}${c.website ? ` (${domainOf(c.website)})` : ""}, en capture d'écran.`}
                     decoding="async"
                     className="block h-auto w-full"
                   />
@@ -248,7 +248,7 @@ function CasePage() {
 
       {story.length > 0 && (
         <Section surface>
-          {/* Une seule rubrique (Find Estate n'a que l'execution) : pleine
+          {/* Une seule rubrique (Find Estate et REV n'ont que l'execution) : pleine
               mesure de lecture plutot qu'une demi-colonne a cote d'un vide. */}
           <div className={story.length > 1 ? "grid gap-4 sm:grid-cols-2" : "max-w-3xl"}>
             {story.map((b) => (
