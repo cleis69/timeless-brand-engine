@@ -255,18 +255,44 @@ export const SITE_ITEMS: SiteItem[] = [
       website: 'https://find-estate.com',
     },
   },
-  /* ---------------- Exemples de mise en page ---------------- */
   {
-    slug: 'exemple-boutique-mode',
-    title: 'Boutique — Mode',
-    category: 'E-COMMERCE',
+    /*
+      Ajoute le 19 octobre 2026, a la place du dernier exemple « Boutique —
+      Mode » : la grille garde ses six cartes, toutes reelles. Capture de
+      l'accueil en ligne (insider-properties.com/fr/) ; textes limites a ce
+      que le site publie (sitemap, llms.txt). Aucune mention d'un autre site
+      du meme proprietaire : regle du client.
+    */
+    slug: 'insider-properties',
+    title: 'INSIDER Properties',
+    category: 'SITE • IMMOBILIER NEUF',
     description:
-      'Collections saisonnières, filtres rapides et fiches pensées pour la photo verticale.',
-    domain: 'exemple-mode.ma',
-    tags: ['Collections', 'Filtres', 'Photo'],
-    hue: 268,
-    layout: 'commerce',
-    placeholder: true,
+      'Site bilingue d’une agence d’achat sur plan à Marrakech : sélection de programmes, page Marrakech et trois simulateurs de calcul.',
+    domain: 'insider-properties.com',
+    shot: '/work/sites/insider-properties/shot-960.webp',
+    shotLarge: '/work/sites/insider-properties/shot-1440.webp',
+    tags: ['Bilingue', 'Simulateurs', 'Achat sur plan'],
+    hue: 30,
+    layout: 'editorial',
+    year: '2026',
+    caseStudy: {
+      client: 'INSIDER Properties',
+      sector: 'immobilier',
+      location: 'Marrakech',
+      services: ['creation-site-web'],
+      languages: ['fr', 'en'],
+      headline:
+        'INSIDER Properties : le site d’une agence d’achat sur plan à Marrakech, en français et en anglais.',
+      seoTitle: 'INSIDER Properties : site d’achat sur plan à Marrakech',
+      seoDescription:
+        'Site d’INSIDER Properties, agence d’achat sur plan à Marrakech, en français et en anglais : sélection de programmes et simulateurs de versements, de crédit et de rentabilité.',
+      summary:
+        'Pour INSIDER Properties, agence immobilière à Marrakech qui accompagne l’achat d’un programme sur plan, de la sélection à la remise des clés, UltraVision Agency a conçu et mis en ligne le site insider-properties.com, en français et en anglais.',
+      execution:
+        'Vingt pages publiées, dix dans chaque langue : accueil, page Marrakech, sélection de programmes avec les pièces de leur dossier et ce qui reste à confirmer, et trois simulateurs. Le premier calcule les versements, de la réservation à la remise des clés ; le deuxième, le financement en crédit classique, Mourabaha ou Ijara, frais d’acquisition compris ; le troisième, la rentabilité locative brute, nette et nette d’impôt. Les prix sont en dirhams, datés et attribués à leur promoteur. Pages générées à l’avance et servies par Cloudflare, données structurées et résumé llms.txt pour les assistants IA.',
+      tools: ['Next.js', 'Cloudflare Pages'],
+      website: 'https://insider-properties.com',
+    },
   },
 ]
 

@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import { SITE_URL } from "@/config/site";
+import { graphOf, orgRef, websiteRef } from "@/lib/seo";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
@@ -130,14 +131,26 @@ export const Route = createFileRoute("/casting")({
       scripts: [
         {
           type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: URL_ },
-              { "@type": "ListItem", position: 2, name: "Casting", item: `${URL_}/casting` },
-            ],
-          }),
+          children: graphOf([
+            {
+              "@type": "WebPage",
+              "@id": `${URL_}/casting#webpage`,
+              url: `${URL_}/casting`,
+              name: "Casting : actrices, modèles et créatrices au Maroc",
+              inLanguage: "fr-FR",
+              isPartOf: websiteRef,
+              about: orgRef,
+              breadcrumb: { "@id": `${URL_}/casting#breadcrumb` },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${URL_}/casting#breadcrumb`,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Accueil", item: `${URL_}/` },
+                { "@type": "ListItem", position: 2, name: "Casting", item: `${URL_}/casting` },
+              ],
+            },
+          ]),
         },
       ],
     };

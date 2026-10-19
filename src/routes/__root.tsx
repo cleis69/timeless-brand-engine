@@ -18,7 +18,6 @@ import { ScrollToTop } from "../components/ScrollToTop";
 import { WhatsAppRail } from "../components/WhatsAppRail";
 import { url } from "../config/site";
 import { BRAND, OG_IMAGE } from "../config/brand";
-import { rootJsonLd } from "../lib/seo";
 
 /**
  * ULTRA VISION — racine de l'application.
@@ -317,16 +316,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         `,
       },
     ],
-    scripts: [
-      /*
-        L'ENTITE, UNE SEULE FOIS, SUR TOUTES LES PAGES.
-
-        UltraVision Agency (ProfessionalService) et le site (WebSite),
-        chacun avec un identifiant stable. Les pages y renvoient par ces
-        identifiants au lieu de redecrire l'agence : voir src/lib/seo.ts.
-      */
-      { type: "application/ld+json", children: rootJsonLd() },
-    ],
+    /*
+      L'ENTITE (agence, site, fondateur) n'est plus emise ici : elle entre
+      dans le graphe JSON-LD de chaque page, un seul par page. Voir graphOf
+      dans src/lib/seo.ts.
+    */
   }),
 
   shellComponent: RootShell,

@@ -182,6 +182,7 @@ export const Route = createFileRoute("/a-propos")({
         "@id": `${url("/a-propos")}#${m.name.toLowerCase()}`,
         name: m.name,
         jobTitle: m.role,
+        url: url("/a-propos"),
         worksFor: orgRef,
       })),
     }),

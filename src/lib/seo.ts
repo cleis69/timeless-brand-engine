@@ -82,7 +82,7 @@ export function organizationNode(): Node {
       "Référencement naturel (SEO)",
       "Visibilité sur les moteurs IA (GEO)",
     ],
-    founder: { "@type": "Person", name: BRAND.founder.name, jobTitle: BRAND.founder.jobTitle },
+    founder: { "@id": FOUNDER_ID },
     contactPoint: [
       {
         "@type": "ContactPoint",
@@ -131,12 +131,48 @@ export function websiteNode(): Node {
   };
 }
 
-/** Le bloc emis par la racine, sur toutes les pages. */
-export const rootJsonLd = () =>
-  JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [organizationNode(), websiteNode()],
-  });
+/**
+ * Le fondateur, decrit une seule fois et identifie par l'ancre de sa fiche
+ * sur /a-propos. L'agence y renvoie par `founder` ; la page A propos
+ * complete le meme noeud (meme @id, fusionne par graphOf).
+ */
+export const FOUNDER_ID = `${url("/a-propos")}#${BRAND.founder.name.toLowerCase()}`;
+
+export function founderNode(): Node {
+  return {
+    "@type": "Person",
+    "@id": FOUNDER_ID,
+    name: BRAND.founder.name,
+    jobTitle: BRAND.founder.jobTitle,
+    url: url("/a-propos"),
+    worksFor: orgRef,
+  };
+}
+
+/**
+ * UN SEUL GRAPHE PAR PAGE.
+ *
+ * L'agence, le site et le fondateur entrent dans le graphe de chaque page,
+ * a cote des noeuds propres a la page. Avant, la racine emettait un second
+ * bloc JSON-LD : les references par @id traversaient deux scripts, ce que
+ * certains lecteurs ne recollent pas. Deux noeuds de meme @id (le fondateur,
+ * aussi declare sur /a-propos) sont fusionnes en un seul.
+ */
+export function graphOf(pageNodes: Node[]): string {
+  const out: Node[] = [];
+  const byId = new Map<string, Node>();
+  for (const n of [organizationNode(), websiteNode(), founderNode(), ...pageNodes]) {
+    const id = n["@id"];
+    const seen = typeof id === "string" ? byId.get(id) : undefined;
+    if (seen) {
+      Object.assign(seen, n);
+      continue;
+    }
+    if (typeof id === "string") byId.set(id, n);
+    out.push(n);
+  }
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": out });
+}
 
 /* ==========================================================================
  *  LES NOEUDS REUTILISABLES
@@ -302,7 +338,7 @@ export function pageHead(o: PageOptions) {
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }),
+        children: graphOf(graph),
       },
     ],
   };
