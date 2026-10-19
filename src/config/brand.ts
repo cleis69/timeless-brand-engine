@@ -21,8 +21,8 @@
  * ------------------------------------------------------------
  *  A COMPLETER QUAND L'INFORMATION EXISTE — JAMAIS AVANT
  *
- *  - `SOCIAL` : les autres profils officiels (LinkedIn, YouTube), quand
- *    ils existent.
+ *  - `SOCIAL` : les autres profils officiels (LinkedIn), quand ils
+ *    existent.
  *  - `address.streetAddress` : seulement si l'adresse est publique.
  *
  *  Un champ vide n'est pas publie. Un champ invente l'est, et se
@@ -50,6 +50,16 @@ export const SOCIAL = [
     network: "TikTok",
     handle: "@ultravision.agency",
     url: "https://www.tiktok.com/@ultravision.agency",
+  },
+  /*
+    La chaine YouTube, renommee le 19 octobre 2026 (ancienne chaine
+    « SUPRA V », meme identifiant de chaine). Les films publicitaires du
+    site y sont publies en Shorts.
+  */
+  {
+    network: "YouTube",
+    handle: "@ultravision.agency",
+    url: "https://www.youtube.com/@ultravision.agency",
   },
   /*
     Le profil d'agence sur Sortlist, publie le 5 octobre 2026. Un annuaire
