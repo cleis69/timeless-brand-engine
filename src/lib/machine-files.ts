@@ -348,6 +348,23 @@ export function buildLlmsFullTxt(): string {
     );
   }
 
+  /* Les articles : l'essentiel et les questions fréquentes, les passages
+     que les assistants citent le plus volontiers. */
+  for (const a of ARTICLES_SORTED) {
+    out.push(
+      `## Article : ${a.title}`,
+      "",
+      `Page : ${url(`/blog/${a.slug}`)} · publié le ${a.date}`,
+      "",
+      a.excerpt,
+      "",
+      "L'essentiel :",
+      ...a.takeaways.map((t) => `- ${t}`),
+      "",
+      ...a.faq.flatMap((f) => [`### ${f.q}`, "", f.a, ""]),
+    );
+  }
+
   out.push("## Tarifs", "", ...pricingLines(), "", "## Contact", "", ...contactLines(), "");
   return out.join("\n");
 }

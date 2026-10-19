@@ -825,14 +825,14 @@ export const ARTICLES: Article[] = [
   {
     slug: "budget-meta-ads-maroc",
     services: ["meta-ads", "production-video-photo", "generation-de-leads"],
-    title: "Quel budget pour Meta Ads au Maroc ? Le calcul, pas une moyenne",
-    seoTitle: "Budget Meta Ads au Maroc : le calcul",
+    title: "Quel budget pour Facebook Ads et Meta Ads au Maroc ? Le calcul, pas une moyenne",
+    seoTitle: "Prix Facebook Ads au Maroc : le budget",
     excerpt:
       "Facebook et Instagram acceptent des campagnes à quelques dirhams par jour. La vraie question n'est pas le minimum autorisé, mais le minimum utile : celui qui donne à l'algorithme assez de résultats pour apprendre.",
     category: "Tarifs",
     date: "2026-10-05",
     readingTime: 7,
-    seo: "Budget Meta Ads au Maroc : comment calculer ce qu'il faut dépenser sur Facebook et Instagram, en dirhams, à partir du coût d'un résultat et de la phase d'apprentissage.",
+    seo: "Prix et budget Facebook Ads au Maroc : combien dépenser sur Facebook et Instagram, en dirhams, calculé à partir du coût d'un résultat et de la phase d'apprentissage.",
     takeaways: [
       "Un budget Meta Ads se calcule à partir du coût d'un résultat, pas à partir d'une moyenne de marché : il doit permettre à chaque ensemble de publicités d'obtenir régulièrement des conversions.",
       "Selon la documentation de Meta, un ensemble de publicités sort de sa phase d'apprentissage après environ 50 événements d'optimisation sur sept jours. Pendant cette phase, les coûts sont plus élevés et moins stables.",
@@ -841,6 +841,10 @@ export const ARTICLES: Article[] = [
       `Pour démarrer, UltraVision Agency recommande ${AD_BUDGET} par mois de budget publicitaire, versé directement à Meta depuis le compte de l'annonceur, en plus des honoraires de production et de pilotage.`,
     ],
     faq: [
+      {
+        q: "Combien coûte la publicité Facebook Ads au Maroc ?",
+        a: `Deux coûts distincts : le budget publicitaire, versé directement à Meta depuis votre compte, et les honoraires de l'agence. Pour démarrer, UltraVision Agency recommande ${AD_BUDGET} par mois de budget publicitaire. Les honoraires de production et de pilotage sont publics sur la page tarifs.`,
+      },
       {
         q: "Quel est le budget minimum pour faire de la publicité sur Facebook au Maroc ?",
         a: "Techniquement, Meta accepte de très petits budgets quotidiens. Pour qu'une campagne apprenne, il faut viser environ 50 résultats par semaine et par ensemble de publicités, ce qui représente le plus souvent plusieurs milliers de dirhams par mois selon le coût d'un résultat dans votre secteur.",
@@ -1050,14 +1054,14 @@ export const ARTICLES: Article[] = [
   {
     slug: "prix-site-internet-maroc",
     services: ["creation-site-web", "generation-de-leads"],
-    title: "Combien coûte un site internet au Maroc ? Ce qui fait le prix",
-    seoTitle: "Prix d'un site internet au Maroc",
+    title: "Combien coûte la création d'un site web au Maroc ? Ce qui fait le prix",
+    seoTitle: "Prix création de site web au Maroc",
     excerpt:
       "Deux devis pour « un site internet » peuvent aller du simple au décuple, et décrire deux objets différents. Les cinq éléments qui font le prix, les lignes qu'on oublie, et les questions à poser avant de signer.",
     category: "Tarifs",
     date: "2026-10-05",
     readingTime: 6,
-    seo: `Prix d'un site internet au Maroc : ce qui fait varier un devis, landing page ou site vitrine, les frais oubliés et nos tarifs à Marrakech, en dirhams.`,
+    seo: `Prix de création d'un site web au Maroc : ce qui fait varier un devis, landing page ou site vitrine, les frais oubliés et nos tarifs à Marrakech, en dirhams.`,
     takeaways: [
       "Le prix d'un site internet dépend surtout de cinq éléments : le nombre de pages, le design, les contenus, les fonctions et ce qui est compris après la mise en ligne.",
       `Chez UltraVision Agency, à Marrakech, un site vitrine jusqu'à cinq pages coûte ${both(VITRINE)} et une landing page de conversion ${both(LANDING)}, hors taxes.`,

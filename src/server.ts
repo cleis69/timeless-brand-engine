@@ -92,7 +92,20 @@ function withHostHeaders(request: Request, response: Response): Response {
   if (!isCanonical && !isWorkersDev) return response;
 
   const out = new Response(response.body, response);
-  if (isCanonical) out.headers.set("Strict-Transport-Security", "max-age=31536000");
+  if (isCanonical) {
+    out.headers.set("Strict-Transport-Security", "max-age=31536000");
+    /*
+      En-tetes de securite de base. Pas de Content-Security-Policy : le
+      site charge des scripts de plusieurs origines, une politique
+      approximative casserait des pages sans prevenir. Pas de
+      includeSubDomains sur HSTS tant que tous les sous-domaines ne sont
+      pas verifies en HTTPS.
+    */
+    out.headers.set("X-Content-Type-Options", "nosniff");
+    out.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    out.headers.set("X-Frame-Options", "SAMEORIGIN");
+    out.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  }
   if (isWorkersDev) out.headers.set("X-Robots-Tag", "noindex, nofollow");
   return out;
 }
