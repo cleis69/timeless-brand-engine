@@ -82,7 +82,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
     return pageHead({
       path,
-      title: withBrand(a.title),
+      title: withBrand(a.seoTitle ?? a.title),
       description: a.seo,
       ogTitle: a.title,
       ogType: "article",

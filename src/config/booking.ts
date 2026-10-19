@@ -231,7 +231,13 @@ export type BookingFields = {
   message: string;
 };
 
-export type BookingResult = { ok: true } | { ok: false; message: string; taken?: boolean };
+/**
+ * `notified: false` : le creneau est enregistre, mais l'e-mail d'alerte n'a
+ * pas pu partir. L'agence n'en sait rien ; c'est le visiteur qui doit la
+ * prevenir (voir BookingCalendar).
+ */
+export type BookingResult =
+  { ok: true; notified?: boolean } | { ok: false; message: string; taken?: boolean };
 
 /** Les creneaux deja reserves, et si le stockage est branche. Ne leve jamais. */
 export async function fetchTaken(): Promise<{ ready: boolean; taken: string[] }> {
@@ -296,26 +302,37 @@ export async function book(
       .filter(Boolean)
       .join("\n"),
   );
-  try {
-    await fetch(FORM.endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        access_key: FORM.accessKey,
-        subject: `Rendez-vous — ${when} — ${f.name}`,
-        from_name: "Réservation UltraVision Agency",
-        rendez_vous: `${when} (heure du Maroc), ${BOOKING.durationMin} minutes`,
-        nom: f.name,
-        entreprise: f.company || "—",
-        telephone: f.phone,
-        ...(digits ? { whatsapp: `https://wa.me/${digits}` } : {}),
-        ...(f.email ? { email: f.email } : {}),
-        projet: f.message || "—",
-        ajouter_a_google_agenda: agenda,
-      }),
-    });
-  } catch {
-    /* Le creneau est deja enregistre : la reservation tient. */
+  /*
+    L'e-mail d'alerte, avec trois essais : un reseau mobile qui coupe une
+    seconde ne doit pas faire perdre un rendez-vous. Reussi seulement si
+    Web3Forms repond « success » ; sinon `notified: false`.
+  */
+  const payload = JSON.stringify({
+    access_key: FORM.accessKey,
+    subject: `Rendez-vous — ${when} — ${f.name}`,
+    from_name: "Réservation UltraVision Agency",
+    rendez_vous: `${when} (heure du Maroc), ${BOOKING.durationMin} minutes`,
+    nom: f.name,
+    entreprise: f.company || "—",
+    telephone: f.phone,
+    ...(digits ? { whatsapp: `https://wa.me/${digits}` } : {}),
+    ...(f.email ? { email: f.email } : {}),
+    projet: f.message || "—",
+    ajouter_a_google_agenda: agenda,
+  });
+  for (const wait of [0, 800, 2500]) {
+    if (wait) await new Promise((r) => setTimeout(r, wait));
+    try {
+      const mail = await fetch(FORM.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: payload,
+      });
+      const answer = (await mail.json().catch(() => ({}))) as { success?: boolean };
+      if (mail.ok && answer.success !== false) return { ok: true, notified: true };
+    } catch {
+      /* Reseau coupe : nouvel essai. */
+    }
   }
-  return { ok: true };
+  return { ok: true, notified: false };
 }

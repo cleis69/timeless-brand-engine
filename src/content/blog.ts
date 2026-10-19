@@ -100,6 +100,8 @@ export type Block =
 export type Article = {
   slug: string;
   title: string;
+  /** Titre court pour l'onglet et Google (60 caracteres, marque comprise). Defaut : `title`. */
+  seoTitle?: string;
   /** Sous-titre affiche sous le titre, et dans la liste. */
   excerpt: string;
   /** Une categorie courte. Sert de filtre visuel. */
@@ -157,6 +159,7 @@ export const ARTICLES: Article[] = [
     slug: "tofu-mofu-bofu-video-publicitaire",
     services: ["meta-ads", "tiktok-ads", "generation-de-leads"],
     title: "TOFU, MOFU, BOFU : pourquoi une seule vidéo ne peut pas vendre",
+    seoTitle: "TOFU, MOFU, BOFU en vidéo publicitaire",
     excerpt:
       "La plupart des campagnes échouent pour une raison mécanique : elles montrent le même film à quelqu'un qui découvre la marque et à quelqu'un qui hésite à acheter. Voici comment nous découpons la production en trois étages.",
     category: "Stratégie",
@@ -394,6 +397,7 @@ export const ARTICLES: Article[] = [
     slug: "combien-coute-une-video-publicitaire",
     services: ["production-video-photo", "meta-ads"],
     title: "Combien coûte une vidéo publicitaire ? Les prix en dirhams et en euros",
+    seoTitle: "Prix d'une vidéo publicitaire au Maroc",
     excerpt: `Entre ${range(200, 8000)} pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, les prix pratiqués à Marrakech, et les questions à poser avant de signer.`,
     category: "Tarifs",
     date: "2026-08-10",
@@ -519,6 +523,7 @@ export const ARTICLES: Article[] = [
     slug: "pourquoi-quatre-videos-par-mois",
     services: ["production-video-photo", "meta-ads", "tiktok-ads"],
     title: "Pourquoi quatre vidéos par mois, et pas une très bonne",
+    seoTitle: "Pourquoi quatre vidéos par mois",
     excerpt:
       "Personne ne sait à l'avance quelle accroche va fonctionner — ni vous, ni nous, ni l'algorithme. Ce qui décide, c'est le nombre d'essais.",
     category: "Méthode",
@@ -712,6 +717,7 @@ export const ARTICLES: Article[] = [
     slug: "ce-que-l-ia-fait-vraiment-dans-notre-production",
     services: ["crm-ia-automatisation", "production-video-photo"],
     title: "Ce que l'intelligence artificielle fait vraiment dans notre production",
+    seoTitle: "L'IA dans notre production vidéo",
     excerpt:
       "Tout le monde annonce de l'IA, presque personne ne dit où elle intervient. Voici la liste exacte, y compris ce que nous refusons de lui confier.",
     category: "Méthode",
@@ -820,6 +826,7 @@ export const ARTICLES: Article[] = [
     slug: "budget-meta-ads-maroc",
     services: ["meta-ads", "production-video-photo", "generation-de-leads"],
     title: "Quel budget pour Meta Ads au Maroc ? Le calcul, pas une moyenne",
+    seoTitle: "Budget Meta Ads au Maroc : le calcul",
     excerpt:
       "Facebook et Instagram acceptent des campagnes à quelques dirhams par jour. La vraie question n'est pas le minimum autorisé, mais le minimum utile : celui qui donne à l'algorithme assez de résultats pour apprendre.",
     category: "Tarifs",
@@ -1044,6 +1051,7 @@ export const ARTICLES: Article[] = [
     slug: "prix-site-internet-maroc",
     services: ["creation-site-web", "generation-de-leads"],
     title: "Combien coûte un site internet au Maroc ? Ce qui fait le prix",
+    seoTitle: "Prix d'un site internet au Maroc",
     excerpt:
       "Deux devis pour « un site internet » peuvent aller du simple au décuple, et décrire deux objets différents. Les cinq éléments qui font le prix, les lignes qu'on oublie, et les questions à poser avant de signer.",
     category: "Tarifs",
@@ -1157,6 +1165,7 @@ export const ARTICLES: Article[] = [
     slug: "choisir-agence-marketing-digital-maroc",
     services: ["meta-ads", "production-video-photo", "generation-de-leads"],
     title: "Choisir une agence de marketing digital au Maroc : huit questions à poser",
+    seoTitle: "Choisir une agence digitale au Maroc",
     excerpt:
       "Les sites d'agence se ressemblent : mêmes promesses, mêmes logos, mêmes « résultats ». Les vraies différences apparaissent dans les réponses à quelques questions précises, posées avant de signer.",
     category: "Stratégie",

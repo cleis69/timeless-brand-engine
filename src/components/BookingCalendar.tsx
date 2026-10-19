@@ -53,7 +53,7 @@ import {
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
 type Now = ReturnType<typeof nowInZone>;
-type Done = { date: string; time: string; phone: string };
+type Done = { date: string; time: string; phone: string; name: string; notified: boolean };
 
 export function BookingCalendar() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -139,7 +139,13 @@ export function BookingCalendar() {
     );
     setSending(false);
     if (r.ok) {
-      setDone({ date: day, time, phone: get("phone") });
+      setDone({
+        date: day,
+        time,
+        phone: get("phone"),
+        name: get("name"),
+        notified: r.notified !== false,
+      });
       return;
     }
     setError(r.message);
@@ -245,6 +251,27 @@ export function BookingCalendar() {
             Apple / Outlook
           </a>
         </div>
+        {!done.notified && hasWhatsapp && (
+          <div
+            className="mt-6 rounded-2xl p-4 text-sm leading-relaxed text-[#c2c6d2]"
+            style={{ border: "1px solid #2b4880", backgroundColor: "rgba(59,130,246,.08)" }}
+          >
+            <p>
+              Votre créneau est bien enregistré, mais notre alerte n&apos;a pas pu partir. Pour être
+              sûr que nous vous appelons, confirmez-le en un clic :
+            </p>
+            <a
+              href={whatsappUrl(
+                `Bonjour UltraVision, c'est ${done.name}. Je confirme mon appel du ${label} (heure du Maroc), au ${done.phone}.`,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex h-10 items-center rounded-full bg-foreground px-5 text-[0.7rem] font-medium tracking-[0.12em] text-background uppercase"
+            >
+              Confirmer sur WhatsApp
+            </a>
+          </div>
+        )}
         {hasWhatsapp && (
           <a
             href={whatsappUrl("Bonjour UltraVision, je dois déplacer notre appel.")}
