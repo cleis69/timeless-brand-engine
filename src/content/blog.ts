@@ -1595,6 +1595,195 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+  /* ======================================================================
+   *  13. VIDEO IMMOBILIERE A MARRAKECH
+   * ==================================================================== */
+  {
+    slug: "video-immobiliere-marrakech",
+    services: ["production-video-photo", "meta-ads", "generation-de-leads"],
+    title: "Vidéo immobilière à Marrakech : filmer un bien pour qu'il se vende",
+    seoTitle: "Vidéo immobilière à Marrakech",
+    excerpt:
+      "Une visite filmée répond aux questions avant le premier appel. Encore faut-il filmer ce que l'acheteur cherche, et le montrer à ceux qui achètent vraiment.",
+    category: "Production",
+    date: "2026-10-19",
+    readingTime: 6,
+    seo: "Vidéo immobilière à Marrakech : visite face caméra ou en ambiance, format vertical, sous-titres pour acheteurs étrangers, diffusion ciblée et suivi des demandes.",
+    takeaways: [
+      "Une vidéo immobilière efficace répond aux questions d'un acheteur avant le premier appel : la lumière, les volumes, la vue, le quartier et l'état réel du bien.",
+      "Le format vertical est celui des réseaux où se diffusent les annonces : un bien filmé en vertical se regarde en entier sur un téléphone, sans le tourner.",
+      "Pour un programme encore en construction, on filme ce qui existe déjà : le quartier, les commerces, les parties communes, le cadre de vie.",
+      "Pour des acheteurs étrangers, la vidéo est tournée sur place, sous-titrée dans la langue du marché visé, puis diffusée dans ce pays.",
+      `Chez UltraVision Agency, à Marrakech, une vidéo publicitaire — angle, script, tournage, montage, formats verticaux — coûte ${both(VIDEO)} hors taxes.`,
+    ],
+    faq: [
+      {
+        q: "Combien coûte une vidéo immobilière à Marrakech ?",
+        a: `Chez UltraVision Agency, une vidéo publicitaire immobilière — angle, script, tournage sur place, montage et formats verticaux — coûte ${both(VIDEO)} hors taxes. Une première vidéo avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}, sans engagement.`,
+      },
+      {
+        q: "Faut-il apparaître face caméra ?",
+        a: "Ce n'est pas obligatoire. Une visite présentée par l'agent ou le promoteur crée de la confiance : on sait à qui l'on parle avant d'appeler. Une visite en ambiance, sans personne à l'écran, convient mieux à un bien d'exception où le lieu suffit.",
+      },
+      {
+        q: "Quelle durée pour une vidéo de visite ?",
+        a: "Assez pour montrer les pièces principales, la vue et l'extérieur, pas davantage. Les premières secondes décident si la vidéo est regardée : elles doivent montrer ce que le bien a de plus fort.",
+      },
+      {
+        q: "Peut-on toucher des acheteurs qui vivent à l'étranger ?",
+        a: "Oui. La vidéo est sous-titrée dans la langue du marché visé, et la publicité est diffusée auprès des personnes de ce pays. C'est un dispositif que nous avons mis en place pour un agent immobilier et pour un promoteur.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Dans l'immobilier, la vidéo ne remplace pas la visite : elle décide qui viendra la faire. Un acheteur qui a vu le bien filmé arrive avec ses vraies questions, et ceux à qui il ne convient pas ne prennent pas rendez-vous pour rien.",
+      },
+
+      { k: "h2", v: "Ce qu'un acheteur veut voir" },
+      {
+        k: "ul",
+        v: [
+          "La lumière, et l'orientation des pièces.",
+          "Les volumes, filmés en continu plutôt qu'en plans fixes.",
+          "La vue et l'extérieur : terrasse, jardin, piscine, rue.",
+          "Le quartier : ce qu'il y a à pied, ce qu'il y a autour.",
+          "L'état réel du bien, sans retouche qui décevrait à la visite.",
+        ],
+      },
+
+      { k: "h2", v: "Face caméra ou en ambiance" },
+      {
+        k: "p",
+        v: "Deux façons de filmer une visite. Présentée face caméra par l'agent ou le promoteur, elle crée de la confiance : on connaît la personne avant de l'appeler. C'est le format de la visite d'un triplex à Marrakech pour l'agence All In Kech, et du film tourné pour Shams Immo sur l'immobilier neuf. En ambiance, sans personne à l'écran, le lieu parle seul : c'est le choix des biens d'exception et des intérieurs très travaillés.",
+      },
+
+      { k: "h2", v: "Vendre ce qui n'est pas encore construit" },
+      {
+        k: "p",
+        v: "Pour un programme en construction, il n'y a pas encore de pièces à filmer. On filme ce qui existe déjà : le quartier, les commerces, les parties communes, le cadre de vie. C'est ainsi qu'ont été tournés le lancement d'une résidence neuve et la présentation d'un programme de villas encore en chantier, adressée à un marché étranger.",
+      },
+
+      { k: "h2", v: "Le format vertical" },
+      {
+        k: "p",
+        v: "Les annonces immobilières se regardent sur Instagram, Facebook et TikTok, sur un téléphone tenu droit. Une vidéo tournée en vertical occupe tout l'écran ; une vidéo horizontale recadrée perd une partie de la pièce. Le cadrage se décide donc au tournage, pas au montage.",
+      },
+
+      { k: "h2", v: "Toucher les acheteurs étrangers" },
+      {
+        k: "p",
+        v: "Une partie des acheteurs d'un bien à Marrakech vit à l'étranger. Pour eux, la vidéo est tournée sur place puis sous-titrée dans la langue du marché visé, et la publicité est diffusée dans ce pays. C'est le dispositif utilisé pour un agent immobilier qui cherchait des acheteurs à l'international.",
+      },
+
+      { k: "h2", v: "Après la vidéo : ne perdre aucune demande" },
+      {
+        k: "p",
+        v: "Une vidéo qui fonctionne génère des messages, des appels et des formulaires. Sans suivi, une partie se perd. Un formulaire relié à un CRM, avec une notification et une relance, permet que chaque demande reçoive une réponse, jusqu'à la visite.",
+      },
+      { k: "quote", v: "La vidéo ne remplace pas la visite : elle décide qui viendra la faire." },
+
+      { k: "h2", v: "Nos prix" },
+      {
+        k: "p",
+        v: `Une vidéo publicitaire — angle, script, tournage sur place à Marrakech, montage, formats verticaux — coûte ${both(VIDEO)} hors taxes. Pour juger avant de s'engager, une première vidéo avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}. Le budget publicitaire, versé aux plateformes, s'ajoute.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  14. RESERVATIONS DIRECTES : RESTAURANTS, RIADS, HOTELS
+   * ==================================================================== */
+  {
+    slug: "reservations-directes-restaurant-riad-marrakech",
+    services: ["creation-site-web", "production-video-photo", "meta-ads"],
+    title: "Restaurant, riad, hôtel à Marrakech : obtenir plus de réservations en direct",
+    seoTitle: "Réservations directes à Marrakech",
+    excerpt:
+      "Les plateformes de réservation apportent des clients et prennent une commission sur chacun. Un site qui réserve, des vidéos qui donnent envie et une publicité bien ciblée font venir une partie d'entre eux en direct.",
+    category: "Stratégie",
+    date: "2026-10-19",
+    readingTime: 6,
+    seo: "Restaurant, riad ou hôtel à Marrakech : site avec réservation intégrée, vidéos de jour et de nuit, fiche Google, Instagram et publicité pour réserver en direct.",
+    takeaways: [
+      "Une réservation directe passe par le site, le téléphone, le WhatsApp ou les réseaux de l'établissement, sans intermédiaire qui prélève une commission.",
+      "Le site d'un restaurant, d'un riad ou d'un hôtel doit permettre de réserver en quelques gestes sur un téléphone, sans renvoyer vers une autre plateforme.",
+      "À Marrakech, la clientèle est à la fois locale et de passage : un site en au moins deux langues parle aux deux.",
+      "Un lieu filmé de jour et de nuit montre ses deux visages : le calme de l'après-midi et l'ambiance du soir ne s'adressent pas aux mêmes clients.",
+      "La fiche d'établissement Google, avec ses photos, ses horaires, ses avis et son lien de réservation, est souvent le premier contact entre un client et un lieu.",
+    ],
+    faq: [
+      {
+        q: "Comment obtenir plus de réservations directes ?",
+        a: "En rendant la réservation directe aussi simple que sur une plateforme : un site rapide sur téléphone, un bouton de réservation visible, des photos et des vidéos à jour, et le lien de ce site partout — Instagram, fiche Google, WhatsApp.",
+      },
+      {
+        q: "Faut-il quitter les plateformes de réservation ?",
+        a: "Rarement. Elles apportent une clientèle qui ne vous connaît pas encore. L'objectif est de faire réserver en direct les clients qui vous connaissent déjà, et d'être assez visible pour que d'autres le fassent aussi.",
+      },
+      {
+        q: "Combien coûte un site avec réservation pour un restaurant ?",
+        a: `Chez UltraVision Agency, un site vitrine jusqu'à 5 pages coûte à partir de ${both(VITRINE)} hors taxes. Le prix final dépend du nombre de pages, des langues et du système de réservation retenu.`,
+      },
+      {
+        q: "Quelles vidéos tourner pour un restaurant ou un riad ?",
+        a: "Le lieu de jour et de nuit, les gestes en cuisine ou au service, les chambres et les terrasses, et les moments que les clients viennent chercher. Filmés en vertical, ces plans servent à la fois sur Instagram, dans les publicités et sur le site.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Un restaurant, un riad ou un hôtel se choisit sur un écran avant de se choisir sur place. La question n'est pas d'être présent sur les plateformes, mais de savoir combien de clients arrivent en direct, et combien passent par un intermédiaire.",
+      },
+
+      { k: "h2", v: "Ce qu'est une réservation directe" },
+      {
+        k: "p",
+        v: "Une réservation directe passe par le site de l'établissement, son téléphone, son WhatsApp ou ses réseaux, sans plateforme qui prélève une commission. Elle donne aussi accès au client : son nom, ses coordonnées, et la possibilité de le faire revenir.",
+      },
+
+      { k: "h2", v: "Le site : réserver en quelques gestes" },
+      {
+        k: "ul",
+        v: [
+          "Un bouton de réservation visible dès l'arrivée, sur téléphone.",
+          "La réservation sur le site lui-même, sans renvoi vers une autre plateforme.",
+          "La carte, les chambres ou les formules, avec des photos réelles.",
+          "Au moins deux langues, pour la clientèle locale et la clientèle de passage.",
+          "Le lien du site sur Instagram, sur la fiche Google et dans chaque réponse WhatsApp.",
+        ],
+      },
+      {
+        k: "p",
+        v: "C'est ce que nous avons mis en place pour Koozina Garden, restaurant et boutique à Essaouira, dont le site bilingue présente la carte, le jardin, la boutique et les événements, et pour le chef Raphaël Anglesy : dans les deux cas, la réservation est intégrée au site.",
+      },
+
+      { k: "h2", v: "La vidéo : de jour et de nuit" },
+      {
+        k: "p",
+        v: "Le calme d'un patio l'après-midi et l'ambiance d'une terrasse le soir ne parlent pas aux mêmes clients. Un lieu filmé aux deux moments montre ses deux visages : c'est le parti pris du film tourné pour un lieu de loisirs à Marrakech, avec une accroche sur le tarif d'entrée.",
+      },
+
+      { k: "h2", v: "Instagram et la publicité" },
+      {
+        k: "p",
+        v: "Instagram sert de vitrine : c'est là qu'un client vérifie l'ambiance avant de réserver. La publicité Meta va chercher ceux qui ne vous suivent pas encore — les habitants de Marrakech, les personnes qui s'intéressent à la ville — avec une vidéo verticale et un lien direct vers la réservation.",
+      },
+
+      { k: "h2", v: "La fiche Google" },
+      {
+        k: "p",
+        v: "Sur « restaurant Marrakech » ou « riad Marrakech », Google affiche d'abord une carte. La fiche d'établissement — photos, horaires, avis, lien de réservation — est souvent le premier contact avec un client. Elle se tient à jour comme une vitrine.",
+      },
+      { k: "quote", v: "Chaque réservation directe est un client que vous pouvez faire revenir." },
+
+      { k: "h2", v: "Ce que nous faisons" },
+      {
+        k: "p",
+        v: `Nous concevons les sites avec réservation intégrée, filmons les lieux sur place et diffusons ces vidéos en publicité. Un site vitrine coûte à partir de ${both(VITRINE)}, une vidéo publicitaire ${both(VIDEO)}, et le pilotage d'une plateforme publicitaire ${both(MEDIA)} par mois, hors taxes. Le budget publicitaire s'ajoute.`,
+      },
+    ],
+  },
 ];
 
 /** Articles triés du plus récent au plus ancien. */
