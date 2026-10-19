@@ -78,6 +78,11 @@ const VITRINE = carte("Site vitrine");
 const SEO_TECH = carte("Référencement technique");
 const ESSAI = pack("essai");
 const PRODUCTION = pack("production");
+const ACQUISITION = pack("acquisition");
+const CM = carte("Community management");
+const SEO_SUIVI = carte("Suivi SEO mensuel");
+const GEO = carte("Visibilité sur les IA (GEO)");
+const CRM = carte("CRM et automatisation des leads");
 /** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
 const AD_BUDGET = range(800, 1500);
 
@@ -1272,6 +1277,321 @@ export const ARTICLES: Article[] = [
       {
         k: "p",
         v: `Les comptes publicitaires sont ouverts à votre nom. Le budget publicitaire est toujours séparé de nos honoraires. Nous pilotons au coût par demande et par rendez-vous. Nos réalisations sont en ligne, avec le nom des clients. L'équipe est restreinte et nommée : ceux qui vendent le projet l'exécutent. La formule Production est sans engagement, et une première vidéo avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}.`,
+      },
+    ],
+  },
+  /* ======================================================================
+   *  10. PRIX D'UNE AGENCE A MARRAKECH
+   * ==================================================================== */
+  {
+    slug: "prix-agence-marketing-digital-marrakech",
+    services: ["meta-ads", "production-video-photo", "generation-de-leads"],
+    title: "Combien coûte une agence de marketing digital à Marrakech ? Ce que l'on paie vraiment",
+    seoTitle: "Prix d'une agence marketing à Marrakech",
+    excerpt:
+      "Un devis d'agence mélange souvent quatre choses différentes : la production, le pilotage, le budget publicitaire et les outils. Les séparer est le seul moyen de comparer deux propositions.",
+    category: "Tarifs",
+    date: "2026-10-19",
+    readingTime: 6,
+    seo: "Prix d'une agence de marketing digital à Marrakech : production, pilotage des publicités, budget, site et CRM. Nos tarifs publics et comment lire un devis.",
+    takeaways: [
+      "Le prix d'une agence de marketing digital se compose de quatre postes distincts : la production des contenus, le pilotage des campagnes, le budget publicitaire versé aux plateformes et les outils comme le site ou le CRM.",
+      "Le budget publicitaire n'est pas un honoraire : il est payé directement à Meta, Google ou TikTok, et doit figurer sur une ligne séparée du devis.",
+      `À Marrakech, chez UltraVision Agency, le pilotage d'une plateforme publicitaire coûte ${both(MEDIA)} par mois hors taxes, et la formule Production — quatre vidéos par mois et leur diffusion — ${both(PRODUCTION)} par mois.`,
+      "Une agence payée en pourcentage du budget publicitaire coûte plus cher à mesure que le budget augmente, même quand le travail reste le même.",
+      "Deux devis d'agence se comparent sur ce qui est livré chaque mois, pas sur le montant total.",
+    ],
+    faq: [
+      {
+        q: "Quel est le tarif d'une agence de marketing digital au Maroc ?",
+        a: `Il dépend de ce qui est inclus. Chez UltraVision Agency, à Marrakech, une vidéo publicitaire coûte ${both(VIDEO)}, le pilotage d'une plateforme publicitaire ${both(MEDIA)} par mois et le community management ${both(CM)} par mois, hors taxes. Le budget publicitaire, versé aux plateformes, s'ajoute : comptez ${AD_BUDGET} par mois pour démarrer.`,
+      },
+      {
+        q: "Le budget publicitaire est-il compris dans le prix de l'agence ?",
+        a: "Non, et il ne devrait jamais l'être sans que ce soit écrit. Le budget est versé directement à Meta, Google ou TikTok, depuis un compte ouvert à votre nom ; les honoraires de l'agence rémunèrent son travail.",
+      },
+      {
+        q: "Pourquoi certaines agences facturent-elles un pourcentage du budget ?",
+        a: "C'est un mode de facturation courant dans la publicité en ligne. Son défaut : la facture augmente avec le budget, même quand le travail ne change pas. Un forfait par plateforme rend le coût prévisible.",
+      },
+      {
+        q: "Peut-on tester une agence avant de s'engager ?",
+        a: `Oui, et c'est la façon la plus sûre de la juger. Chez UltraVision Agency, une vidéo publicitaire avec 14 jours de diffusion pilotée coûte ${both(ESSAI)}, sans engagement.`,
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "« Combien coûte une agence ? » appelle une réponse en deux temps : ce que l'on achète, puis le prix de chaque morceau. Les devis qui affichent un seul montant mensuel recouvrent presque toujours plusieurs prestations, et c'est en les séparant qu'on peut les comparer.",
+      },
+
+      { k: "h2", v: "Les quatre postes d'un devis" },
+      {
+        k: "table",
+        v: {
+          head: ["Poste", "Ce que c'est", "Qui l'encaisse"],
+          rows: [
+            ["La production", "Vidéos, photos, visuels, textes publicitaires", "L'agence"],
+            ["Le pilotage", "Réglage et optimisation des campagnes, rapports", "L'agence"],
+            ["Le budget publicitaire", "L'achat d'espace sur Meta, Google ou TikTok", "Les plateformes"],
+            ["Les outils", "Site, landing page, CRM, automatisations", "L'agence pour la création, l'éditeur pour l'abonnement"],
+          ],
+        },
+      },
+      {
+        k: "p",
+        v: "Un devis qui ne distingue pas ces quatre lignes ne permet pas de savoir combien part réellement en publicité, ni ce que l'agence facture pour son propre travail.",
+      },
+
+      { k: "h2", v: "Forfait ou pourcentage du budget" },
+      {
+        k: "p",
+        v: "Deux modes de facturation dominent le pilotage des campagnes. Le pourcentage du budget publicitaire augmente mécaniquement avec les dépenses, même lorsque le travail reste identique. Le forfait par plateforme rend le coût prévisible : piloter une plateforme coûte le même prix, que le budget soit modeste ou important.",
+      },
+      {
+        k: "p",
+        v: "Le forfait se compte par plateforme parce que le travail n'est pas le même : piloter Meta seul, ou Meta, Google et TikTok, c'est trois interfaces, trois logiques d'enchères et trois jeux de créations à décliner.",
+      },
+
+      { k: "h2", v: "Ce qui n'est jamais compris" },
+      {
+        k: "ul",
+        v: [
+          "Le budget publicitaire, versé directement aux plateformes depuis votre compte.",
+          "Les comédiens, mannequins ou lieux de tournage payants.",
+          "Les abonnements logiciels : CRM, outils d'automatisation, hébergement.",
+          "La réponse aux messages : l'agence génère et centralise les demandes, le suivi commercial reste chez vous.",
+        ],
+      },
+      { k: "note", v: `Pour démarrer une campagne, comptez ${AD_BUDGET} de budget publicitaire par mois, en plus des honoraires.` },
+
+      { k: "h2", v: "Comment comparer deux devis" },
+      {
+        k: "ul",
+        v: [
+          "Additionner ce qui est livré chaque mois : nombre de vidéos, plateformes pilotées, rapports.",
+          "Vérifier que le budget publicitaire figure sur une ligne séparée.",
+          "Demander à qui appartiennent les comptes publicitaires et les fichiers sources.",
+          "Lire la durée d'engagement et les conditions de sortie.",
+        ],
+      },
+      { k: "quote", v: "Un prix ne se compare qu'à ce qu'il contient." },
+
+      { k: "h2", v: "Nos prix, ligne par ligne" },
+      {
+        k: "table",
+        v: {
+          head: ["Prestation", "Prix hors taxes"],
+          rows: [
+            ["Vidéo publicitaire : angle, script, tournage, montage", both(VIDEO)],
+            ["Pilotage d'une plateforme publicitaire", `${both(MEDIA)} par mois`],
+            ["Community management", `${both(CM)} par mois`],
+            ["Landing page de conversion", both(LANDING)],
+            ["Site vitrine, jusqu'à 5 pages", `à partir de ${both(VITRINE)}`],
+            ["Référencement technique", both(SEO_TECH)],
+            ["CRM et automatisation des leads", both(CRM)],
+          ],
+        },
+      },
+      {
+        k: "p",
+        v: `Les formules regroupent ces lignes. La formule Production — quatre vidéos par mois, diffusées et optimisées sur une plateforme — coûte ${both(PRODUCTION)} par mois, sans engagement. La formule Acquisition — quatre vidéos, diffusion sur Meta, Google et TikTok, leads envoyés dans votre CRM — coûte ${both(ACQUISITION)} par mois, avec trois mois d'engagement. L'offre de lancement en cours est indiquée sur notre page tarifs.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  11. COMMUNITY MANAGER A MARRAKECH
+   * ==================================================================== */
+  {
+    slug: "community-manager-marrakech",
+    services: ["production-video-photo", "meta-ads", "branding"],
+    title: "Community manager à Marrakech : ce qu'il fait, et ce qu'il ne fait pas",
+    seoTitle: "Community manager à Marrakech : prix",
+    excerpt:
+      "Publier tous les jours ne suffit pas. Ce qui fait la différence, c'est ce qui est publié, pour qui, et ce qui se passe quand quelqu'un répond.",
+    category: "Stratégie",
+    date: "2026-10-19",
+    readingTime: 5,
+    seo: "Community manager à Marrakech : ligne éditoriale, calendrier, publication et modération. Ce que couvre le service, son prix, et sa différence avec la publicité.",
+    takeaways: [
+      "Un community manager construit la ligne éditoriale d'une marque, planifie et publie ses contenus, et modère les commentaires sur Instagram, Facebook ou TikTok.",
+      "Le community management fait vivre un compte ; la publicité payante fait venir des clients qui ne vous suivent pas encore. Les deux se complètent mais ne se remplacent pas.",
+      `Chez UltraVision Agency, à Marrakech, le community management coûte ${both(CM)} par mois hors taxes : ligne éditoriale, calendrier, publication et modération.`,
+      "La qualité des contenus pèse plus que la fréquence : une vidéo tournée pour le format vertical fait plus pour un compte que plusieurs visuels génériques.",
+      "Les réponses commerciales aux messages privés — prix, réservations, disponibilités — sont mieux traitées par l'entreprise elle-même, qui connaît ses clients.",
+    ],
+    faq: [
+      {
+        q: "Combien coûte un community manager à Marrakech ?",
+        a: `Cela dépend du nombre de réseaux, du volume de publications et de qui produit les contenus. Chez UltraVision Agency, le community management coûte ${both(CM)} par mois hors taxes ; les vidéos se commandent à part, à ${both(VIDEO)} l'unité, ou dans la formule Production.`,
+      },
+      {
+        q: "Un community manager répond-il aux messages des clients ?",
+        a: "Il modère les commentaires et peut répondre aux questions simples. Les demandes commerciales — prix, réservations, disponibilités — sont mieux traitées par l'entreprise, ou transmises à elle sans délai.",
+      },
+      {
+        q: "Faut-il un community manager ou de la publicité ?",
+        a: "Si la marque est encore peu connue, la publicité fait venir les premiers clients plus vite. Si elle a déjà une audience, le community management l'entretient. La plupart des entreprises ont besoin des deux, dans cet ordre.",
+      },
+      {
+        q: "Combien de publications par semaine faut-il ?",
+        a: "Il n'existe pas de chiffre valable pour tous. Un rythme tenu dans la durée vaut mieux qu'un rythme intense abandonné au bout d'un mois, et une publication réussie vaut mieux que trois publications faites pour remplir le calendrier.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "À Marrakech, beaucoup de commerces confient leur compte Instagram à un proche, puis à un freelance, puis à une agence. Le poste change de main ; la question reste la même : que doit-on attendre d'un community manager ?",
+      },
+
+      { k: "h2", v: "Ce que couvre le community management" },
+      {
+        k: "ul",
+        v: [
+          "La ligne éditoriale : ce que la marque dit, à qui, et sur quel ton.",
+          "Le calendrier : quoi publier, quand, sur quel réseau.",
+          "La publication : légendes, formats, identifications.",
+          "La modération : répondre aux commentaires, masquer les indésirables, transmettre les questions commerciales.",
+        ],
+      },
+
+      { k: "h2", v: "Ce qui n'en fait pas partie" },
+      {
+        k: "p",
+        v: "La production des vidéos et des photos est un métier à part : trouver l'angle, écrire, tourner, monter. Un community manager publie une vidéo ; il ne la tourne pas forcément. La publicité payante aussi est un autre métier : régler une campagne Meta ou TikTok, suivre le coût d'une demande et arbitrer les budgets relève du pilotage publicitaire.",
+      },
+      {
+        k: "table",
+        v: {
+          head: ["", "Community management", "Publicité payante"],
+          rows: [
+            ["Objectif", "Faire vivre le compte et fidéliser", "Faire venir de nouveaux clients"],
+            ["Qui voit les contenus", "Surtout vos abonnés", "Des personnes qui ne vous connaissent pas encore"],
+            ["Ce qui se mesure", "Engagement, messages reçus", "Coût par demande, par rendez-vous"],
+            ["Ce que l'on paie", "Des honoraires", "Des honoraires et un budget versé aux plateformes"],
+          ],
+        },
+      },
+
+      { k: "h2", v: "La fréquence compte moins que le contenu" },
+      {
+        k: "p",
+        v: "Publier chaque jour un visuel générique remplit un calendrier, pas un carnet de commandes. Un compte qui publie moins, mais montre le lieu, le produit et les vrais clients, donne une raison de s'abonner, et de revenir.",
+      },
+      { k: "quote", v: "Un compte se juge à ce qu'il donne envie de faire, pas au nombre de publications." },
+
+      { k: "h2", v: "Notre façon de faire" },
+      {
+        k: "p",
+        v: `Nous produisons les contenus avant de les publier : les vidéos sont tournées sur place, à Marrakech, au format vertical, puis réutilisées dans les publicités. Le community management coûte ${both(CM)} par mois hors taxes : ligne éditoriale, calendrier, publication et modération. Les vidéos se commandent à l'unité, à ${both(VIDEO)}, ou dans la formule Production, à ${both(PRODUCTION)} par mois pour quatre vidéos diffusées et pilotées.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  12. REFERENCEMENT GOOGLE A MARRAKECH
+   * ==================================================================== */
+  {
+    slug: "referencement-google-marrakech",
+    services: ["creation-site-web", "google-ads", "generation-de-leads"],
+    title: "Apparaître en premier sur Google à Marrakech : ce qui compte vraiment",
+    seoTitle: "Référencement Google à Marrakech",
+    excerpt:
+      "Sur une recherche comme « restaurant Marrakech » ou « agence immobilière Marrakech », Google affiche d'abord une carte, puis des sites. Les deux ne se gagnent pas de la même manière.",
+    category: "Stratégie",
+    date: "2026-10-19",
+    readingTime: 6,
+    seo: "Référencement à Marrakech : fiche Google, avis, une page par service, technique et liens. Ce qui fait remonter une entreprise locale, et en combien de temps.",
+    takeaways: [
+      "Sur une recherche locale, Google affiche souvent un bloc de carte avant les sites : ce bloc dépend de la fiche d'établissement Google, pas du site seul.",
+      "Google indique classer les résultats locaux selon trois critères : la pertinence, la distance et la notoriété de l'établissement, dont font partie le nombre et la note des avis.",
+      "Une page par service, qui nomme la ville et répond aux questions des clients — prix, délais, déroulé —, se positionne mieux qu'une page d'accueil qui parle de tout.",
+      "Un site neuf met plusieurs semaines, souvent plusieurs mois, à s'installer sur des recherches disputées : personne ne peut garantir une première place sur Google.",
+      "Entre deux pages de qualité comparable, les liens et les mentions venant d'autres sites sérieux, notamment marocains, font souvent la différence.",
+    ],
+    faq: [
+      {
+        q: "Combien de temps faut-il pour apparaître en premier sur Google ?",
+        a: "Il n'y a pas de délai garanti. Sur une recherche peu disputée, quelques semaines peuvent suffire ; sur une recherche comme « agence immobilière Marrakech », il faut compter plusieurs mois de travail régulier. Une agence qui garantit la première place promet ce que Google lui-même dit impossible.",
+      },
+      {
+        q: "La fiche Google est-elle plus importante que le site ?",
+        a: "Pour les recherches locales, la fiche d'établissement est souvent ce qui apparaît en premier, avec la carte. Le site reste indispensable : c'est lui qui convainc, et c'est vers lui que la fiche renvoie.",
+      },
+      {
+        q: "Combien coûte le référencement d'un site à Marrakech ?",
+        a: `Chez UltraVision Agency, le référencement technique — structure, balises, données structurées, Search Console — coûte ${both(SEO_TECH)} une fois, et le suivi mensuel — mots-clés, contenus, liens, rapport de positions — ${both(SEO_SUIVI)} par mois, hors taxes.`,
+      },
+      {
+        q: "Faut-il faire de la publicité Google Ads en attendant ?",
+        a: "C'est souvent judicieux. Le référencement naturel prend du temps ; une annonce Google Ads apparaît en haut des résultats dès son lancement. La publicité apporte des demandes pendant que le référencement s'installe.",
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Tapez « restaurant Marrakech » ou « agence immobilière Marrakech » : Google montre d'abord une carte avec quelques établissements, puis une liste de sites. Ces deux emplacements ne se gagnent pas de la même façon.",
+      },
+
+      { k: "h2", v: "La carte : la fiche d'établissement Google" },
+      {
+        k: "p",
+        v: "Le bloc de carte s'appuie sur la fiche d'établissement Google, celle qui affiche l'adresse, les horaires et les avis. Google indique classer ces résultats selon trois critères : la pertinence par rapport à la recherche, la distance avec la personne qui cherche, et la notoriété de l'établissement.",
+      },
+      {
+        k: "ul",
+        v: [
+          "Une catégorie principale exacte : « agence de marketing », « restaurant », « agence immobilière ».",
+          "Des informations complètes et identiques partout : nom, adresse ou zone desservie, téléphone, site.",
+          "Des photos réelles, tenues à jour.",
+          "Des avis de vrais clients, auxquels l'établissement répond.",
+        ],
+      },
+      {
+        k: "note",
+        v: "Les avis achetés ou écrits par l'entreprise elle-même sont contraires aux règles de Google, qui peut les supprimer et restreindre la fiche.",
+      },
+
+      { k: "h2", v: "Les sites : une page par question" },
+      {
+        k: "p",
+        v: "Sous la carte, Google classe des pages, pas des entreprises. Une page d'accueil qui parle de tout se positionne rarement sur une recherche précise. Une page consacrée à un service, qui nomme la ville et répond aux questions qu'un client se pose — prix, délais, déroulé, exemples —, a beaucoup plus de chances d'être choisie.",
+      },
+      {
+        k: "p",
+        v: "C'est aussi ce que lisent les assistants comme ChatGPT ou l'Aperçu IA de Google : des réponses courtes et claires, qui se comprennent sorties de la page.",
+      },
+
+      { k: "h2", v: "La technique : ce que Google ne doit pas deviner" },
+      {
+        k: "ul",
+        v: [
+          "Un site rapide sur mobile.",
+          "Une seule adresse par page, en https.",
+          "Un titre et une description écrits pour chaque page.",
+          "Des données structurées qui décrivent l'entreprise et ses services.",
+          "Un plan du site déclaré dans la Search Console, qui permet aussi de suivre les positions.",
+        ],
+      },
+
+      { k: "h2", v: "Les mentions : ce que les autres disent de vous" },
+      {
+        k: "p",
+        v: "Entre deux pages de qualité comparable, Google tient compte des liens et des mentions qui viennent d'autres sites : un annuaire professionnel, un média local, un partenaire, un client qui cite son prestataire. Un lien venu d'un site marocain sérieux vaut mieux que des dizaines de liens achetés sans rapport avec votre activité.",
+      },
+
+      { k: "h2", v: "Le délai" },
+      {
+        k: "p",
+        v: "Un site neuf met plusieurs semaines à être exploré, puis plusieurs mois à s'installer sur des recherches disputées. La Search Console permet de suivre ce travail : les pages indexées, les recherches qui déclenchent l'affichage, la position moyenne.",
+      },
+      { k: "quote", v: "Personne ne peut garantir la première place. On peut en revanche ne rien laisser au hasard." },
+
+      { k: "h2", v: "Ce que nous faisons" },
+      {
+        k: "p",
+        v: `Le référencement technique — structure, balises, données structurées, Search Console — coûte ${both(SEO_TECH)}, une fois. Le suivi mensuel — mots-clés, contenus, liens, rapport de positions — coûte ${both(SEO_SUIVI)} par mois. Pour être cité par ChatGPT, Perplexity et les résumés IA de Google, la visibilité sur les IA coûte ${both(GEO)}. Prix hors taxes.`,
       },
     ],
   },
