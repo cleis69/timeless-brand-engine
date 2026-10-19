@@ -21,8 +21,8 @@
  * ------------------------------------------------------------
  *  A COMPLETER QUAND L'INFORMATION EXISTE — JAMAIS AVANT
  *
- *  - `SOCIAL` : les autres profils officiels (LinkedIn, YouTube, fiche
- *    Google Business Profile), quand ils existent.
+ *  - `SOCIAL` : les autres profils officiels (LinkedIn, YouTube), quand
+ *    ils existent.
  *  - `address.streetAddress` : seulement si l'adresse est publique.
  *
  *  Un champ vide n'est pas publie. Un champ invente l'est, et se
@@ -60,6 +60,16 @@ export const SOCIAL = [
     network: "Sortlist",
     handle: "UltraVision Agency",
     url: "https://www.sortlist.com/agency/ultra-vision-360-agency",
+  },
+  /*
+    La fiche Google Business Profile (« Agence de marketing »), qui pointe
+    vers le site. Lien stable par identifiant de lieu (cid), relevé le
+    19 octobre 2026 : il ne change pas si le nom de la fiche change.
+  */
+  {
+    network: "Google Maps",
+    handle: "UltraVision Agency",
+    url: "https://maps.google.com/?cid=7280726788437820950",
   },
 ] as const;
 
