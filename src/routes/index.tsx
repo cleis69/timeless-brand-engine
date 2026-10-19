@@ -126,6 +126,7 @@ const CLIENTS: { name: string; logo: string; w: number; h: number }[] = [
   { name: "Gatsby", logo: "/brand/clients/gatsby.png", w: 216, h: 56 },
   { name: "Koozina Garden", logo: "/brand/clients/koozina-garden.svg", w: 104, h: 104 },
   { name: "All In Kech", logo: "/brand/clients/all-in-kech.png", w: 104, h: 104 },
+  { name: "Shams Immo", logo: "/brand/clients/shams-immo.png", w: 190, h: 57 },
 ];
 
 /**

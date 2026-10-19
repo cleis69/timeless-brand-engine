@@ -510,6 +510,63 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: "+52%", label: "CONVERSIONS" },
     ],
   },
+  /*
+    Ajoutees le 19 octobre 2026. Shams Immo (immobilier) est placee apres
+    Scultbody et Azwaj (application) apres elle : aucun theme ne se suit.
+    Chiffres non communiques : marqueurs STAT_ masques a l'ecran.
+  */
+  {
+    slug: "shams-immo",
+    title: "Shams Immo",
+    category: "PUBLICITE • IMMOBILIER",
+    description:
+      "Film publicitaire vertical pour Shams Immo, sur l'immobilier neuf à Marrakech. Tourné sur place, présenté face caméra, en français.",
+    year: "2026",
+    sources: {
+      mp4: "/work/shams-immo/shams-immo.mp4",
+      mobile: "/work/shams-immo/shams-immo-mobile.mp4",
+    },
+    poster: "/work/shams-immo/poster.jpg",
+    published: "2026-10-19",
+    durationSec: 20,
+    aspect: "9/16",
+    stats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "COUT PAR LEAD" },
+      { value: "STAT_03", label: "CONTACTS" },
+    ],
+    demoStats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "COUT PAR LEAD" },
+      { value: "STAT_03", label: "CONTACTS" },
+    ],
+  },
+  {
+    slug: "azwaj",
+    title: "Azwaj",
+    category: "PUBLICITE • APPLICATION MOBILE",
+    description:
+      "Publicité vidéo verticale pour Azwaj, application iOS de rappels quotidiens pour les couples. Scène de tranche de vie, en français.",
+    year: "2026",
+    sources: {
+      mp4: "/work/azwaj/azwaj.mp4",
+      mobile: "/work/azwaj/azwaj-mobile.mp4",
+    },
+    poster: "/work/azwaj/poster.jpg",
+    published: "2026-10-19",
+    durationSec: 19,
+    aspect: "9/16",
+    stats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "TAUX DE CLIC" },
+      { value: "STAT_03", label: "INSTALLATIONS" },
+    ],
+    demoStats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "TAUX DE CLIC" },
+      { value: "STAT_03", label: "INSTALLATIONS" },
+    ],
+  },
   {
     slug: "africa-beauty",
     title: "Africa Beauty",
