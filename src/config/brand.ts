@@ -21,8 +21,6 @@
  * ------------------------------------------------------------
  *  A COMPLETER QUAND L'INFORMATION EXISTE — JAMAIS AVANT
  *
- *  - `SOCIAL` : les autres profils officiels (LinkedIn), quand ils
- *    existent.
  *  - `address.streetAddress` : seulement si l'adresse est publique.
  *
  *  Un champ vide n'est pas publie. Un champ invente l'est, et se
@@ -60,6 +58,15 @@ export const SOCIAL = [
     network: "YouTube",
     handle: "@ultravision.agency",
     url: "https://www.youtube.com/@ultravision.agency",
+  },
+  /*
+    La page entreprise LinkedIn, creee le 19 octobre 2026 depuis le profil
+    du fondateur, qui y est rattache comme Fondateur.
+  */
+  {
+    network: "LinkedIn",
+    handle: "UltraVision Agency",
+    url: "https://www.linkedin.com/company/ultravision-agency/",
   },
   /*
     Le profil d'agence sur Sortlist, publie le 5 octobre 2026. Un annuaire
