@@ -1,8 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay, telUrl, whatsappUrl } from "@/config/contact";
+import {
+  CONTACT,
+  hasPhone,
+  hasWhatsapp,
+  phoneDisplay,
+  telUrl,
+  whatsappUrl,
+} from "@/config/contact";
 import { BRAND, SOCIAL } from "@/config/brand";
 import { SERVICES, servicePath } from "@/content/services";
+import { LANDINGS } from "@/content/landings";
 import { SECTORS, sectorPath } from "@/content/sectors";
 
 /**
@@ -68,6 +76,7 @@ export function SiteFooter() {
             title="Agence"
             links={[
               { to: "/agence-marketing-digital-marrakech", label: `L'agence à ${BRAND.city}` },
+              ...LANDINGS.map((l) => ({ to: l.path, label: l.name })),
               { to: "/services", label: "Services" },
               { to: "/realisations", label: "Réalisations" },
               { to: "/tarifs", label: "Tarifs" },

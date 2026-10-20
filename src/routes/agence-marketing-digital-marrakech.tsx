@@ -12,11 +12,18 @@ import {
   SectionIntro,
 } from "@/components/page/Blocks";
 import { WorkGrid } from "@/components/work/WorkGrid";
-import { CASE_STUDIES, casePath, findWork, isFilm, type WorkItem } from "@/components/work/work.data";
+import {
+  CASE_STUDIES,
+  casePath,
+  findWork,
+  isFilm,
+  type WorkItem,
+} from "@/components/work/work.data";
 import { BRAND, SOCIAL, withBrand } from "@/config/brand";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { PACKS, dirham, euro } from "@/config/pricing";
 import { POLES, SERVICES, servicePath } from "@/content/services";
+import { LANDINGS } from "@/content/landings";
 import { SECTORS, sectorPath } from "@/content/sectors";
 import { ARTICLES_SORTED } from "@/content/blog";
 import { orgRef, pageHead } from "@/lib/seo";
@@ -202,6 +209,14 @@ function Pilier() {
               };
             }),
           )}
+        />
+        <LinkCards
+          items={LANDINGS.map((l) => ({
+            to: l.path,
+            eyebrow: "Offre",
+            title: l.name,
+            text: l.text,
+          }))}
         />
         <div className="mt-10">
           <ArrowLink to="/methode">Stratégie digitale et accompagnement 360</ArrowLink>

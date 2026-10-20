@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AgenceMarketingDigitalMarrakechRouteImport } from './routes/agence-marketing-digital-marrakech'
+import { Route as AgenceVideoPublicitaireMetaAdsMarrakechRouteImport } from './routes/agence-video-publicitaire-meta-ads-marrakech'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CastingRouteImport } from './routes/casting'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as GenerationLeadsImmobiliersMarrakechRouteImport } from './routes/generation-leads-immobiliers-marrakech'
 import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as SecteursRouteImport } from './routes/secteurs'
@@ -45,6 +47,12 @@ const AgenceMarketingDigitalMarrakechRoute =
     path: '/agence-marketing-digital-marrakech',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AgenceVideoPublicitaireMetaAdsMarrakechRoute =
+  AgenceVideoPublicitaireMetaAdsMarrakechRouteImport.update({
+    id: '/agence-video-publicitaire-meta-ads-marrakech',
+    path: '/agence-video-publicitaire-meta-ads-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -60,6 +68,12 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GenerationLeadsImmobiliersMarrakechRoute =
+  GenerationLeadsImmobiliersMarrakechRouteImport.update({
+    id: '/generation-leads-immobiliers-marrakech',
+    path: '/generation-leads-immobiliers-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MethodeRoute = MethodeRouteImport.update({
   id: '/methode',
   path: '/methode',
@@ -130,9 +144,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
+  '/agence-video-publicitaire-meta-ads-marrakech': typeof AgenceVideoPublicitaireMetaAdsMarrakechRoute
   '/blog': typeof BlogRouteWithChildren
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
+  '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRouteWithChildren
   '/secteurs': typeof SecteursRouteWithChildren
@@ -151,8 +167,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
+  '/agence-video-publicitaire-meta-ads-marrakech': typeof AgenceVideoPublicitaireMetaAdsMarrakechRoute
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
+  '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
   '/methode': typeof MethodeRoute
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -169,9 +187,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/agence-marketing-digital-marrakech': typeof AgenceMarketingDigitalMarrakechRoute
+  '/agence-video-publicitaire-meta-ads-marrakech': typeof AgenceVideoPublicitaireMetaAdsMarrakechRoute
   '/blog': typeof BlogRouteWithChildren
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
+  '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRouteWithChildren
   '/secteurs': typeof SecteursRouteWithChildren
@@ -192,9 +212,11 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/agence-marketing-digital-marrakech'
+    | '/agence-video-publicitaire-meta-ads-marrakech'
     | '/blog'
     | '/casting'
     | '/contact'
+    | '/generation-leads-immobiliers-marrakech'
     | '/methode'
     | '/realisations'
     | '/secteurs'
@@ -213,8 +235,10 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/agence-marketing-digital-marrakech'
+    | '/agence-video-publicitaire-meta-ads-marrakech'
     | '/casting'
     | '/contact'
+    | '/generation-leads-immobiliers-marrakech'
     | '/methode'
     | '/tarifs'
     | '/blog/$slug'
@@ -230,9 +254,11 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/agence-marketing-digital-marrakech'
+    | '/agence-video-publicitaire-meta-ads-marrakech'
     | '/blog'
     | '/casting'
     | '/contact'
+    | '/generation-leads-immobiliers-marrakech'
     | '/methode'
     | '/realisations'
     | '/secteurs'
@@ -252,9 +278,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   AgenceMarketingDigitalMarrakechRoute: typeof AgenceMarketingDigitalMarrakechRoute
+  AgenceVideoPublicitaireMetaAdsMarrakechRoute: typeof AgenceVideoPublicitaireMetaAdsMarrakechRoute
   BlogRoute: typeof BlogRouteWithChildren
   CastingRoute: typeof CastingRoute
   ContactRoute: typeof ContactRoute
+  GenerationLeadsImmobiliersMarrakechRoute: typeof GenerationLeadsImmobiliersMarrakechRoute
   MethodeRoute: typeof MethodeRoute
   RealisationsRoute: typeof RealisationsRouteWithChildren
   SecteursRoute: typeof SecteursRouteWithChildren
@@ -285,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgenceMarketingDigitalMarrakechRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agence-video-publicitaire-meta-ads-marrakech': {
+      id: '/agence-video-publicitaire-meta-ads-marrakech'
+      path: '/agence-video-publicitaire-meta-ads-marrakech'
+      fullPath: '/agence-video-publicitaire-meta-ads-marrakech'
+      preLoaderRoute: typeof AgenceVideoPublicitaireMetaAdsMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog': {
       id: '/blog'
       path: '/blog'
@@ -304,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/generation-leads-immobiliers-marrakech': {
+      id: '/generation-leads-immobiliers-marrakech'
+      path: '/generation-leads-immobiliers-marrakech'
+      fullPath: '/generation-leads-immobiliers-marrakech'
+      preLoaderRoute: typeof GenerationLeadsImmobiliersMarrakechRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/methode': {
@@ -458,9 +500,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   AgenceMarketingDigitalMarrakechRoute: AgenceMarketingDigitalMarrakechRoute,
+  AgenceVideoPublicitaireMetaAdsMarrakechRoute:
+    AgenceVideoPublicitaireMetaAdsMarrakechRoute,
   BlogRoute: BlogRouteWithChildren,
   CastingRoute: CastingRoute,
   ContactRoute: ContactRoute,
+  GenerationLeadsImmobiliersMarrakechRoute:
+    GenerationLeadsImmobiliersMarrakechRoute,
   MethodeRoute: MethodeRoute,
   RealisationsRoute: RealisationsRouteWithChildren,
   SecteursRoute: SecteursRouteWithChildren,

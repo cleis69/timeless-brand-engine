@@ -20,6 +20,7 @@ import { withBrand } from "@/config/brand";
 import { findService, resolvePrice, servicePath } from "@/content/services";
 import { findSector, sectorPath } from "@/content/sectors";
 import { findArticle } from "@/content/blog";
+import { landingsForService } from "@/content/landings";
 import { pageHead, serviceId, serviceNode } from "@/lib/seo";
 
 /**
@@ -86,6 +87,12 @@ function ServicePage() {
   );
 
   const next = [
+    ...landingsForService(s.slug).map((l) => ({
+      to: l.path,
+      eyebrow: "Offre",
+      title: l.name,
+      text: l.text,
+    })),
     ...cases.map((w) => ({
       to: casePath(w.slug),
       eyebrow: "Étude de cas",

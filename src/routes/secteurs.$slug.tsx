@@ -17,6 +17,7 @@ import { SITE_ITEMS } from "@/components/work/sites.data";
 import { withBrand } from "@/config/brand";
 import { findService, servicePath } from "@/content/services";
 import { findSector, sectorPath } from "@/content/sectors";
+import { landingsForSector } from "@/content/landings";
 import { pageHead } from "@/lib/seo";
 
 /**
@@ -85,15 +86,23 @@ function SectorPage() {
           text="Chaque service a sa page : ce qui est compris, comment nous travaillons, et le prix."
         />
         <LinkCards
-          items={s.services.map((k) => {
-            const o = findService(k)!;
-            return {
-              to: servicePath(o.slug),
-              eyebrow: "Service",
-              title: o.name,
-              text: o.description,
-            };
-          })}
+          items={[
+            ...landingsForSector(s.slug).map((l) => ({
+              to: l.path,
+              eyebrow: "Offre",
+              title: l.name,
+              text: l.text,
+            })),
+            ...s.services.map((k) => {
+              const o = findService(k)!;
+              return {
+                to: servicePath(o.slug),
+                eyebrow: "Service",
+                title: o.name,
+                text: o.description,
+              };
+            }),
+          ]}
         />
       </Section>
 

@@ -31,6 +31,7 @@ import { BRAND, SOCIAL } from "@/config/brand";
 import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay } from "@/config/contact";
 import { A_LA_CARTE, LAUNCH_OFFER, MAD, NOT_INCLUDED, PACKS, dirham, euro } from "@/config/pricing";
 import { POLES, SERVICES, servicePath } from "@/content/services";
+import { LANDINGS } from "@/content/landings";
 import { SECTORS, sectorPath } from "@/content/sectors";
 import { ARTICLES_SORTED } from "@/content/blog";
 import {
@@ -63,6 +64,7 @@ function entries(): Entry[] {
   return [
     page("/", "1.0", "weekly"),
     page("/agence-marketing-digital-marrakech", "0.9"),
+    ...LANDINGS.map((l) => ({ ...page(l.path, "0.8"), lastmod: "2026-10-20" })),
     page("/services", "0.9"),
     ...SERVICES.map((s) => page(servicePath(s.slug), "0.8")),
     page("/tarifs", "0.9"),
@@ -246,6 +248,7 @@ export function buildLlmsTxt(): string {
     "",
     `- [Accueil](${SITE_URL}/) : positionnement, réalisations, méthode, FAQ.`,
     `- [L'agence à Marrakech](${url("/agence-marketing-digital-marrakech")}) : qui est ${BRAND.name}, ce qu'elle fait, pour qui, en bref.`,
+    ...LANDINGS.map((l) => `- [${l.name} à ${BRAND.city}](${url(l.path)}) : ${l.text}`),
     `- [Services](${url("/services")}) : les quatre pôles et les huit services.`,
     `- [Secteurs](${url("/secteurs")}) : immobilier, beauté et bien-être, restauration et hospitality.`,
     `- [Réalisations](${url("/realisations")}) : films publicitaires, études de cas et sites livrés.`,
