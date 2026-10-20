@@ -132,7 +132,7 @@ export const SECTORS: Sector[] = [
     services: ["production-video-photo", "meta-ads", "tiktok-ads", "generation-de-leads"],
     works: [
       "africa-beauty",
-      "scultbody",
+      "sculpt-body-marrakech",
       "institut-beaute",
       "salon-coiffure",
       "cosmetique",
@@ -142,7 +142,7 @@ export const SECTORS: Sector[] = [
     faq: [
       {
         q: "Quels résultats avez-vous obtenus dans la beauté ?",
-        a: "Pour Africa Beauty : 1,4 million de vues, 4,2 % de taux de clic et +38 % de ventes. Pour Scultbody : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions. Chiffres relevés dans les gestionnaires de publicités.",
+        a: "Pour Africa Beauty : 1,4 million de vues, 4,2 % de taux de clic et +38 % de ventes. Pour Sculpt Body Marrakech : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions. Chiffres relevés dans les gestionnaires de publicités.",
       },
       {
         q: "Tournez-vous dans mon salon ou mon institut ?",

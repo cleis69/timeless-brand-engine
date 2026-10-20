@@ -46,7 +46,7 @@ import { FloatingPlatforms } from "@/components/FloatingPlatforms";
  * L'ordre de passage. Deux secteurs differents se suivent toujours,
  * et le film le plus vu ouvre la sequence.
  */
-const REEL = ["africa-beauty", "residence-neuve", "scultbody", "institut-beaute", "loisirs"];
+const REEL = ["africa-beauty", "residence-neuve", "sculpt-body-marrakech", "institut-beaute", "loisirs"];
 
 /** Duree d'affichage quand la video ne peut pas jouer (economie, refus). */
 const STILL_MS = 6000;

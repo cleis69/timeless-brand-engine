@@ -65,14 +65,35 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
  */
 const LEGACY_HOSTS = new Set([`www.${SITE_DOMAIN}`, "timeless-brand-engine.lovable.app"]);
 
+/**
+ * LES ADRESSES RENOMMEES, redirigees en 301 vers la nouvelle.
+ *
+ * Le 20 octobre 2026, la realisation « Scultbody » a pris le vrai nom du
+ * client, Sculpt Body Marrakech : sa page et ses films ont change
+ * d'adresse. Les anciennes, deja vues par Google, y renvoient.
+ */
+const RENAMED_PATHS: [string, string][] = [
+  ["/realisations/scultbody", "/realisations/sculpt-body-marrakech"],
+  ["/work/scultbody/scultbody", "/work/sculpt-body-marrakech/sculpt-body-marrakech"],
+  ["/work/scultbody/", "/work/sculpt-body-marrakech/"],
+];
+
+/** La nouvelle adresse d'un chemin renomme, ou undefined. Le premier prefixe trouve l'emporte. */
+function renamedPath(pathname: string): string | undefined {
+  const hit = RENAMED_PATHS.find(([from]) => pathname.startsWith(from));
+  return hit && hit[1] + pathname.slice(hit[0].length);
+}
+
 function redirectToCanonicalHost(request: Request): Response | undefined {
   const url = new URL(request.url);
   const legacy = LEGACY_HOSTS.has(url.host);
   const insecure = url.host === SITE_DOMAIN && url.protocol === "http:";
   const slash = url.pathname.length > 1 && url.pathname.endsWith("/");
-  if (!legacy && !insecure && !slash) return undefined;
+  const renamed = renamedPath(url.pathname);
+  if (!legacy && !insecure && !slash && !renamed) return undefined;
 
-  const path = slash ? url.pathname.replace(/\/+$/, "") || "/" : url.pathname;
+  const base = renamed ?? url.pathname;
+  const path = base.length > 1 && base.endsWith("/") ? base.replace(/\/+$/, "") || "/" : base;
   const origin = legacy || insecure ? `https://${SITE_DOMAIN}` : url.origin;
   return Response.redirect(`${origin}${path}${url.search}`, 301);
 }

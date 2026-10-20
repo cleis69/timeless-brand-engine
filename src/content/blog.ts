@@ -83,6 +83,7 @@ const CM = carte("Community management");
 const SEO_SUIVI = carte("Suivi SEO mensuel");
 const GEO = carte("Visibilité sur les IA (GEO)");
 const CRM = carte("CRM et automatisation des leads");
+const OUVERTURE = carte("Ouverture des comptes publicitaires");
 /** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
 const AD_BUDGET = range(800, 1500);
 
@@ -1781,6 +1782,392 @@ export const ARTICLES: Article[] = [
       {
         k: "p",
         v: `Nous concevons les sites avec réservation intégrée, filmons les lieux sur place et diffusons ces vidéos en publicité. Un site vitrine coûte à partir de ${both(VITRINE)}, une vidéo publicitaire ${both(VIDEO)}, et le pilotage d'une plateforme publicitaire ${both(MEDIA)} par mois, hors taxes. Le budget publicitaire s'ajoute.`,
+      },
+    ],
+  },
+  /* ======================================================================
+   *  15. ETRE CITE PAR CHATGPT ET LES ASSISTANTS IA
+   * ==================================================================== */
+  {
+    slug: "etre-cite-par-chatgpt-entreprise-marrakech",
+    services: ["creation-site-web"],
+    title: "Être cité par ChatGPT quand on cherche une entreprise à Marrakech",
+    seoTitle: "Être cité par ChatGPT à Marrakech",
+    excerpt:
+      "Quand on demande à ChatGPT ou à Perplexity une bonne adresse à Marrakech, l'assistant répond par trois ou quatre noms. Ce qu'il lit pour les choisir, et ce qu'une entreprise peut faire pour en faire partie.",
+    category: "Stratégie",
+    date: "2026-10-20",
+    readingTime: 6,
+    seo: "Être cité par ChatGPT, Perplexity et l'Aperçu IA de Google à Marrakech : un nom cohérent partout, des pages qui répondent, une fiche Google, des avis.",
+    takeaways: [
+      "ChatGPT, Perplexity, Gemini et l'Aperçu IA de Google répondent à une question en citant quelques entreprises, choisies parmi les pages qu'ils trouvent et comprennent.",
+      "Un assistant cite plus volontiers une entreprise dont le nom, la ville et le métier sont décrits de la même façon sur son site, sa fiche Google et les annuaires.",
+      "Une page qui répond en une ou deux phrases claires à une question précise est plus facile à citer qu'une page qui renvoie vers un formulaire de contact.",
+      "Les avis clients et les mentions sur d'autres sites comptent autant que le site lui-même : un assistant cherche des confirmations extérieures.",
+      "Le référencement sur les assistants IA, appelé GEO, prolonge le référencement Google et repose sur les mêmes fondations.",
+    ],
+    faq: [
+      {
+        q: "Comment apparaître dans les réponses de ChatGPT ?",
+        a: "En étant trouvable, compréhensible et confirmé : un site qui répond clairement aux questions de vos clients, le même nom, la même ville et le même métier partout, une fiche Google validée avec des avis, et des mentions sur d'autres sites.",
+      },
+      {
+        q: "Qu'est-ce que le GEO ?",
+        a: "GEO signifie Generative Engine Optimization : le travail qui rend une entreprise compréhensible et citable par les assistants comme ChatGPT, Perplexity, Gemini ou l'Aperçu IA de Google. Il prolonge le référencement Google et repose sur les mêmes fondations.",
+      },
+      {
+        q: "Le fichier llms.txt est-il obligatoire ?",
+        a: "Non. C'est un résumé du site destiné aux assistants qui le lisent ; Google ne l'utilise pas pour classer les pages. Il aide surtout à éviter qu'une machine résume mal votre entreprise.",
+      },
+      {
+        q: "Combien coûte la visibilité sur les IA ?",
+        a: `Chez UltraVision Agency, à Marrakech, la visibilité sur les IA (GEO) coûte ${both(GEO)} hors taxes. Elle s'appuie idéalement sur un référencement technique propre, à ${both(SEO_TECH)}.`,
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Une partie des recherches ne passe plus par une liste de liens. On demande à un assistant « un bon riad à Marrakech », « une clinique dentaire à Guéliz » ou « une agence pour mes vidéos publicitaires », et il répond par trois ou quatre noms. Être dans cette réponse se prépare, comme une première page Google.",
+      },
+
+      { k: "h2", v: "Comment un assistant choisit les entreprises qu'il cite" },
+      {
+        k: "p",
+        v: "Pour une question locale, l'assistant cherche sur le web, lit quelques pages et compose une réponse. Il retient les entreprises qu'il trouve, qu'il comprend, et que d'autres sources confirment. Une entreprise introuvable n'est pas lue, une page confuse n'est pas comprise, et un nom que rien ne confirme passe après ceux que plusieurs sources citent.",
+      },
+      {
+        k: "figure",
+        v: {
+          type: "steps",
+          caption:
+            "Les trois conditions pour être cité. Chacune dépend de la précédente : une page qu'un assistant ne trouve pas ne sera jamais comprise.",
+          steps: [
+            { label: "Trouvé", sub: "Le site est accessible aux robots et présent dans les moteurs." },
+            { label: "Compris", sub: "Le nom, la ville, le métier et les prix sont écrits clairement." },
+            { label: "Confirmé", sub: "La fiche Google, les avis et les annuaires disent la même chose." },
+          ],
+        },
+      },
+
+      { k: "h2", v: "Un nom, une ville, un métier, partout pareil" },
+      {
+        k: "p",
+        v: "C'est la base, et c'est souvent là que tout se perd. Une entreprise s'appelle d'une façon sur son site, d'une autre sur sa fiche Google, d'une troisième sur Instagram, avec une ancienne adresse dans un annuaire. Pour un assistant, ce sont peut-être plusieurs entreprises.",
+      },
+      {
+        k: "ul",
+        v: [
+          "Le même nom exact partout, sans mot-clé ajouté.",
+          "La même ville et le même quartier.",
+          "Le même téléphone et le même site.",
+          "Une phrase qui dit ce que vous faites, reprise à l'identique : « Nom est un restaurant libanais à Guéliz, Marrakech ».",
+        ],
+      },
+
+      { k: "h2", v: "Des pages qui répondent" },
+      {
+        k: "p",
+        v: "Un assistant cite des phrases. « Nous livrons à Guéliz et à l'Hivernage, du mardi au dimanche » peut être repris tel quel ; « livraison selon conditions, contactez-nous » ne peut pas l'être. Les pages à soigner sont celles qui répondent aux questions qu'on vous pose au téléphone : vos prix, vos horaires, votre quartier, ce qui est compris, les délais.",
+      },
+      {
+        k: "ul",
+        v: [
+          "Une question par section, posée en intertitre.",
+          "La réponse dans la première phrase, le détail ensuite.",
+          "Une foire aux questions, avec les questions telles qu'on les tape.",
+          "Les prix, quand vous pouvez les publier.",
+        ],
+      },
+      {
+        k: "p",
+        v: "Le site doit aussi être lisible par une machine : du texte dans la page plutôt que dans une image, et des données structurées qui disent qui vous êtes, où vous êtes et ce que vous faites.",
+      },
+
+      { k: "h2", v: "Ce que les autres disent de vous" },
+      {
+        k: "p",
+        v: "Un assistant ne se fie pas seulement à ce qu'une entreprise dit d'elle-même. Il cherche des confirmations : les avis de la fiche Google, les profils dans les annuaires, les articles de la presse locale, les sites des partenaires. Une entreprise que plusieurs sources indépendantes décrivent de la même façon devient une réponse sûre.",
+      },
+      {
+        k: "ul",
+        v: [
+          "La fiche Google validée, complète, avec des avis récents.",
+          "Les annuaires de votre métier et les annuaires marocains.",
+          "Les sites de vos partenaires, quand ils vous citent avec un lien.",
+          "Une fiche Bing Places : tous les assistants ne s'appuient pas sur Google.",
+        ],
+      },
+
+      { k: "h2", v: "Laisser les assistants lire le site" },
+      {
+        k: "p",
+        v: "Certains sites bloquent sans le savoir les robots des assistants, par un réglage de sécurité ou un fichier robots.txt trop strict. À l'inverse, un fichier llms.txt placé à la racine du site résume l'entreprise et ses pages principales pour les assistants qui le lisent. Ce n'est pas un raccourci : c'est un résumé propre, qui évite qu'une machine se trompe.",
+      },
+      {
+        k: "table",
+        v: {
+          head: ["Ce qu'un assistant cherche", "Où le lui donner"],
+          rows: [
+            ["Qui vous êtes", "Une phrase de définition, identique sur le site, la fiche Google et les annuaires"],
+            ["Où vous êtes", "La ville, le quartier, la zone desservie"],
+            ["Ce que vous faites, et à quel prix", "Une page par service, avec les prix quand c'est possible"],
+            ["Ce qu'en pensent vos clients", "Les avis Google et ceux des annuaires"],
+            ["Qui le confirme", "Les annuaires, la presse, les partenaires"],
+          ],
+        },
+      },
+      { k: "quote", v: "Un assistant cite ce qu'il comprend, et ce que d'autres confirment." },
+
+      { k: "h2", v: "Combien de temps ?" },
+      {
+        k: "p",
+        v: "Les corrections du site se voient à mesure que les moteurs relisent les pages : quelques semaines. La confiance, elle, se construit avec les avis et les mentions, sur plusieurs mois. C'est le même calendrier que le référencement Google, et c'est le même travail.",
+      },
+
+      { k: "h2", v: "Ce que nous faisons" },
+      {
+        k: "p",
+        v: `Nous avons appliqué cette méthode à notre propre site — définition de l'entreprise, données structurées, fichier llms.txt, pages qui répondent, profils alignés — et nous la mettons en place pour nos clients. La visibilité sur les IA coûte ${both(GEO)} et le référencement technique ${both(SEO_TECH)}, hors taxes.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  16. LEADS IMMOBILIERS : DU FORMULAIRE A LA VISITE
+   * ==================================================================== */
+  {
+    slug: "leads-immobiliers-marrakech",
+    services: ["crm-ia-automatisation", "generation-de-leads", "meta-ads"],
+    title: "Agence immobilière à Marrakech : ne plus perdre de leads entre le formulaire et la visite",
+    seoTitle: "Leads immobiliers à Marrakech",
+    excerpt:
+      "Une publicité immobilière qui fonctionne remplit une liste de demandes. La suite décide des ventes : le délai de réponse, la qualification, les relances et le suivi, jusqu'à la visite.",
+    category: "Méthode",
+    date: "2026-10-20",
+    readingTime: 6,
+    seo: "Agences immobilières et promoteurs à Marrakech : répondre vite aux leads, les qualifier, les relancer sur WhatsApp et suivre chaque demande dans un CRM.",
+    takeaways: [
+      "Un lead immobilier est une demande de contact laissée par une personne intéressée par un bien, le plus souvent par un formulaire publicitaire, un appel ou un message WhatsApp.",
+      "Une personne qui vient de remplir un formulaire a encore le bien en tête : la réponse le jour même est le réglage le plus rentable du suivi.",
+      "Trois questions suffisent à qualifier une demande immobilière : le projet, le budget et le délai.",
+      "Un CRM regroupe toutes les demandes au même endroit, avec leur source, leur statut, leur responsable et la prochaine action à faire.",
+      "Une partie des acheteurs à Marrakech vit à l'étranger : le suivi passe alors par WhatsApp, en plusieurs langues, avec des visites en vidéo avant le déplacement.",
+    ],
+    faq: [
+      {
+        q: "Comment gérer les leads immobiliers ?",
+        a: "En les centralisant dans un seul outil, en répondant le jour même, en qualifiant chaque demande par le projet, le budget et le délai, et en relançant selon un rythme fixé à l'avance, jusqu'à la visite ou à un refus clair.",
+      },
+      {
+        q: "Quel CRM pour une agence immobilière ?",
+        a: "Celui que l'équipe met vraiment à jour. L'outil compte moins que les règles : chaque demande a une source, un statut, un responsable et une prochaine action datée. Le choix se fait selon vos habitudes et votre budget logiciel.",
+      },
+      {
+        q: "Pourquoi mes leads Facebook immobiliers ne répondent pas ?",
+        a: "Souvent parce que la réponse arrive trop tard, ou parce que le formulaire était trop facile à remplir. Une notification immédiate, une réponse le jour même et une ou deux questions de qualification dans le formulaire améliorent la qualité des demandes.",
+      },
+      {
+        q: "Combien coûte l'automatisation des leads ?",
+        a: `Chez UltraVision Agency, à Marrakech, la mise en place du CRM et de l'automatisation des leads coûte ${both(CRM)} hors taxes. L'abonnement au logiciel CRM est payé directement à l'éditeur.`,
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "Une campagne immobilière qui fonctionne produit des demandes : des noms, des numéros, des messages. Beaucoup de ventes se perdent ensuite, pas dans la publicité. Une demande qui attend deux jours, un numéro rappelé une seule fois, un tableur que personne ne tient à jour : le budget publicitaire a payé des contacts que personne n'a suivis.",
+      },
+
+      { k: "h2", v: "Le parcours d'une demande" },
+      {
+        k: "figure",
+        v: {
+          type: "steps",
+          caption:
+            "Les cinq étapes entre le formulaire et la visite. Chacune a un responsable et un délai ; c'est là que se joue le coût réel d'une visite.",
+          steps: [
+            { label: "Demande", sub: "Formulaire, appel ou WhatsApp, enregistré avec sa source." },
+            { label: "Réponse", sub: "Le jour même, avec le nom du bien." },
+            { label: "Qualification", sub: "Le projet, le budget, le délai." },
+            { label: "Relances", sub: "Un rythme fixé à l'avance." },
+            { label: "Visite", sub: "Sur place ou en vidéo." },
+          ],
+        },
+      },
+
+      { k: "h2", v: "Répondre le jour même" },
+      {
+        k: "p",
+        v: "Une personne qui demande des informations sur une villa regarde peut-être trois autres annonces le même soir. La première agence qui répond, avec le nom du bien et une proposition concrète, prend l'avantage. Une notification immédiate sur le téléphone de l'agent — le nom, le numéro, le bien concerné — est le réglage le plus rentable de tout le dispositif.",
+      },
+
+      { k: "h2", v: "Qualifier en trois questions" },
+      {
+        k: "ul",
+        v: [
+          "Le projet : y vivre, louer, une résidence secondaire.",
+          "Le budget, et le financement s'il y en a un.",
+          "Le délai : ce mois-ci, dans six mois, ou simple curiosité.",
+        ],
+      },
+      {
+        k: "p",
+        v: "Ces trois réponses décident de la suite. Un acheteur prêt dans le mois appelle une visite ; un investisseur qui compare attend des chiffres et un dossier ; une curiosité reçoit une sélection de biens et une relance plus tard. Le formulaire publicitaire peut poser une ou deux de ces questions dès le départ : quelques demandes en moins, de meilleures demandes en plus.",
+      },
+
+      { k: "h2", v: "Relancer sans harceler" },
+      {
+        k: "p",
+        v: "Beaucoup de personnes ne décrochent pas au premier appel. Un rythme simple : un appel et un message WhatsApp le jour même, un second message le lendemain avec une vidéo du bien, un dernier quelques jours plus tard avec des biens comparables. Au-delà, la demande passe dans un suivi mensuel : un projet immobilier prend du temps.",
+      },
+      {
+        k: "p",
+        v: "La vidéo est un argument de relance. Un film de visite envoyé sur WhatsApp fait revenir une personne qui hésitait, surtout si elle ne peut pas se déplacer.",
+      },
+
+      { k: "h2", v: "Le CRM : une seule liste, à jour" },
+      {
+        k: "table",
+        v: {
+          head: ["Ce que le CRM garde", "Pourquoi"],
+          rows: [
+            ["La source de la demande", "Savoir quelle campagne produit des visites, pas seulement des formulaires"],
+            ["Le bien concerné", "Répondre avec le bon bien, sans faire répéter"],
+            ["Le statut", "Nouvelle, contactée, qualifiée, visite prévue, offre, perdue"],
+            ["La prochaine action et sa date", "Ne plus oublier de relance"],
+            ["L'agent responsable", "Une demande, un interlocuteur"],
+          ],
+        },
+      },
+      {
+        k: "p",
+        v: "L'intérêt n'est pas l'outil, c'est la discipline qu'il impose. C'est aussi lui qui permet, au bout d'un mois, de dire combien de visites et de ventes chaque campagne a produites : la seule mesure qui compte vraiment.",
+      },
+
+      { k: "h2", v: "Les acheteurs qui vivent à l'étranger" },
+      {
+        k: "p",
+        v: "Une partie des acheteurs et des investisseurs à Marrakech ne vit pas au Maroc. Le suivi s'adapte : WhatsApp plutôt que l'appel, des messages en français et en anglais, des horaires qui tiennent compte du décalage, et une visite en vidéo avant le déplacement.",
+      },
+      { k: "quote", v: "Le budget publicitaire achète des demandes. Le suivi les transforme en visites." },
+
+      { k: "h2", v: "Ce que nous faisons" },
+      {
+        k: "p",
+        v: `Nous tournons les vidéos de biens, diffusons les campagnes immobilières et branchons les demandes sur un CRM, avec notifications et relances. Le CRM et l'automatisation des leads coûtent ${both(CRM)}, le pilotage d'une plateforme publicitaire ${both(MEDIA)} par mois, hors taxes. La formule Acquisition réunit les vidéos, la diffusion sur Meta, Google et TikTok et l'automatisation des leads pour ${both(ACQUISITION)} par mois.`,
+      },
+    ],
+  },
+
+  /* ======================================================================
+   *  17. PUBLICITE TIKTOK AU MAROC
+   * ==================================================================== */
+  {
+    slug: "publicite-tiktok-maroc",
+    services: ["tiktok-ads", "production-video-photo"],
+    title: "Publicité TikTok au Maroc : le budget, les vidéos et ce qui fonctionne",
+    seoTitle: "Publicité TikTok au Maroc : le budget",
+    excerpt:
+      "Le budget minimum imposé par TikTok, celui qu'il faut pour apprendre quelque chose, et le type de vidéos qui fonctionne : ce qu'il faut savoir avant de lancer une première campagne TikTok au Maroc.",
+    category: "Tarifs",
+    date: "2026-10-20",
+    readingTime: 6,
+    seo: "Publicité TikTok au Maroc : budget minimum, budget utile pour démarrer, vidéos qui fonctionnent, mesure des résultats et prix de la gestion à Marrakech.",
+    takeaways: [
+      "Dans le gestionnaire de publicités TikTok, le budget quotidien d'un groupe d'annonces doit dépasser 20 dollars, et celui d'une campagne, s'il est fixé à ce niveau, 50 dollars.",
+      "Un groupe d'annonces diffusé un mois au budget minimum représente un peu plus de 600 dollars, versés directement à TikTok.",
+      "Sur TikTok, les publicités qui fonctionnent ressemblent aux vidéos du fil : tournées en vertical, avec une accroche dans les premières secondes et du texte à l'écran.",
+      "Une accroche s'use en quelques semaines : une campagne TikTok demande de nouvelles vidéos chaque mois.",
+      "TikTok convient aux métiers où le résultat se voit tout de suite : beauté, coiffure, cosmétique, restauration, loisirs.",
+    ],
+    faq: [
+      {
+        q: "Quel budget minimum pour une publicité TikTok ?",
+        a: "Dans le gestionnaire de publicités TikTok, le budget quotidien d'un groupe d'annonces doit dépasser 20 dollars, soit un peu plus de 600 dollars sur un mois. Si un budget est fixé au niveau de la campagne, il doit dépasser 50 dollars par jour.",
+      },
+      {
+        q: "Peut-on faire de la publicité TikTok au Maroc ?",
+        a: "Oui. Une entreprise au Maroc crée ses campagnes dans le gestionnaire de publicités TikTok, comme ailleurs, et peut cibler le public marocain.",
+      },
+      {
+        q: "Quelles vidéos marchent sur TikTok Ads ?",
+        a: "Des vidéos verticales qui ressemblent au contenu du fil : une accroche dans les premières secondes, une personne face caméra, du texte à l'écran et une offre claire. Une publicité qui ressemble à une publicité est zappée.",
+      },
+      {
+        q: "Combien coûte la gestion d'une campagne TikTok ?",
+        a: `Chez UltraVision Agency, à Marrakech, le pilotage de TikTok Ads coûte ${both(MEDIA)} par mois hors taxes, hors budget publicitaire versé à TikTok. Une vidéo publicitaire coûte ${both(VIDEO)}.`,
+      },
+    ],
+    body: [
+      {
+        k: "p",
+        v: "TikTok permet de montrer un soin, une coupe, un plat ou une soirée à des personnes qui ne vous connaissent pas encore. Avant de lancer une campagne, trois questions : combien prévoir, quelles vidéos tourner, et comment savoir si ça fonctionne.",
+      },
+
+      { k: "h2", v: "Le budget minimum imposé par TikTok" },
+      {
+        k: "p",
+        v: "Dans le gestionnaire de publicités TikTok, le budget quotidien d'un groupe d'annonces doit dépasser 20 dollars. Si vous fixez aussi un budget au niveau de la campagne, il doit dépasser 50 dollars par jour. Un groupe d'annonces diffusé tout un mois au minimum représente donc un peu plus de 600 dollars, versés directement à TikTok.",
+      },
+      {
+        k: "table",
+        v: {
+          head: ["Niveau", "Budget quotidien minimum", "Sur un mois"],
+          rows: [
+            ["Groupe d'annonces", "Plus de 20 dollars", "Plus de 600 dollars"],
+            ["Campagne, si un budget y est fixé", "Plus de 50 dollars", "Plus de 1 500 dollars"],
+          ],
+        },
+      },
+      {
+        k: "note",
+        v: "La presse marocaine rapporte qu'une TVA de 20 % s'applique depuis le 1er août 2026 aux publicités TikTok achetées par les annonceurs au Maroc. Vérifiez-la sur vos factures TikTok et prévoyez-la dans le budget.",
+      },
+
+      { k: "h2", v: "Le budget utile" },
+      {
+        k: "p",
+        v: `Le minimum permet de diffuser, pas d'apprendre. Pour savoir quelle vidéo fonctionne, chacune doit recevoir assez de vues pour se comparer aux autres. Nous conseillons de démarrer avec un seul groupe d'annonces, trois ou quatre vidéos et un budget tenu au moins quatre semaines, plutôt que plusieurs groupes au minimum qui n'apprennent rien. Toutes plateformes confondues, nous annonçons ${AD_BUDGET} de budget publicitaire par mois pour démarrer.`,
+      },
+
+      { k: "h2", v: "Les vidéos qui fonctionnent sur TikTok" },
+      {
+        k: "ul",
+        v: [
+          "Tournées en vertical dès la prise de vue, pas recadrées depuis un format horizontal.",
+          "Une accroche dans les premières secondes : un résultat, une question, un geste.",
+          "Du texte à l'écran et des sous-titres, pour ceux qui regardent sans le son.",
+          "Une personne qui parle face caméra, plutôt qu'une voix off sur des images.",
+          "Le prix ou l'offre dit clairement, avant la fin.",
+        ],
+      },
+      {
+        k: "p",
+        v: "Une publicité TikTok qui ressemble à une publicité est zappée. Celle qui ressemble à une vidéo du fil — la gérante qui montre son institut, le barbier qui termine un dégradé, la cliente qui découvre son résultat — est regardée.",
+      },
+
+      { k: "h2", v: "Renouveler avant l'usure" },
+      {
+        k: "p",
+        v: "Une même vidéo montrée trop souvent aux mêmes personnes perd son effet en quelques semaines, et le coût par résultat remonte. Une campagne TikTok se nourrit donc de nouvelles vidéos chaque mois, avec plusieurs accroches testées en parallèle : c'est le rythme de quatre vidéos par mois que nous appliquons aussi sur Meta.",
+      },
+
+      { k: "h2", v: "TikTok ou Meta ?" },
+      {
+        k: "p",
+        v: "Les deux ne s'excluent pas. Nous lançons le plus souvent Meta — Facebook et Instagram — en premier, puis TikTok avec les mêmes angles adaptés à ses codes, une fois qu'une vidéo a fait ses preuves. TikTok élargit alors l'audience d'une campagne qui fonctionne déjà.",
+      },
+
+      { k: "h2", v: "Mesurer ce qui compte" },
+      {
+        k: "p",
+        v: "Avant de lancer, installez le pixel TikTok sur le site et déclarez les conversions : demande de contact, réservation, achat. Sans cela, TikTok optimise pour des vues, et une campagne qui fait beaucoup de vues peut ne produire aucun client.",
+      },
+      { k: "quote", v: "Sur TikTok, la vidéo fait l'essentiel du travail ; le budget ne fait que l'amplifier." },
+
+      { k: "h2", v: "Ce que nous faisons" },
+      {
+        k: "p",
+        v: `Nous tournons les vidéos en vertical pour TikTok, ouvrons le compte publicitaire avec son pixel et ses conversions, et pilotons la diffusion chaque semaine. Une vidéo publicitaire coûte ${both(VIDEO)}, l'ouverture des comptes publicitaires ${both(OUVERTURE)}, et le pilotage de TikTok Ads ${both(MEDIA)} par mois, hors taxes et hors budget versé à TikTok.`,
       },
     ],
   },

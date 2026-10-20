@@ -242,7 +242,7 @@ export const SERVICES: Service[] = [
       "all-in-kech",
       "institut-beaute",
       "promoteur-immobilier",
-      "scultbody",
+      "sculpt-body-marrakech",
       "loisirs",
     ],
     articles: [
@@ -350,9 +350,10 @@ export const SERVICES: Service[] = [
       "residence-neuve",
     ],
     articles: [
+      "budget-meta-ads-maroc",
+      "meta-ads-ou-google-ads",
       "tofu-mofu-bofu-video-publicitaire",
       "pourquoi-quatre-videos-par-mois",
-      "format-vertical-9-16",
     ],
     related: ["tiktok-ads", "google-ads", "generation-de-leads", "production-video-photo"],
     sectors: ["immobilier", "beaute-bien-etre", "restauration-hospitality"],
@@ -436,7 +437,7 @@ export const SERVICES: Service[] = [
       { carte: "Landing page de conversion" },
       { pack: "acquisition" },
     ],
-    articles: ["tofu-mofu-bofu-video-publicitaire", "combien-coute-une-video-publicitaire"],
+    articles: ["meta-ads-ou-google-ads", "referencement-google-marrakech", "tofu-mofu-bofu-video-publicitaire"],
     related: ["meta-ads", "generation-de-leads", "creation-site-web"],
     sectors: ["immobilier", "restauration-hospitality"],
     faq: [
@@ -524,9 +525,9 @@ export const SERVICES: Service[] = [
       "loisirs",
     ],
     articles: [
+      "publicite-tiktok-maroc",
       "format-vertical-9-16",
       "pourquoi-quatre-videos-par-mois",
-      "tofu-mofu-bofu-video-publicitaire",
     ],
     related: ["meta-ads", "production-video-photo", "generation-de-leads"],
     sectors: ["beaute-bien-etre", "restauration-hospitality"],
@@ -610,11 +611,11 @@ export const SERVICES: Service[] = [
       "agent-immobilier",
       "promoteur-immobilier",
       "all-in-kech",
-      "scultbody",
+      "sculpt-body-marrakech",
       "residence-neuve",
       "africa-beauty",
     ],
-    articles: ["tofu-mofu-bofu-video-publicitaire", "pourquoi-quatre-videos-par-mois"],
+    articles: ["leads-immobiliers-marrakech", "tofu-mofu-bofu-video-publicitaire", "pourquoi-quatre-videos-par-mois"],
     related: ["meta-ads", "google-ads", "crm-ia-automatisation", "creation-site-web"],
     sectors: ["immobilier", "beaute-bien-etre"],
     faq: [
@@ -703,6 +704,11 @@ export const SERVICES: Service[] = [
       { carte: "Visibilité sur les IA (GEO)" },
     ],
     sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "rev", "find-estate"],
+    articles: [
+      "prix-site-internet-maroc",
+      "referencement-google-marrakech",
+      "etre-cite-par-chatgpt-entreprise-marrakech",
+    ],
     related: ["generation-de-leads", "crm-ia-automatisation", "branding"],
     sectors: ["restauration-hospitality", "immobilier"],
     faq: [
@@ -846,7 +852,7 @@ export const SERVICES: Service[] = [
       },
     ],
     prices: [{ carte: "CRM et automatisation des leads" }, { pack: "acquisition" }],
-    articles: ["ce-que-l-ia-fait-vraiment-dans-notre-production"],
+    articles: ["leads-immobiliers-marrakech", "ce-que-l-ia-fait-vraiment-dans-notre-production"],
     related: ["generation-de-leads", "creation-site-web", "meta-ads"],
     faq: [
       {

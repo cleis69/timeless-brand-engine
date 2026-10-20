@@ -103,7 +103,7 @@ export const Route = createFileRoute("/agence-marketing-digital-marrakech")({
   Estate, dont les photos sont celles des annonces Airbnb du client, et
   REV) restent sur /realisations et sur les pages secteur et service.
 */
-const WORKS = ["africa-beauty", "all-in-kech", "scultbody", "institut-beaute"]
+const WORKS = ["africa-beauty", "all-in-kech", "sculpt-body-marrakech", "institut-beaute"]
   .map(findWork)
   .filter((w): w is WorkItem => !!w);
 

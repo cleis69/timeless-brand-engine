@@ -215,7 +215,7 @@ export const WORK_ITEMS: WorkItem[] = [
     NOMMAGE — les slugs et les titres portent le SECTEUR, jamais le nom
     du client : le slug devient un nom de dossier, donc une URL, donc une
     ligne lisible dans le source de la page. `africa-beauty` et
-    `scultbody` sont deux exceptions anterieures a cette regle, laissees
+    `sculpt-body-marrakech` sont deux exceptions anterieures a cette regle, laissees
     en l'etat a la demande de l'agence.
 
     LES CHIFFRES SONT DES MARQUEURS STAT_. Ils s'affichent en gris avec
@@ -474,29 +474,29 @@ export const WORK_ITEMS: WorkItem[] = [
     ],
   },
   {
-    slug: "scultbody",
-    title: "Scultbody",
+    slug: "sculpt-body-marrakech",
+    title: "Sculpt Body Marrakech",
     category: "PUBLICITE",
     description:
       "Création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet.",
     year: "2025",
     sources: {
-      mp4: "/work/scultbody/scultbody.mp4",
-      mobile: "/work/scultbody/scultbody-mobile.mp4",
+      mp4: "/work/sculpt-body-marrakech/sculpt-body-marrakech.mp4",
+      mobile: "/work/sculpt-body-marrakech/sculpt-body-marrakech-mobile.mp4",
     },
-    poster: "/work/scultbody/poster.jpg",
+    poster: "/work/sculpt-body-marrakech/poster.jpg",
     published: "2026-08-12",
     durationSec: 33,
     caseStudy: {
-      client: "Scultbody",
+      client: "Sculpt Body Marrakech",
       sector: "beaute-bien-etre",
       services: ["production-video-photo", "generation-de-leads"],
-      headline: "Scultbody : une création publicitaire au service d'un tunnel d'acquisition.",
-      seoTitle: "Scultbody : publicité vidéo orientée conversion",
+      headline: "Sculpt Body Marrakech : une création publicitaire au service d'un tunnel d'acquisition.",
+      seoTitle: "Sculpt Body Marrakech : publicité vidéo",
       seoDescription:
-        "Étude de cas Scultbody : une création publicitaire orientée conversion, produite par UltraVision Agency. 890 000 vues, 2,10 € par lead, +52 % de conversions.",
+        "Étude de cas Sculpt Body Marrakech : une création publicitaire orientée conversion, produite par UltraVision Agency. 890 000 vues, 2,10 € par lead, +52 % de conversions.",
       summary:
-        "Pour Scultbody, UltraVision Agency a produit une création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet. Résultats relevés dans les gestionnaires de publicités : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions.",
+        "Pour Sculpt Body Marrakech, UltraVision Agency a produit une création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet. Résultats relevés dans les gestionnaires de publicités : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions.",
     },
     aspect: "9/16",
     stats: [
@@ -512,7 +512,7 @@ export const WORK_ITEMS: WorkItem[] = [
   },
   /*
     Ajoutees le 19 octobre 2026. Shams Immo (immobilier) est placee apres
-    Scultbody et Azwaj (application) apres elle : aucun theme ne se suit.
+    Sculpt Body Marrakech et Azwaj (application) apres elle : aucun theme ne se suit.
     Chiffres non communiques : marqueurs STAT_ masques a l'ecran.
   */
   {

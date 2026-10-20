@@ -251,7 +251,7 @@ export function AiVisual() {
  *  ACQUISITION — une de nos publicites, telle qu'elle passe dans le fil
  * ================================================================ */
 
-const AD_SLUG = "scultbody";
+const AD_SLUG = "sculpt-body-marrakech";
 
 export function AdsVisual() {
   const w = film(AD_SLUG);
