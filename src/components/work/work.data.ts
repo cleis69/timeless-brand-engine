@@ -344,6 +344,52 @@ export const WORK_ITEMS: WorkItem[] = [
     ],
   },
   {
+    /*
+      Ajoutee le 20 octobre 2026 : le premier film hotelier publie.
+      Placee entre All In Kech (immobilier) et Barber shop. Le client est
+      nomme avec son accord ; aucun chiffre n'a ete communique, les
+      marqueurs restent en place. Seul film en 16/9 de la liste : le
+      fichier source portait une rotation erronee, ignoree a l'encodage.
+    */
+    slug: "hotel-bord-de-lac",
+    title: "Le Petit Hôtel du Flouka",
+    category: "FILM • HÔTELLERIE",
+    description:
+      "Film de présentation d'un petit hôtel au bord du lac Lalla Takerkoust, près de Marrakech : la terrasse, le restaurant, la vue sur le lac.",
+    year: "2024",
+    sources: {
+      mp4: "/work/hotel-bord-de-lac/hotel-bord-de-lac.mp4",
+      mobile: "/work/hotel-bord-de-lac/hotel-bord-de-lac-mobile.mp4",
+    },
+    poster: "/work/hotel-bord-de-lac/poster.jpg",
+    published: "2026-10-20",
+    durationSec: 31,
+    caseStudy: {
+      client: "Le Petit Hôtel du Flouka",
+      sector: "restauration-hospitality",
+      location: "Lac Lalla Takerkoust, près de Marrakech",
+      services: ["production-video-photo"],
+      headline:
+        "Le Petit Hôtel du Flouka : un hôtel au bord du lac, filmé de la terrasse au restaurant.",
+      seoTitle: "Le Petit Hôtel du Flouka : film de présentation d'hôtel près de Marrakech",
+      seoDescription:
+        "Étude de cas : pour Le Petit Hôtel du Flouka, au lac Lalla Takerkoust près de Marrakech, UltraVision Agency a tourné et monté un film de présentation du lieu.",
+      summary:
+        "Pour Le Petit Hôtel du Flouka, un petit hôtel au bord du lac Lalla Takerkoust, à une trentaine de kilomètres de Marrakech, UltraVision Agency a tourné et monté un film de présentation : la terrasse face au lac, le restaurant et l'ambiance du lieu.",
+    },
+    aspect: "16/9",
+    stats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "TAUX DE CLIC" },
+      { value: "STAT_03", label: "RESERVATIONS" },
+    ],
+    demoStats: [
+      { value: "STAT_01", label: "VUES" },
+      { value: "STAT_02", label: "TAUX DE CLIC" },
+      { value: "STAT_03", label: "RESERVATIONS" },
+    ],
+  },
+  {
     slug: "barber-shop",
     title: "Barber shop",
     category: "PUBLICITE • META & TIKTOK",

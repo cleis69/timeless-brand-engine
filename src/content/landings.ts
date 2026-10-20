@@ -42,6 +42,13 @@ export const LANDINGS: Landing[] = [
     services: ["generation-de-leads", "google-ads"],
     sectors: ["immobilier"],
   },
+  {
+    path: "/marketing-hotels-riads-marrakech",
+    name: "Hôtels et riads",
+    text: "Vidéos des lieux, site avec réservation intégrée et publicité pour obtenir des réservations en direct, comme pour Le Petit Hôtel du Flouka.",
+    services: ["creation-site-web"],
+    sectors: ["restauration-hospitality"],
+  },
 ];
 
 export const landingsForService = (slug: ServiceSlug) =>

@@ -10,10 +10,15 @@
  *
  *   immobilier                 4 films, 2 sites, 2 clients cites
  *   beaute-bien-etre           6 films, 1 client cite
- *   restauration-hospitality   2 sites, 1 film, 1 client cite
+ *   restauration-hospitality   2 sites, 2 films, 2 clients cites
  *
- * Le luxe, l'hotellerie « pure » ou les services aux entreprises n'ont
- * pas de page : aucune realisation publiable ne les illustre encore.
+ * L'hotellerie a, depuis le 20 octobre 2026, une page d'offre
+ * (/marketing-hotels-riads-marrakech) appuyee sur le film du Petit Hotel
+ * du Flouka. Elle reste rattachee a ce secteur plutot qu'a une page
+ * secteur a part : une seule realisation ne suffit pas a en ouvrir une.
+ *
+ * Le luxe ou les services aux entreprises n'ont pas de page : aucune
+ * realisation publiable ne les illustre encore.
  * Une page secteur sans preuve est une page de mots-cles, et c'est
  * exactement ce que ce site refuse de publier.
  *
@@ -184,9 +189,9 @@ export const SECTORS: Sector[] = [
       },
     ],
     services: ["creation-site-web", "production-video-photo", "meta-ads", "tiktok-ads", "branding"],
-    works: ["loisirs"],
+    works: ["hotel-bord-de-lac", "loisirs"],
     sites: ["koozina-garden", "raphael-anglesy"],
-    clients: ["Koozina Garden"],
+    clients: ["Koozina Garden", "Le Petit Hôtel du Flouka"],
     faq: [
       {
         q: "Pouvez-vous intégrer la réservation au site ?",
@@ -198,7 +203,7 @@ export const SECTORS: Sector[] = [
       },
       {
         q: "Travaillez-vous avec des hôtels et des riads ?",
-        a: "Oui : sites avec réservation, vidéos des lieux et campagnes publicitaires s'appliquent aux hôtels et aux riads comme aux restaurants. Parlez-nous de votre établissement.",
+        a: "Oui. Nous avons tourné le film de présentation du Petit Hôtel du Flouka, au bord du lac Lalla Takerkoust. Sites avec réservation, vidéos des lieux et campagnes publicitaires s'appliquent aux hôtels et aux riads comme aux restaurants.",
       },
     ],
   },

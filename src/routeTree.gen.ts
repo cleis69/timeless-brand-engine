@@ -17,6 +17,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CastingRouteImport } from './routes/casting'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GenerationLeadsImmobiliersMarrakechRouteImport } from './routes/generation-leads-immobiliers-marrakech'
+import { Route as MarketingHotelsRiadsMarrakechRouteImport } from './routes/marketing-hotels-riads-marrakech'
 import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as SecteursRouteImport } from './routes/secteurs'
@@ -72,6 +73,12 @@ const GenerationLeadsImmobiliersMarrakechRoute =
   GenerationLeadsImmobiliersMarrakechRouteImport.update({
     id: '/generation-leads-immobiliers-marrakech',
     path: '/generation-leads-immobiliers-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MarketingHotelsRiadsMarrakechRoute =
+  MarketingHotelsRiadsMarrakechRouteImport.update({
+    id: '/marketing-hotels-riads-marrakech',
+    path: '/marketing-hotels-riads-marrakech',
     getParentRoute: () => rootRouteImport,
   } as any)
 const MethodeRoute = MethodeRouteImport.update({
@@ -149,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
+  '/marketing-hotels-riads-marrakech': typeof MarketingHotelsRiadsMarrakechRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRouteWithChildren
   '/secteurs': typeof SecteursRouteWithChildren
@@ -171,6 +179,7 @@ export interface FileRoutesByTo {
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
+  '/marketing-hotels-riads-marrakech': typeof MarketingHotelsRiadsMarrakechRoute
   '/methode': typeof MethodeRoute
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -192,6 +201,7 @@ export interface FileRoutesById {
   '/casting': typeof CastingRoute
   '/contact': typeof ContactRoute
   '/generation-leads-immobiliers-marrakech': typeof GenerationLeadsImmobiliersMarrakechRoute
+  '/marketing-hotels-riads-marrakech': typeof MarketingHotelsRiadsMarrakechRoute
   '/methode': typeof MethodeRoute
   '/realisations': typeof RealisationsRouteWithChildren
   '/secteurs': typeof SecteursRouteWithChildren
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/casting'
     | '/contact'
     | '/generation-leads-immobiliers-marrakech'
+    | '/marketing-hotels-riads-marrakech'
     | '/methode'
     | '/realisations'
     | '/secteurs'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/casting'
     | '/contact'
     | '/generation-leads-immobiliers-marrakech'
+    | '/marketing-hotels-riads-marrakech'
     | '/methode'
     | '/tarifs'
     | '/blog/$slug'
@@ -259,6 +271,7 @@ export interface FileRouteTypes {
     | '/casting'
     | '/contact'
     | '/generation-leads-immobiliers-marrakech'
+    | '/marketing-hotels-riads-marrakech'
     | '/methode'
     | '/realisations'
     | '/secteurs'
@@ -283,6 +296,7 @@ export interface RootRouteChildren {
   CastingRoute: typeof CastingRoute
   ContactRoute: typeof ContactRoute
   GenerationLeadsImmobiliersMarrakechRoute: typeof GenerationLeadsImmobiliersMarrakechRoute
+  MarketingHotelsRiadsMarrakechRoute: typeof MarketingHotelsRiadsMarrakechRoute
   MethodeRoute: typeof MethodeRoute
   RealisationsRoute: typeof RealisationsRouteWithChildren
   SecteursRoute: typeof SecteursRouteWithChildren
@@ -346,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/generation-leads-immobiliers-marrakech'
       fullPath: '/generation-leads-immobiliers-marrakech'
       preLoaderRoute: typeof GenerationLeadsImmobiliersMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketing-hotels-riads-marrakech': {
+      id: '/marketing-hotels-riads-marrakech'
+      path: '/marketing-hotels-riads-marrakech'
+      fullPath: '/marketing-hotels-riads-marrakech'
+      preLoaderRoute: typeof MarketingHotelsRiadsMarrakechRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/methode': {
@@ -507,6 +528,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   GenerationLeadsImmobiliersMarrakechRoute:
     GenerationLeadsImmobiliersMarrakechRoute,
+  MarketingHotelsRiadsMarrakechRoute: MarketingHotelsRiadsMarrakechRoute,
   MethodeRoute: MethodeRoute,
   RealisationsRoute: RealisationsRouteWithChildren,
   SecteursRoute: SecteursRouteWithChildren,
