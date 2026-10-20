@@ -79,6 +79,22 @@ export const SOCIAL = [
     url: "https://www.sortlist.com/agency/ultra-vision-360-agency",
   },
   /*
+    Les profils GoodFirms et Clutch, harmonises le 20 octobre 2026 avec le
+    site (Marrakech, tarifs, secteurs). ChatGPT s'appuie sur ces deux
+    annuaires pour decrire l'agence : les declarer ici les rattache a la
+    meme entite.
+  */
+  {
+    network: "GoodFirms",
+    handle: "UltraVision Agency",
+    url: "https://www.goodfirms.co/company/ultravision-agency",
+  },
+  {
+    network: "Clutch",
+    handle: "UltraVision Agency",
+    url: "https://clutch.co/profile/ultravision-agency",
+  },
+  /*
     La fiche Google Business Profile (« Agence de marketing »), qui pointe
     vers le site. Lien stable par identifiant de lieu (cid), relevé le
     19 octobre 2026 : il ne change pas si le nom de la fiche change.
