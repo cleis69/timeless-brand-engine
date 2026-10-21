@@ -27,7 +27,7 @@ import { AREA_SERVED, CONTACT, hasPhone, hasWhatsapp, whatsappUrl } from "@/conf
 import { POLES, SERVICES, servicePath, type Service } from "@/content/services";
 import type { CaseStudy, WorkItem } from "@/components/work/work.data";
 import type { SiteItem } from "@/components/work/sites.data";
-import { LANG_TAG, OG_LOCALE, localePath, type Locale } from "@/lib/i18n";
+import { LANG_TAG, OG_LOCALE, localePath, type Locale } from "@/lib/locale";
 
 type Node = Record<string, unknown>;
 

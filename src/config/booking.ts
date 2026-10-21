@@ -24,7 +24,7 @@
  */
 
 import { FORM } from "./forms";
-import type { Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/locale";
 
 export const BOOKING = {
   /** Point d'envoi, servi par src/server.ts. */

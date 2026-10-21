@@ -1,6 +1,6 @@
 /**
  * Adresses anglaises des articles : identifiant francais → slug anglais.
- * Lu par src/lib/i18n.ts. Un article absent garde son slug francais.
+ * Lu par src/lib/locale.ts. Un article absent garde son slug francais.
  */
 export const BLOG_SLUGS_EN: Record<string, string> = {
   "tofu-mofu-bofu-video-publicitaire": "tofu-mofu-bofu-video-ads",

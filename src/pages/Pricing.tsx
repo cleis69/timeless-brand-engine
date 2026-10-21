@@ -288,7 +288,7 @@ type Props = { t: Copy; locale: Locale };
 function Head({ t, locale }: Props) {
   return (
     <section className="relative overflow-hidden">
-      <div className="shell pt-36 pb-12 lg:pt-40 lg:pb-14">
+      <div className="shell pt-[184px] pb-12 sm:pt-[172px] lg:pt-40 lg:pb-14">
         <Reveal immediate>
           <p className="eyebrow" style={{ color: "#3B82F6" }}>
             {t.eyebrow}

@@ -203,7 +203,7 @@ export function BlogArticlePage({ article: a }: { article: Article }) {
           }}
         />
 
-        <div className="shell relative pt-32 pb-10 lg:pt-40 lg:pb-12">
+        <div className="shell relative pt-[184px] pb-10 sm:pt-[172px] lg:pt-40 lg:pb-12">
           {/* Fil d'Ariane, visible et declare en donnees structurees. */}
           <Reveal immediate>
             <nav aria-label={t.breadcrumbLabel} className="text-[0.72rem] text-[#7b88a6]">

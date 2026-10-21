@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/locale";
 import { POLES, SERVICES, type PriceRef, type Service } from "@/content/services";
 import { SECTORS, type Sector } from "@/content/sectors";
 import { ARTICLES, type Article } from "@/content/blog";

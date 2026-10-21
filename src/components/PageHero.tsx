@@ -119,7 +119,14 @@ export function PageHero({
         }}
       />
 
-      <div className="shell relative pt-36 pb-16 lg:pt-44 lg:pb-20">
+      {/*
+        L'en-tete fixe mesure 171 px sur telephone (bandeau promo sur deux
+        lignes, pastille, barre) et 156 px au-dela. Avec pt-36, le fil
+        d'Ariane passait sous le logo. Les valeurs ci-dessous laissent
+        environ 40 px d'air sous l'en-tete ; meme regle sur l'article de
+        blog et sur la page tarifs, qui ont leur propre en-tete.
+      */}
+      <div className="shell relative pt-[184px] pb-16 sm:pt-[172px] lg:pt-44 lg:pb-20">
         {/*
           `immediate` sur tout cet en-tete : c'est le premier ecran de chaque
           page interieure, et son paragraphe d'introduction en est le plus

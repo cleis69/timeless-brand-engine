@@ -34,7 +34,7 @@ import { POLES, SERVICES, servicePath } from "@/content/services";
 import { LANDINGS } from "@/content/landings";
 import { ARTICLES_EN } from "@/content/en/blog";
 import { workFor } from "@/content/localized";
-import { localePath } from "@/lib/i18n";
+import { localePath } from "@/lib/locale";
 import { SECTORS, sectorPath } from "@/content/sectors";
 import { ARTICLES_SORTED } from "@/content/blog";
 import {
