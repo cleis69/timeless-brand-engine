@@ -2,6 +2,7 @@ import { useState } from "react";
 import { type SiteItem } from "./sites.data";
 import { Reveal } from "@/components/Reveal";
 import { EASE_PAGE, MOTION } from "@/config/motion";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — la grille des realisations web.
@@ -80,6 +81,7 @@ export function SiteGrid({ items }: Props) {
  * ========================================================================== */
 
 function SiteCard({ item }: { item: SiteItem }) {
+  const en = useLocale() === "en";
   const [hover, setHover] = useState(false);
 
   /*
@@ -300,7 +302,7 @@ function SiteCard({ item }: { item: SiteItem }) {
               className="shrink-0 rounded-full px-2 py-[3px] text-[0.55rem] tracking-[0.04em] text-[#8792ad]"
               style={{ background: "rgba(148,163,184,.08)", border: "1px solid #24304a" }}
             >
-              Exemple
+              {en ? "Example" : "Exemple"}
             </span>
           )}
         </div>

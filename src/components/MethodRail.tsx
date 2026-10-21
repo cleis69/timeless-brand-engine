@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Reveal } from "./Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
+import { useLocale, type Locale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — la methode, en rail vertical.
@@ -63,7 +64,45 @@ const ETAPES = [
   },
 ];
 
+/* Les memes etapes, en anglais, dans le meme ordre. */
+const ETAPES_EN: { title: string; text: string }[] = [
+  {
+    title: "Diagnosis",
+    text: "An audit of the brand, the funnel and the data. We find the point of friction that costs the most.",
+  },
+  {
+    title: "Strategy",
+    text: "Positioning, message, offer and acquisition plan. A reference document, not a slide deck.",
+  },
+  {
+    title: "Design & Build",
+    text: "Identity, website, apps and content produced by senior people, in short, signed-off cycles.",
+  },
+  {
+    title: "Growth",
+    text: "Campaigns, automations and monthly iterations driven by sales data.",
+  },
+];
+
+const UI: Record<Locale, { eyebrow: string; title: string; text: string; step: string }> = {
+  fr: {
+    eyebrow: "Notre méthode",
+    title: "Quatre étapes, aucune zone grise.",
+    text: "Vous savez à tout moment où en est votre projet, ce qui a été livré, et ce qui arrive ensuite.",
+    step: "Étape",
+  },
+  en: {
+    eyebrow: "Our method",
+    title: "Four steps, no grey areas.",
+    text: "At any moment you know where your project stands, what has been delivered and what comes next.",
+    step: "Step",
+  },
+};
+
 export function MethodRail() {
+  const locale = useLocale();
+  const t = UI[locale];
+  const etapes = locale === "en" ? ETAPES.map((e, i) => ({ ...e, ...ETAPES_EN[i] })) : ETAPES;
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -85,14 +124,9 @@ export function MethodRail() {
     <div className="grid gap-12 lg:grid-cols-[1fr_1.35fr] lg:gap-20">
       <Reveal>
         <div>
-          <p className="eyebrow">Notre méthode</p>
-          <h2 className="display mt-6 max-w-md text-4xl sm:text-5xl">
-            Quatre étapes, aucune zone grise.
-          </h2>
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
-            Vous savez à tout moment où en est votre projet, ce qui a été livré, et ce qui
-            arrive ensuite.
-          </p>
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h2 className="display mt-6 max-w-md text-4xl sm:text-5xl">{t.title}</h2>
+          <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">{t.text}</p>
         </div>
       </Reveal>
 
@@ -111,7 +145,7 @@ export function MethodRail() {
           </div>
 
           <div ref={listRef} className="min-w-0 flex-1">
-            {ETAPES.map((e, i) => {
+            {etapes.map((e, i) => {
               const isActive = i === active;
               return (
                 <div
@@ -122,7 +156,7 @@ export function MethodRail() {
                   onMouseEnter={() => focus(i)}
                   onFocus={() => focus(i)}
                   tabIndex={0}
-                  aria-label={`Étape ${e.n} — ${e.title}`}
+                  aria-label={`${t.step} ${e.n} — ${e.title}`}
                   className="group border-b border-hairline py-5 outline-none last:border-b-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                 >
                   <div className="flex items-baseline gap-4">

@@ -77,6 +77,76 @@ export const EXPERIENCE = ["Débutante", "Quelques tournages", "Professionnelle"
 
 export const LANGUAGES = ["Darija", "Arabe", "Français", "Anglais", "Espagnol", "Amazigh"] as const;
 
+/*
+  LIBELLES ANGLAIS — affichage seulement.
+
+  Les valeurs francaises ci-dessus restent celles qui partent au serveur
+  (qui les verifie avec onlyKnown) et dans l'e-mail : la page anglaise
+  affiche la traduction, mais envoie toujours la valeur francaise.
+*/
+const LABELS_EN: Record<string, string> = {
+  /* Vous etes */
+  "Actrice / comédienne": "Actress",
+  Mannequin: "Model",
+  "Créatrice de contenu (UGC)": "Content creator (UGC)",
+  Figuration: "Extra",
+  /* Experience */
+  Débutante: "Beginner",
+  "Quelques tournages": "A few shoots",
+  Professionnelle: "Professional",
+  /* Langues */
+  Darija: "Darija",
+  Arabe: "Arabic",
+  Français: "French",
+  Anglais: "English",
+  Espagnol: "Spanish",
+  Amazigh: "Amazigh",
+};
+
+/** Libelle affiche d'une valeur de PROFILES, EXPERIENCE ou LANGUAGES. */
+export const castingLabel = (value: string, locale: "fr" | "en") =>
+  locale === "en" ? (LABELS_EN[value] ?? value) : value;
+
+/*
+  Les messages de sendCasting() et du serveur (src/lib/casting-server.ts)
+  sont en francais. Sur la page anglaise, castingMessage() affiche leur
+  traduction ; un message inconnu retombe sur une phrase generique.
+*/
+const MESSAGES_EN: Record<string, string> = {
+  "Merci, votre candidature est bien arrivée. Si un tournage vous correspond, nous vous contacterons par téléphone ou WhatsApp.":
+    "Thank you, your application has arrived. If a shoot suits you, we will contact you by phone or WhatsApp.",
+  "La connexion a échoué pendant l'envoi. Vérifiez votre réseau et réessayez : vos photos et vos réponses sont toujours là.":
+    "The connection failed while sending. Check your network and try again: your photos and answers are still here.",
+  "L'envoi a échoué. Réessayez dans un instant, ou envoyez-nous votre profil sur WhatsApp.":
+    "Sending failed. Try again in a moment, or send us your profile on WhatsApp.",
+  "Les candidatures en ligne ouvrent très bientôt. En attendant, envoyez-nous votre profil sur WhatsApp.":
+    "Online applications open very soon. In the meantime, send us your profile on WhatsApp.",
+  "Vos photos sont trop lourdes. Envoyez-en moins, ou plus légères.":
+    "Your photos are too large. Send fewer, or smaller ones.",
+  "Le formulaire n'a pas pu être lu. Réessayez.": "The form could not be read. Please try again.",
+  [`Ajoutez entre ${CASTING.minPhotos} et ${CASTING.maxPhotos} photos.`]: `Add between ${CASTING.minPhotos} and ${CASTING.maxPhotos} photos.`,
+  "Une de vos photos est trop lourde (8 Mo au maximum).":
+    "One of your photos is too large (8 MB maximum).",
+  "Une de vos photos n'est pas dans un format reconnu. Envoyez des JPEG ou des PNG.":
+    "One of your photos is not in a recognised format. Send JPEG or PNG files.",
+  "L'enregistrement a échoué. Réessayez dans un instant.": "Saving failed. Try again in a moment.",
+  "Indiquez votre nom.": "Please enter your name.",
+  [`Le casting est réservé aux personnes de ${CASTING.minAge} ans et plus.`]: `Casting is open to people aged ${CASTING.minAge} and over.`,
+  "Indiquez votre ville.": "Please enter your city.",
+  "Vérifiez votre numéro de téléphone.": "Please check your phone number.",
+  "Le lien vidéo doit commencer par https://": "The video link must start with https://",
+  "Cochez les deux cases en bas du formulaire.": "Tick both boxes at the bottom of the form.",
+};
+
+/** Le message d'un resultat, dans la langue de la page. */
+export const castingMessage = (r: CastingResult, locale: "fr" | "en") =>
+  locale === "en"
+    ? (MESSAGES_EN[r.message] ??
+      (r.ok
+        ? "Thank you, your application has arrived."
+        : "Sending failed. Try again in a moment, or send us your profile on WhatsApp."))
+    : r.message;
+
 /** Champs texte de la candidature, tels qu'envoyes au serveur. */
 export type CastingFields = {
   name: string;

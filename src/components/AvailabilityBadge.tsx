@@ -1,3 +1,5 @@
+import { useLocale } from "@/lib/i18n";
+
 /**
  * ULTRA VISION — pastille de positionnement.
  *
@@ -25,12 +27,16 @@
  */
 
 export function AvailabilityBadge({
-  text = "Nous transformons vos vues en ventes",
+  text: textProp,
   className = "",
 }: {
   text?: string;
   className?: string;
 }) {
+  const locale = useLocale();
+  const text =
+    textProp ??
+    (locale === "en" ? "We turn your views into sales" : "Nous transformons vos vues en ventes");
   return (
     <div className={`relative inline-block rounded-full p-px ${className}`}>
       <style>{`

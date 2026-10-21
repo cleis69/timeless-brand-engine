@@ -245,10 +245,9 @@ export function VideoReveal({ item, index, total }: Props) {
       <section aria-labelledby={`work-${item.slug}-title`} className="relative">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div
-            className={[
-              "lg:col-span-5",
-              flipped ? "lg:order-2 lg:col-start-8" : "lg:order-1",
-            ].join(" ")}
+            className={["lg:col-span-5", flipped ? "lg:order-2 lg:col-start-8" : "lg:order-1"].join(
+              " ",
+            )}
           >
             {video}
           </div>

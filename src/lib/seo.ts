@@ -27,6 +27,7 @@ import { AREA_SERVED, CONTACT, hasPhone, hasWhatsapp, whatsappUrl } from "@/conf
 import { POLES, SERVICES, servicePath, type Service } from "@/content/services";
 import type { CaseStudy, WorkItem } from "@/components/work/work.data";
 import type { SiteItem } from "@/components/work/sites.data";
+import { LANG_TAG, OG_LOCALE, localePath, type Locale } from "@/lib/i18n";
 
 type Node = Record<string, unknown>;
 
@@ -47,13 +48,16 @@ export const serviceId = (slug: string) => `${url(servicePath(slug as Service["s
  * sous-type d'Organization : c'est le type le plus precis que schema.org
  * propose pour une agence de services.
  */
-export function organizationNode(): Node {
+export function organizationNode(locale: Locale = "fr"): Node {
   return {
     "@type": "ProfessionalService",
     "@id": ORG_ID,
     name: BRAND.name,
     alternateName: [...BRAND.alternateNames],
-    description: `${BRAND.definition} ${BRAND.summary}`,
+    description:
+      locale === "en"
+        ? `${BRAND.en.definition} ${BRAND.en.summary}`
+        : `${BRAND.definition} ${BRAND.summary}`,
     slogan: BRAND.slogan,
     url: `${SITE_URL}/`,
     logo: {
@@ -91,7 +95,7 @@ export function organizationNode(): Node {
         ...(hasPhone ? { telephone: CONTACT.phone } : {}),
         ...(hasWhatsapp ? { url: whatsappUrl() } : {}),
         areaServed: BRAND.countryCode,
-        availableLanguage: ["French"],
+        availableLanguage: ["French", "English"],
       },
     ],
     hasOfferCatalog: {
@@ -118,15 +122,18 @@ export function organizationNode(): Node {
   };
 }
 
-export function websiteNode(): Node {
+export function websiteNode(locale: Locale = "fr"): Node {
   return {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     url: `${SITE_URL}/`,
     name: BRAND.name,
     alternateName: [BRAND.short, "ULTRA VISION"],
-    description: `${BRAND.category} à ${BRAND.city} : marque, production vidéo, publicité, sites web et automatisation.`,
-    inLanguage: "fr-FR",
+    description:
+      locale === "en"
+        ? BRAND.en.website
+        : `${BRAND.category} à ${BRAND.city} : marque, production vidéo, publicité, sites web et automatisation.`,
+    inLanguage: ["fr-FR", "en"],
     publisher: orgRef,
   };
 }
@@ -138,13 +145,13 @@ export function websiteNode(): Node {
  */
 export const FOUNDER_ID = `${url("/a-propos")}#${BRAND.founder.name.toLowerCase()}`;
 
-export function founderNode(): Node {
+export function founderNode(locale: Locale = "fr"): Node {
   return {
     "@type": "Person",
     "@id": FOUNDER_ID,
     name: BRAND.founder.name,
-    jobTitle: BRAND.founder.jobTitle,
-    url: url("/a-propos"),
+    jobTitle: locale === "en" ? BRAND.en.founderJobTitle : BRAND.founder.jobTitle,
+    url: url(localePath("/a-propos", locale)),
     worksFor: orgRef,
   };
 }
@@ -158,10 +165,15 @@ export function founderNode(): Node {
  * certains lecteurs ne recollent pas. Deux noeuds de meme @id (le fondateur,
  * aussi declare sur /a-propos) sont fusionnes en un seul.
  */
-export function graphOf(pageNodes: Node[]): string {
+export function graphOf(pageNodes: Node[], locale: Locale = "fr"): string {
   const out: Node[] = [];
   const byId = new Map<string, Node>();
-  for (const n of [organizationNode(), websiteNode(), founderNode(), ...pageNodes]) {
+  for (const n of [
+    organizationNode(locale),
+    websiteNode(locale),
+    founderNode(locale),
+    ...pageNodes,
+  ]) {
     const id = n["@id"];
     const seen = typeof id === "string" ? byId.get(id) : undefined;
     if (seen) {
@@ -188,7 +200,7 @@ export function serviceNode(s: Service): Node {
     url: url(servicePath(s.slug)),
     provider: orgRef,
     areaServed: AREA_SERVED,
-    availableLanguage: ["French"],
+    availableLanguage: ["French", "English"],
   };
 }
 
@@ -271,10 +283,17 @@ type PageOptions = {
   dateModified?: string;
   extraMeta?: Record<string, string>[];
   noindex?: boolean;
+  /**
+   * Langue de la page. `path` et les chemins du fil d'Ariane restent les
+   * adresses FRANCAISES de reference : pageHead les traduit, et declare
+   * les deux versions de la page (hreflang).
+   */
+  locale?: Locale;
 };
 
 export function pageHead(o: PageOptions) {
-  const href = pageUrl(o.path);
+  const locale = o.locale ?? "fr";
+  const href = pageUrl(localePath(o.path, locale));
   const img = o.image ?? OG_IMAGE;
   const imgUrl = url(img.path);
   const crumbs = o.breadcrumbs && o.breadcrumbs.length > 0 ? o.breadcrumbs : null;
@@ -285,7 +304,7 @@ export function pageHead(o: PageOptions) {
     url: href,
     name: o.title,
     description: o.description,
-    inLanguage: "fr-FR",
+    inLanguage: LANG_TAG[locale],
     isPartOf: websiteRef,
     primaryImageOfPage: { "@type": "ImageObject", url: imgUrl },
     ...(o.about ? { about: o.about } : {}),
@@ -301,16 +320,18 @@ export function pageHead(o: PageOptions) {
     graph.push({
       "@type": "BreadcrumbList",
       "@id": `${href}#breadcrumb`,
-      itemListElement: [{ name: "Accueil", path: "/" }, ...crumbs].map((c, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: c.name,
-        item: pageUrl(c.path),
-      })),
+      itemListElement: [{ name: locale === "en" ? "Home" : "Accueil", path: "/" }, ...crumbs].map(
+        (c, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: c.name,
+          item: pageUrl(localePath(c.path, locale)),
+        }),
+      ),
     });
   }
 
-  if (o.faq && o.faq.length > 0) graph.push(faqNode(o.path, o.faq));
+  if (o.faq && o.faq.length > 0) graph.push(faqNode(localePath(o.path, locale), o.faq));
   if (o.nodes) graph.push(...o.nodes);
 
   const ogTitle = o.ogTitle ?? o.title;
@@ -324,6 +345,11 @@ export function pageHead(o: PageOptions) {
       { property: "og:description", content: ogDescription },
       { property: "og:url", content: href },
       { property: "og:type", content: o.ogType ?? "website" },
+      { property: "og:locale", content: OG_LOCALE[locale] },
+      {
+        property: "og:locale:alternate",
+        content: OG_LOCALE[locale === "fr" ? "en" : "fr"],
+      },
       { property: "og:image", content: imgUrl },
       ...(img.width ? [{ property: "og:image:width", content: String(img.width) }] : []),
       ...(img.height ? [{ property: "og:image:height", content: String(img.height) }] : []),
@@ -334,11 +360,25 @@ export function pageHead(o: PageOptions) {
       ...(o.noindex ? [{ name: "robots", content: "noindex, follow" }] : []),
       ...(o.extraMeta ?? []),
     ],
-    links: [{ rel: "canonical", href }],
+    links: [
+      { rel: "canonical", href },
+      /*
+        Les deux versions de la page se declarent l'une l'autre. Le
+        francais reste la version par defaut (x-default) : c'est la langue
+        de reference du site.
+      */
+      ...(o.noindex
+        ? []
+        : [
+            { rel: "alternate", hrefLang: "fr", href: pageUrl(o.path) },
+            { rel: "alternate", hrefLang: "en", href: pageUrl(localePath(o.path, "en")) },
+            { rel: "alternate", hrefLang: "x-default", href: pageUrl(o.path) },
+          ]),
+    ],
     scripts: [
       {
         type: "application/ld+json",
-        children: graphOf(graph),
+        children: graphOf(graph, locale),
       },
     ],
   };

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { type WorkItem } from "./work.data";
 import { EASE_PAGE } from "@/config/motion";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — le lecteur plein ecran.
@@ -85,6 +86,7 @@ type Props = {
 };
 
 export function WorkPlayer({ item, onClose }: Props) {
+  const en = useLocale() === "en";
   const videoRef = useRef<HTMLVideoElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -239,7 +241,7 @@ export function WorkPlayer({ item, onClose }: Props) {
             ref={closeRef}
             type="button"
             onClick={onClose}
-            aria-label="Fermer la vidéo"
+            aria-label={en ? "Close the video" : "Fermer la vidéo"}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5 text-foreground outline-none transition-colors hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-accent"
           >
             <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
@@ -346,7 +348,7 @@ export function WorkPlayer({ item, onClose }: Props) {
                   fill="none"
                 />
               </svg>
-              Activer le son
+              {en ? "Turn sound on" : "Activer le son"}
             </button>
           )}
         </div>

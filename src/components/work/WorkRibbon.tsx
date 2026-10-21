@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { shownStats, type WorkItem } from "./work.data";
 import { WorkPlayer } from "./WorkPlayer";
 import { EASE_PAGE, LOOP } from "@/config/motion";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — le ruban des realisations.
@@ -445,6 +446,7 @@ function RibbonCard({
   /** Vrai pour la premiere occurrence du film : seule elle porte un titre <h3>. */
   heading: boolean;
 }) {
+  const en = useLocale() === "en";
   const Title = heading ? "h3" : "p";
   const videoRef = useRef<HTMLVideoElement>(null);
   /* Le premier chiffre REEL ; les marqueurs STAT_ ne s'affichent pas. */
@@ -654,7 +656,7 @@ function RibbonCard({
         }}
         tabIndex={decorative ? -1 : 0}
         aria-hidden={decorative ? true : undefined}
-        aria-label={`Lire la vidéo — ${item.title}`}
+        aria-label={`${en ? "Play the video" : "Lire la vidéo"} — ${item.title}`}
         className="absolute top-1/2 left-1/2 z-[7] flex h-[50px] w-[50px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30 outline-none backdrop-blur-sm transition-colors hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-accent"
         style={{
           opacity: isHovered ? 1 : 0,

@@ -1,0 +1,646 @@
+import { useRouterState } from "@tanstack/react-router";
+import { BRAND, withBrand } from "@/config/brand";
+import { orgRef, pageHead } from "@/lib/seo";
+import { useEffect, useState } from "react";
+import { useLenis } from "lenis/react";
+import { PageHero } from "@/components/PageHero";
+import { Reveal } from "@/components/Reveal";
+import {
+  CONTACT,
+  hasPhone,
+  hasWhatsapp,
+  phoneDisplay,
+  telUrl,
+  whatsappUrl,
+} from "@/config/contact";
+import { EASE_RESPOND, MOTION } from "@/config/motion";
+import { FORM, formReady, sendForm, type SendResult } from "@/config/forms";
+import { BookingCalendar } from "@/components/BookingCalendar";
+import { useLocale, type Locale } from "@/lib/i18n";
+
+/**
+ * ULTRA VISION — page Contact.
+ *
+ * ============================================================
+ *  CE FICHIER REMPLACE src/routes/contact.tsx
+ * ============================================================
+ *
+ * LES COORDONNEES FAUSSES QUI ETAIENT EN LIGNE
+ *
+ *   wa.me/33600000000        -> numero inexistant
+ *   tel:+33600000000         -> numero inexistant
+ *   studio@ultravision.fr    -> adresse inexistante
+ *   « Paris — Dubai — Casablanca » -> deux villes sur trois inventees
+ *
+ * Un visiteur qui clique sur un numero mort ne recommence pas. C'est
+ * la seule page du site ou une erreur coute une affaire immediatement.
+ *
+ * Tout vient desormais de src/config/contact.ts, comme sur le reste du
+ * site : une seule source, aucune divergence possible entre les pages.
+ * Les gardes `hasPhone` et `hasWhatsapp` masquent purement et
+ * simplement un moyen de contact non renseigne, plutot que d'afficher
+ * un lien mort.
+ *
+ * LES TRANCHES DE BUDGET ONT ETE REFAITES
+ *
+ * Elles allaient de « moins de 20 000 € » a « plus de 100 000 € ».
+ * Avec une grille qui demarre a 490 €, un prospect ne se reconnaissait
+ * dans aucune case et refermait la page. Les tranches suivent
+ * maintenant les formules reelles.
+ *
+ * L'ENVOI DU FORMULAIRE
+ *
+ * Il n'est toujours pas relie a un service d'envoi : le message
+ * s'affiche mais rien ne part. C'est signale ci-dessous, et c'est la
+ * seule chose qui reste a brancher sur cette page.
+ *
+ * DEUX LANGUES, UNE SEULE PAGE : le texte vient de `copy(locale)`. Les
+ * routes /contact et /en/contact affichent ce composant. Ce qui part
+ * dans l'e-mail ne change pas avec la langue : besoins et budget sont
+ * transmis avec leur libelle FRANCAIS, pour que la boite de reception
+ * reste lisible d'un seul coup d'oeil, quelle que soit la page d'origine.
+ */
+
+const PATH = "/contact";
+
+/*
+  Tranches alignees sur la grille tarifaire reelle.
+  La premiere doit toujours correspondre a l'essai : c'est elle qui dit
+  au petit budget qu'il a le droit d'etre la.
+
+  Montants en DIRHAMS, convertis au taux commercial de pricing.ts
+  (1 € = 11 MAD) et arrondis a la centaine, comme le fait dirham().
+
+  Si MAD.rate change dans pricing.ts, ces quatre lignes ne suivront PAS
+  toutes seules : ce sont des chaines, pas des calculs. C'est volontaire
+  — une tranche de budget doit rester un repere stable pour le prospect,
+  pas un montant qui bouge d'une visite a l'autre. A revoir a la main le
+  jour ou le taux est modifie.
+
+  `value` est ce qui part dans l'e-mail (inchange) ; `en` est le libelle
+  affiche sur la page anglaise. Les deux colonnes se revoient ensemble.
+*/
+const BUDGETS = [
+  { value: "Un essai — 5 400 MAD", en: "A trial — MAD 5,400" },
+  { value: "5 500 à 16 500 MAD / mois", en: "MAD 5,500 to 16,500 / month" },
+  { value: "16 500 à 33 000 MAD / mois", en: "MAD 16,500 to 33,000 / month" },
+  { value: "Plus de 33 000 MAD / mois", en: "Over MAD 33,000 / month" },
+  { value: "Je ne sais pas encore", en: "Not sure yet" },
+];
+
+/*
+  Les besoins reprennent les services du site (src/content/services.ts),
+  regroupes pour tenir en six pastilles : ce que coche le visiteur doit
+  porter le meme nom que la page qu'il vient de lire.
+*/
+const NEEDS = [
+  { value: "Vidéo & photo", en: "Video & photo" },
+  { value: "Meta, Google ou TikTok Ads", en: "Meta, Google or TikTok Ads" },
+  { value: "Génération de leads", en: "Lead generation" },
+  { value: "Site web ou landing page", en: "Website or landing page" },
+  { value: "Branding & identité", en: "Branding & identity" },
+  { value: "CRM, IA & automatisation", en: "CRM, AI & automation" },
+];
+
+/*
+  Les messages renvoyes par sendForm() (src/config/forms.ts) sont en
+  francais. Sur la page anglaise, on affiche leur traduction ; un
+  message inconnu retombe sur une phrase generique selon le resultat.
+*/
+const RESULT_EN: Record<string, string> = {
+  "Le formulaire n'est pas encore relié. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.":
+    "The form is not connected yet. Message us on WhatsApp or by email: we reply the same day.",
+  "Merci, votre demande est bien enregistrée.": "Thank you, your request has been received.",
+  "Merci, votre demande est bien arrivée. Nous revenons vers vous sous 24 heures ouvrées.":
+    "Thank you, your request has arrived. We will get back to you within 24 working hours.",
+  "L'envoi a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.":
+    "Sending failed. Message us on WhatsApp or by email: we reply the same day.",
+  "La connexion a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.":
+    "The connection failed. Message us on WhatsApp or by email: we reply the same day.",
+};
+
+function resultMessage(r: SendResult, l: Locale) {
+  if (l === "fr") return r.message;
+  return (
+    RESULT_EN[r.message] ??
+    (r.ok
+      ? "Thank you, your request has been received."
+      : "Sending failed. Message us on WhatsApp or by email: we reply the same day.")
+  );
+}
+
+function copy(l: Locale) {
+  if (l === "en") {
+    return {
+      title: withBrand("Contact: book a call, WhatsApp, email"),
+      description: `Contact ${BRAND.name} in Marrakech: book a 30-minute call, message us on WhatsApp or by email. Reply within 24 working hours.`,
+      ogDescription: "WhatsApp, email or online booking: reply within 24 working hours.",
+      name: "Contact",
+      eyebrow: "Contact",
+      h1: "Tell us what you want to sell.",
+      accent: "what you want to sell",
+      intro:
+        "A few lines are enough. We get back to you within 24 working hours with a time slot and a first angle to work on.",
+      fieldName: "Full name",
+      fieldCompany: "Company",
+      fieldEmail: "Work email",
+      fieldPhone: "Phone",
+      needsLegend: "What you need",
+      budgetLegend: "Budget in mind",
+      budgetNote: "Excluding the ad budget paid to the platforms.",
+      projectLabel: "Your project",
+      projectPlaceholder: "What you sell, to whom, and what is holding you back today.",
+      sending: "Sending…",
+      submit: "Send your request",
+      notReadyTitle: "The form is being set up.",
+      notReadyBefore: hasWhatsapp
+        ? "In the meantime, message us on WhatsApp or at"
+        : "In the meantime, write to us at",
+      notReadyAfter: "— we reply the same day.",
+      writeUs: "Email us",
+      fastTrack: "Fast track",
+      whatsapp: "Message us on WhatsApp",
+      email: "Email",
+      where: "Where we are",
+      base: "Based in Marrakech, the agency also works in Casablanca, Rabat, Tangier and Agadir.",
+      audience:
+        "We mostly work with French-speaking business owners and companies established in Morocco.",
+      delayTitle: "Response time",
+      delay: "24 working hours. On WhatsApp, usually the same day.",
+    };
+  }
+
+  return {
+    title: withBrand("Contact : rendez-vous, WhatsApp, e-mail"),
+    description: `Contactez ${BRAND.name} à Marrakech : réservez un appel de 30 minutes, écrivez-nous sur WhatsApp ou par e-mail. Réponse sous 24 heures ouvrées.`,
+    ogDescription: "WhatsApp, e-mail ou rendez-vous en ligne : réponse sous 24 heures ouvrées.",
+    name: "Contact",
+    eyebrow: "Contact",
+    h1: "Dites-nous ce que vous voulez vendre.",
+    accent: "ce que vous voulez vendre",
+    intro:
+      "Quelques lignes suffisent. Nous revenons vers vous sous 24 heures ouvrées avec un créneau et un premier angle de travail.",
+    fieldName: "Nom et prénom",
+    fieldCompany: "Entreprise",
+    fieldEmail: "Email professionnel",
+    fieldPhone: "Téléphone",
+    needsLegend: "Ce dont vous avez besoin",
+    budgetLegend: "Budget envisagé",
+    budgetNote: "Hors budget publicitaire versé aux plateformes.",
+    projectLabel: "Votre projet",
+    projectPlaceholder: "Ce que vous vendez, à qui, et ce qui bloque aujourd'hui.",
+    sending: "Envoi en cours…",
+    submit: "Envoyer la demande",
+    notReadyTitle: "Le formulaire est en cours de mise en service.",
+    notReadyBefore: `En attendant, écrivez-nous ${hasWhatsapp ? "sur WhatsApp ou " : ""}à`,
+    notReadyAfter: "— nous répondons dans la journée.",
+    writeUs: "Nous écrire",
+    fastTrack: "Voie rapide",
+    whatsapp: "Écrire sur WhatsApp",
+    email: "Email",
+    where: "Où nous sommes",
+    base: CONTACT.base,
+    audience:
+      "Nous travaillons principalement avec des dirigeants et des entreprises francophones installés au Maroc.",
+    delayTitle: "Délai de réponse",
+    delay: "24 heures ouvrées. Sur WhatsApp, généralement dans la journée.",
+  };
+}
+
+/** Les balises de la page, dans la langue demandee. */
+export function contactHead(locale: Locale) {
+  const t = copy(locale);
+  return pageHead({
+    locale,
+    path: PATH,
+    title: t.title,
+    description: t.description,
+    ogDescription: t.ogDescription,
+    pageType: "ContactPage",
+    /* Les moyens de contact sont decrits une fois, sur l'entite
+       (contactPoint, dans src/lib/seo.ts). La page y renvoie. */
+    about: orgRef,
+    mainEntity: orgRef,
+    breadcrumbs: [{ name: t.name, path: PATH }],
+  });
+}
+
+export function ContactPage() {
+  const locale = useLocale();
+  const t = copy(locale);
+  const label = (o: { value: string; en: string }) => (locale === "en" ? o.en : o.value);
+
+  /*
+    Aucun budget n'est pre-selectionne.
+
+    La version precedente cochait « 500 a 1 500 € / mois » d'office.
+    Presumer le budget de quelqu'un avant qu'il ait parle, c'est soit
+    l'ancrer sur un montant qui n'est pas le sien, soit le vexer. Et
+    cote reception, un budget arrive rempli sans avoir ete choisi ne
+    vaut rien : impossible de savoir s'il est vrai.
+  */
+  const [budget, setBudget] = useState<string | null>(null);
+
+  /*
+    /contact#rendez-vous — le bouton « Prendre rendez-vous » de tout le
+    site — doit arriver SUR le calendrier.
+
+    Le navigateur ne le fait pas seul ici : le defilement doux (Lenis)
+    et l'animation d'entree de page reprennent la main apres lui, et la
+    page restait en haut. Sur telephone, le calendrier est quatre ecrans
+    plus bas : le visiteur ne l'aurait jamais vu. On attend la fin de
+    l'entree de page, puis on y descend.
+  */
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  const lenis = useLenis();
+  useEffect(() => {
+    if (hash !== "rendez-vous") return;
+    const t = window.setTimeout(() => {
+      const el = document.getElementById("rendez-vous");
+      if (!el) return;
+      if (lenis) lenis.scrollTo(el, { offset: -110 });
+      else el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 450);
+    return () => window.clearTimeout(t);
+  }, [hash, lenis]);
+  const [needs, setNeeds] = useState<string[]>([]);
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState<SendResult | null>(null);
+
+  /*
+    L'envoi.
+
+    Trois precautions qui evitent les pertes de contact les plus
+    frequentes :
+
+    1. Le bouton se verrouille pendant l'envoi. Sans cela, un visiteur
+       qui trouve que « ca ne repond pas » clique trois fois et envoie
+       trois fois le meme message.
+    2. Les cases cochees sont transmises en texte lisible. Recevoir
+       « needs: [object Object] » dans sa boite ne sert a rien.
+    3. Le formulaire n'est PAS vide en cas d'echec. Refaire saisir
+       vingt lignes a quelqu'un dont l'envoi vient d'echouer, c'est le
+       perdre.
+  */
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending) return;
+
+    const fd = new FormData(e.currentTarget);
+    setSending(true);
+    setResult(null);
+
+    const r = await sendForm({
+      name: String(fd.get("name") ?? ""),
+      company: String(fd.get("company") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      message: String(fd.get("message") ?? ""),
+      besoins: needs.length ? needs.join(", ") : "Non précisé",
+      budget: budget ?? "Non précisé",
+      [FORM.honeypot]: String(fd.get(FORM.honeypot) ?? ""),
+    });
+
+    setSending(false);
+    setResult(r);
+    if (r.ok) e.currentTarget.reset();
+  };
+
+  const toggle = (n: string) =>
+    setNeeds((cur) => (cur.includes(n) ? cur.filter((x) => x !== n) : [...cur, n]));
+
+  /** Style commun aux pastilles de choix. */
+  const chip = (on: boolean) => ({
+    borderColor: on ? "#3B82F6" : "#262626",
+    backgroundColor: on ? "rgba(59,130,246,.12)" : "transparent",
+    color: on ? "#93C5FD" : "#8a8a8a",
+    transition: `all ${MOTION.respond}ms ${EASE_RESPOND}`,
+  });
+
+  return (
+    <>
+      <PageHero
+        eyebrow={t.eyebrow}
+        title={t.h1}
+        accent={t.accent}
+        intro={t.intro}
+        breadcrumbs={[{ name: t.name, path: PATH }]}
+      />
+
+      <section className="rule bg-background">
+        <div className="shell grid gap-12 py-14 lg:grid-cols-[1.35fr_1fr] lg:gap-16 lg:py-20">
+          {/* ---------------- Le formulaire ---------------- */}
+          <Reveal>
+            <form
+              onSubmit={onSubmit}
+              className="rounded-3xl p-7 sm:p-9"
+              style={{ backgroundColor: "#0B1020", border: "1px solid #16203a" }}
+            >
+              {/*
+                Le champ piege. Invisible pour un humain — il n'est ni
+                affiche, ni atteignable au clavier, ni annonce par un
+                lecteur d'ecran. Un automate, lui, remplit tout ce qu'il
+                trouve : si ce champ revient rempli, le message est jete.
+
+                On n'utilise pas `display: none`, que certains automates
+                detectent. La position hors ecran est plus discrete.
+              */}
+              <input
+                type="text"
+                name={FORM.honeypot}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
+              />
+              <div className="grid gap-6 sm:grid-cols-2">
+                <Field label={t.fieldName} name="name" />
+                <Field label={t.fieldCompany} name="company" />
+                <Field label={t.fieldEmail} name="email" type="email" />
+                <Field label={t.fieldPhone} name="phone" type="tel" required={false} />
+              </div>
+
+              <fieldset className="mt-9">
+                <legend className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.needsLegend}
+                </legend>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {NEEDS.map((n) => (
+                    <button
+                      type="button"
+                      key={n.value}
+                      onClick={() => toggle(n.value)}
+                      aria-pressed={needs.includes(n.value)}
+                      className="rounded-full border px-4 py-2 text-xs"
+                      style={chip(needs.includes(n.value))}
+                    >
+                      {label(n)}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset className="mt-9">
+                <legend className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.budgetLegend}
+                </legend>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {BUDGETS.map((b) => (
+                    <button
+                      type="button"
+                      key={b.value}
+                      onClick={() => setBudget(b.value)}
+                      aria-pressed={budget === b.value}
+                      className="rounded-full border px-4 py-2 text-xs"
+                      style={chip(budget === b.value)}
+                    >
+                      {label(b)}
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-[0.74rem] text-[#797976]">{t.budgetNote}</p>
+              </fieldset>
+
+              <div className="mt-9">
+                <label htmlFor="message" className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.projectLabel}
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  required
+                  className="mt-4 w-full resize-none rounded-xl px-4 py-3 text-sm outline-none"
+                  style={{
+                    backgroundColor: "#070A14",
+                    border: "1px solid #16203a",
+                    transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "#3B82F6")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "#16203a")}
+                  placeholder={t.projectPlaceholder}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={sending || !formReady}
+                className="mt-9 inline-flex h-12 items-center rounded-full px-7 text-xs font-medium tracking-[0.14em] uppercase"
+                style={{
+                  backgroundColor: sending || !formReady ? "#1f2c48" : "#2563EB",
+                  color: sending || !formReady ? "#7d8aa5" : "#fff",
+                  cursor: sending || !formReady ? "not-allowed" : "pointer",
+                  transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                }}
+              >
+                {sending ? t.sending : t.submit}
+              </button>
+
+              {/*
+                LE FORMULAIRE N'EST PAS ENCORE RELIE.
+
+                Plutot que d'afficher un faux message de confirmation —
+                ce que faisait la version precedente — on le dit, et on
+                donne deux canaux qui fonctionnent vraiment.
+
+                Ce bloc disparait tout seul des que la cle est
+                renseignee dans src/config/forms.ts.
+              */}
+              {!formReady && (
+                <div
+                  className="mt-6 rounded-xl p-4"
+                  style={{
+                    backgroundColor: "rgba(148,163,184,.06)",
+                    border: "1px solid #2a3346",
+                  }}
+                >
+                  <p className="text-sm text-[#c2c6d2]">{t.notReadyTitle}</p>
+                  <p className="mt-2 text-[0.82rem] leading-relaxed text-[#8792ad]">
+                    {t.notReadyBefore}{" "}
+                    <a href={`mailto:${CONTACT.email}`} className="link-underline text-[#93C5FD]">
+                      {CONTACT.email}
+                    </a>{" "}
+                    {t.notReadyAfter}
+                  </p>
+                </div>
+              )}
+
+              {/* --- Resultat de l'envoi --- */}
+              {result && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="mt-6 rounded-xl p-4"
+                  style={{
+                    backgroundColor: result.ok ? "rgba(59,130,246,.1)" : "rgba(248,113,113,.08)",
+                    border: `1px solid ${result.ok ? "rgba(96,165,250,.3)" : "rgba(248,113,113,.3)"}`,
+                  }}
+                >
+                  <p className="text-sm" style={{ color: result.ok ? "#93C5FD" : "#fca5a5" }}>
+                    {resultMessage(result, locale)}
+                  </p>
+
+                  {/*
+                    En cas d'echec seulement : les canaux de secours.
+                    Un envoi qui echoue ne doit jamais etre un cul-de-sac.
+                  */}
+                  {!result.ok && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {hasWhatsapp && (
+                        <a
+                          href={whatsappUrl()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex h-9 items-center rounded-full px-4 text-[0.72rem] font-medium tracking-[0.1em] uppercase"
+                          style={{ border: "1px solid #2b4880", color: "#cddafc" }}
+                        >
+                          WhatsApp
+                        </a>
+                      )}
+                      <a
+                        href={`mailto:${CONTACT.email}`}
+                        className="inline-flex h-9 items-center rounded-full px-4 text-[0.72rem] font-medium tracking-[0.1em] uppercase"
+                        style={{ border: "1px solid #2b4880", color: "#cddafc" }}
+                      >
+                        {t.writeUs}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+            </form>
+          </Reveal>
+
+          {/* ---------------- Les voies directes ---------------- */}
+          <Reveal delay={100}>
+            <div className="space-y-9">
+              {/*
+                Le calendrier passe en tete : c'est la voie la plus
+                courte. Le bouton « Prendre rendez-vous » de la
+                navigation pointe ici (/contact#rendez-vous).
+              */}
+              <div id="rendez-vous" className="scroll-mt-32">
+                <BookingCalendar />
+              </div>
+
+              <div className="border-t border-hairline pt-8">
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.fastTrack}
+                </h2>
+                <div className="mt-5 flex flex-col gap-3">
+                  {hasWhatsapp && (
+                    <a
+                      href={whatsappUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full px-7 text-xs font-medium tracking-[0.14em] uppercase"
+                      style={{
+                        border: "1px solid #16203a",
+                        backgroundColor: "#0B1020",
+                        transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                      }}
+                    >
+                      <img
+                        src="/brand/platforms/whatsapp.svg"
+                        alt=""
+                        aria-hidden="true"
+                        width={16}
+                        height={16}
+                        style={{ height: 16, width: 16 }}
+                      />
+                      {t.whatsapp}
+                    </a>
+                  )}
+
+                  {hasPhone && (
+                    <a
+                      href={telUrl}
+                      className="inline-flex h-12 items-center justify-center rounded-full px-7 text-xs font-medium tracking-[0.14em] uppercase"
+                      style={{
+                        border: "1px solid #16203a",
+                        backgroundColor: "#0B1020",
+                        transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+                      }}
+                    >
+                      {phoneDisplay()}
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <div className="border-t border-hairline pt-8">
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.email}
+                </h2>
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="link-underline mt-4 inline-block text-sm"
+                >
+                  {CONTACT.email}
+                </a>
+              </div>
+
+              <div className="border-t border-hairline pt-8">
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.where}
+                </h2>
+                {/*
+                  « Nous travaillons principalement pour des entreprises
+                  francaises » contredisait la FAQ, la page A propos et les
+                  tarifs, qui parlent tous de dirigeants francophones
+                  installes au Maroc. Une seule version, desormais.
+                */}
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {t.base}
+                  <br />
+                  {t.audience}
+                </p>
+              </div>
+
+              <div className="border-t border-hairline pt-8">
+                <h2 className="eyebrow" style={{ color: "#60A5FA" }}>
+                  {t.delayTitle}
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.delay}</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type = "text",
+  required = true,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <div>
+      <label htmlFor={name} className="eyebrow" style={{ color: "#60A5FA" }}>
+        {label}
+      </label>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        required={required}
+        className="mt-3 h-11 w-full rounded-xl px-4 text-sm outline-none"
+        style={{
+          backgroundColor: "#070A14",
+          border: "1px solid #16203a",
+          transition: `border-color ${MOTION.respond}ms ${EASE_RESPOND}`,
+        }}
+        onFocus={(e) => (e.currentTarget.style.borderColor = "#3B82F6")}
+        onBlur={(e) => (e.currentTarget.style.borderColor = "#16203a")}
+      />
+    </div>
+  );
+}

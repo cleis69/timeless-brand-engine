@@ -21,6 +21,9 @@ export type Landing = {
   name: string;
   /** Une phrase, reprise dans les cartes et dans llms.txt. */
   text: string;
+  /** Les memes, en anglais (pied de page de la version /en). */
+  nameEn: string;
+  textEn: string;
   /** Pages de service qui y renvoient. */
   services: ServiceSlug[];
   /** Pages de secteur qui y renvoient. */
@@ -32,6 +35,9 @@ export const LANDINGS: Landing[] = [
     path: "/agence-video-publicitaire-meta-ads-marrakech",
     name: "Vidéo publicitaire et Meta Ads",
     text: "Une seule équipe écrit, tourne et monte vos vidéos publicitaires, puis les diffuse sur Facebook et Instagram, pilotées au coût par lead.",
+    nameEn: "Video ads and Meta Ads",
+    textEn:
+      "One team writes, shoots and edits your video ads, then runs them on Facebook and Instagram, managed on cost per lead.",
     services: ["production-video-photo", "meta-ads"],
     sectors: ["beaute-bien-etre", "restauration-hospitality"],
   },
@@ -39,6 +45,9 @@ export const LANDINGS: Landing[] = [
     path: "/generation-leads-immobiliers-marrakech",
     name: "Leads immobiliers",
     text: "Google Search, Meta Ads, landing page et CRM : un dispositif complet pour recevoir des demandes d'acheteurs qualifiées, au Maroc et à l'étranger.",
+    nameEn: "Real estate leads",
+    textEn:
+      "Google Search, Meta Ads, a landing page and a CRM: a complete set-up for receiving enquiries from qualified buyers, in Morocco and abroad.",
     services: ["generation-de-leads", "google-ads"],
     sectors: ["immobilier"],
   },
@@ -46,6 +55,9 @@ export const LANDINGS: Landing[] = [
     path: "/marketing-hotels-riads-marrakech",
     name: "Hôtels et riads",
     text: "Vidéos des lieux, site avec réservation intégrée et publicité pour obtenir des réservations en direct, comme pour Le Petit Hôtel du Flouka.",
+    nameEn: "Hotels and riads",
+    textEn:
+      "Videos of the property, a website with built-in booking, and advertising to win direct bookings, as for Le Petit Hôtel du Flouka.",
     services: ["creation-site-web"],
     sectors: ["restauration-hospitality"],
   },

@@ -24,6 +24,7 @@
  */
 
 import { FORM } from "./forms";
+import type { Locale } from "@/lib/i18n";
 
 export const BOOKING = {
   /** Point d'envoi, servi par src/server.ts. */
@@ -132,22 +133,28 @@ export const isBookable = (date: string, time: string, now = nowInZone()) =>
  *  Libelles
  * ------------------------------------------------------------------ */
 
-const fmt = (date: string, opts: Intl.DateTimeFormatOptions) => {
+/* Anglais : format britannique, « Thursday 24 September ». */
+const INTL: Record<Locale, string> = { fr: "fr-FR", en: "en-GB" };
+
+const fmt = (date: string, opts: Intl.DateTimeFormatOptions, locale: Locale = "fr") => {
   const [y = 0, m = 1, d = 1] = date.split("-").map(Number);
-  return new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", ...opts }).format(
+  return new Intl.DateTimeFormat(INTL[locale], { timeZone: "UTC", ...opts }).format(
     new Date(Date.UTC(y, m - 1, d, 12)),
   );
 };
 
 /** « jeudi 24 septembre » */
-export const dayLabel = (date: string) =>
-  fmt(date, { weekday: "long", day: "numeric", month: "long" });
+export const dayLabel = (date: string, locale: Locale = "fr") =>
+  fmt(date, { weekday: "long", day: "numeric", month: "long" }, locale);
 
 /** « septembre 2026 » */
-export const monthLabel = (date: string) => fmt(date, { month: "long", year: "numeric" });
+export const monthLabel = (date: string, locale: Locale = "fr") =>
+  fmt(date, { month: "long", year: "numeric" }, locale);
 
 /** « 15:00 » -> « 15 h », « 14:30 » -> « 14 h 30 » */
-export const timeLabel = (time: string) => {
+export const timeLabel = (time: string, locale: Locale = "fr") => {
+  /* Anglais : l'horloge de 24 heures, « 15:00 », comme au Royaume-Uni. */
+  if (locale === "en") return time;
   const [h, m] = time.split(":");
   return m === "00" ? `${Number(h)} h` : `${Number(h)} h ${m}`;
 };
@@ -156,7 +163,7 @@ export const timeLabel = (time: string) => {
  * L'heure du creneau chez le visiteur, s'il n'est pas a l'heure du Maroc.
  * « 16 h » pour un prospect a Paris en ete, `null` a Casablanca.
  */
-export function visitorTimeLabel(date: string, time: string) {
+export function visitorTimeLabel(date: string, time: string, locale: Locale = "fr") {
   const [y = 0, m = 1, d = 1] = date.split("-").map(Number);
   const target = toMinutes(time);
   // Premiere estimation en UTC, corrigee du decalage du Maroc ce jour-la.
@@ -170,8 +177,8 @@ export function visitorTimeLabel(date: string, time: string) {
     hourCycle: "h23",
   }).format(instant);
   const [lh = "0", lm = "00"] = local.split(":");
-  const label = timeLabel(`${lh.padStart(2, "0")}:${lm}`);
-  return label === timeLabel(time) ? null : label;
+  const label = timeLabel(`${lh.padStart(2, "0")}:${lm}`, locale);
+  return label === timeLabel(time, locale) ? null : label;
 }
 
 /* ------------------------------------------------------------------
@@ -261,7 +268,11 @@ export async function book(
   time: string,
   f: BookingFields,
   honeypot: string,
+  /* Langue des messages montres au visiteur. L'e-mail d'alerte envoye a
+     l'agence reste en francais. */
+  locale: Locale = "fr",
 ): Promise<BookingResult> {
+  const en = locale === "en";
   if (honeypot) return { ok: true };
 
   let res: Response;
@@ -276,14 +287,21 @@ export async function book(
   } catch {
     return {
       ok: false,
-      message:
-        "La connexion a échoué. Vérifiez votre réseau et réessayez : vos réponses sont toujours là.",
+      message: en
+        ? "The connection failed. Check your network and try again: your answers are still here."
+        : "La connexion a échoué. Vérifiez votre réseau et réessayez : vos réponses sont toujours là.",
     };
   }
   if (!json.ok) {
     return {
       ok: false,
-      message: json.error ?? "La réservation a échoué. Réessayez, ou écrivez-nous sur WhatsApp.",
+      /* Le serveur repond en francais : en anglais, on affiche notre
+         propre message. */
+      message: en
+        ? json.taken
+          ? "This slot has just been taken. Please choose another one."
+          : "The booking failed. Try again, or message us on WhatsApp."
+        : (json.error ?? "La réservation a échoué. Réessayez, ou écrivez-nous sur WhatsApp."),
       taken: json.taken === true,
     };
   }

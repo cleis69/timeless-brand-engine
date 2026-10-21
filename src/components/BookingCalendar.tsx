@@ -18,6 +18,7 @@ import {
   visitorTimeLabel,
   weekday,
 } from "@/config/booking";
+import { useLocale, type Locale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — le calendrier de reservation, dans la page.
@@ -50,12 +51,101 @@ import {
  * visiteurs qui ne descendront jamais jusque-la, n'aurait aucun sens.
  */
 
-const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
+/* Tous les textes du calendrier, dans les deux langues. Le francais est
+   celui d'origine, mot pour mot. */
+const T = {
+  fr: {
+    weekdays: ["L", "M", "M", "J", "V", "S", "D"],
+    title: "Réserver un appel",
+    unavailable: "La réservation en ligne est momentanément indisponible.",
+    waBook: "Bonjour UltraVision, je souhaite réserver un appel.",
+    waBookCta: "Choisir un créneau sur WhatsApp",
+    at: "à",
+    details: (min: number, phone: string) =>
+      `Appel de ${min} minutes avec UltraVision Agency, au ${phone}.`,
+    waMove: "Bonjour UltraVision, je dois déplacer notre appel.",
+    hitch: "Un empêchement ?",
+    eventTitle: "Appel avec UltraVision Agency",
+    icsName: "appel-ultra-vision.ics",
+    booked: "C'est réservé.",
+    moroccoTime: "heure du Maroc",
+    yourTime: (t: string) => ` (${t} chez vous)`,
+    weCall: (phone: string) => `Nous vous appelons au ${phone}.`,
+    google: "Ajouter à Google Agenda",
+    notNotified:
+      "Votre créneau est bien enregistré, mais notre alerte n'a pas pu partir. Pour être sûr que nous vous appelons, confirmez-le en un clic :",
+    waConfirm: (name: string, label: string, phone: string) =>
+      `Bonjour UltraVision, c'est ${name}. Je confirme mon appel du ${label} (heure du Maroc), au ${phone}.`,
+    confirmCta: "Confirmer sur WhatsApp",
+    moveCta: "Un empêchement ? Prévenez-nous sur WhatsApp",
+    prev: "Mois précédent",
+    next: "Mois suivant",
+    days: "Jours disponibles",
+    dayAria: (n: number) =>
+      n ? `, ${n} créneau${n > 1 ? "x" : ""} libre${n > 1 ? "s" : ""}` : ", complet ou fermé",
+    hours: "Heures disponibles",
+    taken: ", déjà réservé",
+    local: (t: string) => `Soit ${t} à votre heure locale.`,
+    full: "Tous les créneaux des trois prochaines semaines sont pris. Écrivez-nous sur WhatsApp, nous trouverons un moment.",
+    name: "Nom et prénom",
+    phone: "Téléphone / WhatsApp",
+    company: "Entreprise",
+    email: "E-mail",
+    message: "Votre projet en une phrase",
+    sending: "Réservation…",
+    submit: (day: string, time: string) => `Réserver ${day} à ${time}`,
+    optional: "(facultatif)",
+  },
+  en: {
+    weekdays: ["M", "T", "W", "T", "F", "S", "S"],
+    title: "Book a call",
+    unavailable: "Online booking is temporarily unavailable.",
+    waBook: "Hello UltraVision, I'd like to book a call.",
+    waBookCta: "Pick a slot on WhatsApp",
+    at: "at",
+    details: (min: number, phone: string) =>
+      `${min}-minute call with UltraVision Agency, on ${phone}.`,
+    waMove: "Hello UltraVision, I need to move our call.",
+    hitch: "Can't make it?",
+    eventTitle: "Call with UltraVision Agency",
+    icsName: "call-ultra-vision.ics",
+    booked: "You're booked.",
+    moroccoTime: "Morocco time",
+    yourTime: (t: string) => ` (${t} your time)`,
+    weCall: (phone: string) => `We will call you on ${phone}.`,
+    google: "Add to Google Calendar",
+    notNotified:
+      "Your slot is saved, but our alert could not be sent. To be sure we call you, confirm it in one click:",
+    waConfirm: (name: string, label: string, phone: string) =>
+      `Hello UltraVision, this is ${name}. I confirm my call on ${label} (Morocco time), on ${phone}.`,
+    confirmCta: "Confirm on WhatsApp",
+    moveCta: "Can't make it? Let us know on WhatsApp",
+    prev: "Previous month",
+    next: "Next month",
+    days: "Available days",
+    dayAria: (n: number) =>
+      n ? `, ${n} free slot${n > 1 ? "s" : ""}` : ", fully booked or closed",
+    hours: "Available times",
+    taken: ", already booked",
+    local: (t: string) => `That is ${t} your local time.`,
+    full: "Every slot for the next three weeks is taken. Message us on WhatsApp and we will find a time.",
+    name: "Full name",
+    phone: "Phone / WhatsApp",
+    company: "Company",
+    email: "Email",
+    message: "Your project in one sentence",
+    sending: "Booking…",
+    submit: (day: string, time: string) => `Book ${day} at ${time}`,
+    optional: "(optional)",
+  },
+} satisfies Record<Locale, unknown>;
 
 type Now = ReturnType<typeof nowInZone>;
 type Done = { date: string; time: string; phone: string; name: string; notified: boolean };
 
 export function BookingCalendar() {
+  const locale = useLocale();
+  const t = T[locale];
   const rootRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [now, setNow] = useState<Now | null>(null);
@@ -136,6 +226,7 @@ export function BookingCalendar() {
         message: get("message"),
       },
       get(FORM.honeypot),
+      locale,
     );
     setSending(false);
     if (r.ok) {
@@ -169,19 +260,17 @@ export function BookingCalendar() {
     return (
       <div ref={rootRef} className="rounded-3xl p-7 sm:p-8" style={card}>
         <p className="eyebrow" style={{ color: "#60A5FA" }}>
-          Réserver un appel
+          {t.title}
         </p>
-        <p className="mt-4 text-sm leading-relaxed text-[#c2c6d2]">
-          La réservation en ligne est momentanément indisponible.
-        </p>
+        <p className="mt-4 text-sm leading-relaxed text-[#c2c6d2]">{t.unavailable}</p>
         {hasWhatsapp && (
           <a
-            href={whatsappUrl("Bonjour UltraVision, je souhaite réserver un appel.")}
+            href={whatsappUrl(t.waBook)}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 inline-flex h-12 items-center rounded-full bg-[#2563EB] px-7 text-xs font-medium tracking-[0.14em] text-white uppercase"
           >
-            Choisir un créneau sur WhatsApp
+            {t.waBookCta}
           </a>
         )}
       </div>
@@ -192,17 +281,15 @@ export function BookingCalendar() {
    *  C'est reserve.
    * --------------------------------------------------------------- */
   if (done) {
-    const label = `${dayLabel(done.date)} à ${timeLabel(done.time)}`;
+    const label = `${dayLabel(done.date, locale)} ${t.at} ${timeLabel(done.time, locale)}`;
     const when = label.charAt(0).toUpperCase() + label.slice(1);
-    const details = `Appel de ${BOOKING.durationMin} minutes avec UltraVision Agency, au ${done.phone}.${
-      hasWhatsapp
-        ? ` Un empêchement ? ${whatsappUrl("Bonjour UltraVision, je dois déplacer notre appel.")}`
-        : ""
+    const details = `${t.details(BOOKING.durationMin, done.phone)}${
+      hasWhatsapp ? ` ${t.hitch} ${whatsappUrl(t.waMove)}` : ""
     }`;
     const ics = `data:text/calendar;charset=utf-8,${encodeURIComponent(
-      icsFile(done.date, done.time, "Appel avec UltraVision Agency", details),
+      icsFile(done.date, done.time, t.eventTitle, details),
     )}`;
-    const elsewhere = visitorTimeLabel(done.date, done.time);
+    const elsewhere = visitorTimeLabel(done.date, done.time, locale);
     return (
       <div
         ref={rootRef}
@@ -228,23 +315,23 @@ export function BookingCalendar() {
         </span>
         <style>{`@keyframes uv-cal-pop { from { transform: scale(.6); opacity: 0 } to { transform: none; opacity: 1 } }
           @media (prefers-reduced-motion: reduce) { [style*="uv-cal-pop"] { animation: none !important } }`}</style>
-        <h3 className="display mt-5 text-2xl text-foreground">C&apos;est réservé.</h3>
+        <h3 className="display mt-5 text-2xl text-foreground">{t.booked}</h3>
         <p className="mt-3 text-sm leading-relaxed text-[#c2c6d2]">
-          <span className="text-foreground">{when}</span>, heure du Maroc
-          {elsewhere ? ` (${elsewhere} chez vous)` : ""}. Nous vous appelons au {done.phone}.
+          <span className="text-foreground">{when}</span>, {t.moroccoTime}
+          {elsewhere ? t.yourTime(elsewhere) : ""}. {t.weCall(done.phone)}
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           <a
-            href={googleCalendarUrl(done.date, done.time, "Appel avec UltraVision Agency", details)}
+            href={googleCalendarUrl(done.date, done.time, t.eventTitle, details)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-10 items-center rounded-full bg-foreground px-5 text-[0.7rem] font-medium tracking-[0.12em] text-background uppercase"
           >
-            Ajouter à Google Agenda
+            {t.google}
           </a>
           <a
             href={ics}
-            download="appel-ultra-vision.ics"
+            download={t.icsName}
             className="inline-flex h-10 items-center rounded-full px-5 text-[0.7rem] font-medium tracking-[0.12em] uppercase"
             style={{ border: "1px solid #2b4880", color: "#cddafc" }}
           >
@@ -256,30 +343,25 @@ export function BookingCalendar() {
             className="mt-6 rounded-2xl p-4 text-sm leading-relaxed text-[#c2c6d2]"
             style={{ border: "1px solid #2b4880", backgroundColor: "rgba(59,130,246,.08)" }}
           >
-            <p>
-              Votre créneau est bien enregistré, mais notre alerte n&apos;a pas pu partir. Pour être
-              sûr que nous vous appelons, confirmez-le en un clic :
-            </p>
+            <p>{t.notNotified}</p>
             <a
-              href={whatsappUrl(
-                `Bonjour UltraVision, c'est ${done.name}. Je confirme mon appel du ${label} (heure du Maroc), au ${done.phone}.`,
-              )}
+              href={whatsappUrl(t.waConfirm(done.name, label, done.phone))}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 inline-flex h-10 items-center rounded-full bg-foreground px-5 text-[0.7rem] font-medium tracking-[0.12em] text-background uppercase"
             >
-              Confirmer sur WhatsApp
+              {t.confirmCta}
             </a>
           </div>
         )}
         {hasWhatsapp && (
           <a
-            href={whatsappUrl("Bonjour UltraVision, je dois déplacer notre appel.")}
+            href={whatsappUrl(t.waMove)}
             target="_blank"
             rel="noopener noreferrer"
             className="link-underline mt-6 inline-block text-[0.8rem] text-[#93C5FD]"
           >
-            Un empêchement ? Prévenez-nous sur WhatsApp
+            {t.moveCta}
           </a>
         )}
       </div>
@@ -309,35 +391,35 @@ export function BookingCalendar() {
   }
 
   const dayTimes = day && now ? openTimes(day, now) : [];
-  const elsewhere = day && time ? visitorTimeLabel(day, time) : null;
+  const elsewhere = day && time ? visitorTimeLabel(day, time, locale) : null;
 
   return (
     <div ref={rootRef} className="rounded-3xl p-6 sm:p-8" style={card}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="eyebrow whitespace-nowrap" style={{ color: "#60A5FA" }}>
-          Réserver un appel
+          {t.title}
         </p>
         <p className="text-[0.7rem] whitespace-nowrap text-[#8792ad]">
-          {BOOKING.durationMin} min · heure du Maroc
+          {BOOKING.durationMin} min · {t.moroccoTime}
         </p>
       </div>
 
       {/* ---------------- Mois ---------------- */}
       <div className="mt-6 flex items-center justify-between">
         <p className="display text-lg text-foreground first-letter:uppercase" aria-live="polite">
-          {shownMonth ? monthLabel(shownMonth) : " "}
+          {shownMonth ? monthLabel(shownMonth, locale) : " "}
         </p>
         <div className="flex gap-1">
           {[
             {
               n: -1,
-              label: "Mois précédent",
+              label: t.prev,
               path: "M12 4l-6 6 6 6",
               off: !shownMonth || shownMonth <= (firstMonth ?? ""),
             },
             {
               n: 1,
-              label: "Mois suivant",
+              label: t.next,
               path: "M8 4l6 6-6 6",
               off: !shownMonth || shownMonth >= (lastMonth ?? ""),
             },
@@ -371,9 +453,9 @@ export function BookingCalendar() {
         /* « group » et non « grid » : le role grid exige des lignes et des
            cellules ARIA, que ces boutons ne sont pas. Lighthouse le signalait. */
         role="group"
-        aria-label="Jours disponibles"
+        aria-label={t.days}
       >
-        {WEEKDAYS.map((w, i) => (
+        {t.weekdays.map((w, i) => (
           <span
             key={i}
             aria-hidden="true"
@@ -398,7 +480,7 @@ export function BookingCalendar() {
                 setError(null);
               }}
               aria-pressed={on}
-              aria-label={`${dayLabel(d)}${n ? `, ${n} créneau${n > 1 ? "x" : ""} libre${n > 1 ? "s" : ""}` : ", complet ou fermé"}`}
+              aria-label={`${dayLabel(d, locale)}${t.dayAria(n)}`}
               className="relative flex aspect-square items-center justify-center rounded-xl text-sm tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-default"
               style={{
                 backgroundColor: on ? "#F5F5F3" : n ? "rgba(255,255,255,.05)" : "transparent",
@@ -417,18 +499,20 @@ export function BookingCalendar() {
       {/* ---------------- Heures ---------------- */}
       {day && (
         <div className="mt-6 border-t border-white/5 pt-5">
-          <p className="text-[0.8rem] text-[#c3cadb] first-letter:uppercase">{dayLabel(day)}</p>
-          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Heures disponibles">
-            {dayTimes.map((t) => {
-              const gone = taken.has(slotId(day, t));
-              const on = t === time;
+          <p className="text-[0.8rem] text-[#c3cadb] first-letter:uppercase">
+            {dayLabel(day, locale)}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label={t.hours}>
+            {dayTimes.map((slot) => {
+              const gone = taken.has(slotId(day, slot));
+              const on = slot === time;
               return (
                 <button
-                  key={t}
+                  key={slot}
                   type="button"
                   disabled={gone}
                   onClick={() => {
-                    setTime(t);
+                    setTime(slot);
                     setError(null);
                     // Le formulaire apparait sous les heures : on l'amene a portee de pouce.
                     requestAnimationFrame(() =>
@@ -436,30 +520,21 @@ export function BookingCalendar() {
                     );
                   }}
                   aria-pressed={on}
-                  aria-label={`${timeLabel(t)}${gone ? ", déjà réservé" : ""}`}
+                  aria-label={`${timeLabel(slot, locale)}${gone ? t.taken : ""}`}
                   className="h-10 min-w-[4.5rem] rounded-full border px-4 text-[0.8rem] tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:line-through disabled:opacity-35"
                   style={chip(on)}
                 >
-                  {timeLabel(t)}
+                  {timeLabel(slot, locale)}
                 </button>
               );
             })}
           </div>
-          {elsewhere && (
-            <p className="mt-3 text-[0.72rem] text-[#8792ad]">
-              Soit {elsewhere} à votre heure locale.
-            </p>
-          )}
+          {elsewhere && <p className="mt-3 text-[0.72rem] text-[#8792ad]">{t.local(elsewhere)}</p>}
         </div>
       )}
 
       {!now && <div className="mt-4 h-[260px]" aria-hidden="true" />}
-      {now && !firstFree && ready && (
-        <p className="mt-6 text-sm text-[#8792ad]">
-          Tous les créneaux des trois prochaines semaines sont pris. Écrivez-nous sur WhatsApp, nous
-          trouverons un moment.
-        </p>
-      )}
+      {now && !firstFree && ready && <p className="mt-6 text-sm text-[#8792ad]">{t.full}</p>}
 
       {/* ---------------- Coordonnees ---------------- */}
       {day && time && (
@@ -480,19 +555,31 @@ export function BookingCalendar() {
             style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
           />
           <div className="grid gap-3 sm:grid-cols-2">
-            <Input name="name" label="Nom et prénom" autoComplete="name" required />
+            <Input name="name" label={t.name} optional={t.optional} autoComplete="name" required />
             <Input
               name="phone"
-              label="Téléphone / WhatsApp"
+              label={t.phone}
+              optional={t.optional}
               type="tel"
               autoComplete="tel"
               required
             />
-            <Input name="company" label="Entreprise" autoComplete="organization" />
-            <Input name="email" label="E-mail" type="email" autoComplete="email" />
+            <Input
+              name="company"
+              label={t.company}
+              optional={t.optional}
+              autoComplete="organization"
+            />
+            <Input
+              name="email"
+              label={t.email}
+              optional={t.optional}
+              type="email"
+              autoComplete="email"
+            />
           </div>
           <div className="mt-3">
-            <Input name="message" label="Votre projet en une phrase" />
+            <Input name="message" label={t.message} optional={t.optional} />
           </div>
 
           <button
@@ -506,8 +593,11 @@ export function BookingCalendar() {
             }}
           >
             {sending
-              ? "Réservation…"
-              : `Réserver ${dayLabel(day).split(" ").slice(0, 2).join(" ")} à ${timeLabel(time)}`}
+              ? t.sending
+              : t.submit(
+                  dayLabel(day, locale).split(" ").slice(0, 2).join(" "),
+                  timeLabel(time, locale),
+                )}
           </button>
         </form>
       )}
@@ -534,9 +624,11 @@ function Input({
   type = "text",
   required = false,
   autoComplete,
+  optional = "(facultatif)",
 }: {
   name: string;
   label: string;
+  optional?: string;
   type?: string;
   required?: boolean;
   autoComplete?: string;
@@ -546,7 +638,7 @@ function Input({
       <span className="text-[0.62rem] tracking-[0.14em] uppercase text-[#8792ad]">
         {label}
         {!required && (
-          <span className="ml-1 normal-case tracking-normal text-[#5f6b85]">(facultatif)</span>
+          <span className="ml-1 normal-case tracking-normal text-[#5f6b85]">{optional}</span>
         )}
       </span>
       <input

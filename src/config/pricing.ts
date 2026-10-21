@@ -181,6 +181,19 @@ export const dirham = (eur: number) => {
   return `${v.toLocaleString("fr-FR")} MAD`;
 };
 
+/**
+ * Les memes montants, ecrits selon la langue de la page.
+ * Francais : « 490 € », « 5 400 MAD ». Anglais : « €490 », « MAD 5,400 ».
+ */
+export const formatEuro = (n: number, locale: "fr" | "en" = "fr") =>
+  locale === "en" ? `€${n.toLocaleString("en-GB")}` : euro(n);
+
+export const formatDirham = (eur: number, locale: "fr" | "en" = "fr") => {
+  if (locale === "fr") return dirham(eur);
+  const v = Math.round((eur * MAD.rate) / 100) * 100;
+  return `MAD ${v.toLocaleString("en-GB")}`;
+};
+
 /* ==========================================================================
  *  LES TROIS FORMULES
  * ========================================================================== */

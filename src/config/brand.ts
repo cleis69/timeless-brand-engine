@@ -138,7 +138,21 @@ export const BRAND = {
   sameAs: SOCIAL.map((s) => s.url) as string[],
   founder: { name: "Cleis", jobTitle: "Fondateur" },
   /** Langue de travail affichee sur le site. */
-  workingLanguage: "français",
+  workingLanguage: "français et anglais",
+  /**
+   * Les memes phrases en anglais, pour les pages /en et leurs donnees
+   * structurees. Meme regle que la version francaise : vraies hors
+   * contexte.
+   */
+  en: {
+    definition:
+      "UltraVision Agency is a Creative Growth Agency — in other words, a digital marketing agency — based in Marrakech, Morocco.",
+    summary:
+      "It brings together, in a single team, branding, video and photo production, advertising on Meta, Google and TikTok, websites and conversion tools: CRM, artificial intelligence and automation.",
+    founderJobTitle: "Founder",
+    website:
+      "Creative Growth Agency in Marrakech: branding, video production, advertising, websites and automation.",
+  },
 } as const;
 
 /** Identifiants stables du graphe de donnees structurees. */

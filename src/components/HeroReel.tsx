@@ -3,6 +3,8 @@ import { EASE_PAGE, LOOP } from "@/config/motion";
 import { WORK_ITEMS, shownStats, type WorkItem } from "@/components/work/work.data";
 import { WorkPlayer } from "@/components/work/WorkPlayer";
 import { FloatingPlatforms } from "@/components/FloatingPlatforms";
+import { workFor } from "@/content/localized";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — nos publicites, au centre de l'iris.
@@ -46,7 +48,13 @@ import { FloatingPlatforms } from "@/components/FloatingPlatforms";
  * L'ordre de passage. Deux secteurs differents se suivent toujours,
  * et le film le plus vu ouvre la sequence.
  */
-const REEL = ["africa-beauty", "residence-neuve", "sculpt-body-marrakech", "institut-beaute", "loisirs"];
+const REEL = [
+  "africa-beauty",
+  "residence-neuve",
+  "sculpt-body-marrakech",
+  "institut-beaute",
+  "loisirs",
+];
 
 /** Duree d'affichage quand la video ne peut pas jouer (economie, refus). */
 const STILL_MS = 6000;
@@ -70,7 +78,10 @@ const PLATFORM_SLOTS = [
 ];
 
 export function HeroReel() {
-  const n = ITEMS.length;
+  const locale = useLocale();
+  const en = locale === "en";
+  const items = locale === "fr" ? ITEMS : ITEMS.map((w) => workFor(w, locale));
+  const n = items.length;
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const [canPlay, setCanPlay] = useState(false);
@@ -133,7 +144,7 @@ export function HeroReel() {
     return d;
   };
 
-  const front = ITEMS[current];
+  const front = items[current];
   const stat = front ? shownStats(front)[0] : undefined;
 
   return (
@@ -180,7 +191,7 @@ export function HeroReel() {
         // boutons en dessous.
         className="relative z-[1] flex aspect-[25/23] items-center justify-center sm:aspect-[6/5]"
       >
-        {ITEMS.map((w, i) => {
+        {items.map((w, i) => {
           const d = offset(i);
           const isFront = d === 0;
           const hidden = Math.abs(d) > 1;
@@ -240,7 +251,7 @@ export function HeroReel() {
                     setProgress(0);
                     setCurrent(i);
                   }}
-                  aria-label={`Voir ${w.title}`}
+                  aria-label={`${en ? "Watch" : "Voir"} ${w.title}`}
                   className="absolute inset-0 outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 />
               )}
@@ -260,7 +271,7 @@ export function HeroReel() {
               et combien de films il reste a voir.
             */}
             <div className="absolute inset-x-3 top-3 flex gap-1" aria-hidden="true">
-              {ITEMS.map((w, i) => (
+              {items.map((w, i) => (
                 <span
                   key={w.slug}
                   className="h-[2px] flex-1 overflow-hidden rounded-full bg-white/25"
@@ -297,7 +308,7 @@ export function HeroReel() {
                 <svg width="8" height="9" viewBox="0 0 20 22" fill="#fff" aria-hidden="true">
                   <path d="M0 1.2C0 .3 1 -.3 1.8.2l17 9.8c.8.5.8 1.6 0 2L1.8 21.8C1 22.3 0 21.7 0 20.8V1.2Z" />
                 </svg>
-                Avec le son
+                {en ? "With sound" : "Avec le son"}
               </button>
             </div>
           </div>

@@ -4,12 +4,19 @@ import { EASE_PAGE, EASE_RESPOND, MOTION } from "@/config/motion";
 import {
   AGE_RANGES,
   TALENT_CATEGORIES,
-  categoryLabel,
   talentAge,
   type Talent,
   type TalentCategory,
 } from "@/content/talents";
-import { TalentSheet } from "./TalentSheet";
+import { localePath, useLocale } from "@/lib/i18n";
+import { CATEGORY_EN, TalentSheet, categoryLabelFor } from "./TalentSheet";
+
+/* Les tranches d'age, en anglais. Identifiants : src/content/talents.ts. */
+const AGE_RANGES_EN: Record<(typeof AGE_RANGES)[number]["id"], string> = {
+  "18-24": "Aged 18–24",
+  "25-34": "Aged 25–34",
+  "35+": "35 and over",
+};
 
 /**
  * ULTRA VISION — la grille des talents, sur la page /casting.
@@ -48,6 +55,8 @@ type Props = {
 };
 
 export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
+  const locale = useLocale();
+  const en = locale === "en";
   const [category, setCategory] = useState<TalentCategory | null>(null);
   const [range, setRange] = useState<(typeof AGE_RANGES)[number]["id"] | null>(null);
 
@@ -103,7 +112,11 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
 
       {/* ---------------- Les filtres ---------------- */}
       <div className="flex flex-col gap-3">
-        <div role="group" aria-label="Filtrer par profil" className="flex flex-wrap gap-2">
+        <div
+          role="group"
+          aria-label={en ? "Filter by profile" : "Filtrer par profil"}
+          className="flex flex-wrap gap-2"
+        >
           <button
             type="button"
             onClick={() => setCategory(null)}
@@ -111,7 +124,7 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
             className="rounded-full border px-4 py-2 text-xs"
             style={chip(category === null)}
           >
-            Tous <span className="opacity-60">{talents.length}</span>
+            {en ? "All" : "Tous"} <span className="opacity-60">{talents.length}</span>
           </button>
           {TALENT_CATEGORIES.filter((c) => counts.get(c.id)).map((c) => (
             <button
@@ -122,11 +135,16 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
               className="rounded-full border px-4 py-2 text-xs"
               style={chip(category === c.id)}
             >
-              {c.label} <span className="opacity-60">{counts.get(c.id)}</span>
+              {en ? CATEGORY_EN[c.id].label : c.label}{" "}
+              <span className="opacity-60">{counts.get(c.id)}</span>
             </button>
           ))}
         </div>
-        <div role="group" aria-label="Filtrer par âge" className="flex flex-wrap gap-2">
+        <div
+          role="group"
+          aria-label={en ? "Filter by age" : "Filtrer par âge"}
+          className="flex flex-wrap gap-2"
+        >
           {AGE_RANGES.map((r) => (
             <button
               type="button"
@@ -136,14 +154,15 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
               className="rounded-full border px-3.5 py-1.5 text-[0.7rem]"
               style={chip(range === r.id)}
             >
-              {r.label}
+              {en ? AGE_RANGES_EN[r.id] : r.label}
             </button>
           ))}
         </div>
       </div>
 
       <p className="mt-5 text-[0.74rem] text-[#797976]" aria-live="polite">
-        {shown.length} profil{shown.length > 1 ? "s" : ""}
+        {shown.length} {en ? "profile" : "profil"}
+        {shown.length > 1 ? "s" : ""}
       </p>
 
       {/* ---------------- La grille ---------------- */}
@@ -167,7 +186,9 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
           className="mt-4 rounded-xl p-6 text-sm text-[#8792ad]"
           style={{ border: "1px dashed #2a3346" }}
         >
-          Aucun profil ne correspond à ces deux filtres.{" "}
+          {en
+            ? "No profile matches both filters."
+            : "Aucun profil ne correspond à ces deux filtres."}{" "}
           <button
             type="button"
             onClick={() => {
@@ -176,7 +197,7 @@ export function TalentBoard({ talents, selected, onOpen, onClose }: Props) {
             }}
             className="link-underline text-[#93C5FD]"
           >
-            Tout afficher
+            {en ? "Show all" : "Tout afficher"}
           </button>
         </div>
       )}
@@ -195,14 +216,16 @@ function TalentCard({
   eager: boolean;
   onOpen?: (() => void) | undefined;
 }) {
+  const locale = useLocale();
+  const en = locale === "en";
   const [cover, alt] = t.photos;
   return (
     <Link
-      to="/casting"
+      to={localePath("/casting", locale)}
       search={{ profil: t.slug }}
       resetScroll={false}
       onClick={onOpen}
-      aria-label={`Voir le profil de ${t.name}`}
+      aria-label={en ? `View ${t.name}'s profile` : `Voir le profil de ${t.name}`}
       className="group relative block aspect-[3/4] overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={{
         borderRadius: 17,
@@ -243,11 +266,11 @@ function TalentCard({
 
       <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-4">
         <p className="text-[0.54rem] tracking-[0.16em] uppercase text-accent-hover">
-          {categoryLabel(t.categories[0])}
+          {categoryLabelFor(t.categories[0], locale)}
         </p>
         <h3 className="display mt-1 truncate text-[1rem] text-foreground">{t.name}</h3>
         <p className="mt-0.5 truncate text-[0.7rem] text-[#a9a9a5]">
-          {talentAge(t)} ans · {t.city}
+          {en ? `Age ${talentAge(t)}` : `${talentAge(t)} ans`} · {t.city}
         </p>
       </div>
     </Link>

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { localePath, useLocale } from "@/lib/i18n";
 import { MaskReveal, Reveal } from "./Reveal";
 import { LOOP } from "@/config/motion";
 
@@ -64,6 +65,8 @@ export function PageHero({
     le titre s'affiche entier, sans couleur. Une mise en forme ratee
     doit degrader vers du texte correct, jamais vers du texte casse.
   */
+  const locale = useLocale();
+  const en = locale === "en";
   const at = accent ? title.indexOf(accent) : -1;
   const before = at >= 0 ? title.slice(0, at) : title;
   const after = at >= 0 ? title.slice(at + (accent?.length ?? 0)) : "";
@@ -124,9 +127,15 @@ export function PageHero({
         */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Reveal immediate>
-            <nav aria-label="Fil d'Ariane" className="mt-5 mb-6 text-[0.72rem] text-[#7b88a6] md:mt-0">
-              <Link to="/" className="transition-colors hover:text-foreground">
-                Accueil
+            <nav
+              aria-label={en ? "Breadcrumb" : "Fil d'Ariane"}
+              className="mt-5 mb-6 text-[0.72rem] text-[#7b88a6] md:mt-0"
+            >
+              <Link
+                to={localePath("/", locale)}
+                className="transition-colors hover:text-foreground"
+              >
+                {en ? "Home" : "Accueil"}
               </Link>
               {breadcrumbs.map((c, i) => (
                 <span key={c.path}>
@@ -138,7 +147,10 @@ export function PageHero({
                       {c.name}
                     </span>
                   ) : (
-                    <Link to={c.path} className="transition-colors hover:text-foreground">
+                    <Link
+                      to={localePath(c.path, locale)}
+                      className="transition-colors hover:text-foreground"
+                    >
                       {c.name}
                     </Link>
                   )}
@@ -167,8 +179,7 @@ export function PageHero({
             {at >= 0 && (
               <span
                 style={{
-                  background:
-                    "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
+                  background: "linear-gradient(96deg, #60A5FA 0%, #3B82F6 48%, #1D4ED8 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",

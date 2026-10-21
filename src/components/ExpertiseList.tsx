@@ -4,6 +4,7 @@ import { Reveal } from "./Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
 import { AdsVisual, AiVisual, ReelVisual, WebVisual } from "./PoleVisuals";
 import { servicePath, type ServiceSlug } from "@/content/services";
+import { localePath, useLocale, type Locale } from "@/lib/i18n";
 
 /** Un mot-cle du panneau, et la page service qu'il ouvre. */
 const to = (label: string, slug: ServiceSlug) => ({ label, to: servicePath(slug) });
@@ -174,14 +175,66 @@ const POLES: {
   },
 ];
 
+/* Les memes poles, en anglais. Les liens ne changent pas : seuls les
+   mots affiches sont traduits, dans le meme ordre. */
+const POLES_EN: Record<string, { title: string; text: string; lines: string[] }> = {
+  "01": {
+    title: "Brand & Content",
+    text: "An identity that reads in three seconds, and all the content that brings it to life — photo, video, motion, advertising.",
+    lines: ["Visual identity", "Positioning", "Brand guidelines", "Photo & video", "Motion design"],
+  },
+  "02": {
+    title: "Web & Apps",
+    text: "Fast, understated interfaces built for conversion.",
+    lines: ["Websites", "Apps", "Landing pages"],
+  },
+  "03": {
+    title: "AI & Automation",
+    text: "Your sales processes running without friction, 24 hours a day.",
+    lines: ["AI agents", "Automation", "CRM"],
+  },
+  "04": {
+    title: "Acquisition",
+    text: "Managed on cost per qualified appointment, not per click.",
+    lines: ["Meta Ads", "Google Ads", "TikTok Ads", "Lead generation"],
+  },
+};
+
+const UI: Record<Locale, { eyebrow: string; title: string; more: string }> = {
+  fr: {
+    eyebrow: "Nos expertises",
+    title: "Quatre pôles, une seule équipe, une chaîne de valeur complète.",
+    more: "Voir le détail des services",
+  },
+  en: {
+    eyebrow: "Our expertise",
+    title: "Four practices, one team, a complete value chain.",
+    more: "See all services",
+  },
+};
+
+const polesIn = (l: Locale) =>
+  l === "fr"
+    ? POLES
+    : POLES.map((p) => {
+        const t = POLES_EN[p.n];
+        if (!t) return p;
+        return {
+          ...p,
+          title: t.title,
+          text: t.text,
+          lines: p.lines.map((line, i) => ({ ...line, label: t.lines[i] ?? line.label })),
+        };
+      });
+
 export function ExpertiseList() {
+  const locale = useLocale();
+  const t = UI[locale];
   return (
     <div>
       <Reveal>
-        <p className="eyebrow">Nos expertises</p>
-        <h2 className="display mt-5 max-w-3xl text-3xl sm:text-4xl lg:text-5xl">
-          Quatre pôles, une seule équipe, une chaîne de valeur complète.
-        </h2>
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h2 className="display mt-5 max-w-3xl text-3xl sm:text-4xl lg:text-5xl">{t.title}</h2>
       </Reveal>
 
       {/*
@@ -204,7 +257,7 @@ export function ExpertiseList() {
           c'est exactement l'erreur qui a fait echouer la construction
           du site le 15 aout 2026.
         */}
-        {POLES.map((p, i) => (
+        {polesIn(locale).map((p, i) => (
           <Reveal key={p.n} delay={i * MOTION.stagger} className={`h-full ${p.area}`}>
             <article
               tabIndex={0}
@@ -249,7 +302,7 @@ export function ExpertiseList() {
                   {p.lines.map((l) => (
                     <li key={l.label}>
                       <Link
-                        to={l.to}
+                        to={localePath(l.to, locale)}
                         className="flex items-center gap-1.5 transition-colors duration-200 hover:text-white"
                       >
                         <span className="h-px w-2.5 bg-current opacity-50" aria-hidden="true" />
@@ -266,10 +319,10 @@ export function ExpertiseList() {
 
       <Reveal delay={200}>
         <Link
-          to="/services"
+          to={localePath("/services", locale)}
           className="group mt-10 inline-flex items-center gap-3 text-[0.78rem] font-semibold tracking-[0.14em] uppercase text-foreground outline-none transition-colors duration-200 hover:text-accent-hover focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
         >
-          Voir le détail des services
+          {t.more}
           <span
             aria-hidden="true"
             className="inline-block transition-transform duration-200 group-hover:translate-x-1"

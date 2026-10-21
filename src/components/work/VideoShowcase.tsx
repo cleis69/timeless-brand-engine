@@ -1,8 +1,10 @@
-import { Link } from '@tanstack/react-router'
-import { FEATURED_WORK, type WorkItem } from './work.data'
-import { WorkRibbon } from './WorkRibbon'
-import { MaskReveal, Reveal } from '@/components/Reveal'
-import { Texture } from '@/components/Texture'
+import { Link } from "@tanstack/react-router";
+import { FEATURED_WORK, type WorkItem } from "./work.data";
+import { WorkRibbon } from "./WorkRibbon";
+import { MaskReveal, Reveal } from "@/components/Reveal";
+import { Texture } from "@/components/Texture";
+import { workFor } from "@/content/localized";
+import { localePath, useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — section « Selected Work ».
@@ -31,24 +33,44 @@ import { Texture } from '@/components/Texture'
  */
 
 type Props = {
-  items?: WorkItem[]
+  items?: WorkItem[];
   /** Titre de section. */
-  title?: string
-  label?: string
-  intro?: string
+  title?: string;
+  label?: string;
+  intro?: string;
   /** Affiche le lien vers la page complete. */
-  withLink?: boolean
-  className?: string
-}
+  withLink?: boolean;
+  className?: string;
+};
+
+const DEFAULTS = {
+  fr: {
+    title: "Ce que nous produisons.",
+    intro:
+      "Films de marque, campagnes publicitaires et contenus performants. Produits en interne, de l'écriture au montage final.",
+    link: "Voir toutes les réalisations",
+  },
+  en: {
+    title: "What we produce.",
+    intro:
+      "Brand films, ad campaigns and content that performs. Produced in-house, from script to final edit.",
+    link: "See all our work",
+  },
+} as const;
 
 export function VideoShowcase({
-  items = FEATURED_WORK,
-  label = 'SELECTED WORK',
-  title = 'Ce que nous produisons.',
-  intro = "Films de marque, campagnes publicitaires et contenus performants. Produits en interne, de l'écriture au montage final.",
+  items: itemsProp,
+  label = "SELECTED WORK",
+  title: titleProp,
+  intro: introProp,
   withLink = true,
-  className = '',
+  className = "",
 }: Props) {
+  const locale = useLocale();
+  const d = DEFAULTS[locale];
+  const items = itemsProp ?? FEATURED_WORK.map((w) => workFor(w, locale));
+  const title = titleProp ?? d.title;
+  const intro = introProp ?? d.intro;
   return (
     <section
       aria-labelledby="selected-work-title"
@@ -68,7 +90,7 @@ export function VideoShowcase({
         // Jamais un aplat. Le fond glisse de #0b0b0b a #070707 : l'ecart
         // est presque imperceptible, mais il suffit pour que l'oeil cesse
         // de lire un trou et se mette a lire une profondeur.
-        background: 'linear-gradient(to bottom, #0b0b0c 0%, #090909 42%, #070708 100%)',
+        background: "linear-gradient(to bottom, #0b0b0c 0%, #090909 42%, #070708 100%)",
       }}
     >
       {/* Grille technique : elle donne une echelle a l'espace vide. */}
@@ -89,10 +111,7 @@ export function VideoShowcase({
         <header className="mb-7 sm:mb-8">
           <Reveal>
             <div className="flex items-center gap-3">
-              <span
-                className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]"
-                aria-hidden="true"
-              />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" aria-hidden="true" />
               <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8A8A8A]">
                 {label}
               </span>
@@ -131,10 +150,10 @@ export function VideoShowcase({
             {withLink && (
               <Reveal delay={220}>
                 <Link
-                  to="/realisations"
+                  to={localePath("/realisations", locale)}
                   className="group inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F5F5F3] outline-none transition-colors duration-300 hover:text-[#60A5FA] focus-visible:ring-2 focus-visible:ring-[#3B82F6] focus-visible:ring-offset-4 focus-visible:ring-offset-[#090909]"
                 >
-                  Voir toutes les réalisations
+                  {d.link}
                   <span
                     aria-hidden="true"
                     className="inline-block transition-transform duration-300 group-hover:translate-x-1"
@@ -151,7 +170,7 @@ export function VideoShowcase({
         <WorkRibbon items={items} />
       </div>
     </section>
-  )
+  );
 }
 
-export default VideoShowcase
+export default VideoShowcase;

@@ -25,12 +25,34 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as EnIndexRouteImport } from './routes/en/index'
+import { Route as EnAboutRouteImport } from './routes/en/about'
+import { Route as EnBlogRouteImport } from './routes/en/blog'
+import { Route as EnCastingRouteImport } from './routes/en/casting'
+import { Route as EnContactRouteImport } from './routes/en/contact'
+import { Route as EnDigitalMarketingAgencyMarrakechRouteImport } from './routes/en/digital-marketing-agency-marrakech'
+import { Route as EnHotelRiadMarketingMarrakechRouteImport } from './routes/en/hotel-riad-marketing-marrakech'
+import { Route as EnIndustriesRouteImport } from './routes/en/industries'
+import { Route as EnMethodRouteImport } from './routes/en/method'
+import { Route as EnPricingRouteImport } from './routes/en/pricing'
+import { Route as EnRealEstateLeadGenerationMarrakechRouteImport } from './routes/en/real-estate-lead-generation-marrakech'
+import { Route as EnServicesRouteImport } from './routes/en/services'
+import { Route as EnVideoAdsMetaAdsAgencyMarrakechRouteImport } from './routes/en/video-ads-meta-ads-agency-marrakech'
+import { Route as EnWorkRouteImport } from './routes/en/work'
 import { Route as RealisationsIndexRouteImport } from './routes/realisations.index'
 import { Route as RealisationsSlugRouteImport } from './routes/realisations.$slug'
 import { Route as SecteursIndexRouteImport } from './routes/secteurs.index'
 import { Route as SecteursSlugRouteImport } from './routes/secteurs.$slug'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as EnBlogIndexRouteImport } from './routes/en/blog.index'
+import { Route as EnBlogSlugRouteImport } from './routes/en/blog.$slug'
+import { Route as EnIndustriesIndexRouteImport } from './routes/en/industries.index'
+import { Route as EnIndustriesSlugRouteImport } from './routes/en/industries.$slug'
+import { Route as EnServicesIndexRouteImport } from './routes/en/services.index'
+import { Route as EnServicesSlugRouteImport } from './routes/en/services.$slug'
+import { Route as EnWorkIndexRouteImport } from './routes/en/work.index'
+import { Route as EnWorkSlugRouteImport } from './routes/en/work.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -116,6 +138,80 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/en/',
+  path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnAboutRoute = EnAboutRouteImport.update({
+  id: '/en/about',
+  path: '/en/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnBlogRoute = EnBlogRouteImport.update({
+  id: '/en/blog',
+  path: '/en/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnCastingRoute = EnCastingRouteImport.update({
+  id: '/en/casting',
+  path: '/en/casting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnContactRoute = EnContactRouteImport.update({
+  id: '/en/contact',
+  path: '/en/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnDigitalMarketingAgencyMarrakechRoute =
+  EnDigitalMarketingAgencyMarrakechRouteImport.update({
+    id: '/en/digital-marketing-agency-marrakech',
+    path: '/en/digital-marketing-agency-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnHotelRiadMarketingMarrakechRoute =
+  EnHotelRiadMarketingMarrakechRouteImport.update({
+    id: '/en/hotel-riad-marketing-marrakech',
+    path: '/en/hotel-riad-marketing-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnIndustriesRoute = EnIndustriesRouteImport.update({
+  id: '/en/industries',
+  path: '/en/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnMethodRoute = EnMethodRouteImport.update({
+  id: '/en/method',
+  path: '/en/method',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnPricingRoute = EnPricingRouteImport.update({
+  id: '/en/pricing',
+  path: '/en/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRealEstateLeadGenerationMarrakechRoute =
+  EnRealEstateLeadGenerationMarrakechRouteImport.update({
+    id: '/en/real-estate-lead-generation-marrakech',
+    path: '/en/real-estate-lead-generation-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnServicesRoute = EnServicesRouteImport.update({
+  id: '/en/services',
+  path: '/en/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnVideoAdsMetaAdsAgencyMarrakechRoute =
+  EnVideoAdsMetaAdsAgencyMarrakechRouteImport.update({
+    id: '/en/video-ads-meta-ads-agency-marrakech',
+    path: '/en/video-ads-meta-ads-agency-marrakech',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnWorkRoute = EnWorkRouteImport.update({
+  id: '/en/work',
+  path: '/en/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RealisationsIndexRoute = RealisationsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -146,6 +242,46 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
 } as any)
+const EnBlogIndexRoute = EnBlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnBlogRoute,
+} as any)
+const EnBlogSlugRoute = EnBlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EnBlogRoute,
+} as any)
+const EnIndustriesIndexRoute = EnIndustriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnIndustriesRoute,
+} as any)
+const EnIndustriesSlugRoute = EnIndustriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EnIndustriesRoute,
+} as any)
+const EnServicesIndexRoute = EnServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnServicesRoute,
+} as any)
+const EnServicesSlugRoute = EnServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EnServicesRoute,
+} as any)
+const EnWorkIndexRoute = EnWorkIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnWorkRoute,
+} as any)
+const EnWorkSlugRoute = EnWorkSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EnWorkRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,13 +299,35 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/blog': typeof EnBlogRouteWithChildren
+  '/en/casting': typeof EnCastingRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/digital-marketing-agency-marrakech': typeof EnDigitalMarketingAgencyMarrakechRoute
+  '/en/hotel-riad-marketing-marrakech': typeof EnHotelRiadMarketingMarrakechRoute
+  '/en/industries': typeof EnIndustriesRouteWithChildren
+  '/en/method': typeof EnMethodRoute
+  '/en/pricing': typeof EnPricingRoute
+  '/en/real-estate-lead-generation-marrakech': typeof EnRealEstateLeadGenerationMarrakechRoute
+  '/en/services': typeof EnServicesRouteWithChildren
+  '/en/video-ads-meta-ads-agency-marrakech': typeof EnVideoAdsMetaAdsAgencyMarrakechRoute
+  '/en/work': typeof EnWorkRouteWithChildren
   '/realisations/$slug': typeof RealisationsSlugRoute
   '/secteurs/$slug': typeof SecteursSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/en/': typeof EnIndexRoute
   '/realisations/': typeof RealisationsIndexRoute
   '/secteurs/': typeof SecteursIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/en/blog/$slug': typeof EnBlogSlugRoute
+  '/en/industries/$slug': typeof EnIndustriesSlugRoute
+  '/en/services/$slug': typeof EnServicesSlugRoute
+  '/en/work/$slug': typeof EnWorkSlugRoute
+  '/en/blog/': typeof EnBlogIndexRoute
+  '/en/industries/': typeof EnIndustriesIndexRoute
+  '/en/services/': typeof EnServicesIndexRoute
+  '/en/work/': typeof EnWorkIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -183,13 +341,31 @@ export interface FileRoutesByTo {
   '/methode': typeof MethodeRoute
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/casting': typeof EnCastingRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/digital-marketing-agency-marrakech': typeof EnDigitalMarketingAgencyMarrakechRoute
+  '/en/hotel-riad-marketing-marrakech': typeof EnHotelRiadMarketingMarrakechRoute
+  '/en/method': typeof EnMethodRoute
+  '/en/pricing': typeof EnPricingRoute
+  '/en/real-estate-lead-generation-marrakech': typeof EnRealEstateLeadGenerationMarrakechRoute
+  '/en/video-ads-meta-ads-agency-marrakech': typeof EnVideoAdsMetaAdsAgencyMarrakechRoute
   '/realisations/$slug': typeof RealisationsSlugRoute
   '/secteurs/$slug': typeof SecteursSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/en': typeof EnIndexRoute
   '/realisations': typeof RealisationsIndexRoute
   '/secteurs': typeof SecteursIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/en/blog/$slug': typeof EnBlogSlugRoute
+  '/en/industries/$slug': typeof EnIndustriesSlugRoute
+  '/en/services/$slug': typeof EnServicesSlugRoute
+  '/en/work/$slug': typeof EnWorkSlugRoute
+  '/en/blog': typeof EnBlogIndexRoute
+  '/en/industries': typeof EnIndustriesIndexRoute
+  '/en/services': typeof EnServicesIndexRoute
+  '/en/work': typeof EnWorkIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -208,13 +384,35 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/tarifs': typeof TarifsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/blog': typeof EnBlogRouteWithChildren
+  '/en/casting': typeof EnCastingRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/digital-marketing-agency-marrakech': typeof EnDigitalMarketingAgencyMarrakechRoute
+  '/en/hotel-riad-marketing-marrakech': typeof EnHotelRiadMarketingMarrakechRoute
+  '/en/industries': typeof EnIndustriesRouteWithChildren
+  '/en/method': typeof EnMethodRoute
+  '/en/pricing': typeof EnPricingRoute
+  '/en/real-estate-lead-generation-marrakech': typeof EnRealEstateLeadGenerationMarrakechRoute
+  '/en/services': typeof EnServicesRouteWithChildren
+  '/en/video-ads-meta-ads-agency-marrakech': typeof EnVideoAdsMetaAdsAgencyMarrakechRoute
+  '/en/work': typeof EnWorkRouteWithChildren
   '/realisations/$slug': typeof RealisationsSlugRoute
   '/secteurs/$slug': typeof SecteursSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/en/': typeof EnIndexRoute
   '/realisations/': typeof RealisationsIndexRoute
   '/secteurs/': typeof SecteursIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/en/blog/$slug': typeof EnBlogSlugRoute
+  '/en/industries/$slug': typeof EnIndustriesSlugRoute
+  '/en/services/$slug': typeof EnServicesSlugRoute
+  '/en/work/$slug': typeof EnWorkSlugRoute
+  '/en/blog/': typeof EnBlogIndexRoute
+  '/en/industries/': typeof EnIndustriesIndexRoute
+  '/en/services/': typeof EnServicesIndexRoute
+  '/en/work/': typeof EnWorkIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -234,13 +432,35 @@ export interface FileRouteTypes {
     | '/services'
     | '/tarifs'
     | '/blog/$slug'
+    | '/en/about'
+    | '/en/blog'
+    | '/en/casting'
+    | '/en/contact'
+    | '/en/digital-marketing-agency-marrakech'
+    | '/en/hotel-riad-marketing-marrakech'
+    | '/en/industries'
+    | '/en/method'
+    | '/en/pricing'
+    | '/en/real-estate-lead-generation-marrakech'
+    | '/en/services'
+    | '/en/video-ads-meta-ads-agency-marrakech'
+    | '/en/work'
     | '/realisations/$slug'
     | '/secteurs/$slug'
     | '/services/$slug'
     | '/blog/'
+    | '/en/'
     | '/realisations/'
     | '/secteurs/'
     | '/services/'
+    | '/en/blog/$slug'
+    | '/en/industries/$slug'
+    | '/en/services/$slug'
+    | '/en/work/$slug'
+    | '/en/blog/'
+    | '/en/industries/'
+    | '/en/services/'
+    | '/en/work/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -254,13 +474,31 @@ export interface FileRouteTypes {
     | '/methode'
     | '/tarifs'
     | '/blog/$slug'
+    | '/en/about'
+    | '/en/casting'
+    | '/en/contact'
+    | '/en/digital-marketing-agency-marrakech'
+    | '/en/hotel-riad-marketing-marrakech'
+    | '/en/method'
+    | '/en/pricing'
+    | '/en/real-estate-lead-generation-marrakech'
+    | '/en/video-ads-meta-ads-agency-marrakech'
     | '/realisations/$slug'
     | '/secteurs/$slug'
     | '/services/$slug'
     | '/blog'
+    | '/en'
     | '/realisations'
     | '/secteurs'
     | '/services'
+    | '/en/blog/$slug'
+    | '/en/industries/$slug'
+    | '/en/services/$slug'
+    | '/en/work/$slug'
+    | '/en/blog'
+    | '/en/industries'
+    | '/en/services'
+    | '/en/work'
   id:
     | '__root__'
     | '/'
@@ -278,13 +516,35 @@ export interface FileRouteTypes {
     | '/services'
     | '/tarifs'
     | '/blog/$slug'
+    | '/en/about'
+    | '/en/blog'
+    | '/en/casting'
+    | '/en/contact'
+    | '/en/digital-marketing-agency-marrakech'
+    | '/en/hotel-riad-marketing-marrakech'
+    | '/en/industries'
+    | '/en/method'
+    | '/en/pricing'
+    | '/en/real-estate-lead-generation-marrakech'
+    | '/en/services'
+    | '/en/video-ads-meta-ads-agency-marrakech'
+    | '/en/work'
     | '/realisations/$slug'
     | '/secteurs/$slug'
     | '/services/$slug'
     | '/blog/'
+    | '/en/'
     | '/realisations/'
     | '/secteurs/'
     | '/services/'
+    | '/en/blog/$slug'
+    | '/en/industries/$slug'
+    | '/en/services/$slug'
+    | '/en/work/$slug'
+    | '/en/blog/'
+    | '/en/industries/'
+    | '/en/services/'
+    | '/en/work/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -302,6 +562,20 @@ export interface RootRouteChildren {
   SecteursRoute: typeof SecteursRouteWithChildren
   ServicesRoute: typeof ServicesRouteWithChildren
   TarifsRoute: typeof TarifsRoute
+  EnAboutRoute: typeof EnAboutRoute
+  EnBlogRoute: typeof EnBlogRouteWithChildren
+  EnCastingRoute: typeof EnCastingRoute
+  EnContactRoute: typeof EnContactRoute
+  EnDigitalMarketingAgencyMarrakechRoute: typeof EnDigitalMarketingAgencyMarrakechRoute
+  EnHotelRiadMarketingMarrakechRoute: typeof EnHotelRiadMarketingMarrakechRoute
+  EnIndustriesRoute: typeof EnIndustriesRouteWithChildren
+  EnMethodRoute: typeof EnMethodRoute
+  EnPricingRoute: typeof EnPricingRoute
+  EnRealEstateLeadGenerationMarrakechRoute: typeof EnRealEstateLeadGenerationMarrakechRoute
+  EnServicesRoute: typeof EnServicesRouteWithChildren
+  EnVideoAdsMetaAdsAgencyMarrakechRoute: typeof EnVideoAdsMetaAdsAgencyMarrakechRoute
+  EnWorkRoute: typeof EnWorkRouteWithChildren
+  EnIndexRoute: typeof EnIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -418,6 +692,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/en/': {
+      id: '/en/'
+      path: '/en'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/about': {
+      id: '/en/about'
+      path: '/en/about'
+      fullPath: '/en/about'
+      preLoaderRoute: typeof EnAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/blog': {
+      id: '/en/blog'
+      path: '/en/blog'
+      fullPath: '/en/blog'
+      preLoaderRoute: typeof EnBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/casting': {
+      id: '/en/casting'
+      path: '/en/casting'
+      fullPath: '/en/casting'
+      preLoaderRoute: typeof EnCastingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/contact': {
+      id: '/en/contact'
+      path: '/en/contact'
+      fullPath: '/en/contact'
+      preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/digital-marketing-agency-marrakech': {
+      id: '/en/digital-marketing-agency-marrakech'
+      path: '/en/digital-marketing-agency-marrakech'
+      fullPath: '/en/digital-marketing-agency-marrakech'
+      preLoaderRoute: typeof EnDigitalMarketingAgencyMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/hotel-riad-marketing-marrakech': {
+      id: '/en/hotel-riad-marketing-marrakech'
+      path: '/en/hotel-riad-marketing-marrakech'
+      fullPath: '/en/hotel-riad-marketing-marrakech'
+      preLoaderRoute: typeof EnHotelRiadMarketingMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/industries': {
+      id: '/en/industries'
+      path: '/en/industries'
+      fullPath: '/en/industries'
+      preLoaderRoute: typeof EnIndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/method': {
+      id: '/en/method'
+      path: '/en/method'
+      fullPath: '/en/method'
+      preLoaderRoute: typeof EnMethodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/pricing': {
+      id: '/en/pricing'
+      path: '/en/pricing'
+      fullPath: '/en/pricing'
+      preLoaderRoute: typeof EnPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/real-estate-lead-generation-marrakech': {
+      id: '/en/real-estate-lead-generation-marrakech'
+      path: '/en/real-estate-lead-generation-marrakech'
+      fullPath: '/en/real-estate-lead-generation-marrakech'
+      preLoaderRoute: typeof EnRealEstateLeadGenerationMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/services': {
+      id: '/en/services'
+      path: '/en/services'
+      fullPath: '/en/services'
+      preLoaderRoute: typeof EnServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/video-ads-meta-ads-agency-marrakech': {
+      id: '/en/video-ads-meta-ads-agency-marrakech'
+      path: '/en/video-ads-meta-ads-agency-marrakech'
+      fullPath: '/en/video-ads-meta-ads-agency-marrakech'
+      preLoaderRoute: typeof EnVideoAdsMetaAdsAgencyMarrakechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/work': {
+      id: '/en/work'
+      path: '/en/work'
+      fullPath: '/en/work'
+      preLoaderRoute: typeof EnWorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/realisations/': {
       id: '/realisations/'
       path: '/'
@@ -459,6 +831,62 @@ declare module '@tanstack/react-router' {
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
+    }
+    '/en/blog/': {
+      id: '/en/blog/'
+      path: '/'
+      fullPath: '/en/blog/'
+      preLoaderRoute: typeof EnBlogIndexRouteImport
+      parentRoute: typeof EnBlogRoute
+    }
+    '/en/blog/$slug': {
+      id: '/en/blog/$slug'
+      path: '/$slug'
+      fullPath: '/en/blog/$slug'
+      preLoaderRoute: typeof EnBlogSlugRouteImport
+      parentRoute: typeof EnBlogRoute
+    }
+    '/en/industries/': {
+      id: '/en/industries/'
+      path: '/'
+      fullPath: '/en/industries/'
+      preLoaderRoute: typeof EnIndustriesIndexRouteImport
+      parentRoute: typeof EnIndustriesRoute
+    }
+    '/en/industries/$slug': {
+      id: '/en/industries/$slug'
+      path: '/$slug'
+      fullPath: '/en/industries/$slug'
+      preLoaderRoute: typeof EnIndustriesSlugRouteImport
+      parentRoute: typeof EnIndustriesRoute
+    }
+    '/en/services/': {
+      id: '/en/services/'
+      path: '/'
+      fullPath: '/en/services/'
+      preLoaderRoute: typeof EnServicesIndexRouteImport
+      parentRoute: typeof EnServicesRoute
+    }
+    '/en/services/$slug': {
+      id: '/en/services/$slug'
+      path: '/$slug'
+      fullPath: '/en/services/$slug'
+      preLoaderRoute: typeof EnServicesSlugRouteImport
+      parentRoute: typeof EnServicesRoute
+    }
+    '/en/work/': {
+      id: '/en/work/'
+      path: '/'
+      fullPath: '/en/work/'
+      preLoaderRoute: typeof EnWorkIndexRouteImport
+      parentRoute: typeof EnWorkRoute
+    }
+    '/en/work/$slug': {
+      id: '/en/work/$slug'
+      path: '/$slug'
+      fullPath: '/en/work/$slug'
+      preLoaderRoute: typeof EnWorkSlugRouteImport
+      parentRoute: typeof EnWorkRoute
     }
   }
 }
@@ -517,6 +945,60 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
   ServicesRouteChildren,
 )
 
+interface EnBlogRouteChildren {
+  EnBlogSlugRoute: typeof EnBlogSlugRoute
+  EnBlogIndexRoute: typeof EnBlogIndexRoute
+}
+
+const EnBlogRouteChildren: EnBlogRouteChildren = {
+  EnBlogSlugRoute: EnBlogSlugRoute,
+  EnBlogIndexRoute: EnBlogIndexRoute,
+}
+
+const EnBlogRouteWithChildren =
+  EnBlogRoute._addFileChildren(EnBlogRouteChildren)
+
+interface EnIndustriesRouteChildren {
+  EnIndustriesSlugRoute: typeof EnIndustriesSlugRoute
+  EnIndustriesIndexRoute: typeof EnIndustriesIndexRoute
+}
+
+const EnIndustriesRouteChildren: EnIndustriesRouteChildren = {
+  EnIndustriesSlugRoute: EnIndustriesSlugRoute,
+  EnIndustriesIndexRoute: EnIndustriesIndexRoute,
+}
+
+const EnIndustriesRouteWithChildren = EnIndustriesRoute._addFileChildren(
+  EnIndustriesRouteChildren,
+)
+
+interface EnServicesRouteChildren {
+  EnServicesSlugRoute: typeof EnServicesSlugRoute
+  EnServicesIndexRoute: typeof EnServicesIndexRoute
+}
+
+const EnServicesRouteChildren: EnServicesRouteChildren = {
+  EnServicesSlugRoute: EnServicesSlugRoute,
+  EnServicesIndexRoute: EnServicesIndexRoute,
+}
+
+const EnServicesRouteWithChildren = EnServicesRoute._addFileChildren(
+  EnServicesRouteChildren,
+)
+
+interface EnWorkRouteChildren {
+  EnWorkSlugRoute: typeof EnWorkSlugRoute
+  EnWorkIndexRoute: typeof EnWorkIndexRoute
+}
+
+const EnWorkRouteChildren: EnWorkRouteChildren = {
+  EnWorkSlugRoute: EnWorkSlugRoute,
+  EnWorkIndexRoute: EnWorkIndexRoute,
+}
+
+const EnWorkRouteWithChildren =
+  EnWorkRoute._addFileChildren(EnWorkRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
@@ -534,6 +1016,22 @@ const rootRouteChildren: RootRouteChildren = {
   SecteursRoute: SecteursRouteWithChildren,
   ServicesRoute: ServicesRouteWithChildren,
   TarifsRoute: TarifsRoute,
+  EnAboutRoute: EnAboutRoute,
+  EnBlogRoute: EnBlogRouteWithChildren,
+  EnCastingRoute: EnCastingRoute,
+  EnContactRoute: EnContactRoute,
+  EnDigitalMarketingAgencyMarrakechRoute:
+    EnDigitalMarketingAgencyMarrakechRoute,
+  EnHotelRiadMarketingMarrakechRoute: EnHotelRiadMarketingMarrakechRoute,
+  EnIndustriesRoute: EnIndustriesRouteWithChildren,
+  EnMethodRoute: EnMethodRoute,
+  EnPricingRoute: EnPricingRoute,
+  EnRealEstateLeadGenerationMarrakechRoute:
+    EnRealEstateLeadGenerationMarrakechRoute,
+  EnServicesRoute: EnServicesRouteWithChildren,
+  EnVideoAdsMetaAdsAgencyMarrakechRoute: EnVideoAdsMetaAdsAgencyMarrakechRoute,
+  EnWorkRoute: EnWorkRouteWithChildren,
+  EnIndexRoute: EnIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

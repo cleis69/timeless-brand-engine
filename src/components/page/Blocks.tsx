@@ -2,7 +2,25 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { Reveal } from "@/components/Reveal";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
-import { LAUNCH_OFFER, dirham, euro } from "@/config/pricing";
+import { formatDirham, formatEuro } from "@/config/pricing";
+import { launchOfferFor } from "@/content/localized";
+import { localePath, useLocale, type Locale } from "@/lib/i18n";
+
+/* Les libelles communs aux briques, dans les deux langues. */
+const UI: Record<Locale, { from: string; note: string; allPrices: string; faq: string }> = {
+  fr: {
+    from: "à partir de",
+    note: "Tarifs pleins, hors taxes et hors budget publicitaire.",
+    allPrices: "Voir tous les tarifs",
+    faq: "Questions fréquentes",
+  },
+  en: {
+    from: "from",
+    note: "Full prices, excluding tax and ad spend.",
+    allPrices: "See all prices",
+    faq: "Frequently asked questions",
+  },
+};
 
 /**
  * UltraVision Agency — briques des pages services, secteurs, etudes de
@@ -147,6 +165,9 @@ export function PriceRows({
     from?: boolean;
   }[];
 }) {
+  const locale = useLocale();
+  const t = UI[locale];
+  const offer = launchOfferFor(locale);
   return (
     <div className="mt-10">
       <div className="border-t border-hairline">
@@ -162,23 +183,23 @@ export function PriceRows({
               </p>
             </div>
             <div className="text-right whitespace-nowrap">
-              {r.from && (
-                <span className="mr-1 text-[0.7rem] text-muted-foreground">à partir de</span>
-              )}
-              <span className="display text-[1.25rem]">{dirham(r.price)}</span>
+              {r.from && <span className="mr-1 text-[0.7rem] text-muted-foreground">{t.from}</span>}
+              <span className="display text-[1.25rem]">{formatDirham(r.price, locale)}</span>
               {r.unit && (
                 <span className="ml-1 text-[0.72rem] text-muted-foreground">{r.unit}</span>
               )}
-              <p className="mt-0.5 text-[0.68rem] text-[#7b88a6]">≈ {euro(r.price)}</p>
+              <p className="mt-0.5 text-[0.68rem] text-[#7b88a6]">
+                ≈ {formatEuro(r.price, locale)}
+              </p>
             </div>
           </div>
         ))}
       </div>
       <p className="mt-5 text-[0.78rem] leading-relaxed text-[#797976]">
-        Tarifs pleins, hors taxes et hors budget publicitaire.
-        {LAUNCH_OFFER.enabled && <> {LAUNCH_OFFER.badge}.</>}{" "}
-        <Link to="/tarifs" className="link-underline text-accent-hover">
-          Voir tous les tarifs
+        {t.note}
+        {offer.enabled && <> {offer.badge}.</>}{" "}
+        <Link to={localePath("/tarifs", locale)} className="link-underline text-accent-hover">
+          {t.allPrices}
         </Link>
       </p>
     </div>
@@ -225,19 +246,14 @@ export function LinkCards({
 }
 
 /** Questions frequentes, toujours depliees : lisibles sans clic, et par les robots. */
-export function FaqList({
-  faq,
-  title = "Questions fréquentes",
-}: {
-  faq: { q: string; a: string }[];
-  title?: string;
-}) {
+export function FaqList({ faq, title }: { faq: { q: string; a: string }[]; title?: string }) {
+  const locale = useLocale();
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
       <Reveal>
         <div>
           <p className="eyebrow">FAQ</p>
-          <h2 className="display mt-5 text-3xl sm:text-4xl">{title}</h2>
+          <h2 className="display mt-5 text-3xl sm:text-4xl">{title ?? UI[locale].faq}</h2>
         </div>
       </Reveal>
       <div className="border-t border-hairline">

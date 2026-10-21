@@ -2,6 +2,8 @@ import { useReveal } from "@/hooks/useReveal";
 import { EASE_PAGE } from "@/config/motion";
 import { WORK_ITEMS, shownStats } from "@/components/work/work.data";
 import { SITE_ITEMS } from "@/components/work/sites.data";
+import { workFor } from "@/content/localized";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — une image par pole, dans la section Expertises.
@@ -175,7 +177,16 @@ const CHAT = [
   { from: "in", text: "15 h, parfait." },
 ] as const;
 
+/* La meme conversation, en anglais. */
+const CHAT_EN = [
+  { from: "in", text: "Hello, can I view the apartment on Saturday?" },
+  { from: "out", text: "Of course. On Saturday I can offer you 11 am or 3 pm." },
+  { from: "in", text: "3 pm, perfect." },
+] as const;
+
 export function AiVisual() {
+  const en = useLocale() === "en";
+  const chat = en ? CHAT_EN : CHAT;
   const { ref, isVisible } = useReveal<HTMLDivElement>({ amount: 0.4 });
   const step = (i: number) => ({
     opacity: isVisible ? 1 : 0,
@@ -202,14 +213,14 @@ export function AiVisual() {
             height={14}
             className="h-3.5 w-3.5"
           />
-          <span className="text-[0.62rem] text-[#c7d2ea]">Agent IA</span>
+          <span className="text-[0.62rem] text-[#c7d2ea]">{en ? "AI agent" : "Agent IA"}</span>
           <span className="ml-auto flex items-center gap-1 text-[0.55rem] text-[#6fdc8c]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            en ligne
+            {en ? "online" : "en ligne"}
           </span>
         </div>
         <div className="mt-2.5 flex flex-col gap-1.5">
-          {CHAT.map((m, i) => (
+          {chat.map((m, i) => (
             <p
               key={m.text}
               className={`max-w-[86%] rounded-2xl px-3 py-1.5 text-[0.66rem] leading-snug ${
@@ -224,9 +235,11 @@ export function AiVisual() {
           ))}
           <p
             className="mt-1 self-center rounded-full border border-[#28c840]/30 bg-[#28c840]/10 px-2.5 py-1 text-[0.56rem] tracking-[0.04em] text-[#8ee6a6]"
-            style={step(CHAT.length)}
+            style={step(chat.length)}
           >
-            ✓ Visite ajoutée au CRM — samedi 15 h
+            {en
+              ? "✓ Viewing added to the CRM — Saturday 3 pm"
+              : "✓ Visite ajoutée au CRM — samedi 15 h"}
           </p>
         </div>
       </div>
@@ -254,8 +267,11 @@ export function AiVisual() {
 const AD_SLUG = "sculpt-body-marrakech";
 
 export function AdsVisual() {
-  const w = film(AD_SLUG);
-  if (!w) return null;
+  const locale = useLocale();
+  const en = locale === "en";
+  const raw = film(AD_SLUG);
+  if (!raw) return null;
+  const w = workFor(raw, locale);
   const stats = shownStats(w);
 
   return (
@@ -300,7 +316,9 @@ export function AdsVisual() {
             </span>
             <span className="leading-tight">
               <span className="block text-[0.62rem] text-[#e3e8f4]">{w.title}</span>
-              <span className="block text-[0.5rem] text-[#8792ad]">Sponsorisé</span>
+              <span className="block text-[0.5rem] text-[#8792ad]">
+                {en ? "Sponsored" : "Sponsorisé"}
+              </span>
             </span>
             <img
               src="/brand/platforms/meta.svg"
@@ -320,7 +338,9 @@ export function AdsVisual() {
             className="aspect-[4/5] w-full object-cover"
           />
           <div className="flex items-center justify-between gap-2 bg-[#121b33] px-3 py-2">
-            <span className="text-[0.6rem] text-[#e3e8f4]">Envoyer un message</span>
+            <span className="text-[0.6rem] text-[#e3e8f4]">
+              {en ? "Send message" : "Envoyer un message"}
+            </span>
             <img
               src="/brand/platforms/whatsapp.svg"
               alt=""

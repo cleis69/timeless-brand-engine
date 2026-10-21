@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { CONTACT_TEXT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { useLocale } from "@/lib/i18n";
 import { EASE_PAGE } from "@/config/motion";
 
 /**
@@ -54,6 +55,10 @@ const WHATSAPP_GREEN = "#25D366";
 
 export function WhatsAppRail() {
   const [visible, setVisible] = useState(false);
+  const locale = useLocale();
+  const en = locale === "en";
+  const href = whatsappUrl(CONTACT_TEXT[locale].whatsappMessage);
+  const label = en ? "Message us on WhatsApp" : "Nous écrire sur WhatsApp";
 
   useEffect(() => {
     if (!hasWhatsapp) return;
@@ -102,10 +107,10 @@ export function WhatsAppRail() {
 
       {/* ---------- Grand ecran : rail vertical ---------- */}
       <a
-        href={whatsappUrl()}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Nous écrire sur WhatsApp"
+        aria-label={label}
         className="uv-wa fixed top-1/2 right-0 z-[70] hidden -translate-y-1/2 items-center gap-3 rounded-l-2xl border border-r-0 px-3 py-6 outline-none focus-visible:ring-2 focus-visible:ring-accent lg:flex"
         style={{
           flexDirection: "column",
@@ -115,9 +120,7 @@ export function WhatsAppRail() {
           borderColor: "#262a35",
           boxShadow: "0 0 0 1px rgba(255,255,255,.04), 0 18px 40px -14px rgba(0,0,0,.85)",
           // Range hors de l'ecran tant qu'il n'a pas lieu d'etre.
-          transform: visible
-            ? "translate(0, -50%)"
-            : "translate(calc(100% + 8px), -50%)",
+          transform: visible ? "translate(0, -50%)" : "translate(calc(100% + 8px), -50%)",
           opacity: visible ? 1 : 0,
           pointerEvents: visible ? "auto" : "none",
         }}
@@ -141,7 +144,7 @@ export function WhatsAppRail() {
           className="text-[0.68rem] font-medium tracking-[0.16em] uppercase text-[#C8C8C6]"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
-          Parler sur WhatsApp
+          {en ? "Chat on WhatsApp" : "Parler sur WhatsApp"}
         </span>
 
         <span
@@ -153,10 +156,10 @@ export function WhatsAppRail() {
 
       {/* ---------- Telephone : bouton rond ---------- */}
       <a
-        href={whatsappUrl()}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Nous écrire sur WhatsApp"
+        aria-label={label}
         className="uv-wa fixed right-4 bottom-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         style={{
           backgroundColor: "rgba(13,13,16,0.94)",

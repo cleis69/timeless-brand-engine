@@ -32,6 +32,9 @@ import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay } from "@/config/contact";
 import { A_LA_CARTE, LAUNCH_OFFER, MAD, NOT_INCLUDED, PACKS, dirham, euro } from "@/config/pricing";
 import { POLES, SERVICES, servicePath } from "@/content/services";
 import { LANDINGS } from "@/content/landings";
+import { ARTICLES_EN } from "@/content/en/blog";
+import { workFor } from "@/content/localized";
+import { localePath } from "@/lib/i18n";
 import { SECTORS, sectorPath } from "@/content/sectors";
 import { ARTICLES_SORTED } from "@/content/blog";
 import {
@@ -101,33 +104,57 @@ const xml = (s: string) =>
 export function buildSitemap(): string {
   const films = CASE_STUDIES.filter((c): c is CaseItem & WorkItem => isFilm(c));
   const cases = new Map(films.map((w) => [casePath(w.slug), w]));
+  const abs = (path: string) => (path === "/" ? `${SITE_URL}/` : url(path));
+
+  /*
+    CHAQUE PAGE EXISTE EN DEUX LANGUES. Les deux adresses figurent dans
+    le sitemap, et chacune declare l'autre (xhtml:link hreflang) : c'est
+    la forme que Google recommande quand les versions linguistiques n'ont
+    pas la meme adresse. Un article non traduit n'a pas de version
+    anglaise : il ne declare que lui-meme.
+  */
+  const hasEnglish = (path: string) =>
+    !path.startsWith("/blog/") || !!ARTICLES_EN[path.slice("/blog/".length)];
+
   const urls = entries()
-    .map((e) => {
-      const loc = e.path === "/" ? `${SITE_URL}/` : url(e.path);
-      const w = cases.get(e.path);
-      const video = w
+    .flatMap((e) => {
+      const en = hasEnglish(e.path) ? localePath(e.path, "en") : null;
+      const alternates = en
         ? `
+    <xhtml:link rel="alternate" hreflang="fr" href="${xml(abs(e.path))}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${xml(abs(en))}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${xml(abs(e.path))}"/>`
+        : "";
+      return (["fr", "en"] as const)
+        .filter((l) => l === "fr" || en)
+        .map((l) => {
+          const loc = abs(l === "fr" ? e.path : en!);
+          const film = cases.get(e.path);
+          const w = film ? workFor(film, l) : null;
+          const video = w
+            ? `
     <video:video>
       <video:thumbnail_loc>${xml(url(w.poster))}</video:thumbnail_loc>
-      <video:title>${xml(`${w.title} — vidéo publicitaire`)}</video:title>
+      <video:title>${xml(`${w.title} — ${l === "en" ? "video ad" : "vidéo publicitaire"}`)}</video:title>
       <video:description>${xml(w.caseStudy!.summary)}</video:description>
       <video:content_loc>${xml(url(w.sources.mp4))}</video:content_loc>
       <video:duration>${w.durationSec}</video:duration>
       <video:publication_date>${w.published}</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>`
-        : "";
-      return `  <url>
+            : "";
+          return `  <url>
     <loc>${xml(loc)}</loc>
     <lastmod>${e.lastmod}</lastmod>
     <changefreq>${e.changefreq}</changefreq>
-    <priority>${e.priority}</priority>${video}
+    <priority>${e.priority}</priority>${alternates}${video}
   </url>`;
+        });
     })
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls}
 </urlset>
 `;
@@ -257,6 +284,24 @@ export function buildLlmsTxt(): string {
     `- [Blog](${url("/blog")}) : méthodes de production et d'acquisition.`,
     `- [Contact](${url("/contact")}) : rendez-vous, WhatsApp, e-mail.`,
     `- [Casting](${url("/casting")}) : candidatures des actrices, comédiennes et modèles pour les films publicitaires de l'agence.`,
+    "",
+    "## English version",
+    "",
+    `The whole site is also published in English. ${BRAND.name} is a digital marketing agency based in Marrakech, Morocco, working in French and English: one team writes, shoots and edits video ads, then runs them on Meta, Google and TikTok.`,
+    "",
+    `- [Home](${url(localePath("/", "en"))})`,
+    `- [The agency in Marrakech](${url(localePath("/agence-marketing-digital-marrakech", "en"))})`,
+    ...LANDINGS.map(
+      (l) =>
+        `- [${l.nameEn ?? l.name}](${url(localePath(l.path, "en"))})${l.textEn ? ` : ${l.textEn}` : ""}`,
+    ),
+    `- [Services](${url(localePath("/services", "en"))})`,
+    `- [Industries](${url(localePath("/secteurs", "en"))})`,
+    `- [Work](${url(localePath("/realisations", "en"))})`,
+    `- [Pricing](${url(localePath("/tarifs", "en"))})`,
+    `- [About](${url(localePath("/a-propos", "en"))})`,
+    `- [Blog](${url(localePath("/blog", "en"))})`,
+    `- [Contact](${url(localePath("/contact", "en"))})`,
     "",
     "## Blog",
     "",

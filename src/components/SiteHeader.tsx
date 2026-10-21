@@ -1,9 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
 import { PromoBar } from "@/components/PromoBar";
 import { AvailabilityBadge } from "./AvailabilityBadge";
 import { Magnetic } from "./Magnetic";
+import { frenchPath, localePath, useLocale, type Locale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — navigation.
@@ -43,14 +44,82 @@ import { Magnetic } from "./Magnetic";
   derniere position se lit comme une information qu'on aurait preferé
   ne pas donner — exactement l'inverse du message de la page.
 */
+/* Les adresses sont les adresses FRANCAISES : elles sont traduites a
+   l'affichage par localePath. */
 const NAV = [
-  { to: "/services", label: "Services" },
-  { to: "/realisations", label: "Réalisations" },
-  { to: "/tarifs", label: "Tarifs" },
-  { to: "/a-propos", label: "À propos" },
-  { to: "/casting", label: "Casting" },
-  { to: "/contact", label: "Contact" },
+  { to: "/services", label: { fr: "Services", en: "Services" } },
+  { to: "/realisations", label: { fr: "Réalisations", en: "Work" } },
+  { to: "/tarifs", label: { fr: "Tarifs", en: "Pricing" } },
+  { to: "/a-propos", label: { fr: "À propos", en: "About" } },
+  { to: "/casting", label: { fr: "Casting", en: "Casting" } },
+  { to: "/contact", label: { fr: "Contact", en: "Contact" } },
 ] as const;
+
+const UI: Record<
+  Locale,
+  { cta: string; home: string; openMenu: string; closeMenu: string; switchTo: string }
+> = {
+  fr: {
+    cta: "Prendre rendez-vous",
+    home: "UltraVision Agency — accueil",
+    openMenu: "Ouvrir le menu",
+    closeMenu: "Fermer le menu",
+    switchTo: "Read this page in English",
+  },
+  en: {
+    cta: "Book a call",
+    home: "UltraVision Agency — home",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    switchTo: "Lire cette page en français",
+  },
+};
+
+/**
+ * Selecteur de langue : FR / EN.
+ *
+ * Discret par intention : deux lettres en petites capitales espacees, la
+ * langue affichee en clair, l'autre en bleu desature. Il mene a la page
+ * EQUIVALENTE, jamais a l'accueil de l'autre langue : un visiteur qui
+ * lit les tarifs veut lire les tarifs, pas recommencer sa visite.
+ */
+function LangSwitch({
+  onNavigate,
+  className = "",
+}: {
+  onNavigate?: () => void;
+  className?: string;
+}) {
+  const locale = useLocale();
+  const { pathname } = useLocation();
+  const other: Locale = locale === "fr" ? "en" : "fr";
+  /* Une page sans equivalent anglais renvoie vers l'accueil anglais
+     plutot que vers elle-meme. */
+  const en = localePath(pathname, "en");
+  const target = locale === "fr" ? (en === pathname ? "/en" : en) : frenchPath(pathname);
+  return (
+    <div
+      className={`flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.16em] uppercase ${className}`}
+    >
+      <span className="text-foreground" aria-current="true">
+        {locale.toUpperCase()}
+      </span>
+      <span aria-hidden="true" className="text-[#3a4560]">
+        /
+      </span>
+      <Link
+        to={target}
+        onClick={onNavigate}
+        hrefLang={other}
+        lang={other}
+        aria-label={UI[locale].switchTo}
+        className="text-[#8FA8CC] transition-colors duration-200 hover:text-[#60A5FA]"
+      >
+        {other.toUpperCase()}
+      </Link>
+    </div>
+  );
+}
 
 /**
  * Fil bleu qui se remplit au fil du defilement.
@@ -134,6 +203,9 @@ function ScrollProgress() {
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const locale = useLocale();
+  const t = UI[locale];
+  const lp = (p: string) => localePath(p, locale);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -287,10 +359,10 @@ export function SiteHeader() {
           est exactement ce qu'on veut sur un ecran tactile.
         */}
         <Link
-          to="/"
+          to={lp("/")}
           className="flex min-h-11 min-w-0 items-center py-1"
           onClick={() => setOpen(false)}
-          aria-label="UltraVision Agency — accueil"
+          aria-label={t.home}
         >
           <Logo className="h-9 sm:h-10" />
         </Link>
@@ -335,23 +407,27 @@ export function SiteHeader() {
           {NAV.map((item) => (
             <Link
               key={item.to}
-              to={item.to}
+              to={lp(item.to)}
               className="uv-nav group relative text-[0.82rem] font-medium tracking-[0.04em] text-[#8FA8CC] transition-colors duration-200 hover:text-[#60A5FA]"
-              activeProps={{ className: "uv-nav uv-nav-on relative text-[0.82rem] font-medium tracking-[0.04em] text-[#60A5FA]" }}
+              activeProps={{
+                className:
+                  "uv-nav uv-nav-on relative text-[0.82rem] font-medium tracking-[0.04em] text-[#60A5FA]",
+              }}
             >
-              {item.label}
+              {item.label[locale]}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-6 lg:flex">
+          <LangSwitch />
           <Magnetic strength={0.22} radius={90}>
             <Link
-              to="/contact"
+              to={lp("/contact")}
               hash="rendez-vous"
               className="inline-flex h-11 items-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors duration-300 hover:bg-accent-hover"
             >
-              Prendre rendez-vous
+              {t.cta}
             </Link>
           </Magnetic>
         </div>
@@ -370,7 +446,7 @@ export function SiteHeader() {
         */}
         <button
           onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={open ? t.closeMenu : t.openMenu}
           aria-expanded={open}
           className="-mr-1 flex h-11 w-11 shrink-0 items-center justify-center lg:hidden"
         >
@@ -430,7 +506,7 @@ export function SiteHeader() {
           {NAV.map((item, i) => (
             <Link
               key={item.to}
-              to={item.to}
+              to={lp(item.to)}
               onClick={() => setOpen(false)}
               className="display text-3xl"
               /*
@@ -445,11 +521,11 @@ export function SiteHeader() {
                 transition: `opacity 420ms cubic-bezier(.22,1,.36,1) ${90 + i * 45}ms, transform 420ms cubic-bezier(.22,1,.36,1) ${90 + i * 45}ms`,
               }}
             >
-              {item.label}
+              {item.label[locale]}
             </Link>
           ))}
           <Link
-            to="/contact"
+            to={lp("/contact")}
             hash="rendez-vous"
             onClick={() => setOpen(false)}
             className="mt-2 inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-foreground px-6 text-xs font-medium tracking-[0.12em] uppercase text-background"
@@ -459,8 +535,9 @@ export function SiteHeader() {
               transition: `opacity 420ms cubic-bezier(.22,1,.36,1) ${90 + NAV.length * 45}ms, transform 420ms cubic-bezier(.22,1,.36,1) ${90 + NAV.length * 45}ms`,
             }}
           >
-            Prendre rendez-vous
+            {t.cta}
           </Link>
+          <LangSwitch onNavigate={() => setOpen(false)} className="mt-2" />
         </nav>
       </div>
     </header>

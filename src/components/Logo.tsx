@@ -1,3 +1,5 @@
+import { useLocale } from "@/lib/i18n";
+
 /**
  * ULTRA VISION — logo.
  *
@@ -35,13 +37,13 @@
  */
 
 const SRC = {
-  dark: '/brand/logo/ultravision-horizontal-dark.svg',
-  light: '/brand/logo/ultravision-horizontal-light.svg',
-  mono: '/brand/logo/ultravision-mono-white.svg',
-  compact: '/brand/logo/ultravision-nav-compact.svg',
-} as const
+  dark: "/brand/logo/ultravision-horizontal-dark.svg",
+  light: "/brand/logo/ultravision-horizontal-light.svg",
+  mono: "/brand/logo/ultravision-mono-white.svg",
+  compact: "/brand/logo/ultravision-nav-compact.svg",
+} as const;
 
-export type LogoVariant = keyof typeof SRC
+export type LogoVariant = keyof typeof SRC;
 
 /*
   Dimensions intrinseques de chaque fichier, relevees dans son viewBox.
@@ -60,20 +62,24 @@ const DIMS: Record<LogoVariant, { w: number; h: number }> = {
   light: { w: 1160, h: 460 },
   mono: { w: 1160, h: 460 },
   compact: { w: 220, h: 110 },
-}
-
+};
 
 export function Logo({
-  className = 'h-8',
-  variant = 'dark',
+  className = "h-8",
+  variant = "dark",
 }: {
-  className?: string
-  variant?: LogoVariant
+  className?: string;
+  variant?: LogoVariant;
 }) {
+  const locale = useLocale();
   return (
     <img
       src={SRC[variant]}
-      alt="UltraVision Agency — Creative Growth Agency à Marrakech"
+      alt={
+        locale === "en"
+          ? "UltraVision Agency — Creative Growth Agency in Marrakech"
+          : "UltraVision Agency — Creative Growth Agency à Marrakech"
+      }
       /*
         Les dimensions intrinseques du fichier sont declarees, meme si
         la taille reelle vient du `className`. Le navigateur en deduit le
@@ -90,7 +96,7 @@ export function Logo({
       decoding="async"
       draggable={false}
     />
-  )
+  );
 }
 
 /**
@@ -102,17 +108,9 @@ export function Logo({
  * de 56 px, 36 au dessus. En dessous de 32 px, c'est le favicon qui
  * prend le relais, avec 18 pointes.
  */
-export function LogoIcon({
-  size = 40,
-  className = '',
-}: {
-  size?: number
-  className?: string
-}) {
+export function LogoIcon({ size = 40, className = "" }: { size?: number; className?: string }) {
   const src =
-    size < 56
-      ? '/brand/icon/ultravision-icon-nav-24.svg'
-      : '/brand/icon/ultravision-icon-blue.svg'
+    size < 56 ? "/brand/icon/ultravision-icon-nav-24.svg" : "/brand/icon/ultravision-icon-blue.svg";
 
   return (
     <img
@@ -124,5 +122,5 @@ export function LogoIcon({
       className={className}
       draggable={false}
     />
-  )
+  );
 }

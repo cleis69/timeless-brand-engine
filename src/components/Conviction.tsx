@@ -1,5 +1,6 @@
 import { MaskReveal, Reveal } from "./Reveal";
 import { Texture } from "./Texture";
+import { useLocale, type Locale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — la respiration claire.
@@ -43,7 +44,45 @@ const PILIERS = [
   },
 ];
 
+const T: Record<
+  Locale,
+  {
+    eyebrow: string;
+    lines: [string, string, string];
+    piliers: { title: string; text: string }[];
+    team: string;
+    teamText: string;
+  }
+> = {
+  fr: {
+    eyebrow: "Notre conviction",
+    lines: ["Une marque ne se juge pas", "à sa beauté. Elle se juge", "à ce qu'elle déclenche."],
+    piliers: PILIERS,
+    team: "Une seule équipe",
+    teamText:
+      "métiers réunis, du branding à l'acquisition, sans jamais passer par un prestataire externe.",
+  },
+  en: {
+    eyebrow: "What we believe",
+    lines: ["A brand is not judged", "by its looks. It is judged", "by what it sets in motion."],
+    piliers: [
+      {
+        title: "Image and acquisition, together",
+        text: "Brand and performance are built in the same movement, never in two silos passing the blame back and forth.",
+      },
+      {
+        title: "The people who sell are the people who deliver",
+        text: "You talk to the people who will actually work on your project. There is no second team behind the first.",
+      },
+    ],
+    team: "One team",
+    teamText:
+      "disciplines under one roof, from branding to acquisition, never handed to an outside supplier.",
+  },
+};
+
 export function Conviction() {
+  const t = T[useLocale()];
   return (
     <section aria-labelledby="conviction-title" className="relative bg-background py-16 sm:py-20">
       <div className="shell">
@@ -54,7 +93,7 @@ export function Conviction() {
           <div className="relative">
             <Reveal>
               <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-[#6B6B6B]">
-                Notre conviction
+                {t.eyebrow}
               </p>
             </Reveal>
 
@@ -62,13 +101,13 @@ export function Conviction() {
               id="conviction-title"
               className="display mt-9 max-w-4xl text-[clamp(2rem,5vw,4rem)] leading-[1.02] tracking-[-0.035em]"
             >
-              <MaskReveal delay={80}>Une marque ne se juge pas</MaskReveal>
-              <MaskReveal delay={160}>à sa beauté. Elle se juge</MaskReveal>
-              <MaskReveal delay={240}>à ce qu&apos;elle déclenche.</MaskReveal>
+              <MaskReveal delay={80}>{t.lines[0]}</MaskReveal>
+              <MaskReveal delay={160}>{t.lines[1]}</MaskReveal>
+              <MaskReveal delay={240}>{t.lines[2]}</MaskReveal>
             </h2>
 
             <div className="mt-14 grid gap-10 border-t border-[#D6D6D2] pt-12 sm:gap-12 lg:grid-cols-3 lg:gap-14">
-              {PILIERS.map((p, i) => (
+              {t.piliers.map((p, i) => (
                 <Reveal key={p.title} delay={320 + i * 90}>
                   <h3 className="text-base font-medium">{p.title}</h3>
                   <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-[#5A5A57]">
@@ -86,15 +125,14 @@ export function Conviction() {
               <Reveal delay={500}>
                 <div className="flex h-full flex-col justify-between rounded-2xl bg-[#090909] p-7 text-[#F5F5F3]">
                   <p className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-[#8A8A8A]">
-                    Une seule équipe
+                    {t.team}
                   </p>
                   <div className="mt-8">
                     <span className="display block text-[3.2rem] leading-none tracking-[-0.04em]">
                       10
                     </span>
                     <span className="mt-2 block text-[0.8rem] leading-relaxed text-[#A8A8A6]">
-                      métiers réunis, du branding à l&apos;acquisition, sans jamais passer
-                      par un prestataire externe.
+                      {t.teamText}
                     </span>
                   </div>
                 </div>

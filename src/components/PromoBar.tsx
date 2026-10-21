@@ -1,3 +1,5 @@
+import { useLocale } from "@/lib/i18n";
+
 /**
  * ULTRA VISION — le liseré promotionnel, tout en haut du site.
  *
@@ -53,8 +55,19 @@ const PROMO = {
   conditions: "voir conditions",
 } as const;
 
+/* Les memes offres, en anglais. Aucune condition de plus, aucune de moins. */
+const PROMO_EN = {
+  offreForte: "Your website free",
+  offreAlternative: "−30% on our services",
+  cible: "for new clients",
+  conditions: "see terms",
+  ou: "or",
+} as const;
+
 export function PromoBar() {
+  const locale = useLocale();
   if (!PROMO.enabled) return null;
+  const t = locale === "en" ? PROMO_EN : { ...PROMO, ou: "ou" };
 
   return (
     <div
@@ -76,7 +89,7 @@ export function PromoBar() {
     >
       <p className="shell flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 py-[7px] text-center text-[0.66rem] leading-tight tracking-[0.08em] text-[#C7D9FF] sm:text-[0.7rem]">
         <span className="font-medium text-foreground">
-          {PROMO.offreForte}
+          {t.offreForte}
           {/*
             L'astérisque est collé au mot, sans espace : séparé, il se
             lit comme une puce de liste et non comme un renvoi.
@@ -84,15 +97,15 @@ export function PromoBar() {
           <span aria-hidden="true">*</span>
         </span>
 
-        <span className="text-[#707d9d]">ou</span>
+        <span className="text-[#707d9d]">{t.ou}</span>
 
-        <span className="font-medium text-foreground">{PROMO.offreAlternative}</span>
+        <span className="font-medium text-foreground">{t.offreAlternative}</span>
 
-        <span>{PROMO.cible}</span>
+        <span>{t.cible}</span>
 
         <span className="text-[0.9em] text-[#707d9d]">
           <span aria-hidden="true">*</span>
-          {PROMO.conditions}
+          {t.conditions}
         </span>
       </p>
     </div>

@@ -3,6 +3,7 @@ import { shownStats, type WorkItem } from "./work.data";
 import { WorkPlayer } from "./WorkPlayer";
 import { useReveal } from "@/hooks/useReveal";
 import { EASE_ENTER, EASE_PAGE, MOTION } from "@/config/motion";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — la grille des realisations, en chevauchement.
@@ -300,6 +301,7 @@ function GridCard({
   /** Ouvre le lecteur plein ecran. */
   onPlay: () => void;
 }) {
+  const en = useLocale() === "en";
   const videoRef = useRef<HTMLVideoElement>(null);
   /*
     Le premier chiffre REEL. Les marqueurs STAT_ sont masques : une carte
@@ -478,7 +480,7 @@ function GridCard({
           e.stopPropagation();
           onPlay();
         }}
-        aria-label={`Lire la vidéo — ${item.title}`}
+        aria-label={`${en ? "Play the video" : "Lire la vidéo"} — ${item.title}`}
         className="absolute top-1/2 left-1/2 z-[7] flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/30 outline-none transition-colors hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-accent"
         style={{
           opacity: lifted ? 1 : 0,

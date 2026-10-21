@@ -1,7 +1,9 @@
 import { MaskReveal, Reveal } from "./Reveal";
 import { BookingCalendar } from "./BookingCalendar";
+import { useLocale, type Locale } from "@/lib/i18n";
 import {
   CONTACT,
+  CONTACT_TEXT,
   hasPhone,
   hasWhatsapp,
   phoneDisplay,
@@ -40,7 +42,27 @@ import {
  * suite.
  */
 
+const T: Record<Locale, { eyebrow: string; l1: string; l2: string; text: string; email: string }> =
+  {
+    fr: {
+      eyebrow: "Prochaine étape",
+      l1: "Parlons de votre croissance",
+      l2: "sur les douze prochains mois.",
+      text: "30 minutes, sans engagement. Choisissez votre créneau : vous repartez avec une lecture claire de votre positionnement, de votre tunnel d'acquisition et des leviers prioritaires.",
+      email: "Nous écrire",
+    },
+    en: {
+      eyebrow: "Next step",
+      l1: "Let's talk about your growth",
+      l2: "over the next twelve months.",
+      text: "30 minutes, no commitment. Pick a slot: you leave with a clear reading of your positioning, your acquisition funnel and the levers to pull first.",
+      email: "Email us",
+    },
+  };
+
 export function FinalCTA() {
+  const locale = useLocale();
+  const t = T[locale];
   return (
     /*
       Le troisieme temps de respiration de la page.
@@ -93,26 +115,24 @@ export function FinalCTA() {
         <div>
           <Reveal>
             <p className="text-[0.7rem] font-medium tracking-[0.2em] uppercase text-accent">
-              Prochaine étape
+              {t.eyebrow}
             </p>
           </Reveal>
 
           <h2 className="display mt-8 max-w-3xl text-4xl sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
-            <MaskReveal delay={80}>Parlons de votre croissance</MaskReveal>
-            <MaskReveal delay={170}>sur les douze prochains mois.</MaskReveal>
+            <MaskReveal delay={80}>{t.l1}</MaskReveal>
+            <MaskReveal delay={170}>{t.l2}</MaskReveal>
           </h2>
 
           <Reveal delay={280}>
             <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground">
-              30 minutes, sans engagement. Choisissez votre créneau : vous repartez avec une lecture
-              claire de votre positionnement, de votre tunnel d&apos;acquisition et des leviers
-              prioritaires.
+              {t.text}
             </p>
 
             <div className="mt-12 flex flex-wrap items-center gap-4">
               {hasWhatsapp ? (
                 <a
-                  href={whatsappUrl()}
+                  href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
@@ -124,7 +144,7 @@ export function FinalCTA() {
                   href={`mailto:${CONTACT.email}`}
                   className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
                 >
-                  Nous écrire
+                  {t.email}
                 </a>
               )}
 

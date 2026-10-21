@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n";
+
 /**
  * ULTRA VISION — coordonnees de contact.
  *
@@ -85,25 +87,48 @@ export const CONTACT = {
   /** Pays d'intervention, code ISO. Sert aux donnees structurees. */
   country: "MA",
   countryName: "Maroc",
-} as const
+} as const;
+
+/**
+ * Les textes affiches, dans les deux langues.
+ *
+ * Seuls les LIBELLES changent : numeros, adresse e-mail et donnees
+ * structurees restent ceux de CONTACT. Le francais reprend CONTACT a
+ * l'identique.
+ */
+export const CONTACT_TEXT = {
+  fr: {
+    whatsappMessage: CONTACT.whatsappMessage,
+    locations: CONTACT.locations,
+    base: CONTACT.base,
+    countryName: CONTACT.countryName,
+  },
+  en: {
+    whatsappMessage:
+      "Hello UltraVision, I found you through your website. I'd like to talk about my project.",
+    locations: "Marrakech — Casablanca — Rabat — Tangier — Agadir",
+    base: "Based in Marrakech, the agency also works in Casablanca, Rabat, Tangier and Agadir.",
+    countryName: "Morocco",
+  },
+} as const satisfies Record<Locale, Record<string, string>>;
 
 /** Vrai si un numero de telephone publiable est renseigne. */
-export const hasPhone = CONTACT.phone.length > 0
+export const hasPhone = CONTACT.phone.length > 0;
 
 /** Vrai si un numero WhatsApp publiable est renseigne. */
-export const hasWhatsapp = CONTACT.whatsapp.length > 0
+export const hasWhatsapp = CONTACT.whatsapp.length > 0;
 
 /** Numero de telephone formate pour l'affichage : +212 6 38 59 56 58, ou +33 6 12 34 56 78 */
 export function phoneDisplay() {
-  if (!hasPhone) return ""
-  const n = CONTACT.phone.replace(/\s/g, "")
+  if (!hasPhone) return "";
+  const n = CONTACT.phone.replace(/\s/g, "");
   if (n.startsWith("+212") && n.length === 13) {
-    return `+212 ${n.slice(4, 5)} ${n.slice(5, 7)} ${n.slice(7, 9)} ${n.slice(9, 11)} ${n.slice(11, 13)}`
+    return `+212 ${n.slice(4, 5)} ${n.slice(5, 7)} ${n.slice(7, 9)} ${n.slice(9, 11)} ${n.slice(11, 13)}`;
   }
   if (n.startsWith("+33") && n.length === 12) {
-    return `+33 ${n.slice(3, 4)} ${n.slice(4, 6)} ${n.slice(6, 8)} ${n.slice(8, 10)} ${n.slice(10, 12)}`
+    return `+33 ${n.slice(3, 4)} ${n.slice(4, 6)} ${n.slice(6, 8)} ${n.slice(8, 10)} ${n.slice(10, 12)}`;
   }
-  return CONTACT.phone
+  return CONTACT.phone;
 }
 
 /**
@@ -112,15 +137,15 @@ export function phoneDisplay() {
  * confondue avec un prospect.
  */
 export function whatsappUrl(message: string = CONTACT.whatsappMessage) {
-  if (!hasWhatsapp) return ""
-  return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`
+  if (!hasWhatsapp) return "";
+  return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
 /** Lien mailto. */
-export const mailtoUrl = `mailto:${CONTACT.email}`
+export const mailtoUrl = `mailto:${CONTACT.email}`;
 
 /** Lien telephone. */
-export const telUrl = hasPhone ? `tel:${CONTACT.phone}` : ""
+export const telUrl = hasPhone ? `tel:${CONTACT.phone}` : "";
 
 /**
  * Zone d'intervention, au format attendu par les donnees structurees.
@@ -134,7 +159,7 @@ export const telUrl = hasPhone ? `tel:${CONTACT.phone}` : ""
 export const AREA_SERVED = [
   { "@type": "Country", name: CONTACT.countryName },
   ...CONTACT.cities.map((c) => ({ "@type": "City", name: c })),
-]
+];
 
 /*
   L'ENTREPRISE N'EST PLUS DECRITE ICI.

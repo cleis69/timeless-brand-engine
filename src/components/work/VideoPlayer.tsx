@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { WorkItem } from "./work.data";
 import { usePrefersReducedMotion } from "@/hooks/useReveal";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — lecteur video.
@@ -58,6 +59,7 @@ export function VideoPlayer({
   withSound = false,
   active,
 }: Props) {
+  const en = useLocale() === "en";
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -208,10 +210,7 @@ export function VideoPlayer({
           media="(max-width: 640px)"
           type="image/webp"
         />
-        <source
-          srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")}
-          type="image/webp"
-        />
+        <source srcSet={item.poster.replace(/poster\.jpg$/, "poster.webp")} type="image/webp" />
         <img
           src={item.poster}
           alt=""
@@ -264,7 +263,11 @@ export function VideoPlayer({
         <button
           type="button"
           onClick={togglePlay}
-          aria-label={isPlaying ? `Mettre en pause ${item.title}` : `Lire ${item.title}`}
+          aria-label={
+            isPlaying
+              ? `${en ? "Pause" : "Mettre en pause"} ${item.title}`
+              : `${en ? "Play" : "Lire"} ${item.title}`
+          }
           className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-black/35 text-foreground backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white/40 hover:bg-black/50 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:h-20 sm:w-20"
         >
           {isPlaying ? (
@@ -285,7 +288,9 @@ export function VideoPlayer({
         <button
           type="button"
           onClick={toggleSound}
-          aria-label={isMuted ? "Activer le son" : "Couper le son"}
+          aria-label={
+            isMuted ? (en ? "Turn sound on" : "Activer le son") : en ? "Mute" : "Couper le son"
+          }
           className="absolute top-4 right-4 flex h-10 items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 text-[0.68rem] font-semibold tracking-[0.14em] text-foreground backdrop-blur-sm transition-colors duration-300 hover:border-white/35 hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:top-6 sm:right-6"
         >
           {isMuted ? "SON" : "MUET"}

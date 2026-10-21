@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n";
+
 /**
  * ULTRA VISION — envoi du formulaire de contact.
  *
@@ -85,6 +87,31 @@ export const FORM = {
 /** Vrai quand la cle est renseignee. Pilote l'affichage du formulaire. */
 export const formReady = FORM.accessKey.trim().length > 0;
 
+/**
+ * Les messages montres au visiteur, dans les deux langues. L'objet de
+ * l'e-mail recu par l'agence reste en francais.
+ */
+const MESSAGES = {
+  fr: {
+    notReady:
+      "Le formulaire n'est pas encore relié. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
+    bot: "Merci, votre demande est bien enregistrée.",
+    sent: "Merci, votre demande est bien arrivée. Nous revenons vers vous sous 24 heures ouvrées.",
+    failed:
+      "L'envoi a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
+    network:
+      "La connexion a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
+  },
+  en: {
+    notReady:
+      "The form is not connected yet. Message us on WhatsApp or by email, we reply the same day.",
+    bot: "Thank you, your request has been received.",
+    sent: "Thank you, your request has arrived. We will get back to you within 24 working hours.",
+    failed: "Sending failed. Message us on WhatsApp or by email, we reply the same day.",
+    network: "The connection failed. Message us on WhatsApp or by email, we reply the same day.",
+  },
+} as const satisfies Record<Locale, Record<string, string>>;
+
 export type SendResult = { ok: boolean; message: string };
 
 /**
@@ -94,18 +121,18 @@ export type SendResult = { ok: boolean; message: string };
  * parce qu'une erreur reseau ne doit pas laisser le visiteur devant
  * une page figee sans explication.
  */
-export async function sendForm(data: Record<string, string>): Promise<SendResult> {
+export async function sendForm(
+  data: Record<string, string>,
+  locale: Locale = "fr",
+): Promise<SendResult> {
+  const m = MESSAGES[locale];
   if (!formReady) {
-    return {
-      ok: false,
-      message:
-        "Le formulaire n'est pas encore relié. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
-    };
+    return { ok: false, message: m.notReady };
   }
 
   // Champ piege rempli : c'est un automate. On fait semblant d'accepter.
   if (data[FORM.honeypot]) {
-    return { ok: true, message: "Merci, votre demande est bien enregistrée." };
+    return { ok: true, message: m.bot };
   }
 
   try {
@@ -123,28 +150,16 @@ export async function sendForm(data: Record<string, string>): Promise<SendResult
     const json = await res.json().catch(() => ({}) as { success?: boolean });
 
     if (res.ok && json?.success !== false) {
-      return {
-        ok: true,
-        message:
-          "Merci, votre demande est bien arrivée. Nous revenons vers vous sous 24 heures ouvrées.",
-      };
+      return { ok: true, message: m.sent };
     }
 
-    return {
-      ok: false,
-      message:
-        "L'envoi a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
-    };
+    return { ok: false, message: m.failed };
   } catch {
     /*
       Panne reseau, coupure, blocage par une extension du navigateur.
       On ne perd pas le contact pour autant : on renvoie le visiteur
       vers un canal qui, lui, ne depend pas de notre code.
     */
-    return {
-      ok: false,
-      message:
-        "La connexion a échoué. Écrivez-nous sur WhatsApp ou par e-mail, nous répondons dans la journée.",
-    };
+    return { ok: false, message: m.network };
   }
 }

@@ -778,7 +778,7 @@ export const ARTICLES: Article[] = [
         v: {
           type: "split",
           caption:
-            "Le partage exact. À gauche ce que nous confions à la machine, à droite ce que nous gardons. Le critère est simple : une erreur y est-elle rattrapable en un coup d'œil ?",
+            "Le partage exact. À gauche ce que nous gardons, à droite ce que nous confions à la machine. Le critère est simple : une erreur y est-elle rattrapable en un coup d'œil ?",
           left: {
             title: "Jamais confié à l'IA",
             items: [

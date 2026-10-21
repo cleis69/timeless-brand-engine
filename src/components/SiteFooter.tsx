@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import {
   CONTACT,
+  CONTACT_TEXT,
   hasPhone,
   hasWhatsapp,
   phoneDisplay,
@@ -9,9 +10,47 @@ import {
   whatsappUrl,
 } from "@/config/contact";
 import { BRAND, SOCIAL } from "@/config/brand";
-import { SERVICES, servicePath } from "@/content/services";
+import { servicePath } from "@/content/services";
 import { LANDINGS } from "@/content/landings";
-import { SECTORS, sectorPath } from "@/content/sectors";
+import { sectorPath } from "@/content/sectors";
+import { sectorsFor, servicesFor } from "@/content/localized";
+import { localePath, useLocale, type Locale } from "@/lib/i18n";
+
+/* Les libelles du pied de page, dans les deux langues. */
+const T = {
+  fr: {
+    about: `${BRAND.name} est une ${BRAND.category} basée à ${BRAND.city}, au ${BRAND.country} : marque, contenu, publicité et outils digitaux, réunis dans une seule équipe.`,
+    whatsapp: "Écrire sur WhatsApp",
+    email: "Nous écrire",
+    agency: "Agence",
+    agencyIn: `L'agence à ${BRAND.city}`,
+    services: "Services",
+    work: "Réalisations",
+    pricing: "Tarifs",
+    method: "Stratégie & méthode",
+    about_: "À propos",
+    sectors: "Secteurs",
+    quote: "Demander un devis",
+    country: BRAND.country,
+    rights: "Tous droits réservés.",
+  },
+  en: {
+    about: `${BRAND.name} is a ${BRAND.category} based in ${BRAND.city}, Morocco: brand, content, advertising and digital tools, brought together in a single team.`,
+    whatsapp: "Message us on WhatsApp",
+    email: "Email us",
+    agency: "Agency",
+    agencyIn: `The agency in ${BRAND.city}`,
+    services: "Services",
+    work: "Work",
+    pricing: "Pricing",
+    method: "Strategy & method",
+    about_: "About",
+    sectors: "Industries",
+    quote: "Request a quote",
+    country: "Morocco",
+    rights: "All rights reserved.",
+  },
+} satisfies Record<Locale, Record<string, string>>;
 
 /**
  * UltraVision Agency — pied de page.
@@ -43,59 +82,68 @@ import { SECTORS, sectorPath } from "@/content/sectors";
  */
 
 export function SiteFooter() {
+  const locale = useLocale();
+  const t = T[locale];
+  const lp = (p: string) => localePath(p, locale);
   return (
     <footer className="rule bg-background">
       <div className="shell py-20">
         <div className="grid gap-14 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div className="min-w-0">
             <Logo className="h-8" />
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              {BRAND.name} est une {BRAND.category} basée à {BRAND.city}, au {BRAND.country} :
-              marque, contenu, publicité et outils digitaux, réunis dans une seule équipe.
-            </p>
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">{t.about}</p>
             {hasWhatsapp ? (
               <a
-                href={whatsappUrl()}
+                href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link-underline mt-6 inline-block text-sm font-medium"
               >
-                Écrire sur WhatsApp
+                {t.whatsapp}
               </a>
             ) : (
               <a
                 href={`mailto:${CONTACT.email}`}
                 className="link-underline mt-6 inline-block text-sm font-medium"
               >
-                Nous écrire
+                {t.email}
               </a>
             )}
           </div>
 
           <FooterCol
-            title="Agence"
+            title={t.agency}
             links={[
-              { to: "/agence-marketing-digital-marrakech", label: `L'agence à ${BRAND.city}` },
-              ...LANDINGS.map((l) => ({ to: l.path, label: l.name })),
-              { to: "/services", label: "Services" },
-              { to: "/realisations", label: "Réalisations" },
-              { to: "/tarifs", label: "Tarifs" },
-              { to: "/methode", label: "Stratégie & méthode" },
-              { to: "/a-propos", label: "À propos" },
-              { to: "/blog", label: "Blog" },
-              { to: "/casting", label: "Casting" },
+              { to: lp("/agence-marketing-digital-marrakech"), label: t.agencyIn },
+              ...LANDINGS.map((l) => ({
+                to: lp(l.path),
+                label: locale === "en" ? l.nameEn : l.name,
+              })),
+              { to: lp("/services"), label: t.services },
+              { to: lp("/realisations"), label: t.work },
+              { to: lp("/tarifs"), label: t.pricing },
+              { to: lp("/methode"), label: t.method },
+              { to: lp("/a-propos"), label: t.about_ },
+              { to: lp("/blog"), label: "Blog" },
+              { to: lp("/casting"), label: "Casting" },
             ]}
           />
 
           <div>
             <FooterCol
-              title="Services"
-              links={SERVICES.map((s) => ({ to: servicePath(s.slug), label: s.name }))}
+              title={t.services}
+              links={servicesFor(locale).map((s) => ({
+                to: lp(servicePath(s.slug)),
+                label: s.name,
+              }))}
             />
             <div className="mt-10">
               <FooterCol
-                title="Secteurs"
-                links={SECTORS.map((s) => ({ to: sectorPath(s.slug), label: s.name }))}
+                title={t.sectors}
+                links={sectorsFor(locale).map((s) => ({
+                  to: lp(sectorPath(s.slug)),
+                  label: s.name,
+                }))}
               />
             </div>
           </div>
@@ -115,7 +163,7 @@ export function SiteFooter() {
                   </a>
                 </li>
               )}
-              <li>{CONTACT.locations}</li>
+              <li>{CONTACT_TEXT[locale].locations}</li>
               {SOCIAL.map((s) => (
                 <li key={s.network}>
                   <a
@@ -129,8 +177,8 @@ export function SiteFooter() {
                 </li>
               ))}
               <li>
-                <Link to="/contact" className="link-underline text-foreground">
-                  Demander un devis
+                <Link to={lp("/contact")} className="link-underline text-foreground">
+                  {t.quote}
                 </Link>
               </li>
             </ul>
@@ -139,8 +187,7 @@ export function SiteFooter() {
 
         <div className="rule mt-16 flex flex-col gap-4 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {BRAND.name} — {BRAND.city}, {BRAND.country}. Tous droits
-            réservés.
+            © {new Date().getFullYear()} {BRAND.name} — {BRAND.city}, {t.country}. {t.rights}
           </p>
           <p className="tracking-[0.18em] uppercase">{BRAND.category}</p>
         </div>

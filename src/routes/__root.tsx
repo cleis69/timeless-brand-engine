@@ -18,6 +18,7 @@ import { ScrollToTop } from "../components/ScrollToTop";
 import { WhatsAppRail } from "../components/WhatsAppRail";
 import { url } from "../config/site";
 import { BRAND, OG_IMAGE } from "../config/brand";
+import { localePath, useLocale } from "../lib/i18n";
 
 /**
  * ULTRA VISION — racine de l'application.
@@ -55,7 +56,31 @@ import { BRAND, OG_IMAGE } from "../config/brand";
  * Le reste du fichier est inchange.
  */
 
+/* Les textes des pages 404 et d'erreur, dans la langue de l'adresse. */
+const ROOT_TEXT = {
+  fr: {
+    notFound: "Page introuvable",
+    notFoundText: "Cette page n'existe pas ou a été déplacée.",
+    backHome: "Retour à l'accueil",
+    errorTitle: "Cette page n'a pas pu se charger",
+    errorText: "Un incident est survenu de notre côté. Réessayez ou revenez à l'accueil.",
+    retry: "Réessayer",
+    home: "Accueil",
+  },
+  en: {
+    notFound: "Page not found",
+    notFoundText: "This page does not exist or has been moved.",
+    backHome: "Back to home",
+    errorTitle: "This page could not load",
+    errorText: "Something went wrong on our side. Try again or go back to the home page.",
+    retry: "Try again",
+    home: "Home",
+  },
+} as const;
+
 function NotFoundComponent() {
+  const locale = useLocale();
+  const t = ROOT_TEXT[locale];
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       {/*
@@ -63,20 +88,18 @@ function NotFoundComponent() {
         n'avait aucun titre, et rien ne demandait aux moteurs de ne pas
         l'indexer.
       */}
-      <title>{`Page introuvable | ${BRAND.name}`}</title>
+      <title>{`${t.notFound} | ${BRAND.name}`}</title>
       <meta name="robots" content="noindex, follow" />
       <div className="max-w-md text-center">
         <h1 className="display text-7xl text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Cette page n'existe pas ou a été déplacée.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t.notFound}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t.notFoundText}</p>
         <div className="mt-6">
           <Link
-            to="/"
+            to={localePath("/", locale)}
             className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors hover:bg-accent-hover"
           >
-            Retour à l'accueil
+            {t.backHome}
           </Link>
         </div>
       </div>
@@ -87,6 +110,8 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const locale = useLocale();
+  const t = ROOT_TEXT[locale];
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -94,12 +119,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Cette page n'a pas pu se charger
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Un incident est survenu de notre côté. Réessayez ou revenez à l'accueil.
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">{t.errorTitle}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t.errorText}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -108,13 +129,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-background transition-colors hover:bg-accent-hover"
           >
-            Réessayer
+            {t.retry}
           </button>
           <a
-            href="/"
+            href={localePath("/", locale)}
             className="inline-flex items-center justify-center rounded-full border border-hairline px-5 py-2.5 text-xs font-medium tracking-[0.12em] uppercase text-foreground transition-colors hover:border-accent"
           >
-            Accueil
+            {t.home}
           </a>
         </div>
       </div>
@@ -330,8 +351,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  /* La langue suit l'adresse : /en/... est en anglais, le reste en francais. */
+  const locale = useLocale();
   return (
-    <html lang="fr" className="dark">
+    <html lang={locale} className="dark">
       <head>
         <HeadContent />
       </head>

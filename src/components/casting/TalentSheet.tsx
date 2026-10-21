@@ -3,7 +3,9 @@ import { createPortal } from "react-dom";
 import { EASE_PAGE, EASE_RESPOND, MOTION } from "@/config/motion";
 import { hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { SITE_URL } from "@/config/site";
-import { categoryLabel, talentAge, type Talent } from "@/content/talents";
+import { categoryLabel, talentAge, type Talent, type TalentCategory } from "@/content/talents";
+import { castingLabel } from "@/config/casting";
+import { localePath, useLocale, type Locale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — la fiche d'un talent, ouverte par-dessus la grille.
@@ -29,12 +31,28 @@ import { categoryLabel, talentAge, type Talent } from "@/content/talents";
  * s'agit, meme si le prospect a efface la moitie du texte.
  */
 
+/*
+  Les familles de talents, en anglais. Les identifiants et les libelles
+  francais restent dans src/content/talents.ts ; seul l'affichage change.
+*/
+export const CATEGORY_EN: Record<TalentCategory, { label: string; one: string }> = {
+  actrice: { label: "Actresses", one: "Actress" },
+  mannequin: { label: "Models", one: "Model" },
+  ugc: { label: "UGC creators", one: "UGC creator" },
+};
+
+/** Libelle d'une famille (au singulier), dans la langue de la page. */
+export const categoryLabelFor = (id: TalentCategory | undefined, l: Locale) =>
+  l === "en" ? (id ? CATEGORY_EN[id].one : "") : categoryLabel(id);
+
 type Props = {
   talent: Talent | null;
   onClose: () => void;
 };
 
 export function TalentSheet({ talent, onClose }: Props) {
+  const locale = useLocale();
+  const en = locale === "en";
   const closeRef = useRef<HTMLButtonElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -92,9 +110,11 @@ export function TalentSheet({ talent, onClose }: Props) {
 
   if (!talent || typeof document === "undefined") return null;
 
-  const link = `${SITE_URL}/casting?profil=${talent.slug}`;
+  const link = `${SITE_URL}${localePath("/casting", locale)}?profil=${talent.slug}`;
   const ask = whatsappUrl(
-    `Bonjour UltraVision, je souhaite travailler avec ${talent.name} pour une campagne : ${link}`,
+    en
+      ? `Hello UltraVision, I would like to work with ${talent.name} on a campaign: ${link}`
+      : `Bonjour UltraVision, je souhaite travailler avec ${talent.name} pour une campagne : ${link}`,
   );
 
   const share = async () => {
@@ -119,18 +139,25 @@ export function TalentSheet({ talent, onClose }: Props) {
     }
   };
 
-  const facts: [string, string][] = [
-    ["Âge", `${talentAge(talent)} ans`],
-    ...(talent.height ? ([["Taille", `${talent.height} cm`]] as [string, string][]) : []),
-    ["Ville", talent.city],
-    ["Langues", talent.languages.join(", ")],
-  ];
+  const facts: [string, string][] = en
+    ? [
+        ["Age", `${talentAge(talent)}`],
+        ...(talent.height ? ([["Height", `${talent.height} cm`]] as [string, string][]) : []),
+        ["City", talent.city],
+        ["Languages", talent.languages.map((l) => castingLabel(l, locale)).join(", ")],
+      ]
+    : [
+        ["Âge", `${talentAge(talent)} ans`],
+        ...(talent.height ? ([["Taille", `${talent.height} cm`]] as [string, string][]) : []),
+        ["Ville", talent.city],
+        ["Langues", talent.languages.join(", ")],
+      ];
 
   return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Profil de ${talent.name}`}
+      aria-label={en ? `${talent.name}'s profile` : `Profil de ${talent.name}`}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -172,7 +199,7 @@ export function TalentSheet({ talent, onClose }: Props) {
           ref={closeRef}
           type="button"
           onClick={onClose}
-          aria-label="Fermer la fiche"
+          aria-label={en ? "Close profile" : "Fermer la fiche"}
           className="absolute top-3 right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-foreground outline-none backdrop-blur-sm transition-colors hover:bg-black/60 focus-visible:ring-2 focus-visible:ring-accent"
         >
           <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
@@ -199,7 +226,11 @@ export function TalentSheet({ talent, onClose }: Props) {
               <img
                 key={src}
                 src={src}
-                alt={`${talent.name}, photo ${i + 1} sur ${count}`}
+                alt={
+                  en
+                    ? `${talent.name}, photo ${i + 1} of ${count}`
+                    : `${talent.name}, photo ${i + 1} sur ${count}`
+                }
                 width={900}
                 height={1200}
                 className="aspect-[3/4] w-full shrink-0 snap-center object-cover"
@@ -237,7 +268,7 @@ export function TalentSheet({ talent, onClose }: Props) {
         {/* ---------------- Les informations ---------------- */}
         <div className="p-7 sm:p-9 lg:py-10 lg:pr-12 lg:pl-0">
           <p className="eyebrow" style={{ color: "#60A5FA" }}>
-            {talent.categories.map(categoryLabel).join(" · ")}
+            {talent.categories.map((c) => categoryLabelFor(c, locale)).join(" · ")}
           </p>
           <h2 className="display mt-3 text-[2rem] leading-[1.05] tracking-[-0.03em] text-foreground">
             {talent.name}
@@ -255,7 +286,7 @@ export function TalentSheet({ talent, onClose }: Props) {
           {talent.credits && talent.credits.length > 0 && (
             <div className="mt-7">
               <p className="text-[0.62rem] tracking-[0.16em] uppercase text-[#797976]">
-                A tourné avec nous
+                {en ? "Has shot with us" : "A tourné avec nous"}
               </p>
               <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
                 {talent.credits.map((c) => (
@@ -288,7 +319,7 @@ export function TalentSheet({ talent, onClose }: Props) {
                   transition: `background-color ${MOTION.respond}ms ${EASE_RESPOND}`,
                 }}
               >
-                Choisir ce profil
+                {en ? "Choose this profile" : "Choisir ce profil"}
               </a>
             )}
             <button
@@ -297,7 +328,13 @@ export function TalentSheet({ talent, onClose }: Props) {
               className="inline-flex h-12 items-center rounded-full px-6 text-xs font-medium tracking-[0.14em] uppercase"
               style={{ border: "1px solid #2b4880", color: "#cddafc" }}
             >
-              {copied ? "Lien copié" : "Partager la fiche"}
+              {en
+                ? copied
+                  ? "Link copied"
+                  : "Share profile"
+                : copied
+                  ? "Lien copié"
+                  : "Partager la fiche"}
             </button>
           </div>
         </div>
