@@ -190,8 +190,8 @@ export const SECTORS: Sector[] = [
     ],
     services: ["creation-site-web", "production-video-photo", "meta-ads", "tiktok-ads", "branding"],
     works: ["hotel-bord-de-lac", "loisirs"],
-    sites: ["koozina-garden", "raphael-anglesy"],
-    clients: ["Koozina Garden", "Le Petit Hôtel du Flouka"],
+    sites: ["squid-wok", "koozina-garden", "raphael-anglesy"],
+    clients: ["Koozina Garden", "Le Petit Hôtel du Flouka", "Squid Wok"],
     faq: [
       {
         q: "Pouvez-vous intégrer la réservation au site ?",

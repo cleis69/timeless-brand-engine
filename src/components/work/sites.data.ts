@@ -174,6 +174,44 @@ export const SITE_ITEMS: SiteItem[] = [
   },
   {
     /*
+      Etude de cas ajoutee le 21 octobre 2026 : le site de Squid Wok,
+      restaurant asiatique a Marrakech, en ligne sur squidwok.com. Capture
+      de l'accueil en fenetre 1440x820. Prestations confirmees par l'agence :
+      le site, le referencement et la fiche Google Business Profile. La note
+      Google affichee sur le site est celle du restaurant, pas un resultat
+      revendique ici : aucun chiffre n'est annonce.
+    */
+    slug: 'squid-wok',
+    title: 'Squid Wok',
+    category: 'SITE • RESTAURANT',
+    description:
+      'Restaurant de wok à Marrakech : la carte complète, un panier qui envoie la commande sur WhatsApp, la livraison Glovo, puis le référencement et la fiche Google.',
+    domain: 'squidwok.com',
+    shot: '/work/sites/squid-wok/shot-960.webp',
+    shotLarge: '/work/sites/squid-wok/shot-1440.webp',
+    tags: ['Commande WhatsApp', 'Référencement', 'Fiche Google'],
+    hue: 30,
+    layout: 'commerce',
+    year: '2026',
+    caseStudy: {
+      client: 'Squid Wok',
+      sector: 'restauration-hospitality',
+      location: 'Marrakech',
+      services: ['creation-site-web'],
+      headline:
+        'Squid Wok : le site d’un restaurant de wok à Marrakech, de la carte à la commande sur WhatsApp.',
+      seoTitle: 'Squid Wok : site et référencement d’un restaurant à Marrakech',
+      seoDescription:
+        'Site de Squid Wok, restaurant asiatique à Marrakech : carte complète, panier relié à WhatsApp, livraison Glovo, référencement local et fiche Google Business Profile.',
+      summary:
+        'Pour Squid Wok, restaurant asiatique de Marrakech (nouilles sautées, pad thaï, wok saté, sur place, à emporter ou en livraison), UltraVision Agency a conçu et mis en ligne le site squidwok.com, puis pris en charge son référencement et sa fiche Google Business Profile.',
+      execution:
+        'Un site d’une page pensé pour le téléphone : la carte complète par catégories, les menus poulet, bœuf et gambas, et un panier qui envoie la commande sur WhatsApp au prix de la carte. Boutons d’appel, de WhatsApp et de livraison Glovo toujours visibles, page de commande directe, horaires et accès. Référencement local : données structurées de restaurant avec adresse et horaires, fiche Google Business Profile créée et reliée au site.',
+      website: 'https://squidwok.com',
+    },
+  },
+  {
+    /*
       Etude de cas ajoutee le 9 octobre 2026, deuxieme site apres Find
       Estate. La capture est celle de la page Expertises (/services,
       « Quatre piliers, un seul moteur de croissance. »), en fenetre

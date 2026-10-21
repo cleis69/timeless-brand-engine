@@ -703,7 +703,7 @@ export const SERVICES: Service[] = [
       { carte: "Suivi SEO mensuel" },
       { carte: "Visibilité sur les IA (GEO)" },
     ],
-    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "rev", "find-estate"],
+    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "squid-wok", "rev", "find-estate"],
     articles: [
       "prix-site-internet-maroc",
       "referencement-google-marrakech",

@@ -181,6 +181,24 @@ export const SITES_EN: SitesEn = {
       location: "Lyon, Paris and Dubai",
     },
   },
+  "squid-wok": {
+    category: "WEBSITE • RESTAURANT",
+    description:
+      "Wok restaurant in Marrakech: the full menu, a basket that sends the order on WhatsApp, Glovo delivery, then search optimisation and the Google listing.",
+    tags: ["WhatsApp ordering", "SEO", "Google listing"],
+    caseStudy: {
+      headline:
+        "Squid Wok: the site of a wok restaurant in Marrakech, from the menu to ordering on WhatsApp.",
+      seoTitle: "Squid Wok: website and SEO for a restaurant in Marrakech",
+      seoDescription:
+        "Site of Squid Wok, an Asian restaurant in Marrakech: full menu, a basket linked to WhatsApp, Glovo delivery, local SEO and a Google Business Profile.",
+      summary:
+        "For Squid Wok, an Asian restaurant in Marrakech (stir-fried noodles, pad thai, satay wok, to eat in, take away or delivered), UltraVision Agency designed and launched the site squidwok.com, then took on its search optimisation and its Google Business Profile.",
+      execution:
+        "A one-page site built for mobile: the full menu by category, chicken, beef and prawn set menus, and a basket that sends the order on WhatsApp at menu prices. Call, WhatsApp and Glovo delivery buttons always in view, a direct ordering page, opening hours and directions. Local SEO: restaurant structured data with address and opening hours, and a Google Business Profile created and linked to the site.",
+      location: "Marrakech",
+    },
+  },
   "insider-properties": {
     category: "WEBSITE • NEW-BUILD PROPERTY",
     description:
