@@ -703,7 +703,7 @@ export const SERVICES: Service[] = [
       { carte: "Suivi SEO mensuel" },
       { carte: "Visibilité sur les IA (GEO)" },
     ],
-    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "squid-wok", "rev", "find-estate"],
+    sites: ["ideal-contemporain", "raphael-anglesy", "koozina-garden", "squid-wok", "citystar", "rev", "find-estate"],
     articles: [
       "prix-site-internet-maroc",
       "referencement-google-marrakech",
@@ -854,6 +854,7 @@ export const SERVICES: Service[] = [
     prices: [{ carte: "CRM et automatisation des leads" }, { pack: "acquisition" }],
     articles: ["leads-immobiliers-marrakech", "ce-que-l-ia-fait-vraiment-dans-notre-production"],
     related: ["generation-de-leads", "creation-site-web", "meta-ads"],
+    sites: ["citystar"],
     faq: [
       {
         q: "Faut-il changer de CRM ?",

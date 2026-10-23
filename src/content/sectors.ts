@@ -88,7 +88,7 @@ export const SECTORS: Sector[] = [
       "crm-ia-automatisation",
     ],
     works: ["all-in-kech", "agent-immobilier", "promoteur-immobilier", "residence-neuve"],
-    sites: ["rev", "find-estate"],
+    sites: ["citystar", "rev", "find-estate"],
     clients: ["All In Kech", "Centralym Immobilier"],
     faq: [
       {

@@ -264,6 +264,46 @@ export const SITE_ITEMS: SiteItem[] = [
       une etude de cas, et premier projet dont l'adresse reelle est liee
       (voir la REGLE 1, en tete de fichier) ; REV a suivi.
     */
+    /*
+      Etude de cas ajoutee le 23 octobre 2026 : CITYSTAR, programme de
+      14 villas a Oulad Hassoune (Marrakech), en ligne sur citystar.ma.
+      Faits limites a ce que le site publie et a ce que l'agence a livre :
+      site en six langues, pages « dossier » par langue, espace
+      proprietaire, simulateurs, CRM. Le promoteur n'est pas nomme : le
+      site ne le nomme pas. Aucun prix ni resultat annonce. Capture de
+      l'accueil (rendu 3D, non contractuel, comme le precise le site).
+    */
+    slug: 'citystar',
+    title: 'CITYSTAR',
+    category: 'SITE • PROGRAMME IMMOBILIER',
+    description:
+      'Programme de 14 villas à Marrakech : site en six langues, page dossier par pays, simulateurs, espace propriétaire et CRM reliés aux demandes.',
+    domain: 'citystar.ma',
+    shot: '/work/sites/citystar/shot-960.webp',
+    shotLarge: '/work/sites/citystar/shot-1440.webp',
+    tags: ['Six langues', 'Espace propriétaire', 'CRM'],
+    hue: 34,
+    layout: 'editorial',
+    year: '2026',
+    caseStudy: {
+      client: 'CITYSTAR',
+      sector: 'immobilier',
+      location: 'Oulad Hassoune, Marrakech',
+      services: ['creation-site-web', 'crm-ia-automatisation'],
+      languages: ['fr', 'en', 'es', 'it', 'nl', 'no'],
+      headline:
+        'CITYSTAR : le site et le CRM d’un programme de 14 villas à Marrakech, en six langues.',
+      seoTitle: 'CITYSTAR : site et CRM de 14 villas',
+      seoDescription:
+        'Site de CITYSTAR, 14 villas à Marrakech, en six langues : pages dossier par pays, visite 360°, simulateurs, espace propriétaire et CRM.',
+      summary:
+        'Pour CITYSTAR, résidence privée de 14 villas contemporaines à Oulad Hassoune, près de la Palmeraie de Marrakech, UltraVision Agency a conçu et mis en ligne le site citystar.ma en six langues, avec un espace propriétaire, des simulateurs et un CRM qui reçoit chaque demande.',
+      execution:
+        'Un site en français, anglais, espagnol, italien, néerlandais et norvégien, avec une page « dossier » par langue pour les acheteurs venus de la publicité : chaque demande de brochure, de plans ou d’échéancier arrive dans le CRM avec la villa et la langue du contact, et déclenche une séquence d’e-mails dans sa langue. Les trois types de villas, une galerie et une visite 360°, la carte et les temps de trajet, le parcours d’achat chez le notaire et le calendrier du chantier. Deux simulateurs : rendement locatif, et échéancier avec crédit. Un espace propriétaire, avec connexion sans mot de passe, pour suivre l’avancement, les photos et les paiements depuis l’étranger.',
+      website: 'https://www.citystar.ma',
+    },
+  },
+  {
     slug: 'find-estate',
     title: 'Find Estate',
     category: 'REFONTE • CONCIERGERIE',

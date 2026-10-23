@@ -181,6 +181,24 @@ export const SITES_EN: SitesEn = {
       location: "Lyon, Paris and Dubai",
     },
   },
+  citystar: {
+    category: "WEBSITE • PROPERTY DEVELOPMENT",
+    description:
+      "A development of 14 villas in Marrakech: a site in six languages, an information-pack page per country, calculators, an owner portal and a CRM linked to every enquiry.",
+    tags: ["Six languages", "Owner portal", "CRM"],
+    caseStudy: {
+      headline:
+        "CITYSTAR: the website and CRM of a 14-villa development in Marrakech, in six languages.",
+      seoTitle: "CITYSTAR: website and CRM for 14 villas",
+      seoDescription:
+        "Site of CITYSTAR, 14 villas in Marrakech, in six languages: information-pack pages per country, 360° tour, calculators, owner portal and CRM.",
+      summary:
+        "For CITYSTAR, a private estate of 14 contemporary villas in Oulad Hassoune, near the Palmeraie in Marrakech, UltraVision Agency designed and launched the site citystar.ma in six languages, with an owner portal, calculators and a CRM that receives every enquiry.",
+      execution:
+        "A site in French, English, Spanish, Italian, Dutch and Norwegian, with an information-pack page in each language for buyers arriving from advertising: every request for the brochure, plans or payment schedule reaches the CRM with the villa and the contact's language, and starts an email sequence in that language. The three villa types, a gallery and a 360° tour, the map and travel times, the purchase process before a notary and the construction timeline. Two calculators: rental yield, and payment schedule with a mortgage. An owner portal, with passwordless sign-in, to follow progress, photos and payments from abroad.",
+      location: "Oulad Hassoune, Marrakech",
+    },
+  },
   "squid-wok": {
     category: "WEBSITE • RESTAURANT",
     description:
