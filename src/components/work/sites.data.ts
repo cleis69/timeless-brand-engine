@@ -277,11 +277,11 @@ export const SITE_ITEMS: SiteItem[] = [
     title: 'CITYSTAR',
     category: 'SITE • PROGRAMME IMMOBILIER',
     description:
-      'Programme de 14 villas à Marrakech : site en six langues, page dossier par pays, simulateurs, espace propriétaire et CRM reliés aux demandes.',
+      'Programme de 14 villas à Marrakech : site en six langues, page dossier par pays, campagne d’e-mails, simulateurs, espace propriétaire et CRM.',
     domain: 'citystar.ma',
     shot: '/work/sites/citystar/shot-960.webp',
     shotLarge: '/work/sites/citystar/shot-1440.webp',
-    tags: ['Six langues', 'Espace propriétaire', 'CRM'],
+    tags: ['Six langues', 'Campagne e-mail', 'CRM'],
     hue: 34,
     layout: 'editorial',
     year: '2026',
@@ -295,11 +295,11 @@ export const SITE_ITEMS: SiteItem[] = [
         'CITYSTAR : le site et le CRM d’un programme de 14 villas à Marrakech, en six langues.',
       seoTitle: 'CITYSTAR : site et CRM de 14 villas',
       seoDescription:
-        'Site de CITYSTAR, 14 villas à Marrakech, en six langues : pages dossier par pays, visite 360°, simulateurs, espace propriétaire et CRM.',
+        'Site de CITYSTAR, 14 villas à Marrakech, en six langues : pages dossier, campagne d’e-mails, visite 360°, simulateurs, espace propriétaire et CRM.',
       summary:
-        'Pour CITYSTAR, résidence privée de 14 villas contemporaines à Oulad Hassoune, près de la Palmeraie de Marrakech, UltraVision Agency a conçu et mis en ligne le site citystar.ma en six langues, avec un espace propriétaire, des simulateurs et un CRM qui reçoit chaque demande.',
+        'Pour CITYSTAR, résidence privée de 14 villas contemporaines à Oulad Hassoune, près de la Palmeraie de Marrakech, UltraVision Agency a conçu et mis en ligne le site citystar.ma en six langues, avec un espace propriétaire, des simulateurs, un CRM qui reçoit chaque demande et la campagne d’e-mails qui accompagne l’acheteur jusqu’aux clés.',
       execution:
-        'Un site en français, anglais, espagnol, italien, néerlandais et norvégien, avec une page « dossier » par langue pour les acheteurs venus de la publicité : chaque demande de brochure, de plans ou d’échéancier arrive dans le CRM avec la villa et la langue du contact, et déclenche une séquence d’e-mails dans sa langue. Les trois types de villas, une galerie et une visite 360°, la carte et les temps de trajet, le parcours d’achat chez le notaire et le calendrier du chantier. Deux simulateurs : rendement locatif, et échéancier avec crédit. Un espace propriétaire, avec connexion sans mot de passe, pour suivre l’avancement, les photos et les paiements depuis l’étranger.',
+        'Un site en français, anglais, espagnol, italien, néerlandais et norvégien, avec une page « dossier » par langue pour les acheteurs venus de la publicité : chaque demande de brochure, de plans ou d’échéancier arrive dans le CRM avec la villa et la langue du contact, et déclenche une séquence d’e-mails dans sa langue. La campagne : huit e-mails en trois semaines après la demande de dossier, chacun terminé par un contact avec un conseiller et arrêté dès que l’acheteur répond ou prend rendez-vous ; puis la confirmation et le rappel de visite, l’accueil des nouveaux acquéreurs et des nouvelles à chaque étape du chantier. Quinze modèles, en six langues : quatre-vingt-dix e-mails. Les trois types de villas, une galerie et une visite 360°, la carte et les temps de trajet, le parcours d’achat chez le notaire et le calendrier du chantier. Deux simulateurs : rendement locatif, et échéancier avec crédit. Un espace propriétaire, avec connexion sans mot de passe, pour suivre l’avancement, les photos et les paiements depuis l’étranger.',
       website: 'https://www.citystar.ma',
     },
   },

@@ -184,18 +184,18 @@ export const SITES_EN: SitesEn = {
   citystar: {
     category: "WEBSITE • PROPERTY DEVELOPMENT",
     description:
-      "A development of 14 villas in Marrakech: a site in six languages, an information-pack page per country, calculators, an owner portal and a CRM linked to every enquiry.",
-    tags: ["Six languages", "Owner portal", "CRM"],
+      "A development of 14 villas in Marrakech: a site in six languages, an information-pack page per country, an email campaign, calculators, an owner portal and a CRM.",
+    tags: ["Six languages", "Email campaign", "CRM"],
     caseStudy: {
       headline:
         "CITYSTAR: the website and CRM of a 14-villa development in Marrakech, in six languages.",
       seoTitle: "CITYSTAR: website and CRM for 14 villas",
       seoDescription:
-        "Site of CITYSTAR, 14 villas in Marrakech, in six languages: information-pack pages per country, 360° tour, calculators, owner portal and CRM.",
+        "Site of CITYSTAR, 14 villas in Marrakech, in six languages: information packs, email campaign, 360° tour, calculators, owner portal and CRM.",
       summary:
-        "For CITYSTAR, a private estate of 14 contemporary villas in Oulad Hassoune, near the Palmeraie in Marrakech, UltraVision Agency designed and launched the site citystar.ma in six languages, with an owner portal, calculators and a CRM that receives every enquiry.",
+        "For CITYSTAR, a private estate of 14 contemporary villas in Oulad Hassoune, near the Palmeraie in Marrakech, UltraVision Agency designed and launched the site citystar.ma in six languages, with an owner portal, calculators, a CRM that receives every enquiry and the email campaign that takes the buyer through to handover of the keys.",
       execution:
-        "A site in French, English, Spanish, Italian, Dutch and Norwegian, with an information-pack page in each language for buyers arriving from advertising: every request for the brochure, plans or payment schedule reaches the CRM with the villa and the contact's language, and starts an email sequence in that language. The three villa types, a gallery and a 360° tour, the map and travel times, the purchase process before a notary and the construction timeline. Two calculators: rental yield, and payment schedule with a mortgage. An owner portal, with passwordless sign-in, to follow progress, photos and payments from abroad.",
+        "A site in French, English, Spanish, Italian, Dutch and Norwegian, with an information-pack page in each language for buyers arriving from advertising: every request for the brochure, plans or payment schedule reaches the CRM with the villa and the contact's language, and starts an email sequence in that language. The campaign: eight emails over three weeks after the pack request, each ending with a way to reach an adviser and stopping as soon as the buyer replies or books a visit; then visit confirmation and reminder, a welcome for new buyers and news at each stage of construction. Fifteen templates in six languages: ninety emails. The three villa types, a gallery and a 360° tour, the map and travel times, the purchase process before a notary and the construction timeline. Two calculators: rental yield, and payment schedule with a mortgage. An owner portal, with passwordless sign-in, to follow progress, photos and payments from abroad.",
       location: "Oulad Hassoune, Marrakech",
     },
   },
