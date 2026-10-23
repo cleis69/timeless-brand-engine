@@ -285,7 +285,7 @@ export const SERVICES: Service[] = [
     serviceType: "Gestion de campagnes publicitaires Meta Ads (Facebook et Instagram)",
     title: "Agence Meta Ads à Marrakech",
     description:
-      "Campagnes Facebook et Instagram pilotées au coût par lead par UltraVision Agency, à Marrakech : vidéos produites en interne, comptes à votre nom, rapport mensuel.",
+      "Campagnes Facebook et Instagram pilotées au coût par lead, à Marrakech : vidéos produites en interne, comptes à votre nom, rapport mensuel.",
     eyebrow: "Meta Ads — Facebook & Instagram",
     h1: "Des campagnes Meta Ads pilotées au coût par lead, pas au clic.",
     accent: "au coût par lead",
@@ -385,7 +385,7 @@ export const SERVICES: Service[] = [
     serviceType: "Gestion de campagnes Google Ads",
     title: "Agence Google Ads à Marrakech",
     description:
-      "Campagnes Google Ads pour capter les personnes qui cherchent déjà votre service : structure, suivi des conversions et pilotage au coût par lead, depuis Marrakech.",
+      "Campagnes Google Ads pour capter ceux qui cherchent déjà votre service : structure, suivi des conversions et pilotage au coût par lead, depuis Marrakech.",
     eyebrow: "Google Ads — la demande existante",
     h1: "Google Ads : être trouvé au moment où l'on vous cherche.",
     accent: "au moment où l'on vous cherche",
@@ -646,7 +646,7 @@ export const SERVICES: Service[] = [
     serviceType: "Création de sites web, landing pages et applications web",
     title: "Création de site web à Marrakech",
     description:
-      "Sites vitrines, landing pages et applications web rapides, pensés pour la conversion, référencés sur Google et lisibles par les IA. Par UltraVision Agency à Marrakech.",
+      "Sites vitrines, landing pages et applications web rapides, pensés pour la conversion, référencés sur Google et lisibles par les IA, à Marrakech.",
     eyebrow: "Sites web & applications",
     h1: "Des sites rapides, sobres et pensés pour la conversion.",
     accent: "pensés pour la conversion",
@@ -735,7 +735,7 @@ export const SERVICES: Service[] = [
     serviceType: "Branding, identité visuelle et positionnement",
     title: "Branding et identité visuelle à Marrakech",
     description:
-      "Positionnement, messages clés, logo et identité visuelle, direction artistique : une marque lisible en trois secondes et prête pour la publicité. Par UltraVision Agency.",
+      "Positionnement, messages clés, logo et identité visuelle, direction artistique : une marque lisible en trois secondes et prête pour la publicité.",
     eyebrow: "Branding & identité",
     h1: "Une marque lisible en trois secondes, qui déclenche quelque chose.",
     accent: "qui déclenche quelque chose",
@@ -806,7 +806,7 @@ export const SERVICES: Service[] = [
     serviceType: "Intégration CRM, intelligence artificielle et automatisation commerciale",
     title: "CRM, IA et automatisation à Marrakech",
     description:
-      "Mise en place du CRM, automatisation des leads et des relances, agents IA et tableaux de bord : aucune demande perdue entre le clic et l'appel. Par UltraVision Agency.",
+      "Mise en place du CRM, automatisation des leads et des relances, agents IA et tableaux de bord : aucune demande perdue entre le clic et l'appel.",
     eyebrow: "CRM, IA & automatisation",
     h1: "Aucune demande perdue entre le clic et l'appel.",
     accent: "entre le clic et l'appel",

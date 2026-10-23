@@ -56,7 +56,7 @@ export const SECTORS: Sector[] = [
     name: "Immobilier",
     title: "Marketing immobilier à Marrakech",
     description:
-      "Vidéos de visite, campagnes Meta pour capter des acheteurs au Maroc et à l'étranger, landing pages et CRM : le marketing immobilier d'UltraVision Agency, à Marrakech.",
+      "Vidéos de visite, campagnes Meta pour capter des acheteurs au Maroc et à l'étranger, landing pages et CRM : notre marketing immobilier à Marrakech.",
     eyebrow: "Secteur — Immobilier",
     h1: "Marketing immobilier : faire visiter un bien avant la visite.",
     accent: "avant la visite",
@@ -164,7 +164,7 @@ export const SECTORS: Sector[] = [
     name: "Restauration & hospitality",
     title: "Marketing restaurants et hôtels à Marrakech",
     description:
-      "Sites avec réservation, vidéos et campagnes pour restaurants, chefs, hôtels, riads et lieux de loisirs : le marketing hospitality d'UltraVision Agency à Marrakech.",
+      "Sites avec réservation, vidéos et campagnes pour restaurants, chefs, hôtels, riads et lieux de loisirs : notre marketing hospitality à Marrakech.",
     eyebrow: "Secteur — Restauration & hospitality",
     h1: "Donner envie de réserver, avant même d'avoir goûté.",
     accent: "de réserver",

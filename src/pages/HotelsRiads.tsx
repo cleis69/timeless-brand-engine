@@ -208,7 +208,7 @@ function copy(l: Locale) {
   return {
     name: "Hôtels et riads",
     title: withBrand(`Marketing pour hôtels et riads à ${BRAND.city}`),
-    description: `Vidéos des lieux, site avec réservation intégrée et publicité pour les hôtels et les riads de ${BRAND.city}. Réalisation : Le Petit Hôtel du Flouka. Essai à ${d(ESSAI.price)}.`,
+    description: `Vidéos des lieux, site avec réservation et publicité pour les hôtels et riads de ${BRAND.city}. Réalisation : Le Petit Hôtel du Flouka. Essai à ${d(ESSAI.price)}.`,
     serviceName: `Marketing pour hôtels et riads à ${BRAND.city}`,
     serviceType: "Vidéo, site avec réservation et publicité pour l'hôtellerie",
     audience: "Hôtels et riads",

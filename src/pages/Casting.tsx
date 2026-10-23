@@ -97,7 +97,7 @@ function copy(l: Locale) {
       /** Message pre-rempli quand une candidate ouvre WhatsApp depuis cette page. */
       whatsapp:
         "Hello UltraVision, I'm coming from the casting page on your website. I'd like to send you my profile.",
-      title: "Casting: actresses, models and creators in Morocco | UltraVision Agency",
+      title: "Casting: actresses and models in Morocco | UltraVision",
       name: "Casting: actresses, models and creators in Morocco",
       description:
         "Actresses, performers, models: apply for our video ads in Morocco. Free, two minutes, from your phone.",
@@ -180,7 +180,7 @@ function copy(l: Locale) {
     /** Message pre-rempli quand une candidate ouvre WhatsApp depuis cette page. */
     whatsapp:
       "Bonjour UltraVision, je viens de la page casting de votre site. J'aimerais vous envoyer mon profil.",
-    title: "Casting : actrices, modèles et créatrices au Maroc | UltraVision Agency",
+    title: "Casting : actrices et modèles au Maroc | UltraVision Agency",
     name: "Casting : actrices, modèles et créatrices au Maroc",
     description:
       "Actrices, comédiennes, modèles : déposez votre candidature pour nos films publicitaires au Maroc. Gratuit, deux minutes, depuis votre téléphone.",

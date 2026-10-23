@@ -325,7 +325,7 @@ export const WORK_ITEMS: WorkItem[] = [
       location: "Marrakech",
       services: ["production-video-photo"],
       headline: "All In Kech : la visite d'un triplex à Marrakech, filmée en vertical.",
-      seoTitle: "All In Kech : vidéo de visite immobilière à Marrakech",
+      seoTitle: "All In Kech : visite immobilière filmée",
       seoDescription:
         "Étude de cas : pour l'agence immobilière All In Kech, UltraVision Agency a tourné à Marrakech la visite d'un triplex, présentée face caméra, en format vertical.",
       summary:
@@ -371,7 +371,7 @@ export const WORK_ITEMS: WorkItem[] = [
       services: ["production-video-photo"],
       headline:
         "Le Petit Hôtel du Flouka : un hôtel au bord du lac, filmé de la terrasse au restaurant.",
-      seoTitle: "Le Petit Hôtel du Flouka : film de présentation d'hôtel près de Marrakech",
+      seoTitle: "Le Petit Hôtel du Flouka : film d'hôtel",
       seoDescription:
         "Étude de cas : pour Le Petit Hôtel du Flouka, au lac Lalla Takerkoust près de Marrakech, UltraVision Agency a tourné et monté un film de présentation du lieu.",
       summary:
@@ -540,7 +540,7 @@ export const WORK_ITEMS: WorkItem[] = [
       headline: "Sculpt Body Marrakech : une création publicitaire au service d'un tunnel d'acquisition.",
       seoTitle: "Sculpt Body Marrakech : publicité vidéo",
       seoDescription:
-        "Étude de cas Sculpt Body Marrakech : une création publicitaire orientée conversion, produite par UltraVision Agency. 890 000 vues, 2,10 € par lead, +52 % de conversions.",
+        "Étude de cas Sculpt Body Marrakech : une publicité vidéo orientée conversion. 890 000 vues, 2,10 € par lead, +52 % de conversions.",
       summary:
         "Pour Sculpt Body Marrakech, UltraVision Agency a produit une création publicitaire orientée conversion, pensée pour alimenter un tunnel d'acquisition complet. Résultats relevés dans les gestionnaires de publicités : 890 000 vues, un coût par lead de 2,10 € et +52 % de conversions.",
     },

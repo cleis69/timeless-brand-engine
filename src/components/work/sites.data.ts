@@ -200,9 +200,9 @@ export const SITE_ITEMS: SiteItem[] = [
       services: ['creation-site-web'],
       headline:
         'Squid Wok : le site d’un restaurant de wok à Marrakech, de la carte à la commande sur WhatsApp.',
-      seoTitle: 'Squid Wok : site et référencement d’un restaurant à Marrakech',
+      seoTitle: 'Squid Wok : site d’un restaurant de wok',
       seoDescription:
-        'Site de Squid Wok, restaurant asiatique à Marrakech : carte complète, panier relié à WhatsApp, livraison Glovo, référencement local et fiche Google Business Profile.',
+        'Site de Squid Wok, restaurant asiatique à Marrakech : carte complète, commande WhatsApp, livraison Glovo, référencement local et fiche Google.',
       summary:
         'Pour Squid Wok, restaurant asiatique de Marrakech (nouilles sautées, pad thaï, wok saté, sur place, à emporter ou en livraison), UltraVision Agency a conçu et mis en ligne le site squidwok.com, puis pris en charge son référencement et sa fiche Google Business Profile.',
       execution:
@@ -246,9 +246,9 @@ export const SITE_ITEMS: SiteItem[] = [
       languages: ['fr-FR', 'en-GB'],
       headline:
         'Refonte de REV — Real Estate Vision : un site bilingue et un plan de vente interactif pour les promoteurs.',
-      seoTitle: 'REV : refonte du site et plan de vente interactif',
+      seoTitle: 'REV : refonte et plan de vente interactif',
       seoDescription:
-        'Refonte du site de REV, agence de croissance immobilière, en français et en anglais, et plan de vente interactif pour les promoteurs : lots, visites 360°, vues 3D.',
+        'Refonte du site de REV, agence de croissance immobilière, en français et en anglais, et plan de vente interactif : lots, visites 360°, vues 3D.',
       summary:
         'Pour REV — Real Estate Vision, agence de croissance immobilière qui accompagne promoteurs, agences et agents, UltraVision Agency a réalisé la refonte du site realestatevision360.com, en français et en anglais, puis un plan de vente interactif que les promoteurs peuvent publier et intégrer à leur propre site.',
       execution:
@@ -282,7 +282,7 @@ export const SITE_ITEMS: SiteItem[] = [
       location: 'Lyon, Paris et Dubaï',
       services: ['creation-site-web'],
       headline: 'Refonte de Find Estate : le site d’une conciergerie de location courte durée, de Lyon à Dubaï.',
-      seoTitle: 'Find Estate : refonte du site d’une conciergerie',
+      seoTitle: 'Find Estate : site d’une conciergerie',
       seoDescription:
         'Refonte du site de Find Estate, conciergerie de location courte durée en France et à Dubaï : estimateur de revenus, formulaires et référencement page par page.',
       summary:
@@ -321,9 +321,9 @@ export const SITE_ITEMS: SiteItem[] = [
       languages: ['fr', 'en'],
       headline:
         'INSIDER Properties : le site d’une agence d’achat sur plan à Marrakech, en français et en anglais.',
-      seoTitle: 'INSIDER Properties : site d’achat sur plan à Marrakech',
+      seoTitle: 'INSIDER Properties : site d’achat sur plan',
       seoDescription:
-        'Site d’INSIDER Properties, agence d’achat sur plan à Marrakech, en français et en anglais : sélection de programmes et simulateurs de versements, de crédit et de rentabilité.',
+        'Site bilingue d’INSIDER Properties, agence d’achat sur plan à Marrakech : sélection de programmes, simulateurs de versements, de crédit et de rentabilité.',
       summary:
         'Pour INSIDER Properties, agence immobilière à Marrakech qui accompagne l’achat d’un programme sur plan, de la sélection à la remise des clés, UltraVision Agency a conçu et mis en ligne le site insider-properties.com, en français et en anglais.',
       execution:

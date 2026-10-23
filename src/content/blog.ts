@@ -838,7 +838,7 @@ export const ARTICLES: Article[] = [
     category: "Tarifs",
     date: "2026-10-05",
     readingTime: 7,
-    seo: "Prix et budget Facebook Ads au Maroc : combien dépenser sur Facebook et Instagram, en dirhams, calculé à partir du coût d'un résultat et de la phase d'apprentissage.",
+    seo: "Prix et budget Facebook Ads au Maroc : combien dépenser sur Facebook et Instagram, en dirhams, calculé à partir du coût d'un résultat.",
     takeaways: [
       "Un budget Meta Ads se calcule à partir du coût d'un résultat, pas à partir d'une moyenne de marché : il doit permettre à chaque ensemble de publicités d'obtenir régulièrement des conversions.",
       "Selon la documentation de Meta, un ensemble de publicités sort de sa phase d'apprentissage après environ 50 événements d'optimisation sur sept jours. Pendant cette phase, les coûts sont plus élevés et moins stables.",
@@ -1609,7 +1609,7 @@ export const ARTICLES: Article[] = [
     category: "Production",
     date: "2026-10-19",
     readingTime: 6,
-    seo: "Vidéo immobilière à Marrakech : visite face caméra ou en ambiance, format vertical, sous-titres pour acheteurs étrangers, diffusion ciblée et suivi des demandes.",
+    seo: "Vidéo immobilière à Marrakech : visite face caméra ou en ambiance, format vertical, sous-titres pour acheteurs étrangers, diffusion et suivi des demandes.",
     takeaways: [
       "Une vidéo immobilière efficace répond aux questions d'un acheteur avant le premier appel : la lumière, les volumes, la vue, le quartier et l'état réel du bien.",
       "Le format vertical est celui des réseaux où se diffusent les annonces : un bien filmé en vertical se regarde en entier sur un téléphone, sans le tourner.",

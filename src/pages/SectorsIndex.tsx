@@ -26,7 +26,7 @@ function copy(l: Locale) {
     return {
       title: withBrand(`Industries we work in, ${BRAND.city}`),
       description:
-        "Real estate, beauty and wellness, restaurants and hospitality: the industries where UltraVision Agency, a digital marketing agency in Marrakech, has produced the most work.",
+        "Real estate, beauty and wellness, restaurants and hospitality: the industries where UltraVision Agency, in Marrakech, has produced the most work.",
       crumb: "Industries",
       eyebrow: "Industries",
       h1: "The trades where we have produced the most.",

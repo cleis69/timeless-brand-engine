@@ -175,5 +175,16 @@ export const OG_IMAGE = {
   alt: "UltraVision Agency — Creative Growth Agency à Marrakech, Maroc",
 };
 
-/** Titre complet, ou le nom de marque ferme toujours le titre. */
-export const withBrand = (title: string) => `${title} | ${BRAND.name}`;
+/**
+ * Titre complet, ou le nom de marque ferme toujours le titre.
+ *
+ * Google coupe un titre vers 60 caracteres. Le nom complet passe donc
+ * en premier ; s'il fait deborder, la forme courte « UltraVision » le
+ * remplace. Un titre de plus de 46 caracteres est a raccourcir a la
+ * source plutot qu'a laisser couper.
+ */
+const TITLE_MAX = 60;
+export const withBrand = (title: string) => {
+  const full = `${title} | ${BRAND.name}`;
+  return full.length <= TITLE_MAX ? full : `${title} | ${BRAND.short}`;
+};

@@ -36,7 +36,7 @@ export const WORKS_EN: WorksEn = {
       "Tour of a triplex in Marrakech for the agency All In Kech, presented to camera. Vertical format, filmed on location.",
     caseStudy: {
       headline: "All In Kech: a triplex tour in Marrakech, filmed in vertical format.",
-      seoTitle: "All In Kech: real estate tour video in Marrakech",
+      seoTitle: "All In Kech: filmed property tour",
       seoDescription:
         "Case study: for the real estate agency All In Kech, UltraVision Agency filmed a triplex tour in Marrakech, presented to camera, in vertical format.",
       summary:
@@ -51,7 +51,7 @@ export const WORKS_EN: WorksEn = {
     caseStudy: {
       headline:
         "Le Petit Hôtel du Flouka: a lakeside hotel, filmed from the terrace to the restaurant.",
-      seoTitle: "Le Petit Hôtel du Flouka: hotel presentation film near Marrakech",
+      seoTitle: "Le Petit Hôtel du Flouka: hotel film",
       seoDescription:
         "Case study: for Le Petit Hôtel du Flouka, at Lake Lalla Takerkoust near Marrakech, UltraVision Agency shot and edited a presentation film of the hotel.",
       summary:
@@ -171,7 +171,7 @@ export const SITES_EN: SitesEn = {
     caseStudy: {
       headline:
         "Redesign of Find Estate: the site of a short-term rental concierge service, from Lyon to Dubai.",
-      seoTitle: "Find Estate: redesign of a concierge service's site",
+      seoTitle: "Find Estate: concierge website redesign",
       seoDescription:
         "Redesign of the site of Find Estate, a short-term rental concierge service in France and Dubai: revenue estimator, forms and page-by-page SEO.",
       summary:
@@ -189,7 +189,7 @@ export const SITES_EN: SitesEn = {
     caseStudy: {
       headline:
         "Squid Wok: the site of a wok restaurant in Marrakech, from the menu to ordering on WhatsApp.",
-      seoTitle: "Squid Wok: website and SEO for a restaurant in Marrakech",
+      seoTitle: "Squid Wok: restaurant website and SEO",
       seoDescription:
         "Site of Squid Wok, an Asian restaurant in Marrakech: full menu, a basket linked to WhatsApp, Glovo delivery, local SEO and a Google Business Profile.",
       summary:
@@ -207,9 +207,9 @@ export const SITES_EN: SitesEn = {
     caseStudy: {
       headline:
         "INSIDER Properties: the site of an off-plan buying agency in Marrakech, in French and English.",
-      seoTitle: "INSIDER Properties: off-plan property site in Marrakech",
+      seoTitle: "INSIDER Properties: off-plan property site",
       seoDescription:
-        "Site of INSIDER Properties, an off-plan buying agency in Marrakech, in French and English: a selection of developments and calculators for payments, mortgages and rental yield.",
+        "Bilingual site of INSIDER Properties, an off-plan buying agency in Marrakech: selected developments and calculators for payments, mortgages and yield.",
       summary:
         "For INSIDER Properties, a real estate agency in Marrakech that guides buyers of off-plan developments from selection to handover of the keys, UltraVision Agency designed and launched the site insider-properties.com, in French and English.",
       execution:

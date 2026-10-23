@@ -66,7 +66,7 @@ function copy(l: Locale) {
     };
   }
   return {
-    title: withBrand("Réalisations : vidéos publicitaires et sites web"),
+    title: withBrand("Réalisations : vidéos et sites web"),
     description: `Films publicitaires verticaux, campagnes Meta et TikTok et sites web produits en interne par ${BRAND.name}, agence de marketing digital à Marrakech.`,
     ogDescription: "Ce que nous avons produit, et ce que ça a donné.",
     crumb: "Réalisations",

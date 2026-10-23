@@ -196,7 +196,7 @@ function copy(l: Locale) {
   const adBudget = `${d(800)} à ${d(1500)} par mois (800 à 1 500 €)`;
   return {
     name: "Vidéo publicitaire et Meta Ads",
-    title: withBrand(`Agence vidéo publicitaire et Meta Ads à ${BRAND.city}`),
+    title: withBrand(`Vidéo publicitaire et Meta Ads à ${BRAND.city}`),
     description: `Vidéos publicitaires tournées et diffusées sur Facebook et Instagram par la même équipe, à ${BRAND.city}. Essai à ${d(ESSAI.price)}, vidéo livrée en 7 jours.`,
     serviceName: `Vidéo publicitaire et Meta Ads à ${BRAND.city}`,
     serviceType: "Production de vidéos publicitaires et gestion de campagnes Meta Ads",

@@ -310,7 +310,7 @@ function copy(l: Locale) {
   return {
     name: "À propos",
     title: withBrand(`À propos : l'équipe, à ${BRAND.city}`),
-    description: `${BRAND.name}, ${BRAND.category} basée à Marrakech : une équipe restreinte de seniors — production audiovisuelle, direction artistique, contenu et media buying.`,
+    description: `${BRAND.name}, ${BRAND.category} à Marrakech : une équipe de seniors — production audiovisuelle, direction artistique, contenu et media buying.`,
     ogDescription:
       "Quatre spécialistes, nommés. Ceux qui vous vendent le projet sont ceux qui l'exécutent.",
     h1: "Une équipe restreinte, et vous savez qui fait quoi.",

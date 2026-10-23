@@ -44,6 +44,7 @@ export const ARTICLES_EN_2: ArticlesEn = {
    * ==================================================================== */
   "meta-ads-ou-google-ads": {
     title: "Meta Ads or Google Ads: where should you start?",
+    seoTitle: "Meta Ads or Google Ads: where to start?",
     excerpt:
       "The two platforms do not do the same job. Google answers someone who is already searching; Meta reaches someone who was not looking for anything. The right starting point depends on one question: does your customer know they need you?",
     category: "Strategy",
