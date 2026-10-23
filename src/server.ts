@@ -116,12 +116,22 @@ function withHostHeaders(request: Request, response: Response): Response {
   if (isCanonical) {
     out.headers.set("Strict-Transport-Security", "max-age=31536000");
     /*
-      En-tetes de securite de base. Pas de Content-Security-Policy : le
-      site charge des scripts de plusieurs origines, une politique
-      approximative casserait des pages sans prevenir. Pas de
-      includeSubDomains sur HSTS tant que tous les sous-domaines ne sont
-      pas verifies en HTTPS.
+      En-tetes de securite de base. Pas de includeSubDomains sur HSTS tant
+      que tous les sous-domaines ne sont pas verifies en HTTPS.
+
+      CSP LIMITEE AUX DIRECTIVES SANS RISQUE (23 octobre 2026). Le site
+      charge des scripts de plusieurs origines : restreindre script-src,
+      style-src ou connect-src casserait des pages sans prevenir. La
+      politique ci-dessous ne touche a aucune de ces ressources. Elle
+      interdit seulement d'integrer le site ailleurs (frame-ancestors),
+      de detourner les liens relatifs (base-uri), les plugins (object-src)
+      et l'envoi d'un formulaire HTML vers un autre site (form-action). Les
+      trois formulaires du site envoient en fetch(), non concerne.
     */
+    out.headers.set(
+      "Content-Security-Policy",
+      "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests",
+    );
     out.headers.set("X-Content-Type-Options", "nosniff");
     out.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     out.headers.set("X-Frame-Options", "SAMEORIGIN");
