@@ -136,7 +136,12 @@ export const BRAND = {
     "Elle réunit dans une seule équipe la marque, la production vidéo et photo, la publicité sur Meta, Google et TikTok, les sites web et les outils de conversion : CRM, intelligence artificielle et automatisation.",
   /** Adresses des profils officiels (voir SOCIAL). */
   sameAs: SOCIAL.map((s) => s.url) as string[],
-  founder: { name: "Cleis", jobTitle: "Fondateur" },
+  founder: {
+    name: "Cleis",
+    jobTitle: "Fondateur",
+    /** Profil LinkedIn personnel, donne par le fondateur (sameAs de la personne). */
+    linkedin: "https://www.linkedin.com/in/cl%C3%A9is-padou-78b668a9/",
+  },
   /** Langue de travail affichee sur le site. */
   workingLanguage: "français et anglais",
   /**

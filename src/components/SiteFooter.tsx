@@ -92,6 +92,23 @@ export function SiteFooter() {
           <div className="min-w-0">
             <Logo className="h-8" />
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">{t.about}</p>
+            <div className="mt-8">
+              <p className="eyebrow">{locale === "en" ? "Follow us" : "Suivez-nous"}</p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {SOCIAL.map((s) => (
+                  <li key={s.network}>
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer me"
+                      className="inline-flex items-center rounded-full border border-foreground/20 px-4 py-2 text-sm text-foreground transition hover:border-foreground"
+                    >
+                      {s.network}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
             {hasWhatsapp ? (
               <a
                 href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}

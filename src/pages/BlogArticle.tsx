@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { url } from "@/config/site";
 import { BRAND, ORG_ID, withBrand } from "@/config/brand";
-import { pageHead, pageUrl } from "@/lib/seo";
+import { FOUNDER_ID, pageHead, pageUrl } from "@/lib/seo";
 import { LinkCards } from "@/components/page/Blocks";
 import { servicePath } from "@/content/services";
 import { Reveal } from "@/components/Reveal";
@@ -142,19 +142,9 @@ export function articleHead(a: Article | undefined, locale: Locale) {
         datePublished: a.date,
         dateModified: a.date,
         inLanguage: LANG_TAG[locale],
-        /*
-          Le compte de mots ne porte que sur le texte reel : tableaux et
-          infographies sont exclus, sinon « [object Object] » faussait
-          le decompte declare.
-        */
-        wordCount: a.body.reduce((n, b) => {
-          if (b.k === "ul") return n + b.v.join(" ").split(/\s+/).length;
-          if (b.k === "table" || b.k === "figure") return n;
-          return n + b.v.split(/\s+/).length;
-        }, 0),
         timeRequired: `PT${a.readingTime}M`,
         articleSection: a.category,
-        author: agency,
+        author: { "@id": FOUNDER_ID },
         publisher: agency,
         isPartOf: {
           "@type": "Blog",
@@ -236,6 +226,8 @@ export function BlogArticlePage({ article: a }: { article: Article }) {
               <time dateTime={a.date}>{formatDateIn(a.date, locale)}</time>
               <span aria-hidden="true">·</span>
               <span>{t.readingTime(a.readingTime)}</span>
+              <span aria-hidden="true">·</span>
+              <span>{locale === "en" ? "By" : "Par"} {BRAND.founder.name}</span>
               <span aria-hidden="true">·</span>
               <span>{BRAND.name}</span>
             </p>

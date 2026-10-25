@@ -256,7 +256,7 @@ export function buildLlmsTxt(): string {
     ...CASE_STUDIES.map(
       (w) => `- [${w.caseStudy.client}](${url(casePath(w.slug))}) : ${w.caseStudy.summary}`,
     ),
-    ...WORK_ITEMS.filter((w) => !w.caseStudy).map((w) => `- ${w.title} : ${w.description}`),
+    ...WORK_ITEMS.filter((w) => !w.caseStudy).map((w) => `- ${w.title} : ${w.description} (${url("/realisations")})`),
     /* Un site qui a son etude de cas est deja liste plus haut, avec sa page. */
     ...SITE_ITEMS.filter((s) => !s.placeholder && !s.caseStudy).map(
       (s) => `- Site web ${s.title} : ${s.description}`,

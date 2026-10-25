@@ -6,7 +6,7 @@ import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact
 import { BRAND, withBrand } from "@/config/brand";
 import { orgRef, pageHead } from "@/lib/seo";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
-import { MAD, PACKS, formatDirham, formatEuro, withOffer } from "@/config/pricing";
+import { LAUNCH_OFFER, MAD, PACKS, formatDirham, formatEuro, withOffer } from "@/config/pricing";
 import {
   aLaCarteFor,
   customFor,
@@ -247,6 +247,19 @@ export function pricingHead(locale: Locale) {
                 valueAddedTaxIncluded: false,
                 ...(p.period ? { unitText: "MONTH" } : {}),
               },
+              ...(LAUNCH_OFFER.enabled
+                ? [
+                    {
+                      "@type": "UnitPriceSpecification",
+                      name: "Offre de lancement, première commande",
+                      price: withOffer(p.price),
+                      priceCurrency: "EUR",
+                      validThrough: "2026-12-31",
+                      valueAddedTaxIncluded: false,
+                      ...(p.period ? { unitText: "MONTH" } : {}),
+                    },
+                  ]
+                : []),
               {
                 "@type": "UnitPriceSpecification",
                 price: Math.round((p.price * MAD.rate) / 100) * 100,

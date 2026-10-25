@@ -27,7 +27,7 @@ import {
   servicesFor,
 } from "@/content/localized";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { orgRef, pageHead } from "@/lib/seo";
+import { orgRef, pageHead, pageUrl } from "@/lib/seo";
 
 /**
  * UltraVision Agency — la page pilier.
@@ -346,6 +346,19 @@ export function pillarHead(locale: Locale) {
     about: orgRef,
     mainEntity: orgRef,
     faq: t.faq,
+    nodes: [
+      {
+        "@type": "Service",
+        "@id": `${pageUrl(localePath(PATH, locale))}#service`,
+        name: locale === "en" ? "Digital marketing agency in Marrakech" : "Agence de marketing digital à Marrakech",
+        serviceType: locale === "en" ? "Digital marketing" : "Marketing digital",
+        description: t.description,
+        url: pageUrl(localePath(PATH, locale)),
+        provider: orgRef,
+        areaServed: ["Marrakech", "Casablanca", "Rabat", "Tanger", "Agadir"].map((c) => ({ "@type": "City", name: c })),
+        availableLanguage: ["French", "English"],
+      },
+    ],
   });
 }
 

@@ -153,6 +153,7 @@ export function founderNode(locale: Locale = "fr"): Node {
     jobTitle: locale === "en" ? BRAND.en.founderJobTitle : BRAND.founder.jobTitle,
     url: url(localePath("/a-propos", locale)),
     worksFor: orgRef,
+    sameAs: [BRAND.founder.linkedin],
   };
 }
 
