@@ -14,7 +14,7 @@ import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
 import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
-import { MAD, PACKS, formatDirham } from "@/config/pricing";
+import { LAUNCH_OFFER, MAD, PACKS, dirham, euro, formatDirham, formatEuro, withOffer } from "@/config/pricing";
 import { useState } from "react";
 
 /**
@@ -252,7 +252,7 @@ const FAQ = [
       comme un prix qui change selon l'interlocuteur.
     */
     q: "Quel est le budget d'un accompagnement ?",
-    a: "Une première vidéo publicitaire est à 5 400 MAD, diffusion comprise pendant 14 jours. Les accompagnements mensuels démarrent à 16 400 MAD par mois. Le détail complet, prestation par prestation, est publié sur la page tarifs.",
+    a: `Une première vidéo publicitaire coûte ${euro(ESSAI.price)} (environ ${dirham(ESSAI.price)}), diffusion comprise pendant 14 jours. Les accompagnements mensuels démarrent à ${euro(PRODUCTION.price)} par mois (environ ${dirham(PRODUCTION.price)}). ${LAUNCH_OFFER.enabled ? `En première commande, l'offre de lancement ramène ces montants à ${euro(withOffer(ESSAI.price))} et ${euro(withOffer(PRODUCTION.price))}, valable jusqu'au 31 décembre 2026. ` : ""}Le détail complet, prestation par prestation, est publié sur la page tarifs.`,
   },
   {
     q: "Quels sont les délais ?",
@@ -267,7 +267,7 @@ const FAQ = [
       de tout le reste. La reponse suit maintenant src/config/pricing.ts.
     */
     q: "Vos prix sont-ils en dirhams ou en euros ?",
-    a: `En dirhams, convertis au taux commercial de ${MAD.rate} MAD pour 1 €. Le devis est établi en euros, qui font foi, et le règlement se fait en dirhams.`,
+    a: `En euros, hors taxes : l'euro fait foi au devis. Équivalent indicatif en dirhams, au taux commercial de ${MAD.rate} MAD pour 1 €, et le règlement se fait en dirhams.`,
   },
   {
     q: "Comment mesurez-vous les résultats ?",
@@ -296,7 +296,7 @@ const FAQ = [
 */
 const WHY_EN = [
   {
-    title: "Seniors only",
+    title: "Experienced people only",
     text: "No interns on your project. The people who sell the work are the people who do it.",
   },
   {
@@ -329,7 +329,7 @@ function faqEn() {
     },
     {
       q: "How much does working with you cost?",
-      a: `A first video ad costs ${d(ESSAI.price)}, with 14 days of ads included. Monthly plans start at ${d(PRODUCTION.price)} a month. The full detail, service by service, is published on our pricing page.`,
+      a: `A first video ad costs ${formatEuro(ESSAI.price, "en")} (about ${formatDirham(ESSAI.price, "en")}), with 14 days of ads included. Monthly plans start at ${formatEuro(PRODUCTION.price, "en")} a month. ${LAUNCH_OFFER.enabled ? `On a first order, the launch offer brings these to ${formatEuro(withOffer(ESSAI.price), "en")} and ${formatEuro(withOffer(PRODUCTION.price), "en")}, valid until 31 December 2026. ` : ""}The full detail, service by service, is published on our pricing page.`,
     },
     {
       q: "How long does it take?",
@@ -337,7 +337,7 @@ function faqEn() {
     },
     {
       q: "Are your prices in dirhams or euros?",
-      a: `In dirhams, converted at a commercial rate of ${MAD.rate} MAD to €1. Quotes are drawn up in euros, which are binding, and payment is made in dirhams.`,
+      a: `In euros, excluding taxes: the euro is the binding currency for quotes. Indicative equivalent in dirhams at a commercial rate of ${MAD.rate} MAD to €1, and payment is made in dirhams.`,
     },
     {
       q: "How do you measure results?",
@@ -373,7 +373,7 @@ function copy(l: Locale) {
       ctaWhatsapp: "Chat on WhatsApp",
       ctaEmail: "Email us",
       priceLine: "First video delivered in 7 days, ads included — ",
-      priceFrom: `from ${formatDirham(ESSAI.price, "en")}`,
+      priceFrom: `from ${formatEuro(ESSAI.price, "en")}`,
       locations: CONTACT.locations.replace("Tanger", "Tangier"),
       clients: "Businesses we support",
       whyEyebrow: `Why ${BRAND.short}`,
@@ -407,7 +407,7 @@ function copy(l: Locale) {
     ctaWhatsapp: "Parler sur WhatsApp",
     ctaEmail: "Nous écrire",
     priceLine: "Première vidéo livrée en 7 jours, diffusion comprise — ",
-    priceFrom: "dès 5 400 MAD",
+    priceFrom: `dès ${euro(ESSAI.price)}`,
     locations: CONTACT.locations,
     clients: "Entreprises accompagnées",
     whyEyebrow: `Pourquoi ${BRAND.short}`,

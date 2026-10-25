@@ -91,7 +91,7 @@ const TEAM_ALL: Member[] = [
     // photo: '/brand/team/julien.jpg',
   },
   {
-    name: NAME_TODO,
+    name: "Selma",
     role: "Community manager",
     bio: "Elle tient la ligne éditoriale et la présence quotidienne sur les réseaux : ce qui se publie, quand, et sur quel ton. C'est le lien entre les campagnes payantes et ce que la marque raconte le reste du temps.",
     facts: ["Ligne éditoriale", "Réseaux sociaux", "Community management"],

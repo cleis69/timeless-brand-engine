@@ -68,8 +68,7 @@ const PATH = "/contact";
   La premiere doit toujours correspondre a l'essai : c'est elle qui dit
   au petit budget qu'il a le droit d'etre la.
 
-  Montants en DIRHAMS, convertis au taux commercial de pricing.ts
-  (1 € = 11 MAD) et arrondis a la centaine, comme le fait dirham().
+  Montants en EUROS hors taxes, devise de référence (pricing.ts).
 
   Si MAD.rate change dans pricing.ts, ces quatre lignes ne suivront PAS
   toutes seules : ce sont des chaines, pas des calculs. C'est volontaire
@@ -81,10 +80,10 @@ const PATH = "/contact";
   affiche sur la page anglaise. Les deux colonnes se revoient ensemble.
 */
 const BUDGETS = [
-  { value: "Un essai — 5 400 MAD", en: "A trial — MAD 5,400" },
-  { value: "5 500 à 16 500 MAD / mois", en: "MAD 5,500 to 16,500 / month" },
-  { value: "16 500 à 33 000 MAD / mois", en: "MAD 16,500 to 33,000 / month" },
-  { value: "Plus de 33 000 MAD / mois", en: "Over MAD 33,000 / month" },
+  { value: "Un essai — 490 €", en: "A trial — €490" },
+  { value: "500 à 1 500 € / mois", en: "€500 to €1,500 / month" },
+  { value: "1 500 à 3 000 € / mois", en: "€1,500 to €3,000 / month" },
+  { value: "Plus de 3 000 € / mois", en: "Over €3,000 / month" },
   { value: "Je ne sais pas encore", en: "Not sure yet" },
 ];
 

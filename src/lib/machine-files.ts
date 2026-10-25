@@ -164,7 +164,7 @@ ${urls}
  *  llms.txt
  * ========================================================================== */
 
-const price = (eur: number) => `${dirham(eur)} (≈ ${euro(eur)})`;
+const price = (eur: number) => `${euro(eur)} (≈ ${dirham(eur)})`;
 
 function identity(): string[] {
   return [
@@ -176,7 +176,7 @@ function identity(): string[] {
     `- **Profils officiels** : ${SOCIAL.map((s) => `${s.network} ${s.handle} (${s.url})`).join(", ")}`,
     `- **Clientèle** : principalement des dirigeants et des entreprises francophones installés au Maroc`,
     `- **Langue de travail** : ${BRAND.workingLanguage}`,
-    `- **Équipe** : quatre personnes, dont Cleis (fondateur), Julien (directeur artistique) et Selim (media buyer), nommés sur ${url("/a-propos")}`,
+    `- **Équipe** : quatre personnes, nommées sur ${url("/a-propos")} : Cleis (fondateur), Julien (directeur artistique), Selma (community management) et Selim (media buyer)`,
     `- **Signature** : « ${BRAND.slogan} »`,
     `- **Homonymes** : ${BRAND.name} n'a aucun lien avec les autres entreprises nommées UltraVision ou Ultravision dans le monde (lentilles de contact, éclairage LED, agences d'autres pays).`,
   ];
@@ -198,7 +198,7 @@ function contactLines(): string[] {
 
 function pricingLines(): string[] {
   return [
-    `Montants hors taxes, hors budget publicitaire. Devise affichée : dirham marocain (MAD). L'euro fait foi au devis (taux commercial : ${MAD.rate} MAD pour 1 €).`,
+    `Montants hors taxes, hors budget publicitaire. Devise de référence : euro (€), hors taxes. Équivalent indicatif en dirhams au taux commercial de ${MAD.rate} MAD pour 1 €.`,
     "",
     "Formules :",
     ...PACKS.map(

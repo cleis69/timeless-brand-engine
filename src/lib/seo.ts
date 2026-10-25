@@ -78,7 +78,7 @@ export function organizationNode(locale: Locale = "fr"): Node {
       addressCountry: BRAND.countryCode,
     },
     areaServed: AREA_SERVED,
-    knowsLanguage: ["fr", "ar", "en"],
+    knowsLanguage: ["fr", "en"],
     knowsAbout: [
       BRAND.category,
       "Marketing digital",

@@ -238,7 +238,7 @@ function copy(l: Locale) {
       { label: "Langue de travail", value: "Français et anglais" },
       {
         label: "Tarifs",
-        value: `Publics — essai vidéo à ${d(ESSAI.price)}, diffusion comprise`,
+        value: `${l === "en" ? "Public prices" : "Prix publics"} — essai vidéo à ${formatEuro(ESSAI.price, l)}, diffusion comprise`,
       },
       { label: "Délai", value: "Première vidéo livrée en 7 jours" },
     ],
