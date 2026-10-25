@@ -217,6 +217,7 @@ const STATS: { value: string; label: string }[] = [
   { value: "10 000", label: "Leads générés chaque mois" },
   { value: "50 K€", label: "Budget publicitaire piloté par mois" },
   { value: "+15", label: "Marques accompagnées" },
+  { value: "100 %", label: "Clients satisfaits" },
 ];
 
 if (import.meta.env.DEV && typeof window !== "undefined") {
@@ -316,6 +317,7 @@ const STATS_EN: { value: string; label: string }[] = [
   { value: "10,000", label: "Leads generated every month" },
   { value: "€50K", label: "Ad budget managed every month" },
   { value: "15+", label: "Brands supported" },
+  { value: "100%", label: "Satisfied clients" },
 ];
 
 function faqEn() {
@@ -806,7 +808,7 @@ function Stats({ t }: { t: Copy }) {
           Le rappel a bascule en console (voir plus bas) : c'est
           desormais le seul endroit ou un oubli se voit.
         */}
-        <div className="grid gap-12 sm:grid-cols-3">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {t.stats
             .filter((s) => !s.value.startsWith("STAT_"))
             .map((s, i) => (

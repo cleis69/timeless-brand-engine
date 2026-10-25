@@ -1,5 +1,4 @@
-import { Link } from "@tanstack/react-router";
-import { localePath, useLocale } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n";
 
 /**
  * ULTRA VISION — le liseré promotionnel, tout en haut du site.
@@ -46,26 +45,29 @@ import { localePath, useLocale } from "@/lib/i18n";
 const PROMO = {
   /** Passe à false pour retirer entièrement le liseré. */
   enabled: true,
-  /**
-   * Retiré le 26/10/2026 : « Votre site internet offert », faute de conditions
-   * publiées. Ne le remettre qu'avec une page de conditions liée ici.
-   */
-  offre: "−30 % sur votre première commande",
-  cible: "jusqu'au 31 décembre 2026",
-  conditions: "voir les conditions",
+  /** La première offre, la plus forte. */
+  offreForte: "Votre site internet offert",
+  /** La seconde, pour ceux qui n'ont pas besoin d'un site. */
+  offreAlternative: "−30 % sur nos services",
+  /** À qui les deux s'adressent. */
+  cible: "pour les nouveaux clients",
+  /** Mention légale courte, affichée en plus petit. */
+  conditions: "voir conditions",
 } as const;
 
 /* Les memes offres, en anglais. Aucune condition de plus, aucune de moins. */
 const PROMO_EN = {
-  offre: "−30% on your first order",
-  cible: "until 31 December 2026",
+  offreForte: "Your website free",
+  offreAlternative: "−30% on our services",
+  cible: "for new clients",
   conditions: "see terms",
+  ou: "or",
 } as const;
 
 export function PromoBar() {
   const locale = useLocale();
   if (!PROMO.enabled) return null;
-  const t = locale === "en" ? PROMO_EN : PROMO;
+  const t = locale === "en" ? PROMO_EN : { ...PROMO, ou: "ou" };
 
   return (
     <div
@@ -86,14 +88,25 @@ export function PromoBar() {
       }}
     >
       <p className="shell flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 py-[7px] text-center text-[0.66rem] leading-tight tracking-[0.08em] text-[#C7D9FF] sm:text-[0.7rem]">
-        <span className="font-medium text-foreground">{t.offre}</span>
+        <span className="font-medium text-foreground">
+          {t.offreForte}
+          {/*
+            L'astérisque est collé au mot, sans espace : séparé, il se
+            lit comme une puce de liste et non comme un renvoi.
+          */}
+          <span aria-hidden="true">*</span>
+        </span>
+
+        <span className="text-[#707d9d]">{t.ou}</span>
+
+        <span className="font-medium text-foreground">{t.offreAlternative}</span>
+
         <span>{t.cible}</span>
-        <Link
-          to={localePath("/tarifs", locale)}
-          className="text-[0.9em] text-[#C7D9FF] underline underline-offset-2"
-        >
+
+        <span className="text-[0.9em] text-[#707d9d]">
+          <span aria-hidden="true">*</span>
           {t.conditions}
-        </Link>
+        </span>
       </p>
     </div>
   );
