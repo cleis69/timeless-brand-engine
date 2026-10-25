@@ -83,6 +83,7 @@ const UI = {
     servicesTitle: "Ce que nous faisons de cette méthode.",
     service: "Service",
     next: "À lire ensuite",
+    sources: "Sources",
   },
   en: {
     home: "Home",
@@ -95,8 +96,15 @@ const UI = {
     servicesTitle: "What we do with this method.",
     service: "Service",
     next: "Read next",
+    sources: "Sources",
   },
 };
+
+/** Les sources d'un article, avec le titre et l'adresse de la langue demandee. */
+const referencesFor = (a: Article, locale: Locale) =>
+  (a.references ?? []).map((r) =>
+    locale === "en" ? { ...r, title: r.titleEn ?? r.title, url: r.urlEn ?? r.url } : r,
+  );
 
 /** Les balises d'un article, dans la langue demandee. */
 export function articleHead(a: Article | undefined, locale: Locale) {
@@ -118,13 +126,15 @@ export function articleHead(a: Article | undefined, locale: Locale) {
     ogType: "article",
     breadcrumbs: [
       { name: "Blog", path: "/blog" },
-      { name: a.title, path },
+      /* Meme fil que celui affiche : Accueil / Blog / rubrique. */
+      { name: a.category, path },
     ],
     datePublished: a.date,
-    dateModified: a.date,
+    dateModified: a.updated ?? a.date,
     faq: a.faq,
     extraMeta: [
       { property: "article:published_time", content: a.date },
+      ...(a.updated ? [{ property: "article:modified_time", content: a.updated }] : []),
       { property: "article:section", content: a.category },
     ],
     nodes: [
@@ -140,7 +150,7 @@ export function articleHead(a: Article | undefined, locale: Locale) {
         */
         abstract: a.takeaways.join(" "),
         datePublished: a.date,
-        dateModified: a.date,
+        dateModified: a.updated ?? a.date,
         inLanguage: LANG_TAG[locale],
         timeRequired: `PT${a.readingTime}M`,
         articleSection: a.category,
@@ -161,6 +171,17 @@ export function articleHead(a: Article | undefined, locale: Locale) {
               })),
             }
           : {}),
+        ...(a.references?.length
+          ? {
+              citation: referencesFor(a, locale).map((r) => ({
+                "@type": "CreativeWork",
+                name: r.title,
+                url: r.url,
+                publisher: { "@type": "Organization", name: r.publisher },
+                ...(r.date ? { datePublished: r.date } : {}),
+              })),
+            }
+          : {}),
         /* Designe les zones autonomes, citables hors contexte. */
         speakable: {
           "@type": "SpeakableSpecification",
@@ -177,6 +198,7 @@ export function BlogArticlePage({ article: a }: { article: Article }) {
   const locale = useLocale();
   const lp = (p: string) => localePath(p, locale);
   const t = UI[locale];
+  const refs = referencesFor(a, locale);
   const others = articlesFor(locale)
     .filter((x) => x.slug !== a.slug)
     .slice(0, 2);
@@ -227,7 +249,9 @@ export function BlogArticlePage({ article: a }: { article: Article }) {
               <span aria-hidden="true">·</span>
               <span>{t.readingTime(a.readingTime)}</span>
               <span aria-hidden="true">·</span>
-              <span>{locale === "en" ? "By" : "Par"} {BRAND.founder.name}</span>
+              <Link to={lp("/a-propos")} rel="author" className="hover:text-foreground">
+                {locale === "en" ? "By" : "Par"} {BRAND.founder.name}
+              </Link>
               <span aria-hidden="true">·</span>
               <span>{BRAND.name}</span>
             </p>
@@ -277,6 +301,34 @@ export function BlogArticlePage({ article: a }: { article: Article }) {
                 <BlockView block={b} />
               </Reveal>
             ))}
+
+            {/* Les sources publiques des faits avances, en fin d'article. */}
+            {refs.length > 0 && (
+              <Reveal>
+                <div className="mt-12 border-t border-hairline pt-6">
+                  <h2 className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-[#7b88a6]">
+                    {t.sources}
+                  </h2>
+                  <ul className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                    {refs.map((r) => (
+                      <li key={r.url}>
+                        {r.publisher}
+                        {r.date ? `, ${formatDateIn(r.date, locale)}` : ""}
+                        {locale === "en" ? ": " : " : "}
+                        <a
+                          href={r.url}
+                          target="_blank"
+                          rel="noopener"
+                          className="text-foreground underline underline-offset-2 hover:text-accent-hover"
+                        >
+                          {r.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )}
           </div>
         </div>
       </section>

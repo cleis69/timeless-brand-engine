@@ -1,4 +1,4 @@
-import { LAUNCH_OFFER, PACKS, formatDirham, formatEuro } from "@/config/pricing";
+import { LAUNCH_OFFER, PACKS, formatDirham, formatEuro, withOffer } from "@/config/pricing";
 import type { CarteEn, CarteGroupsEn, PacksEn } from "./types";
 
 /*
@@ -12,7 +12,7 @@ const packPrice = (id: string) => {
 };
 
 /** Prix d'une video dans une formule a 4 videos, arrondi vers le bas comme en francais (372, 622). */
-const perVideo = (id: string) => formatEuro(Math.floor(packPrice(id) / 4), "en");
+const perVideo = (id: string) => formatEuro(Math.round(withOffer(packPrice(id)) / 4), "en");
 
 /** Les formules, en anglais. Cles : id (pricing.ts). */
 export const PACKS_EN: PacksEn = {
@@ -149,7 +149,7 @@ export const CARTE_GROUPS_EN: CarteGroupsEn = {
 export const NOT_INCLUDED_EN: { label: string; detail: string }[] = [
   {
     label: "The advertising budget",
-    detail: `It is paid directly to the platforms, never through us. Allow ${formatDirham(800, "en")} to ${formatDirham(1500, "en")} per month (${formatEuro(800, "en")} to ${formatEuro(1500, "en")}) to get started.`,
+    detail: `It is paid directly to the platforms, never through us. Allow ${formatEuro(800, "en")} to ${formatEuro(1500, "en")} per month (about ${formatDirham(800, "en")} to ${formatDirham(1500, "en")}) to get started.`,
   },
   {
     label: "External talent and locations",

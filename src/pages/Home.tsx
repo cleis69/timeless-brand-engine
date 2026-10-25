@@ -13,7 +13,7 @@ import { LOOP, MOTION, EASE_RESPOND } from "@/config/motion";
 import { ExpertiseList } from "@/components/ExpertiseList";
 import { MethodRail } from "@/components/MethodRail";
 import { VideoShowcase } from "@/components/work/VideoShowcase";
-import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { CONTACT, CONTACT_TEXT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { LAUNCH_OFFER, MAD, PACKS, dirham, euro, formatDirham, formatEuro, withOffer } from "@/config/pricing";
 import { useState } from "react";
 
@@ -217,7 +217,6 @@ const STATS: { value: string; label: string }[] = [
   { value: "10 000", label: "Leads générés chaque mois" },
   { value: "50 K€", label: "Budget publicitaire piloté par mois" },
   { value: "+15", label: "Marques accompagnées" },
-  { value: "100 %", label: "Clients satisfaits" },
 ];
 
 if (import.meta.env.DEV && typeof window !== "undefined") {
@@ -317,7 +316,6 @@ const STATS_EN: { value: string; label: string }[] = [
   { value: "10,000", label: "Leads generated every month" },
   { value: "€50K", label: "Ad budget managed every month" },
   { value: "15+", label: "Brands supported" },
-  { value: "100%", label: "Satisfied clients" },
 ];
 
 function faqEn() {
@@ -478,6 +476,7 @@ export function HomePage() {
  * portee de pouce juste en dessous.
  */
 function Hero({ t, lp }: { t: Copy; lp: (p: string) => string }) {
+  const locale = useLocale();
   return (
     <section className="relative overflow-hidden">
       {/* Nappe bleue tres diffuse, a gauche : le texte ne flotte pas dans un vide. */}
@@ -569,7 +568,7 @@ function Hero({ t, lp }: { t: Copy; lp: (p: string) => string }) {
               </Link>
               {hasWhatsapp ? (
                 <a
-                  href={whatsappUrl()}
+                  href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-12 items-center rounded-full border border-hairline px-7 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent-hover"
@@ -807,7 +806,7 @@ function Stats({ t }: { t: Copy }) {
           Le rappel a bascule en console (voir plus bas) : c'est
           desormais le seul endroit ou un oubli se voit.
         */}
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 sm:grid-cols-3">
           {t.stats
             .filter((s) => !s.value.startsWith("STAT_"))
             .map((s, i) => (

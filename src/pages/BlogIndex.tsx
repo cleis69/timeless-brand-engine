@@ -76,7 +76,7 @@ function copy(l: Locale) {
         "How we produce and run video ads. Methods, prices and trade-offs, explained in detail.",
       blogDescription:
         "Ad production and acquisition methods: conversion funnel, prices, formats, use of artificial intelligence.",
-      h1: "How we work, explained in detail.",
+      h1: "The blog: prices, budgets and methods for digital marketing in Morocco.",
       accent: "explained in detail",
       intro:
         "Our production and media methods, without jargon and without grey areas. Each article answers a question a client has actually asked us.",
@@ -93,7 +93,7 @@ function copy(l: Locale) {
       "Comment nous produisons et diffusons des vidéos publicitaires. Méthodes, prix et arbitrages, expliqués en détail.",
     blogDescription:
       "Méthodes de production publicitaire et d'acquisition : tunnel de conversion, prix, formats, usage de l'intelligence artificielle.",
-    h1: "Comment nous travaillons, expliqué en détail.",
+    h1: "Le blog : prix, budgets et méthodes du marketing digital au Maroc.",
     accent: "expliqué en détail",
     intro:
       "Nos méthodes de production et de diffusion, sans jargon et sans zone grise. Chaque article répond à une question qu'un client nous a réellement posée.",

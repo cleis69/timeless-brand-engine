@@ -103,7 +103,7 @@ const pack = (id: string) => {
 };
 
 /** « 4 300 MAD (≈ 390 €) » */
-const both = (eur: number) => `${dirham(eur)} (≈ ${euro(eur)})`;
+const both = (eur: number) => `${euro(eur)} (≈ ${dirham(eur)})`;
 
 const VIDEO = carte("Vidéo publicitaire");
 const PHOTO = carte("Série photo");
@@ -119,7 +119,7 @@ const ESSAI = pack("essai");
 const ACQUISITION = pack("acquisition");
 
 /** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
-const AD_BUDGET = `${dirham(800)} à ${dirham(1500)} par mois (800 à 1 500 €)`;
+const AD_BUDGET = `800 à 1 500 € par mois (environ ${dirham(800)} à ${dirham(1500)})`;
 
 /* ==========================================================================
  *  LES QUATRE POLES
@@ -243,7 +243,6 @@ export const SERVICES: Service[] = [
       "institut-beaute",
       "promoteur-immobilier",
       "sculpt-body-marrakech",
-      "loisirs",
     ],
     articles: [
       "format-vertical-9-16",
@@ -373,6 +372,10 @@ export const SERVICES: Service[] = [
       {
         q: "Comment mesurez-vous les résultats ?",
         a: "Au coût par lead et par rendez-vous, pas au clic. Un tableau de bord relie la dépense, les leads et les rendez-vous, et nous le commentons chaque mois.",
+      },
+      {
+        q: "Faut-il prévoir la TVA sur le budget Meta ?",
+        a: "Oui. Depuis le 1er octobre 2026, Meta ajoute une TVA de 20 % aux achats publicitaires des comptes marocains sans identifiant fiscal renseigné. Avec un identifiant fiscal, Meta ne l'ajoute plus et l'entreprise la déclare elle-même, en autoliquidation. Elle porte sur le budget versé à Meta, pas sur nos honoraires.",
       },
     ],
   },
@@ -522,7 +525,6 @@ export const SERVICES: Service[] = [
       "salon-coiffure",
       "institut-beaute",
       "barber-shop",
-      "loisirs",
     ],
     articles: [
       "publicite-tiktok-maroc",

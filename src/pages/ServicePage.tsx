@@ -28,7 +28,7 @@ import {
   siteItemsFor,
 } from "@/content/localized";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { pageHead, serviceId, serviceNode } from "@/lib/seo";
+import { pageHead, serviceChannel, serviceId, serviceNode } from "@/lib/seo";
 
 /**
  * UltraVision Agency — la page d'un service.
@@ -154,7 +154,7 @@ export function serviceHead(slug: string | undefined, locale: Locale) {
         ? {
             ...node,
             url: url(localePath(servicePath(s.slug), locale)),
-            availableLanguage: ["French", "English"],
+            availableChannel: serviceChannel(locale),
           }
         : node,
     ],

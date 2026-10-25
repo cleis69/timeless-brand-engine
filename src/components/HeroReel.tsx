@@ -53,7 +53,6 @@ const REEL = [
   "residence-neuve",
   "sculpt-body-marrakech",
   "institut-beaute",
-  "loisirs",
 ];
 
 /** Duree d'affichage quand la video ne peut pas jouer (economie, refus). */

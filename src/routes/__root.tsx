@@ -357,6 +357,13 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang={locale} className="dark">
       <head>
         <HeadContent />
+        {/* Sans JavaScript, les blocs animés partent de opacity:0 : on les rend visibles. */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html:
+              '<style>[style*="opacity:0"]{opacity:1!important;transform:none!important;filter:none!important}</style>',
+          }}
+        />
       </head>
       <body>
         {children}

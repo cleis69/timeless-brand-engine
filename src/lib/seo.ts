@@ -24,6 +24,7 @@
 import { SITE_URL, url } from "@/config/site";
 import { BRAND, LOGO, LOGO_ID, OG_IMAGE, ORG_ID, WEBSITE_ID } from "@/config/brand";
 import { AREA_SERVED, CONTACT, hasPhone, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { LAUNCH_OFFER, MAD, withOffer } from "@/config/pricing";
 import { POLES, SERVICES, servicePath, type Service } from "@/content/services";
 import type { CaseStudy, WorkItem } from "@/components/work/work.data";
 import type { SiteItem } from "@/components/work/sites.data";
@@ -151,10 +152,58 @@ export function founderNode(locale: Locale = "fr"): Node {
     "@id": FOUNDER_ID,
     name: BRAND.founder.name,
     jobTitle: locale === "en" ? BRAND.en.founderJobTitle : BRAND.founder.jobTitle,
+    description: locale === "en" ? BRAND.en.founderBio : BRAND.founder.bio,
+    image: url(BRAND.founder.photo),
     url: url(localePath("/a-propos", locale)),
     worksFor: orgRef,
+    knowsAbout:
+      locale === "en"
+        ? ["Audiovisual production", "Video advertising", "Digital marketing"]
+        : ["Production audiovisuelle", "Vidéo publicitaire", "Marketing digital"],
     sameAs: [BRAND.founder.linkedin],
   };
+}
+
+/**
+ * Les langues de service. Sur un Service, schema.org ne connait pas
+ * `availableLanguage` : la propriete vit sur le canal (ServiceChannel),
+ * comme sur le ContactPoint de l'agence.
+ */
+export function serviceChannel(locale: Locale = "fr"): Node {
+  return {
+    "@type": "ServiceChannel",
+    serviceUrl: url(localePath("/contact", locale)),
+    availableLanguage: ["French", "English"],
+  };
+}
+
+/**
+ * Le prix d'une offre tel que /tarifs l'affiche : l'euro de reference,
+ * l'offre de lancement et sa date de fin, puis l'equivalent en dirhams
+ * arrondi comme a l'ecran. `monthly` ajoute l'unite aux formules mensuelles.
+ */
+export function priceSpecs(price: number, monthly: boolean, locale: Locale = "fr"): Node[] {
+  const unit = monthly ? { unitText: "MONTH" } : {};
+  const spec = (amount: number, currency: string, extra: Node = {}): Node => ({
+    "@type": "UnitPriceSpecification",
+    ...extra,
+    price: amount,
+    priceCurrency: currency,
+    valueAddedTaxIncluded: false,
+    ...unit,
+  });
+  return [
+    spec(price, "EUR"),
+    ...(LAUNCH_OFFER.enabled
+      ? [
+          spec(withOffer(price), "EUR", {
+            name: locale === "en" ? "Launch offer, first order" : "Offre de lancement, première commande",
+            validThrough: LAUNCH_OFFER.endDate,
+          }),
+        ]
+      : []),
+    spec(Math.round((price * MAD.rate) / 100) * 100, "MAD"),
+  ];
 }
 
 /**
@@ -201,7 +250,7 @@ export function serviceNode(s: Service): Node {
     url: url(servicePath(s.slug)),
     provider: orgRef,
     areaServed: AREA_SERVED,
-    availableLanguage: ["French", "English"],
+    availableChannel: serviceChannel(),
   };
 }
 
@@ -354,7 +403,14 @@ export function pageHead(o: PageOptions) {
       { property: "og:image", content: imgUrl },
       ...(img.width ? [{ property: "og:image:width", content: String(img.width) }] : []),
       ...(img.height ? [{ property: "og:image:height", content: String(img.height) }] : []),
-      { property: "og:image:alt", content: img.alt ?? ogTitle },
+      {
+        property: "og:image:alt",
+        content: o.image
+          ? (img.alt ?? ogTitle)
+          : locale === "en"
+            ? "UltraVision Agency — Creative Growth Agency in Marrakech, Morocco"
+            : img.alt,
+      },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: ogDescription },
       { name: "twitter:image", content: imgUrl },

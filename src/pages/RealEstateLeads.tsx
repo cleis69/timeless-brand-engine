@@ -18,7 +18,7 @@ import { type WorkItem } from "@/components/work/work.data";
 import { BRAND, withBrand } from "@/config/brand";
 import { AREA_SERVED } from "@/config/contact";
 import { PACKS, formatDirham, formatEuro } from "@/config/pricing";
-import { url } from "@/config/site";
+import { CONTENT_UPDATED, url } from "@/config/site";
 import { servicePath, type ServiceSlug } from "@/content/services";
 import { findSector, sectorPath } from "@/content/sectors";
 import {
@@ -31,7 +31,7 @@ import {
   siteItemsFor,
 } from "@/content/localized";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { orgRef, pageHead, serviceId } from "@/lib/seo";
+import { orgRef, pageHead, priceSpecs, serviceChannel, serviceId } from "@/lib/seo";
 
 /**
  * UltraVision Agency — page d'offre : leads d'acheteurs immobiliers.
@@ -71,15 +71,15 @@ const SECTOR_SLUG = "immobilier";
 const SECTOR_FR = findSector(SECTOR_SLUG)!;
 
 function copy(l: Locale) {
-  const d = (eur: number) => formatDirham(eur, l);
-  const both = (eur: number) => `${d(eur)} (≈ ${formatEuro(eur, l)})`;
+  const d = (eur: number) => formatEuro(eur, l);
+  const both = (eur: number) => `${formatEuro(eur, l)} (≈ ${formatDirham(eur, l)})`;
   const landing = resolvePriceFor({ carte: "Landing page de conversion" }, l)!;
   const crm = resolvePriceFor({ carte: "CRM et automatisation des leads" }, l)!;
   const pack = packsFor(l).find((p) => p.id === "acquisition")!;
 
   if (l === "en") {
     /** Starting ad budget, as stated on /pricing. */
-    const adBudget = `${d(800)} to ${d(1500)} a month (€800 to €1,500)`;
+    const adBudget = `${d(800)} to ${d(1500)} a month (about ${formatDirham(800, l)} to ${formatDirham(1500, l)})`;
     const intro = `${BRAND.name}, an agency based in ${BRAND.city}, generates buyer enquiries for real estate agencies, property developers and property owners. The system is complete: Google Search campaigns for people already looking, videos run on Meta Ads to create demand, a landing page that qualifies, and a CRM that notifies, follows up and files every enquiry until the viewing. We generate the enquiries; the sales conversation stays with you.`;
     return {
       name: "Real estate leads",
@@ -197,7 +197,7 @@ function copy(l: Locale) {
   }
 
   /** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
-  const adBudget = `${d(800)} à ${d(1500)} par mois (800 à 1 500 €)`;
+  const adBudget = `${d(800)} à ${d(1500)} par mois (environ ${formatDirham(800, l)} à ${formatDirham(1500, l)})`;
   const intro = `${BRAND.name}, agence basée à ${BRAND.city}, génère des demandes d'acheteurs pour les agences immobilières, les promoteurs et les propriétaires de biens. Le dispositif est complet : des campagnes Google Search pour ceux qui cherchent déjà, des vidéos diffusées sur Meta Ads pour créer la demande, une landing page qui qualifie, et un CRM qui notifie, relance et range chaque demande jusqu'à la visite. Nous générons les demandes ; la réponse commerciale reste chez vous.`;
   return {
     name: "Leads immobiliers",
@@ -334,6 +334,7 @@ export function realEstateLeadsHead(locale: Locale) {
     breadcrumbs: [{ name: t.name, path: PATH }],
     about: { "@id": `${url(PATH)}#service` },
     faq: t.faq,
+    dateModified: CONTENT_UPDATED,
     nodes: [
       {
         "@type": "Service",
@@ -344,7 +345,7 @@ export function realEstateLeadsHead(locale: Locale) {
         url: url(localePath(PATH, locale)),
         provider: orgRef,
         areaServed: AREA_SERVED,
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
         audience: {
           "@type": "BusinessAudience",
           audienceType: t.audienceType,
@@ -360,6 +361,7 @@ export function realEstateLeadsHead(locale: Locale) {
           name: t.offerName,
           price: ACQUISITION.price,
           priceCurrency: "EUR",
+          priceSpecification: priceSpecs(ACQUISITION.price, true, locale),
           url: url(localePath("/tarifs", locale)),
         },
       },

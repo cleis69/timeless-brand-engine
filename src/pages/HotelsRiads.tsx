@@ -28,9 +28,9 @@ import {
   resolvePriceFor,
   siteItemsFor,
 } from "@/content/localized";
-import { url } from "@/config/site";
+import { CONTENT_UPDATED, url } from "@/config/site";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { orgRef, pageHead, serviceId, videoNode } from "@/lib/seo";
+import { orgRef, pageHead, priceSpecs, serviceChannel, serviceId, videoNode } from "@/lib/seo";
 
 /**
  * UltraVision Agency — page d'offre : hotels et riads.
@@ -66,8 +66,8 @@ const PRODUCTION = PACKS.find((p) => p.id === "production")!;
 const PROOF_SLUG = "hotel-bord-de-lac";
 
 function copy(l: Locale) {
-  const d = (eur: number) => formatDirham(eur, l);
-  const both = (eur: number) => `${d(eur)} (≈ ${formatEuro(eur, l)})`;
+  const d = (eur: number) => formatEuro(eur, l);
+  const both = (eur: number) => `${formatEuro(eur, l)} (≈ ${formatDirham(eur, l)})`;
   const vitrine = resolvePriceFor({ carte: "Site vitrine" }, l)!;
   const proof = findCaseFor(PROOF_SLUG, l);
 
@@ -340,9 +340,8 @@ function copy(l: Locale) {
   };
 }
 
-/* Les films montres : la realisation hoteliere d'abord, puis le film
-   tourne de jour et de nuit pour un lieu de loisirs. */
-const WORK_SLUGS = ["hotel-bord-de-lac", "loisirs"];
+/* Le film montre : la realisation hoteliere. */
+const WORK_SLUGS = ["hotel-bord-de-lac"];
 
 const works = (l: Locale) =>
   WORK_SLUGS.map((s) => findWorkFor(s, l)).filter((w): w is WorkItem => !!w);
@@ -361,6 +360,7 @@ export function hotelsRiadsHead(locale: Locale) {
     breadcrumbs: [{ name: t.name, path: PATH }],
     about: { "@id": `${url(PATH)}#service` },
     faq: t.faq,
+    dateModified: CONTENT_UPDATED,
     nodes: [
       {
         "@type": "Service",
@@ -371,7 +371,7 @@ export function hotelsRiadsHead(locale: Locale) {
         url: url(localePath(PATH, locale)),
         provider: orgRef,
         areaServed: AREA_SERVED,
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
         audience: { "@type": "BusinessAudience", name: t.audience },
         isRelatedTo: [
           { "@id": serviceId("production-video-photo") },
@@ -383,6 +383,7 @@ export function hotelsRiadsHead(locale: Locale) {
           name: t.offerName,
           price: ESSAI.price,
           priceCurrency: "EUR",
+          priceSpecification: priceSpecs(ESSAI.price, false, locale),
           url: url(localePath("/tarifs", locale)),
         },
       },

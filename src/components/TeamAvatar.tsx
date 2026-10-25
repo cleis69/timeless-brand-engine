@@ -64,6 +64,8 @@ export type Member = {
    * de remonter le cadrage sans retoucher le fichier.
    */
   objectPosition?: string;
+  /** Profil LinkedIn public, s'il a ete donne. */
+  linkedin?: string;
 };
 
 /** Somme stable des caracteres : sert a tirer la teinte et l'angle. */
@@ -333,6 +335,18 @@ export function TeamCard({ member }: { member: Member }) {
               </li>
             ))}
           </ul>
+        )}
+
+        {member.linkedin && (
+          <a
+            href={member.linkedin}
+            target="_blank"
+            rel="noopener me"
+            aria-label={`LinkedIn — ${member.name}`}
+            className="mt-4 inline-flex text-[0.78rem] text-[#93C5FD] underline underline-offset-2 hover:text-foreground"
+          >
+            LinkedIn
+          </a>
         )}
       </div>
     </article>

@@ -18,7 +18,7 @@
  * Servis par src/server.ts.
  *
  * ------------------------------------------------------------
- *  CONTENT_UPDATED : A AVANCER A CHAQUE MODIFICATION DE FOND
+ *  CONTENT_UPDATED (src/config/site.ts) : A AVANCER A CHAQUE MODIFICATION DE FOND
  *
  *  C'est la date `lastmod` des pages du sitemap. Elle doit dire vrai :
  *  une date qui change sans que le contenu change apprend a Google a
@@ -26,7 +26,7 @@
  * ------------------------------------------------------------
  */
 
-import { SITE_URL, url } from "@/config/site";
+import { CONTENT_UPDATED, SITE_URL, url } from "@/config/site";
 import { BRAND, SOCIAL } from "@/config/brand";
 import { CONTACT, hasPhone, hasWhatsapp, phoneDisplay } from "@/config/contact";
 import { A_LA_CARTE, LAUNCH_OFFER, MAD, NOT_INCLUDED, PACKS, dirham, euro } from "@/config/pricing";
@@ -47,9 +47,11 @@ import {
   type WorkItem,
 } from "@/components/work/work.data";
 import { SITE_ITEMS } from "@/components/work/sites.data";
+import { PRINCIPLES as METHOD_PRINCIPLES, STEPS as METHOD_STEPS } from "@/pages/Method";
+import { TEAM, VALUES } from "@/pages/About";
 
-/** Date de la derniere modification de fond des pages. */
-export const CONTENT_UPDATED = "2026-10-09";
+/** Date de la derniere modification de fond des pages (definie dans src/config/site.ts). */
+export { CONTENT_UPDATED };
 
 /* ==========================================================================
  *  LES PAGES DU SITE
@@ -67,7 +69,7 @@ function entries(): Entry[] {
   return [
     page("/", "1.0", "weekly"),
     page("/agence-marketing-digital-marrakech", "0.9"),
-    ...LANDINGS.map((l) => ({ ...page(l.path, "0.8"), lastmod: "2026-10-20" })),
+    ...LANDINGS.map((l) => page(l.path, "0.8")),
     page("/services", "0.9"),
     ...SERVICES.map((s) => page(servicePath(s.slug), "0.8")),
     page("/tarifs", "0.9"),
@@ -81,7 +83,7 @@ function entries(): Entry[] {
     page("/blog", "0.7", "weekly"),
     ...ARTICLES_SORTED.map((a) => ({
       path: `/blog/${a.slug}`,
-      lastmod: a.date,
+      lastmod: a.updated ?? a.date,
       priority: "0.6",
       changefreq: "yearly",
     })),
@@ -256,7 +258,7 @@ export function buildLlmsTxt(): string {
     ...CASE_STUDIES.map(
       (w) => `- [${w.caseStudy.client}](${url(casePath(w.slug))}) : ${w.caseStudy.summary}`,
     ),
-    ...WORK_ITEMS.filter((w) => !w.caseStudy).map((w) => `- ${w.title} : ${w.description} (${url("/realisations")})`),
+    ...WORK_ITEMS.filter((w) => !w.caseStudy).map((w) => `- [${w.title}](${url("/realisations")}) : ${w.description}`),
     /* Un site qui a son etude de cas est deja liste plus haut, avec sa page. */
     ...SITE_ITEMS.filter((s) => !s.placeholder && !s.caseStudy).map(
       (s) => `- Site web ${s.title} : ${s.description}`,
@@ -375,6 +377,47 @@ export function buildLlmsFullTxt(): string {
     );
   }
 
+  /* Les pages d'offre : chacune assemble des services existants pour une demande precise. */
+  for (const l of LANDINGS) {
+    const services = l.services
+      .map((k) => SERVICES.find((x) => x.slug === k))
+      .filter((x) => !!x)
+      .map((x) => `[${x.name}](${url(servicePath(x.slug))})`);
+    out.push(
+      `## Offre : ${l.name} à ${BRAND.city}`,
+      "",
+      `Page : ${url(l.path)}`,
+      "",
+      l.text,
+      ...(services.length ? ["", `Services réunis : ${services.join(", ")}.`] : []),
+      "",
+    );
+  }
+
+  out.push(
+    "## Méthode",
+    "",
+    `Page : ${url("/methode")}`,
+    "",
+    ...METHOD_STEPS.flatMap((st) => [
+      `${st.n}. ${st.title} (${st.duration.toLowerCase()}) : ${st.text}`,
+      ...st.deliverables.map((d) => `   - ${d}`),
+    ]),
+    "",
+    "Principes :",
+    ...METHOD_PRINCIPLES.map((pr) => `- ${pr.t} : ${pr.d}`),
+    "",
+    "## À propos",
+    "",
+    `Page : ${url("/a-propos")}`,
+    "",
+    ...TEAM.map((m) => `- ${m.name}, ${m.role.toLowerCase()} : ${m.bio}`),
+    "",
+    "Ce qui guide l'équipe :",
+    ...VALUES.map((v) => `- ${v.t} : ${v.d}`),
+    "",
+  );
+
   for (const w of CASE_STUDIES) {
     /* Les chiffres des gestionnaires de publicites n'existent que pour les films. */
     const stats = isFilm(w) ? shownStats(w) : [];
@@ -402,7 +445,7 @@ export function buildLlmsFullTxt(): string {
     out.push(
       `## Article : ${a.title}`,
       "",
-      `Page : ${url(`/blog/${a.slug}`)} · publié le ${a.date}`,
+      `Page : ${url(`/blog/${a.slug}`)} · publié le ${a.date}${a.updated ? ` · mis à jour le ${a.updated}` : ""}`,
       "",
       a.excerpt,
       "",
@@ -410,6 +453,9 @@ export function buildLlmsFullTxt(): string {
       ...a.takeaways.map((t) => `- ${t}`),
       "",
       ...a.faq.flatMap((f) => [`### ${f.q}`, "", f.a, ""]),
+      ...(a.references?.length
+        ? ["Sources :", ...a.references.map((r) => `- ${r.publisher}${r.date ? `, ${r.date}` : ""} : [${r.title}](${r.url})`), ""]
+        : []),
     );
   }
 

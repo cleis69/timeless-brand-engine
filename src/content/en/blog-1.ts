@@ -18,11 +18,11 @@ const pack = (id: string) => {
   if (!p) throw new Error(`[blog-en] Formule introuvable dans pricing.ts : ${id}`);
   return p.price;
 };
-/** « MAD 4,300 (≈ €390) » */
-const both = (eur: number) => `${formatDirham(eur, "en")} (≈ ${formatEuro(eur, "en")})`;
-/** « MAD 8,800 to 16,500 (≈ €800 to €1,500) » */
+/** « €390 (≈ MAD 4,300) » */
+const both = (eur: number) => `${formatEuro(eur, "en")} (≈ ${formatDirham(eur, "en")})`;
+/** « €800 to €1,500 (≈ MAD 8,800 to 16,500) » */
 const range = (a: number, b: number) =>
-  `${formatDirham(a, "en")} to ${formatDirham(b, "en").replace("MAD ", "")} (≈ ${formatEuro(a, "en")} to ${formatEuro(b, "en")})`;
+  `${formatEuro(a, "en")} to ${formatEuro(b, "en")} (≈ ${formatDirham(a, "en")} to ${formatDirham(b, "en").replace("MAD ", "")})`;
 
 const VIDEO = carte("Vidéo publicitaire");
 const MEDIA = carte("Media buying");
@@ -201,7 +201,7 @@ export const ARTICLES_EN_1: ArticlesEn = {
       },
       {
         k: "p",
-        v: "Two TOFU videos because that is the stage where we are still searching. One MOFU and one BOFU because those two, once found, can be reused for months: a good proof video hardly wears out, whereas a hook wears out in three weeks.",
+        v: "Two TOFU videos because that is the stage where we are still searching. One MOFU and one BOFU because those two, once found, can be reused for months: a good proof video hardly wears out, whereas a hook wears out in three to six weeks.",
       },
       {
         k: "quote",
@@ -272,7 +272,7 @@ export const ARTICLES_EN_1: ArticlesEn = {
   "combien-coute-une-video-publicitaire": {
     title: "How much does a video ad cost? Prices in dirhams and euros",
     seoTitle: "Video ad prices in Morocco",
-    excerpt: `Anywhere from ${range(200, 8000)} for things that go by the same name. What really changes from one quote to another, the prices charged in Marrakech, and the questions to ask before signing.`,
+    excerpt: `Anywhere from ${range(150, 15000)} for things that go by the same name. What really changes from one quote to another, the prices charged in Marrakech, and the questions to ask before signing.`,
     category: "Pricing",
     seo: "The price of a video ad in dirhams and euros: what makes a quote vary, our rates in Marrakech, and the five questions to ask before you sign anything.",
     takeaways: [
@@ -501,7 +501,7 @@ export const ARTICLES_EN_1: ArticlesEn = {
     category: "Production",
     seo: "Vertical 9:16 format in advertising: why cropping a horizontal video does not work, and how to compose shots directly for the phone screen from the start.",
     takeaways: [
-      "Cropping a video shot in 16:9 to 9:16 removes around 60% of the image area, and usually the subject along with it.",
+      "Cropping a video shot in 16:9 to 9:16 removes around 68% of the image area, and usually the subject along with it.",
       "A video intended for vertical format is framed tighter, with the subject placed in the top third of the image.",
       "The bottom third must be left clear: it is the area where the platforms display their buttons, the account name and the ad text.",
       "Sideways camera movements do not work in vertical: a horizontal pan crosses a narrow frame in half a second.",
@@ -510,7 +510,7 @@ export const ARTICLES_EN_1: ArticlesEn = {
     faq: [
       {
         q: "Can you turn a horizontal video into a vertical one?",
-        a: "Technically yes, but the result rarely converts. Cropping removes around 60% of the image, shifts the composition and often pushes the text out of frame. It only holds up if the original video was shot in high definition with deliberately loose framing, and that decision was made before the shoot.",
+        a: "Technically yes, but the result rarely converts. Cropping removes around 68% of the image, shifts the composition and often pushes the text out of frame. It only holds up if the original video was shot in high definition with deliberately loose framing, and that decision was made before the shoot.",
       },
       {
         q: "What format should a Meta, TikTok or YouTube Shorts ad use?",
@@ -533,11 +533,11 @@ export const ARTICLES_EN_1: ArticlesEn = {
         v: {
           type: "bars",
           caption:
-            "What remains of an image when it is moved from one format to another. Cropping 16:9 to 9:16 keeps only about four tenths of the original area.",
+            "What remains of an image when it is moved from one format to another. Cropping 16:9 to 9:16 keeps only about a third of the original area.",
           unit: "Image area kept after cropping.",
           bars: [
             { label: "Shot directly in 9:16", value: 100, display: "100%", highlight: true },
-            { label: "16:9 cropped to 9:16", value: 40, display: "about 40%" },
+            { label: "16:9 cropped to 9:16", value: 32, display: "about 32%" },
             { label: "16:9 cropped to 1:1", value: 56, display: "about 56%" },
           ],
         },
@@ -717,6 +717,10 @@ export const ARTICLES_EN_1: ArticlesEn = {
         q: "What if the calculated budget is more than I can spend?",
         a: "Change the optimised event rather than cutting the budget. Optimising for a more frequent event, such as a click to WhatsApp or a visit to the contact page, makes it possible to reach 50 weekly events with less money, at the cost of a less precise signal.",
       },
+      {
+        q: "Does VAT apply to Meta advertising in Morocco?",
+        a: "Yes, since 1 October 2026. Meta adds 20% VAT to ad purchases on accounts whose country of sale is Morocco and that have no tax ID on file. A business that enters its tax ID in the payment settings is no longer charged VAT by Meta, but declares it itself under the reverse-charge mechanism. Your accountant will tell you which case applies to you.",
+      },
     ],
     body: [
       {
@@ -782,6 +786,7 @@ export const ARTICLES_EN_1: ArticlesEn = {
           "The area. Meta lets you target a city — Marrakech, Casablanca — or a radius around your address. For a neighbourhood business, a radius of a few kilometres is better than the whole country.",
           "The foreign audience. A residence, a riad or a service for non-residents may target people living in France or Belgium: the budget must then allow for a cost that is often higher in those markets.",
           "The language. A video in French does not speak to the same audience as a video in Darija. Choosing the language is a choice of target before it is a choice of translation.",
+          "VAT. Since 1 October 2026, Meta adds 20% VAT to ad purchases on accounts whose country of sale is Morocco and that have no tax ID on file. A business can enter its tax ID in the account's payment settings: Meta then stops adding the VAT, but the business declares it itself, under the reverse-charge mechanism. Either way, include it in the budget.",
         ],
       },
 

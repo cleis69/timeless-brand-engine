@@ -46,6 +46,14 @@
  */
 export const SITE_URL = "https://ultravisionagency.com";
 
+/**
+ * Date de la derniere modification de fond des pages : lastmod du sitemap
+ * et dateModified des pages commerciales. A avancer a chaque modification
+ * de fond, et seulement dans ce cas : une date qui change sans que le
+ * contenu change apprend a Google a l'ignorer.
+ */
+export const CONTENT_UPDATED = "2026-10-25";
+
 /** Nom du domaine seul, sans protocole. Sert aux affichages. */
 export const SITE_DOMAIN = SITE_URL.replace(/^https?:\/\//, "");
 

@@ -17,10 +17,10 @@ const pack = (id: string) => {
   return p.price;
 };
 /** « MAD 4,300 (≈ €390) » */
-const both = (eur: number) => `${formatDirham(eur, "en")} (≈ ${formatEuro(eur, "en")})`;
+const both = (eur: number) => `${formatEuro(eur, "en")} (≈ ${formatDirham(eur, "en")})`;
 /** « MAD 8,800 to 16,500 (≈ €800 to €1,500) » */
 const range = (a: number, b: number) =>
-  `${formatDirham(a, "en")} to ${formatDirham(b, "en").replace("MAD ", "")} (≈ ${formatEuro(a, "en")} to ${formatEuro(b, "en")})`;
+  `${formatEuro(a, "en")} to ${formatEuro(b, "en")} (≈ ${formatDirham(a, "en")} to ${formatDirham(b, "en").replace("MAD ", "")})`;
 
 const VIDEO = carte("Vidéo publicitaire");
 const MEDIA = carte("Media buying");

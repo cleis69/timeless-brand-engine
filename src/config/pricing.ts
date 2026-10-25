@@ -52,6 +52,8 @@ export const LAUNCH_OFFER = {
    * ci-dessus avant de le faire.
    */
   until: "Offre de lancement, valable jusqu'au 31 décembre 2026.",
+  /** La meme date de fin, au format ISO, pour les donnees structurees. */
+  endDate: "2026-12-31",
 } as const;
 
 /**
@@ -292,7 +294,7 @@ export const PACKS: Pack[] = [
       "Rapport mensuel commenté",
       "Un interlocuteur unique",
     ],
-    equivalent: "soit 372 € la vidéo, diffusion comprise",
+    equivalent: `soit ${euro(Math.round(withOffer(1490) / 4))} la vidéo, diffusion comprise`,
     /* 4 vidéos à 390 € = 1 560 €, plus 490 € de media buying. */
     anchor: 2050,
     cta: "Démarrer la production",
@@ -312,7 +314,7 @@ export const PACKS: Pack[] = [
       "Optimisation hebdomadaire et arbitrage des budgets",
       "Rapport mensuel et point avec la direction",
     ],
-    equivalent: "soit 622 € la vidéo, diffusion et tunnel compris",
+    equivalent: `soit ${euro(Math.round(withOffer(2490) / 4))} la vidéo, diffusion et tunnel compris`,
     /*
       4 vidéos à 390 € = 1 560 €
       media buying sur 3 plateformes, 3 x 490 € = 1 470 €

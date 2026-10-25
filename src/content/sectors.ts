@@ -10,7 +10,7 @@
  *
  *   immobilier                 4 films, 2 sites, 2 clients cites
  *   beaute-bien-etre           6 films, 1 client cite
- *   restauration-hospitality   2 sites, 2 films, 2 clients cites
+ *   restauration-hospitality   3 sites, 1 film, 3 clients cites
  *
  * L'hotellerie a, depuis le 20 octobre 2026, une page d'offre
  * (/marketing-hotels-riads-marrakech) appuyee sur le film du Petit Hotel
@@ -189,7 +189,7 @@ export const SECTORS: Sector[] = [
       },
     ],
     services: ["creation-site-web", "production-video-photo", "meta-ads", "tiktok-ads", "branding"],
-    works: ["hotel-bord-de-lac", "loisirs"],
+    works: ["hotel-bord-de-lac"],
     sites: ["squid-wok", "koozina-garden", "raphael-anglesy"],
     clients: ["Koozina Garden", "Le Petit Hôtel du Flouka", "Squid Wok"],
     faq: [

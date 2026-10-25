@@ -77,12 +77,6 @@ export const WORKS_EN: WorksEn = {
     description:
       "Guided tour of the salon, from the chair to the treatment room. The place is the subject, not the pitch.",
   },
-  loisirs: {
-    title: "Leisure & sport",
-    category: "ADVERTISING • META & TIKTOK",
-    description:
-      "Film shot by day and by night to show both sides of the venue. The hook is the entry price.",
-  },
   "residence-neuve": {
     title: "New residence",
     category: "ADVERTISING • META",

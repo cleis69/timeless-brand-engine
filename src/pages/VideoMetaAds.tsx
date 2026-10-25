@@ -17,7 +17,7 @@ import { casePath, isFilm, type WorkItem } from "@/components/work/work.data";
 import { BRAND, withBrand } from "@/config/brand";
 import { AREA_SERVED } from "@/config/contact";
 import { PACKS, formatDirham, formatEuro } from "@/config/pricing";
-import { url } from "@/config/site";
+import { CONTENT_UPDATED, url } from "@/config/site";
 import { servicePath, type ServiceSlug } from "@/content/services";
 import {
   articlesFor,
@@ -27,7 +27,7 @@ import {
   resolvePriceFor,
 } from "@/content/localized";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { orgRef, pageHead, serviceId, videoNode } from "@/lib/seo";
+import { orgRef, pageHead, priceSpecs, serviceChannel, serviceId, videoNode } from "@/lib/seo";
 
 /**
  * UltraVision Agency — page d'offre : video publicitaire ET Meta Ads.
@@ -62,13 +62,13 @@ const WORK_SLUGS = ["sculpt-body-marrakech", "africa-beauty", "all-in-kech", "sh
 const PROOF_SLUG = "sculpt-body-marrakech";
 
 function copy(l: Locale) {
-  const d = (eur: number) => formatDirham(eur, l);
-  const both = (eur: number) => `${d(eur)} (≈ ${formatEuro(eur, l)})`;
+  const d = (eur: number) => formatEuro(eur, l);
+  const both = (eur: number) => `${formatEuro(eur, l)} (≈ ${formatDirham(eur, l)})`;
   const proof = findCaseFor(PROOF_SLUG, l);
   const media = resolvePriceFor({ carte: "Media buying" }, l)!;
 
   if (l === "en") {
-    const adBudget = `${d(800)} to ${d(1500)} a month (€800 to €1,500)`;
+    const adBudget = `${d(800)} to ${d(1500)} a month (about ${formatDirham(800, l)} to ${formatDirham(1500, l)})`;
     return {
       name: "Video ads and Meta Ads",
       title: withBrand(`Video ad and Meta Ads agency in ${BRAND.city}`),
@@ -193,7 +193,7 @@ function copy(l: Locale) {
     };
   }
 
-  const adBudget = `${d(800)} à ${d(1500)} par mois (800 à 1 500 €)`;
+  const adBudget = `${d(800)} à ${d(1500)} par mois (environ ${formatDirham(800, l)} à ${formatDirham(1500, l)})`;
   return {
     name: "Vidéo publicitaire et Meta Ads",
     title: withBrand(`Vidéo publicitaire et Meta Ads à ${BRAND.city}`),
@@ -339,6 +339,7 @@ export function videoMetaAdsHead(locale: Locale) {
     breadcrumbs: [{ name: t.name, path: PATH }],
     about: { "@id": `${url(PATH)}#service` },
     faq: t.faq,
+    dateModified: CONTENT_UPDATED,
     nodes: [
       {
         "@type": "Service",
@@ -349,7 +350,7 @@ export function videoMetaAdsHead(locale: Locale) {
         url: url(localePath(PATH, locale)),
         provider: orgRef,
         areaServed: AREA_SERVED,
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
         isRelatedTo: [
           { "@id": serviceId("production-video-photo") },
           { "@id": serviceId("meta-ads") },
@@ -359,6 +360,7 @@ export function videoMetaAdsHead(locale: Locale) {
           name: t.offerName,
           price: ESSAI.price,
           priceCurrency: "EUR",
+          priceSpecification: priceSpecs(ESSAI.price, false, locale),
           url: url(localePath("/tarifs", locale)),
         },
       },

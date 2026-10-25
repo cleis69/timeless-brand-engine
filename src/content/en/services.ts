@@ -23,7 +23,7 @@ const pack = (id: string) => {
 };
 
 /** « MAD 4,300 (≈ €390) » */
-const both = (eur: number) => `${formatDirham(eur, "en")} (≈ ${formatEuro(eur, "en")})`;
+const both = (eur: number) => `${formatEuro(eur, "en")} (≈ ${formatDirham(eur, "en")})`;
 
 const VIDEO = carte("Vidéo publicitaire");
 const PHOTO = carte("Série photo");
@@ -39,7 +39,7 @@ const ESSAI = pack("essai");
 const ACQUISITION = pack("acquisition");
 
 /** Budget publicitaire de depart, tel qu'annonce sur /tarifs. */
-const AD_BUDGET = `${formatDirham(800, "en")} to ${formatDirham(1500, "en")} per month (${formatEuro(800, "en")} to ${formatEuro(1500, "en")})`;
+const AD_BUDGET = `${formatEuro(800, "en")} to ${formatEuro(1500, "en")} per month (about ${formatDirham(800, "en")} to ${formatDirham(1500, "en")})`;
 
 /** Les huit services, en anglais. Cles : slugs francais (identifiants). */
 export const SERVICES_EN: ServicesEn = {
@@ -197,6 +197,10 @@ export const SERVICES_EN: ServicesEn = {
       {
         q: "How do you measure results?",
         a: "On cost per lead and per appointment, not per click. A dashboard links spend, leads and appointments, and we comment on it every month.",
+      },
+      {
+        q: "Should I budget for VAT on Meta ads?",
+        a: "Yes. Since 1 October 2026, Meta adds 20% VAT to ad purchases on Moroccan accounts with no tax ID on file. With a tax ID, Meta no longer adds it and the business declares it itself, under the reverse-charge mechanism. It applies to the budget paid to Meta, not to our fees.",
       },
     ],
   },

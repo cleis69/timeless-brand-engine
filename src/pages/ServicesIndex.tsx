@@ -272,7 +272,7 @@ export function ServicesIndexPage() {
 
                       <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                         <span className="display text-[1.9rem] leading-none">
-                          {formatDirham(now, locale)}
+                          {formatEuro(now, locale)}
                         </span>
                         {p.period && (
                           <span className="text-sm text-muted-foreground">{p.period}</span>
@@ -282,7 +282,7 @@ export function ServicesIndexPage() {
                             className="text-[0.8rem] text-[#797976]"
                             style={{ textDecoration: "line-through" }}
                           >
-                            {formatDirham(p.price, locale)}
+                            {formatEuro(p.price, locale)}
                           </span>
                         )}
                       </div>
@@ -292,7 +292,8 @@ export function ServicesIndexPage() {
                         expatries comparent a ce qu'ils payaient en France.
                       */}
                       <p className="mt-1.5 text-[0.74rem] text-[#707d9d]">
-                        ≈ {formatEuro(now, locale)}
+                        ≈ {formatDirham(now, locale)}
+                        {reduced ? (locale === "en" ? " · first-order price" : " · prix de la première commande") : ""}
                         {p.period ? ` ${p.period}` : ""}
                       </p>
 

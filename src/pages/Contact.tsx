@@ -7,6 +7,7 @@ import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import {
   CONTACT,
+  CONTACT_TEXT,
   hasPhone,
   hasWhatsapp,
   phoneDisplay,
@@ -487,7 +488,7 @@ export function ContactPage() {
                     <div className="mt-3 flex flex-wrap gap-2">
                       {hasWhatsapp && (
                         <a
-                          href={whatsappUrl()}
+                          href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex h-9 items-center rounded-full px-4 text-[0.72rem] font-medium tracking-[0.1em] uppercase"
@@ -529,7 +530,7 @@ export function ContactPage() {
                 <div className="mt-5 flex flex-col gap-3">
                   {hasWhatsapp && (
                     <a
-                      href={whatsappUrl()}
+                      href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full px-7 text-xs font-medium tracking-[0.14em] uppercase"

@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { url } from "@/config/site";
+import { CONTENT_UPDATED, url } from "@/config/site";
 import { MaskReveal, Reveal } from "@/components/Reveal";
 import { Magnetic } from "@/components/Magnetic";
-import { AREA_SERVED, CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { AREA_SERVED, CONTACT, CONTACT_TEXT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { BRAND, withBrand } from "@/config/brand";
-import { orgRef, pageHead } from "@/lib/seo";
+import { orgRef, pageHead, priceSpecs, serviceChannel } from "@/lib/seo";
 import { EASE_RESPOND, MOTION } from "@/config/motion";
-import { LAUNCH_OFFER, MAD, PACKS, formatDirham, formatEuro, withOffer } from "@/config/pricing";
+import { MAD, PACKS, formatDirham, formatEuro, withOffer } from "@/config/pricing";
 import {
   aLaCarteFor,
   customFor,
@@ -71,7 +71,7 @@ const PATH = "/tarifs";
   rendre compte en reorganisant un fichier.
 */
 function copy(l: Locale) {
-  const d = (eur: number) => formatDirham(eur, l);
+  const d = (eur: number) => formatEuro(eur, l);
   const e = (eur: number) => formatEuro(eur, l);
   const essai = PACKS.find((p) => p.id === "essai")!.price;
 
@@ -89,7 +89,7 @@ function copy(l: Locale) {
       faq: [
         {
           q: "Is the ad budget included?",
-          a: `No, never. It is paid directly to the platforms from your own account, so it stays entirely yours. Allow ${d(800)} to ${d(1500)} a month (${e(800)} to ${e(1500)}) to start, depending on your industry.`,
+          a: `No, never. It is paid directly to the platforms from your own account, so it stays entirely yours. Allow ${e(800)} to ${e(1500)} a month (about ${formatDirham(800, l)} to ${formatDirham(1500, l)}) to start, depending on your industry.`,
         },
         {
           q: "What happens after the 3-month commitment?",
@@ -113,7 +113,7 @@ function copy(l: Locale) {
       h1b: "no surprises.",
       intro:
         "Everything is written down: what is included, what isn't, and the price of each service on its own. You can redo the maths yourself.",
-      note: "Amounts in dirhams, excluding tax. The ad budget is never included.",
+      note: "Amounts in euros, excluding tax. The ad budget is never included.",
       madNote: (n: string) => `Dirham amounts are ${n}.`,
       featured: "Most popular",
       firstOrder: (full: string) => `Price of your first order. ${full} after that.`,
@@ -150,7 +150,7 @@ function copy(l: Locale) {
     faq: [
       {
         q: "Le budget publicitaire est-il compris ?",
-        a: `Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez ${d(800)} à ${d(1500)} par mois (800 à 1 500 €) pour démarrer, selon votre secteur.`,
+        a: `Non, jamais. Il est versé directement aux plateformes depuis votre compte, ce qui vous en laisse la pleine propriété. Comptez ${e(800)} à ${e(1500)} par mois (environ ${formatDirham(800, l)} à ${formatDirham(1500, l)}) pour démarrer, selon votre secteur.`,
       },
       {
         q: "Que se passe-t-il après les 3 mois d'engagement ?",
@@ -174,7 +174,7 @@ function copy(l: Locale) {
     h1b: "aucune surprise.",
     intro:
       "Tout est écrit : ce qui est compris, ce qui ne l'est pas, et le prix de chaque prestation prise séparément. Vous pouvez refaire le calcul vous-même.",
-    note: "Montants en dirhams hors taxes. Le budget publicitaire n'est jamais inclus.",
+    note: "Montants en euros hors taxes. Le budget publicitaire n'est jamais inclus.",
     madNote: (n: string) => `Les montants en dirhams sont ${n}.`,
     featured: "Le plus choisi",
     firstOrder: (full: string) => `Prix de la première commande. ${full} ensuite.`,
@@ -210,6 +210,7 @@ export function pricingHead(locale: Locale) {
     ogDescription: t.ogDescription,
     breadcrumbs: [{ name: t.name, path: PATH }],
     faq: t.faq,
+    dateModified: CONTENT_UPDATED,
     nodes: [
       /*
         CATALOGUE D'OFFRES — le balisage le plus utile du site.
@@ -229,7 +230,7 @@ export function pricingHead(locale: Locale) {
         serviceType: t.serviceType,
         provider: orgRef,
         areaServed: AREA_SERVED,
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: t.catalogName,
@@ -239,35 +240,7 @@ export function pricingHead(locale: Locale) {
             description: p.forWho,
             price: p.price,
             priceCurrency: "EUR",
-            priceSpecification: [
-              {
-                "@type": "UnitPriceSpecification",
-                price: p.price,
-                priceCurrency: "EUR",
-                valueAddedTaxIncluded: false,
-                ...(p.period ? { unitText: "MONTH" } : {}),
-              },
-              ...(LAUNCH_OFFER.enabled
-                ? [
-                    {
-                      "@type": "UnitPriceSpecification",
-                      name: "Offre de lancement, première commande",
-                      price: withOffer(p.price),
-                      priceCurrency: "EUR",
-                      validThrough: "2026-12-31",
-                      valueAddedTaxIncluded: false,
-                      ...(p.period ? { unitText: "MONTH" } : {}),
-                    },
-                  ]
-                : []),
-              {
-                "@type": "UnitPriceSpecification",
-                price: Math.round((p.price * MAD.rate) / 100) * 100,
-                priceCurrency: "MAD",
-                valueAddedTaxIncluded: false,
-                ...(p.period ? { unitText: "MONTH" } : {}),
-              },
-            ],
+            priceSpecification: priceSpecs(p.price, !!p.period, locale),
             category: p.period ? t.monthly : t.oneOff,
             url: url(localePath(PATH, locale)),
           })),
@@ -369,7 +342,7 @@ function OfferBadge({ locale, className = "" }: { locale: Locale; className?: st
 
 function Packs({ t, locale }: Props) {
   const offer = launchOfferFor(locale);
-  const d = (n: number) => formatDirham(n, locale);
+  const d = (n: number) => formatEuro(n, locale);
   return (
     <section className="rule bg-background">
       <div className="shell py-16 lg:py-20">
@@ -451,7 +424,7 @@ function Packs({ t, locale }: Props) {
                     montant en euros n'apparaissait plus nulle part.
                   */}
                   <p className="mt-1.5 text-[0.76rem] text-[#707d9d]">
-                    ≈ {formatEuro(now, locale)}
+                    ≈ {formatDirham(now, locale)}
                     {p.period ? ` ${p.period}` : ""}
                   </p>
 
@@ -634,7 +607,7 @@ function Carte({ t, locale }: Props) {
                             </span>
                           )}
                           <span className="display text-[1.25rem]">
-                            {formatDirham(now, locale)}
+                            {formatEuro(now, locale)}
                           </span>
                           {it.unit && (
                             <span className="ml-1 text-[0.72rem] text-muted-foreground">
@@ -646,11 +619,11 @@ function Carte({ t, locale }: Props) {
                               className="mt-0.5 text-[0.72rem] text-[#797976]"
                               style={{ textDecoration: "line-through" }}
                             >
-                              {formatDirham(it.price, locale)}
+                              {formatEuro(it.price, locale)}
                             </p>
                           )}
                           <p className="mt-0.5 text-[0.68rem] text-[#7b88a6]">
-                            ≈ {formatEuro(now, locale)}
+                            ≈ {formatDirham(now, locale)}
                           </p>
                         </div>
                       </div>
@@ -731,7 +704,7 @@ function Custom({ t, locale }: Props) {
 
                   {hasWhatsapp ? (
                     <a
-                      href={whatsappUrl()}
+                      href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex h-12 items-center rounded-full px-7 text-xs font-medium tracking-[0.12em] uppercase text-foreground"

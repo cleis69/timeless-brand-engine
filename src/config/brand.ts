@@ -141,6 +141,10 @@ export const BRAND = {
     jobTitle: "Fondateur",
     /** Profil LinkedIn personnel, donne par le fondateur (sameAs de la personne). */
     linkedin: "https://www.linkedin.com/in/cl%C3%A9is-padou-78b668a9/",
+    /** Portrait de la page À propos, repris dans la fiche Person. */
+    photo: "/brand/team/cleis.jpg",
+    /** Biographie de la page À propos : une seule source pour la page et le JSON-LD. */
+    bio: "Dix ans à la tête d'un studio de production audiovisuelle en France. Formé en école de commerce, autodidacte pour le reste. C'est lui qui prend le brief, et c'est lui qui reste sur le projet.",
   },
   /** Langue de travail affichee sur le site. */
   workingLanguage: "français et anglais",
@@ -155,6 +159,8 @@ export const BRAND = {
     summary:
       "It brings together, in a single team, branding, video and photo production, advertising on Meta, Google and TikTok, websites and conversion tools: CRM, artificial intelligence and automation.",
     founderJobTitle: "Founder",
+    founderBio:
+      "Ten years running an audiovisual production studio in France. Business-school trained, self-taught for the rest. He takes the brief, and he stays on the project.",
     website:
       "Creative Growth Agency in Marrakech: branding, video production, advertising, websites and automation.",
   },

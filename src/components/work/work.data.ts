@@ -206,7 +206,7 @@ export const WORK_ITEMS: WorkItem[] = [
     L'alternance est ce qui fait lire « plusieurs metiers ».
 
     Themes en presence : beaute (3), immobilier (3), cosmetique, barber,
-    loisirs, remise en forme. Si tu deplaces un bloc, verifie ses deux
+    remise en forme. Si tu deplaces un bloc, verifie ses deux
     nouveaux voisins.
 
     L'ORDRE DU TABLEAU EST L'ORDRE DE LA VITRINE : la page d'accueil
@@ -465,32 +465,6 @@ export const WORK_ITEMS: WorkItem[] = [
       { value: "STAT_01", label: "VUES" },
       { value: "STAT_02", label: "TAUX DE CLIC" },
       { value: "STAT_03", label: "RENDEZ-VOUS" },
-    ],
-  },
-  {
-    slug: "loisirs",
-    title: "Loisirs & sport",
-    category: "PUBLICITE • META & TIKTOK",
-    description:
-      "Film tourné de jour et de nuit pour montrer les deux visages du lieu. Accroche sur le tarif d'entrée.",
-    year: "2025",
-    sources: {
-      mp4: "/work/loisirs/loisirs.mp4",
-      mobile: "/work/loisirs/loisirs-mobile.mp4",
-    },
-    poster: "/work/loisirs/poster.jpg",
-    published: "2026-08-28",
-    durationSec: 33,
-    aspect: "9/16",
-    stats: [
-      { value: "STAT_01", label: "VUES" },
-      { value: "STAT_02", label: "TAUX DE CLIC" },
-      { value: "STAT_03", label: "RESERVATIONS" },
-    ],
-    demoStats: [
-      { value: "STAT_01", label: "VUES" },
-      { value: "STAT_02", label: "TAUX DE CLIC" },
-      { value: "STAT_03", label: "RESERVATIONS" },
     ],
   },
   {

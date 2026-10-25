@@ -184,12 +184,12 @@ export function PriceRows({
             </div>
             <div className="text-right whitespace-nowrap">
               {r.from && <span className="mr-1 text-[0.7rem] text-muted-foreground">{t.from}</span>}
-              <span className="display text-[1.25rem]">{formatDirham(r.price, locale)}</span>
+              <span className="display text-[1.25rem]">{formatEuro(r.price, locale)}</span>
               {r.unit && (
                 <span className="ml-1 text-[0.72rem] text-muted-foreground">{r.unit}</span>
               )}
               <p className="mt-0.5 text-[0.68rem] text-[#7b88a6]">
-                ≈ {formatEuro(r.price, locale)}
+                ≈ {formatDirham(r.price, locale)}
               </p>
             </div>
           </div>

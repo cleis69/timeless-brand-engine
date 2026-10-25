@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { url } from "@/config/site";
 import { BRAND, withBrand } from "@/config/brand";
 import { AREA_SERVED } from "@/config/contact";
-import { orgRef, pageHead } from "@/lib/seo";
+import { orgRef, pageHead, serviceChannel } from "@/lib/seo";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -85,14 +85,14 @@ export function methodHead(locale: Locale) {
         description: t.serviceDescription,
         provider: orgRef,
         areaServed: AREA_SERVED,
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
         url: url(localePath(PATH, locale)),
       },
     ],
   });
 }
 
-const STEPS = [
+export const STEPS = [
   {
     n: "01",
     title: "Diagnostic",
@@ -139,10 +139,10 @@ const STEPS = [
   },
 ];
 
-const PRINCIPLES = [
+export const PRINCIPLES = [
   {
     t: "Un seul interlocuteur",
-    d: "La personne qui prend le brief est celle qui tourne. Il n'y a pas de chef de projet entre vous et la production.",
+    d: "La personne qui prend le brief suit votre projet jusqu'à la livraison. Il n'y a pas de chef de projet entre vous et l'équipe qui produit.",
   },
   {
     t: "Tout vous appartient",
@@ -212,7 +212,7 @@ const STEPS_EN: typeof STEPS = [
 const PRINCIPLES_EN: typeof PRINCIPLES = [
   {
     t: "A single point of contact",
-    d: "The person who takes the brief is the person who shoots. There is no project manager between you and production.",
+    d: "The person who takes the brief follows your project through to delivery. There is no project manager between you and the team that produces it.",
   },
   {
     t: "Everything belongs to you",

@@ -1,3 +1,4 @@
+import { CONTENT_UPDATED } from "@/config/site";
 import { PageHero } from "@/components/PageHero";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Reveal } from "@/components/Reveal";
@@ -13,7 +14,7 @@ import {
 import { WorkGrid } from "@/components/work/WorkGrid";
 import { casePath, isFilm, type WorkItem } from "@/components/work/work.data";
 import { BRAND, SOCIAL, withBrand } from "@/config/brand";
-import { CONTACT, hasWhatsapp, whatsappUrl } from "@/config/contact";
+import { CONTACT, CONTACT_TEXT, hasWhatsapp, whatsappUrl } from "@/config/contact";
 import { PACKS, formatDirham, formatEuro } from "@/config/pricing";
 import { servicePath } from "@/content/services";
 import { LANDINGS, type Landing } from "@/content/landings";
@@ -27,7 +28,7 @@ import {
   servicesFor,
 } from "@/content/localized";
 import { localePath, useLocale, type Locale } from "@/lib/i18n";
-import { orgRef, pageHead, pageUrl } from "@/lib/seo";
+import { orgRef, pageHead, pageUrl, serviceChannel } from "@/lib/seo";
 
 /**
  * UltraVision Agency — la page pilier.
@@ -78,8 +79,8 @@ const SUMMARY_EN =
 type LandingText = Landing & { nameEn?: string; textEn?: string };
 
 function copy(l: Locale) {
-  const d = (eur: number) => formatDirham(eur, l);
-  const both = (eur: number) => `${d(eur)} (≈ ${formatEuro(eur, l)})`;
+  const d = (eur: number) => formatEuro(eur, l);
+  const both = (eur: number) => `${formatEuro(eur, l)} (≈ ${formatDirham(eur, l)})`;
   const services = servicesFor(l);
 
   if (l === "en") {
@@ -238,7 +239,7 @@ function copy(l: Locale) {
       { label: "Langue de travail", value: "Français et anglais" },
       {
         label: "Tarifs",
-        value: `${l === "en" ? "Public prices" : "Prix publics"} — essai vidéo à ${formatEuro(ESSAI.price, l)}, diffusion comprise`,
+        value: `Prix publics — essai vidéo à ${formatEuro(ESSAI.price, l)}, diffusion comprise`,
       },
       { label: "Délai", value: "Première vidéo livrée en 7 jours" },
     ],
@@ -346,6 +347,7 @@ export function pillarHead(locale: Locale) {
     about: orgRef,
     mainEntity: orgRef,
     faq: t.faq,
+    dateModified: CONTENT_UPDATED,
     nodes: [
       {
         "@type": "Service",
@@ -356,7 +358,7 @@ export function pillarHead(locale: Locale) {
         url: pageUrl(localePath(PATH, locale)),
         provider: orgRef,
         areaServed: ["Marrakech", "Casablanca", "Rabat", "Tanger", "Agadir"].map((c) => ({ "@type": "City", name: c })),
-        availableLanguage: ["French", "English"],
+        availableChannel: serviceChannel(locale),
       },
     ],
   });
@@ -407,7 +409,7 @@ export function PillarPage() {
                 {" "}
                 ·{" "}
                 <a
-                  href={whatsappUrl()}
+                  href={whatsappUrl(CONTACT_TEXT[locale].whatsappMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link-underline text-foreground"

@@ -65,11 +65,11 @@ const pack = (id: string) => {
   if (!p) throw new Error(`[blog] Formule introuvable dans pricing.ts : ${id}`);
   return p.price;
 };
-/** « 4 300 MAD (390 €) » */
-const both = (eur: number) => `${dirham(eur)} (${euro(eur)})`;
-/** « 8 800 à 16 500 MAD (800 à 1 500 €) » */
+/** « 390 € (4 300 MAD) » */
+const both = (eur: number) => `${euro(eur)} (${dirham(eur)})`;
+/** « 800 à 1 500 € (8 800 à 16 500 MAD) » */
 const range = (a: number, b: number) =>
-  `${dirham(a).replace(" MAD", "")} à ${dirham(b)} (${a.toLocaleString("fr-FR")} à ${euro(b)})`;
+  `${a.toLocaleString("fr-FR")} à ${euro(b)} (${dirham(a).replace(" MAD", "")} à ${dirham(b)})`;
 
 const VIDEO = carte("Vidéo publicitaire");
 const MEDIA = carte("Media buying");
@@ -102,6 +102,19 @@ export type Block =
    * centaines de kilo-octets.
    */
   | { k: "figure"; v: FigureData };
+
+export type Reference = {
+  /** L'editeur : « Meta », « Google Search Central », « Hespress ». */
+  publisher: string;
+  /** Le titre exact de la page citee. */
+  title: string;
+  /** Date de publication, pour un article de presse. */
+  date?: string;
+  url: string;
+  /** Titre et adresse de la version anglaise, quand elle existe. */
+  titleEn?: string;
+  urlEn?: string;
+};
 
 export type Article = {
   slug: string;
@@ -150,6 +163,18 @@ export type Article = {
   faq: { q: string; a: string }[];
   body: Block[];
   /**
+   * Date de la derniere modification de fond, si l'article a change
+   * depuis sa publication. Reprise par le sitemap (lastmod) et par
+   * dateModified. Ne l'avancer que si le contenu change vraiment.
+   */
+  updated?: string;
+  /**
+   * Les sources publiques des faits avances dans l'article, affichees en
+   * fin d'article et declarees en `citation`. Uniquement des pages
+   * verifiees qui disent bien ce que l'article leur fait dire.
+   */
+  references?: Reference[];
+  /**
    * Les services dont parle l'article. Affiches en fin d'article : un
    * lecteur convaincu par la methode doit trouver en un clic le service
    * qui l'applique.
@@ -170,6 +195,7 @@ export const ARTICLES: Article[] = [
       "La plupart des campagnes échouent pour une raison mécanique : elles montrent le même film à quelqu'un qui découvre la marque et à quelqu'un qui hésite à acheter. Voici comment nous découpons la production en trois étages.",
     category: "Stratégie",
     date: "2026-08-14",
+    updated: "2026-10-25",
     readingTime: 9,
     seo: "TOFU, MOFU, BOFU appliqué à la vidéo publicitaire : quel film produire pour chaque étage du tunnel, dans quel ordre, et avec quel budget.",
     takeaways: [
@@ -331,7 +357,7 @@ export const ARTICLES: Article[] = [
       },
       {
         k: "p",
-        v: "Deux vidéos TOFU parce que c'est l'étage où l'on cherche encore. Une MOFU et une BOFU parce que ces deux-là, une fois trouvées, se réutilisent pendant des mois : une bonne vidéo de preuve ne s'use presque pas, une accroche s'use en trois semaines.",
+        v: "Deux vidéos TOFU parce que c'est l'étage où l'on cherche encore. Une MOFU et une BOFU parce que ces deux-là, une fois trouvées, se réutilisent pendant des mois : une bonne vidéo de preuve ne s'use presque pas, une accroche s'use en trois à six semaines.",
       },
       {
         k: "quote",
@@ -404,9 +430,10 @@ export const ARTICLES: Article[] = [
     services: ["production-video-photo", "meta-ads"],
     title: "Combien coûte une vidéo publicitaire ? Les prix en dirhams et en euros",
     seoTitle: "Prix d'une vidéo publicitaire au Maroc",
-    excerpt: `Entre ${range(200, 8000)} pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, les prix pratiqués à Marrakech, et les questions à poser avant de signer.`,
+    excerpt: `De ${range(150, 15000)} pour un objet qui porte le même nom. Ce qui change vraiment d'un devis à l'autre, les prix pratiqués à Marrakech, et les questions à poser avant de signer.`,
     category: "Tarifs",
     date: "2026-08-10",
+    updated: "2026-10-25",
     readingTime: 6,
     seo: "Prix d'une vidéo publicitaire en dirhams et en euros : ce qui fait varier un devis, nos tarifs à Marrakech et les cinq questions à poser avant de signer.",
     takeaways: [
@@ -640,10 +667,11 @@ export const ARTICLES: Article[] = [
       "Prendre une vidéo horizontale et couper les bords produit une vidéo verticale techniquement conforme et commercialement morte. Ce qui change vraiment quand on tourne pour le 9/16.",
     category: "Production",
     date: "2026-07-28",
+    updated: "2026-10-25",
     readingTime: 4,
     seo: "Format vertical 9/16 en publicité : pourquoi recadrer une vidéo horizontale ne fonctionne pas, et comment composer directement pour le téléphone.",
     takeaways: [
-      "Recadrer une vidéo tournée en 16/9 vers du 9/16 supprime environ 60 % de la surface de l'image, et généralement le sujet avec.",
+      "Recadrer une vidéo tournée en 16/9 vers du 9/16 supprime environ 68 % de la surface de l'image, et généralement le sujet avec.",
       "Une vidéo destinée au format vertical se cadre plus serré, avec le sujet placé dans le tiers haut de l'image.",
       "Le tiers bas doit rester libre : c'est la zone où les plateformes affichent leurs boutons, le nom du compte et le texte de la publicité.",
       "Les mouvements de caméra latéraux ne fonctionnent pas en vertical : un panoramique horizontal traverse un cadre étroit en une demi-seconde.",
@@ -652,7 +680,7 @@ export const ARTICLES: Article[] = [
     faq: [
       {
         q: "Peut-on transformer une vidéo horizontale en vidéo verticale ?",
-        a: "Techniquement oui, mais le résultat convertit rarement. Le recadrage supprime environ 60 % de l'image, décale la composition et fait souvent sortir le texte du cadre. Cela ne se défend que si la vidéo d'origine a été tournée en haute définition avec des plans volontairement aérés, et que cette décision a été prise avant le tournage.",
+        a: "Techniquement oui, mais le résultat convertit rarement. Le recadrage supprime environ 68 % de l'image, décale la composition et fait souvent sortir le texte du cadre. Cela ne se défend que si la vidéo d'origine a été tournée en haute définition avec des plans volontairement aérés, et que cette décision a été prise avant le tournage.",
       },
       {
         q: "Quel format pour une publicité Meta, TikTok ou YouTube Shorts ?",
@@ -675,11 +703,11 @@ export const ARTICLES: Article[] = [
         v: {
           type: "bars",
           caption:
-            "Ce qu'il reste d'une image quand on la fait passer d'un format à l'autre. Le recadrage d'un 16/9 vers du 9/16 ne conserve qu'environ quatre dixièmes de la surface d'origine.",
+            "Ce qu'il reste d'une image quand on la fait passer d'un format à l'autre. Le recadrage d'un 16/9 vers du 9/16 ne conserve qu'environ un tiers de la surface d'origine.",
           unit: "Surface de l'image conservée après recadrage.",
           bars: [
             { label: "Tourné directement en 9/16", value: 100, display: "100 %", highlight: true },
-            { label: "16/9 recadré en 9/16", value: 40, display: "environ 40 %" },
+            { label: "16/9 recadré en 9/16", value: 32, display: "environ 32 %" },
             { label: "16/9 recadré en 1/1", value: 56, display: "environ 56 %" },
           ],
         },
@@ -837,6 +865,21 @@ export const ARTICLES: Article[] = [
       "Facebook et Instagram acceptent des campagnes à quelques dirhams par jour. La vraie question n'est pas le minimum autorisé, mais le minimum utile : celui qui donne à l'algorithme assez de résultats pour apprendre.",
     category: "Tarifs",
     date: "2026-10-05",
+    updated: "2026-10-25",
+    references: [
+      {
+        publisher: "Meta",
+        title: "À propos de la phase d'apprentissage",
+        titleEn: "About the learning phase",
+        url: "https://www.facebook.com/business/help/112167992830700",
+      },
+      {
+        publisher: "Hespress",
+        date: "2026-09-25",
+        title: "Publicité : Meta applique la TVA au Maroc dès octobre",
+        url: "https://fr.hespress.com/489385-publicite-meta-applique-la-tva-au-maroc-des-octobre.html",
+      },
+    ],
     readingTime: 7,
     seo: "Prix et budget Facebook Ads au Maroc : combien dépenser sur Facebook et Instagram, en dirhams, calculé à partir du coût d'un résultat.",
     takeaways: [
@@ -866,6 +909,10 @@ export const ARTICLES: Article[] = [
       {
         q: "Que faire si le budget calculé dépasse ce que je peux dépenser ?",
         a: "Changer l'événement optimisé plutôt que de couper le budget. Optimiser sur un événement plus fréquent, comme un clic vers WhatsApp ou une visite de la page de contact, permet d'atteindre les 50 événements hebdomadaires avec moins d'argent, au prix d'un signal moins précis.",
+      },
+      {
+        q: "La TVA s'applique-t-elle à la publicité Meta au Maroc ?",
+        a: "Oui, depuis le 1er octobre 2026. Meta ajoute une TVA de 20 % aux achats publicitaires des comptes dont le pays de vente est le Maroc et qui n'ont pas renseigné d'identifiant fiscal. Une entreprise qui saisit le sien dans les paramètres de paiement ne se voit plus facturer la TVA par Meta, mais la déclare elle-même en autoliquidation. Votre expert-comptable vous dira quel cas s'applique à vous.",
       },
     ],
     body: [
@@ -932,6 +979,7 @@ export const ARTICLES: Article[] = [
           "La zone. Meta permet de viser une ville — Marrakech, Casablanca — ou un rayon autour de votre adresse. Pour un commerce de quartier, un rayon de quelques kilomètres vaut mieux que tout le pays.",
           "L'audience étrangère. Une résidence, un riad ou un service aux non-résidents peut viser des personnes qui vivent en France ou en Belgique : le budget doit alors tenir compte d'un coût souvent plus élevé sur ces marchés.",
           "La langue. Une vidéo en français ne parle pas au même public qu'une vidéo en darija. Le choix de la langue est un choix de cible, avant d'être un choix de traduction.",
+          "La TVA. Depuis le 1er octobre 2026, Meta ajoute une TVA de 20 % aux achats publicitaires des comptes dont le pays de vente est le Maroc et qui n'ont pas renseigné d'identifiant fiscal. Une entreprise peut saisir le sien dans les paramètres de paiement du compte : Meta n'ajoute alors plus la TVA, mais l'entreprise la déclare elle-même, en autoliquidation. Dans les deux cas, prévoyez-la dans le budget.",
         ],
       },
 
@@ -1502,6 +1550,16 @@ export const ARTICLES: Article[] = [
       "Sur une recherche comme « restaurant Marrakech » ou « agence immobilière Marrakech », Google affiche d'abord une carte, puis des sites. Les deux ne se gagnent pas de la même manière.",
     category: "Stratégie",
     date: "2026-10-19",
+    updated: "2026-10-25",
+    references: [
+      {
+        publisher: "Google Search Central",
+        title: "Avez-vous besoin d'un référenceur ?",
+        titleEn: "Do you need an SEO?",
+        url: "https://developers.google.com/search/docs/fundamentals/do-i-need-seo?hl=fr",
+        urlEn: "https://developers.google.com/search/docs/fundamentals/do-i-need-seo",
+      },
+    ],
     readingTime: 6,
     seo: "Référencement à Marrakech : fiche Google, avis, une page par service, technique et liens. Ce qui fait remonter une entreprise locale, et en combien de temps.",
     takeaways: [
@@ -1704,6 +1762,7 @@ export const ARTICLES: Article[] = [
       "Les plateformes de réservation apportent des clients et prennent une commission sur chacun. Un site qui réserve, des vidéos qui donnent envie et une publicité bien ciblée font venir une partie d'entre eux en direct.",
     category: "Stratégie",
     date: "2026-10-19",
+    updated: "2026-10-25",
     readingTime: 6,
     seo: "Restaurant, riad ou hôtel à Marrakech : site avec réservation intégrée, vidéos de jour et de nuit, fiche Google, Instagram et publicité pour réserver en direct.",
     takeaways: [
@@ -1762,7 +1821,7 @@ export const ARTICLES: Article[] = [
       { k: "h2", v: "La vidéo : de jour et de nuit" },
       {
         k: "p",
-        v: "Le calme d'un patio l'après-midi et l'ambiance d'une terrasse le soir ne parlent pas aux mêmes clients. Un lieu filmé aux deux moments montre ses deux visages : c'est le parti pris du film tourné pour un lieu de loisirs à Marrakech, avec une accroche sur le tarif d'entrée.",
+        v: "Le calme d'un patio l'après-midi et l'ambiance d'une terrasse le soir ne parlent pas aux mêmes clients. Un lieu filmé aux deux moments montre ses deux visages, et chacun s'y projette à l'heure où il viendrait.",
       },
 
       { k: "h2", v: "Instagram et la publicité" },
@@ -1797,6 +1856,16 @@ export const ARTICLES: Article[] = [
       "Quand on demande à ChatGPT ou à Perplexity une bonne adresse à Marrakech, l'assistant répond par trois ou quatre noms. Ce qu'il lit pour les choisir, et ce qu'une entreprise peut faire pour en faire partie.",
     category: "Stratégie",
     date: "2026-10-20",
+    updated: "2026-10-25",
+    references: [
+      {
+        publisher: "Google Search Central",
+        title: "Fonctionnalités d'IA et votre site Web",
+        titleEn: "AI features and your website",
+        url: "https://developers.google.com/search/docs/appearance/ai-features?hl=fr",
+        urlEn: "https://developers.google.com/search/docs/appearance/ai-features",
+      },
+    ],
     readingTime: 6,
     seo: "Être cité par ChatGPT, Perplexity et l'Aperçu IA de Google à Marrakech : un nom cohérent partout, des pages qui répondent, une fiche Google, des avis.",
     takeaways: [

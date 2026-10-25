@@ -67,7 +67,7 @@ const TEAM_ALL: Member[] = [
   {
     name: "Cleis",
     role: "Fondateur",
-    bio: "Dix ans à la tête d'un studio de production audiovisuelle en France. Formé en école de commerce, autodidacte pour le reste. C'est lui qui prend le brief, et c'est lui qui reste sur le projet.",
+    bio: BRAND.founder.bio,
     facts: ["Business school", "Autodidacte", "10 ans de studio en France"],
     /*
       Le fichier est deja cadre en 4/5 sur le buste, exactement le
@@ -81,7 +81,8 @@ const TEAM_ALL: Member[] = [
       pixels, et une fiche d'equipe ou l'on ne distingue pas le visage
       ne sert a rien.
     */
-    photo: "/brand/team/cleis.jpg",
+    photo: BRAND.founder.photo,
+    linkedin: BRAND.founder.linkedin,
   },
   {
     name: "Julien",
@@ -190,7 +191,10 @@ export function aboutHead(locale: Locale) {
       "@id": `${url(PATH)}#${m.name.toLowerCase()}`,
       name: m.name,
       jobTitle: m.role,
+      description: m.bio,
       url: url(localePath(PATH, locale)),
+      ...(m.photo ? { image: url(m.photo) } : {}),
+      ...(m.linkedin ? { sameAs: [m.linkedin] } : {}),
       worksFor: orgRef,
     })),
   });
@@ -200,7 +204,7 @@ export function aboutHead(locale: Locale) {
  *  VALEURS
  * ========================================================================== */
 
-const VALUES = [
+export const VALUES = [
   {
     t: "Ceux qui vendent exécutent",
     d: "Vous parlez aux personnes qui travailleront sur votre projet. Il n'y a pas de seconde équipe derrière la première.",
@@ -231,7 +235,7 @@ const VALUES = [
 const TEAM_EN: Record<string, Pick<Member, "role" | "bio" | "facts">> = {
   Fondateur: {
     role: "Founder",
-    bio: "Ten years running an audiovisual production studio in France. Business-school trained, self-taught for the rest. He takes the brief, and he stays on the project.",
+    bio: BRAND.en.founderBio,
     facts: ["Business school", "Self-taught", "10 years running a studio in France"],
   },
   "Directeur artistique": {
